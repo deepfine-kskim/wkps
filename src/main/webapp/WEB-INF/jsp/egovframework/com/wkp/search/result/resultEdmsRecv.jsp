@@ -14,7 +14,7 @@
 	<ul class="sch_result_list">
 		<c:forEach var="result" items="${edmsRecvList}" varStatus="status">
 		<li>
-			<div class="tit"><span>${result.open_flag}</span>&nbsp<span><a href="http://105.0.1.208/bms/dctenf/BmsDctEnfReceiptCardDetail.do?enfdocid=${result.doc_id}" target="_blank"><c:out value="${result.title}"  escapeXml="false"/></a></span>
+			<div class="tit"><span>${result.open_flag}</span>&nbsp<span><a href="http://10.191.0.54/bms/dctenf/BmsDctEnfReceiptCardDetail.do?enfdocid=${result.doc_id}" target="_blank"><c:out value="${result.title}"  escapeXml="false"/></a></span>
 			<span class="info"><fmt:parseDate var="date" value="${result.reg_dttm}"  pattern="yyyyMMddHHmmss"/>
 			<fmt:formatDate value="${date}"  pattern="yyyy-MM-dd"/><span><c:out value="${result.dept_nm}"  escapeXml="false"/></span>
 			<span><c:out value="${result.writer_nm}"  escapeXml="false"/></span>

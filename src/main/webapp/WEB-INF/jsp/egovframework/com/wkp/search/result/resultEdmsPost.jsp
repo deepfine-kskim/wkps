@@ -14,7 +14,7 @@
 	<ul class="sch_result_list">
 		<c:forEach var="result" items="${edmsPostList}" varStatus="status">
 		<li>
-			<div class="tit"><span>${result.open_flag}</span>&nbsp<a href="http://105.0.1.208/bms/dct/viewreport.do?docid=${result.doc_id}"  target="_blank"><c:out value="${result.title}"  escapeXml="false"/></a>
+			<div class="tit"><span>${result.open_flag}</span>&nbsp<a href="http://10.191.0.54/bms/dct/viewreport.do?docid=${result.doc_id}"  target="_blank"><c:out value="${result.title}"  escapeXml="false"/></a>
 			<span class="info"><fmt:parseDate var="date" value="${result.reg_dttm}"  pattern="yyyyMMddHHmmss"/>
 			<fmt:formatDate value="${date}"  pattern="yyyy-MM-dd"/><span><c:out value="${result.dept_nm}"  escapeXml="false"/></span>
 			<span><c:out value="${result.writer_nm}"  escapeXml="false"/></span>

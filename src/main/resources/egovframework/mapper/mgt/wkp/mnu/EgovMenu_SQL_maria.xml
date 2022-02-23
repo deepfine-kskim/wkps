@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuDAO">
+
+ 	<select id="selectMenuList" parameterType="MenuVO" resultType="MenuVO"> 
+ 		
+			SELECT
+				MENU_NO,
+				MENU_NM,
+				MENU_URL,
+				MENU_DESC,
+				UP_NO,
+				SORT_ORDR,
+				REGISTER_ID,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				DEL_YN
+			FROM
+				TB_MENU
+			<where>
+				<if test="delYn != null and delYn == 'Y'">
+				AND DEL_YN = 'N'
+				</if>
+			</where>
+			ORDER BY SORT_ORDR
+ 		
+ 	</select>
+ 	
+ 	<select id="selectMenu" parameterType="MenuVO" resultType="MenuVO"> 
+ 		
+			SELECT
+				MENU_NM
+			FROM
+				TB_MENU
+			<where>
+				AND MENU_NM = #{menuNm}
+			</where>
+ 		
+ 	</select>
+
+	<insert id="insertMenu" parameterType="MenuVO">
+		
+			INSERT INTO TB_MENU
+			(MENU_NM, MENU_URL, MENU_DESC, UP_NO, SORT_ORDR, REGISTER_ID, REGIST_DTM, DEL_YN)
+			VALUES
+			(#{menuNm}, #{menuUrl}, #{menuDesc}, #{upNo}, #{sortOrdr}, #{registerId}, SYSDATE(), 'Y')
+		
+	</insert> 
+				
+	<update id="updateMenu" parameterType="MenuVO">
+		
+			UPDATE TB_MENU
+			SET 
+				MENU_NM = #{menuNm},
+				MENU_URL = #{menuUrl},
+				MENU_DESC = #{menuDesc},
+				UP_NO = #{upNo},
+				SORT_ORDR = #{sortOrdr},
+				UPDATER_ID = #{updaterId},
+				UPD_DTM = SYSDATE(),
+				DEL_YN = #{delYn}
+			WHERE
+				MENU_NO = #{menuNo}
+			
+	</update>
+	
+	<delete id="deleteMenu" parameterType="MenuVO">
+		
+			DELETE 
+			FROM 
+				TB_MENU
+			WHERE
+				MENU_NO = #{menuNo}
+		
+	</delete>
+ 	
+</mapper>

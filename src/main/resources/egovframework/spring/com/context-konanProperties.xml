@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean name="konanPropertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<property name="properties">
+	        <map>
+	        	<!-- 개발 IP -->
+				<!--
+	        	<entry key="url" value="http://192.168.1.24:7577/search"/>
+	        	<entry key="ksfUrl" value="http://192.168.1.24:7614/ksf/api/" />
+	        	<entry key="klaUrl" value="http://192.168.1.24:7581/ksm/kla/api/" />
+	        	<entry key="docIP" value="10.10.20.223" />
+	        	<entry key="docPort" value="2577" />
+ 				-->
+	        	
+	        	<!-- 운영 IP -->        
+
+	        	<entry key="url" value="http://105.0.1.229:7577/search"/>
+	        	<entry key="ksfUrl" value="http://105.0.1.229:7614/ksf/api/" />
+	        	<entry key="klaUrl" value="http://105.0.1.229:7581/ksm/kla/api/" />
+	        	<entry key="docIP" value="105.0.1.130" />
+	        	<entry key="docPort" value="7577" />
+	        	
+	        	
+	        	<entry key="charset" value="UTF-8" />
+	        	<entry key="site" value="경기도청" /> <!-- 사이트명 -->
+	        		        	
+				<entry key="ksfDomain" value="0" />
+				<entry key="ksfMaxResult" value="10" />
+				
+				<!-- 운영(true)/개발(false) 라이선스 구분-->
+				<entry key="realLic" value="true" />
+				
+				<entry key="pageSize" value="10" />
+				<entry key="pageSizeTotal" value="3" />
+				
+				<entry key="knowledgeField" value="url,knowlg_no,title,knowlg_map_type,summry,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm,main,sub,sort_ordr,cont,up_no,atch_file_no,file_regist_dtm,file_sn,file_stre_cours,stre_file_nm,orignl_file_nm,file_extsn,file_cn" /><!-- 필드명 -->	
+				<entry key="communityField" value="url,cmmnty_no,cmmnty_nm,cmmnty_desc,aprv_yn,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm" /><!-- 필드명 -->	
+				<entry key="faqField" value="url,faq_no,title,cont,inq_cnt,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm,atch_file_no,file_regist_dtm,file_sn,file_stre_cours,stre_file_nm,orignl_file_nm,file_extsn,file_cn" /><!-- 필드명 -->
+				<entry key="noticeField" value="url,notice_no,title,cont,inq_cnt,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm,atch_file_no,file_regist_dtm,file_sn,file_stre_cours,stre_file_nm,orignl_file_nm,file_extsn,file_cn" /><!-- 필드명 -->
+				<entry key="qnaField" value="url,question_no,title,cont,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm,atch_file_no,file_regist_dtm,file_sn,file_stre_cours,stre_file_nm,orignl_file_nm,file_extsn,file_cn" /><!-- 필드명 -->
+				<entry key="surveyField" value="url,survey_no,bngn_dtm,end_dtm,title,survey_desc,aprv_state,register_id,register_name,regist_dtm,updater_id,updater_name,upd_dtm" /><!-- 필드명 -->
+				
+   				<entry key="defaultHilight" value="{'cont':{'length':200,'begin':'&lt;em class=&quot;mark&quot;&gt;','end':'&lt;/em&gt;'}}"/>
+<!--   				<entry key="defaultHilight" value="{'title':{'length':50,'begin':'&lt;mark&gt;','end':'&lt;/mark&gt;'}},{'cont':{'length':200,'begin':'&lt;mark&gt;','end':'&lt;/mark&gt;'}}"/> -->
+				<entry key="communityHilight" value="{'cmmnty_desc':{'length':200,'begin':'&lt;em class=&quot;mark&quot;&gt;','end':'&lt;/em&gt;'}}"/>
+				<entry key="surveyHilight" value="{'survey_desc':{'length':200,'begin':'&lt;em class=&quot;mark&quot;&gt;','end':'&lt;/em&gt;'}}"/>
+				
+				<entry key="knowledgeFrom" value="knowledge.knowledge" /> <!-- 볼륨.테이블 -->		
+				<entry key="communityFrom" value="community.community" /> <!-- 볼륨.테이블 -->			
+				<entry key="faqFrom" value="faq.faq" /> <!-- 볼륨.테이블 -->
+				<entry key="noticeFrom" value="notice.notice" /> <!-- 볼륨.테이블 -->
+				<entry key="qnaFrom" value="qna.qna" /> <!-- 볼륨.테이블 -->
+				<entry key="surveyFrom" value="survey.survey" /> <!-- 볼륨.테이블 -->
+		
+	        </map>
+		</property>		
+	</bean>
+						
+</beans>	

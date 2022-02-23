@@ -1,0 +1,89 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ckeditor-plugin-wsc@git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+        "scope": null,
+        "escapedName": "ckeditor-plugin-wsc",
+        "name": "ckeditor-plugin-wsc",
+        "rawSpec": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+        "spec": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+          "sshUrl": "git+ssh://git@github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+          "httpsUrl": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+          "gitUrl": "git://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+          "shortcut": "github:WebSpellChecker/ckeditor-plugin-wsc#release.5.7.0.0",
+          "directUrl": "https://raw.githubusercontent.com/WebSpellChecker/ckeditor-plugin-wsc/release.5.7.0.0/package.json"
+        }
+      },
+      "/home/ckeditor/repository/git-new/ckeditor-presets"
+    ]
+  ],
+  "_from": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+  "_id": "ckeditor-plugin-wsc@5.7.0",
+  "_inCache": true,
+  "_location": "/ckeditor-plugin-wsc",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ckeditor-plugin-wsc@git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+    "scope": null,
+    "escapedName": "ckeditor-plugin-wsc",
+    "name": "ckeditor-plugin-wsc",
+    "rawSpec": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+    "spec": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+      "sshUrl": "git+ssh://git@github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+      "httpsUrl": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+      "gitUrl": "git://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+      "shortcut": "github:WebSpellChecker/ckeditor-plugin-wsc#release.5.7.0.0",
+      "directUrl": "https://raw.githubusercontent.com/WebSpellChecker/ckeditor-plugin-wsc/release.5.7.0.0/package.json"
+    }
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#db9a829a4aead06106c65d102546b912e848d2d0",
+  "_shasum": "9b13e3d4b08ec196acde0a54604138310e3f5925",
+  "_shrinkwrap": null,
+  "_spec": "ckeditor-plugin-wsc@git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#release.5.7.0.0",
+  "_where": "/home/ckeditor/repository/git-new/ckeditor-presets",
+  "author": {
+    "name": "WebSpellChecker",
+    "url": "https://webspellchecker.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/WebSpellChecker/ckeditor-plugin-wsc/issues"
+  },
+  "dependencies": {},
+  "description": "WebSpellChecker Dialog plugin for CKEditor 4",
+  "devDependencies": {},
+  "gitHead": "db9a829a4aead06106c65d102546b912e848d2d0",
+  "homepage": "https://github.com/WebSpellChecker/ckeditor-plugin-wsc#readme",
+  "keywords": [
+    "spelling checking",
+    "grammar checking",
+    "spellcheck",
+    "spelling checker for ckeditor 4",
+    "grammar checker for ckeditor 4",
+    "text proofreading in CKEditor 4",
+    "webspellchecker",
+    "ckeditor 4",
+    "WebSpellChecker Dialog"
+  ],
+  "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
+  "name": "ckeditor-plugin-wsc",
+  "optionalDependencies": {},
+  "readme": "﻿WebSpellChecker Dialog Plugin for CKEditor 4\n===============================\n\nWebSpellChecker Dialog (WSC Dialog) provides distraction-free proofreading, checking the whole text’s spelling and grammar on-click in a separate pop-up window.\n\n![WSC Dialog Plugin for CKEditor 4 View](https://webspellchecker.com/app/images/wsc_dialog_plugin_for_ckeditor4.png)\n\nThis plugin brings the multi-language WSC Dialog functionality into CKEditor 4. It is integrated by default starting with [Standard Package of CKEditor 4](https://ckeditor.com/ckeditor-4/download/). You can find it on the CKEditor 4 toolbar panel under the ABC button (Check Spelling). \n\nIf your version of CKEditor doesn’t have WSC Dialog built-in, you can easily add it by following the steps outlined in the Get Started section.\n\nThe default version of WSC Dialog plugin for CKEditor 4 is using the free services of WebSpellChecker. It is provided with a banner ad and has some [limitations](https://docs.webspellchecker.net/display/WebSpellCheckerCloud/Free+and+Paid+WebSpellChecker+Cloud+Services+Comparison+for+CKEditor). \n\nTo lift the limitations and get rid of the banner, [obtain a license](https://webspellchecker.com/wsc-dialog-ckeditor4/#pricing). Depending on your needs, you can choose a Cloud-based or Server (self-hosted) solution.\n\nDemo\n------------\nWSC Dialog plugin for CKEditor 4: https://webspellchecker.com/wsc-dialog-ckeditor4/\n\nSupported Languages\n------------\n\nThe WSC Dialog plugin for CKEditor as a part of the free services supports the next languages for check spelling: American English, British English, Canadian English, Canadian French, Danish, Dutch, Finnish, French, German, Greek, Italian, Norwegian Bokmal, Spanish, Swedish.\n\nThere are also additional languages and specialized dictionaries available for a commercial license, you can check the full list [here](https://webspellchecker.com/additional-dictionaries/). \n\nGet Started\n------------\n\n1. Clone/copy this repository contents in a new \"plugins/wsc\" folder in your CKEditor installation.\n2. Enable the \"wsc\" plugin in the CKEditor configuration file (config.js):\n\n        config.extraPlugins = 'wsc';\n\nThat's all. WSC Dialog will appear on the editor toolbar under the ABC button and will be ready to use.\n\nSupported Browsers\n-------\n\nThis is the list of officially supported browsers for the WSC Dialog plugin for CKEditor 4. WSC Dialog may also work in other browsers and environments but we unable to check all of them and guarantee proper work.\n\n* Chrome (the latest)\n* Firefox (the latest)\n* Safari (the latest)\n* MS Edge (the latest)\n* Internet Explorer 8.0 (limited support)\n* Internet Explorer 9.0+ (close to full support)\n\nNote: All browsers are to be supported for web pages that work in Standards Mode.\n\nResources\n-------\n\n* Demo: https://webspellchecker.com/wsc-dialog-ckeditor4/\n* Documentation: https://docs.webspellchecker.net/\n* YouTube video: https://youtu.be/bkVPZ-5T22Q\n* Term of Service: https://webspellchecker.com/terms-of-service/\n\nTechnical Support or Questions\n-------\n\nIn cooperation with the CKEditor team, during the past 10 years we have simplified the installation and built the extensive amount of documentation devoted to WSC Dialog plugin for CKEditor 4 and less. \n\nIf you are experiencing any difficulties with the setup of the plugin, please check the links provided in the Resources section.\n\nHolders of an active subscription to the services or a commercial license have access to professional technical assistance directly from the WebSpellChecker team. [Contact us here](https://webspellchecker.com/contact-us/)! \n\nReporting Issues\n-------\n\nPlease use the [WSC Dialog plugin for CKEditor 4 GitHub issue page](https://github.com/WebSpellChecker/ckeditor-plugin-wsc/issues) to report bugs and feature requests. We will do our best to reply at our earliest convenience.\n\nLicense\n-------\n\nThis plugin is licensed under the terms of any of the following licenses at your choice: [GPL](http://www.gnu.org/licenses/gpl.html), [LGPL](http://www.gnu.org/licenses/lgpl.html) and [MPL](http://www.mozilla.org/MPL/MPL-1.1.html).\n\nSee LICENSE.md for more information.\n\nDeveloped by [WebSpellChecker](https://webspellchecker.com/) in cooperation with CKSource.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git"
+  },
+  "version": "5.7.0"
+}

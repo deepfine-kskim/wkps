@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+	
+<!-- DOCTYPE을 사용함으로써 태그 자동완성기능과 검증기능을 추가할수 있다. -->
+<tiles-definitions>
+	
+	<definition name="mainTemplate" template="/WEB-INF/jsp/layout/template.jsp" preparer="menuPreparer"> 
+		<put-attribute name="header"	value="/WEB-INF/jsp/layout/header.jsp" />
+		<put-attribute name="footer"	value="/WEB-INF/jsp/layout/footer.jsp" />
+	</definition>
+	
+	<definition name="subTemplate" template="/WEB-INF/jsp/layout/template_sub.jsp">
+		<put-attribute name="header"	value="/WEB-INF/jsp/layout/header.jsp" />
+		<put-attribute name="left"		value="/WEB-INF/jsp/layout/left.jsp" />
+		<put-attribute name="footer"	value="/WEB-INF/jsp/layout/footer.jsp" />
+	</definition>
+	
+	<definition name="admTemplate" template="/WEB-INF/jsp/layout/template_adm.jsp">
+	</definition>
+
+	<definition name="/com/*/*/*" extends="mainTemplate"> 
+		<put-attribute name="contents"		value="/WEB-INF/jsp/egovframework/com/{1}/{2}/{3}.jsp" />
+	</definition>
+			
+	<definition name="/mgt/*/*/*" extends="admTemplate">
+		<put-attribute name="contents"		value="/WEB-INF/jsp/egovframework/mgt/{1}/{2}/{3}.jsp" />
+	</definition>
+
+	<definition name="uploadTemplate" template="/WEB-INF/jsp/layout/uploadTemplate.jsp">
+	</definition>
+
+	<definition name="/upload/*/*" extends="uploadTemplate">
+		<put-attribute name="contents" value="/WEB-INF/jsp/egovframework/com/{1}/{2}.jsp" />
+	</definition>
+	
+</tiles-definitions>

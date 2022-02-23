@@ -1,0 +1,24 @@
+@charset "utf-8";
+html,body{margin:0;padding:0;width:100%;overflow:hidden;}
+
+#head				{background:url("../img/icon_install.png") no-repeat 10px 50%;background-color:#369;height:50px;font:normal 11pt 돋움,dotum;letter-spacing:-1px;color:#fff;font-weight:bold;text-indent:40px;}
+#head div			{float:left;}
+#head #buttonClose	{background:url("../img/btn_close.gif") no-repeat 50% 50%;width:50px;height:50px;position:absolute;right:0;cursor:pointer;}
+
+#main	{background:#FFF;font:normal 9pt "돋움",dotum;position:relative;padding:10px;text-align:justify;}
+#main p {line-height:1.2em}
+
+#foot		{background:#FFF;text-align:center;}
+#foot p		{font:normal 8pt 돋움,dotum}
+#foot input	{margin:0;padding:2px;}
+
+#download{background:url("../img/btn_offLineDownload.gif");width:136px;height:29px;border:0;cursor:pointer;text-align:center;}
+
+.valignMiddle	{vertical-align:middle;line-height:50px}
+.underline		{text-decoration:underline;}
+.clear			{clear:left;}
+
+.boxCase		{margin-top:30px;}
+#messageBox		{text-align:center;font:normal 12pt "돋움",dotum;font-weight:bold;}
+#messageArea	{width:300px;margin:auto auto;margin-top:40px;padding-top:20px;border-top:1px solid #ccc;text-align:center;font:normal 10pt "돋움",dotum;font-weight:bold;}
+#buttonBox		{width:300px;margin:auto auto;margin-top:40px;padding-top:20px;border-top:1px solid #ccc;text-align:center;}

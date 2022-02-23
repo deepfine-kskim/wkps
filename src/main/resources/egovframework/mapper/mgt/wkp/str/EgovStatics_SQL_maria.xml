@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticsDAO">
+
+ 	<select id="selectConnectStatics" parameterType="map" resultType="StaticsConnectVO">
+		<![CDATA[
+		SELECT e.dt, COALESCE(f.visit_user_count, 0) AS visit_user_count , COALESCE(g.visit_count, 0) AS visit_count FROM (
+		SELECT CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY dt
+		FROM (SELECT 0 a
+		UNION ALL SELECT 1
+		UNION ALL SELECT 2
+		UNION ALL SELECT 3
+		) a
+		, (SELECT 0 b
+		UNION ALL SELECT 1
+		UNION ALL SELECT 2
+		UNION ALL SELECT 3
+		UNION ALL SELECT 4
+		UNION ALL SELECT 5
+		UNION ALL SELECT 6
+		UNION ALL SELECT 7
+		UNION ALL SELECT 8
+		UNION ALL SELECT 9
+		) b
+		, (SELECT 0 c
+		UNION ALL SELECT 1
+		UNION ALL SELECT 2
+		UNION ALL SELECT 3
+		UNION ALL SELECT 4
+		UNION ALL SELECT 5
+		UNION ALL SELECT 6
+		UNION ALL SELECT 7
+		UNION ALL SELECT 8
+		UNION ALL SELECT 9
+		) c
+		, (SELECT #{year} y) d
+		WHERE a*100 + b*10 + c < DayOfYear(CONCAT(y, '1231'))
+        AND CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY BETWEEN CONVERT('${year}-${month}-1 00:00:00', DATETIME) AND  DATE_ADD(DATE_ADD(CONVERT('${year}-${month}-1 00:00:00', DATETIME), INTERVAL 1 MONTH),INTERVAL -1 DAY)
+		) e LEFT OUTER JOIN
+		(SELECT b.date_day, COUNT(b.date_day) AS visit_user_count
+		FROM (
+		SELECT
+		REGISTER_ID
+		,DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS date_day
+		FROM TB_USER_LOG a
+		GROUP  BY date_day, register_id
+		) b
+		GROUP BY b.date_day) f ON e.dt = f.date_day
+		LEFT OUTER JOIN (
+		SELECT b.date_day, COUNT(b.date_day) AS visit_count
+		FROM (
+		SELECT
+		REGISTER_ID
+		, DATE_FORMAT(REGIST_DTM, '%Y-%m-%d %H') AS date_hour
+		, DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS date_day
+		FROM TB_USER_LOG a
+		GROUP  BY date_hour, register_id
+		) b
+		GROUP BY b.date_day) g  ON e.dt = g.date_day
+		ORDER BY e.dt
+		]]>
+ 	</select>
+
+ 	<select id="selectQnaStatics" parameterType="map" resultType="StaticsQnaVO">
+		<![CDATA[
+			SELECT e.dt, COALESCE(f.question_Count, 0) AS question_Count , COALESCE(g.answer_Count, 0) AS answer_Count FROM (
+			SELECT CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY dt
+                  FROM (SELECT 0 a
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                        ) a
+                     , (SELECT 0 b
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                        UNION ALL SELECT 4
+                        UNION ALL SELECT 5
+                        UNION ALL SELECT 6
+                        UNION ALL SELECT 7
+                        UNION ALL SELECT 8
+                        UNION ALL SELECT 9
+                        ) b
+                     , (SELECT 0 c
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                        UNION ALL SELECT 4
+                        UNION ALL SELECT 5
+                        UNION ALL SELECT 6
+                        UNION ALL SELECT 7
+                        UNION ALL SELECT 8
+                        UNION ALL SELECT 9
+                        ) c
+                     , (SELECT #{year} y) d
+                 WHERE a*100 + b*10 + c < DayOfYear(CONCAT(y, '1231'))
+                 AND CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY BETWEEN CONVERT('${year}-${month}-1 00:00:00', DATETIME) AND  DATE_ADD(DATE_ADD(CONVERT('${year}-${month}-1 00:00:00', DATETIME), INTERVAL 1 MONTH),INTERVAL -1 DAY)
+                 ) e LEFT OUTER JOIN
+                 ( SELECT DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS DATE_DAY , COUNT(*) AS QUESTION_COUNT FROM TB_QUESTION
+						  GROUP  BY date_day) f ON e.dt = f.date_day
+						LEFT OUTER JOIN (
+						SELECT DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS DATE_DAY , COUNT(*) AS ANSWER_COUNT FROM TB_ANSWER
+						GROUP  BY date_day) g  ON e.dt = g.date_day
+						                 ORDER BY e.dt
+		]]>
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeStatics" parameterType="StaticsKnowledgeVO" resultType="StaticsKnowledgeVO">
+		<![CDATA[
+			SELECT
+				e.DT, COALESCE(f.KNOWLEDGE_COUNT, 0) AS KNOWLEDGE_COUNT
+			FROM (
+				SELECT 
+					CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY DT
+				FROM (SELECT 0 a
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                     ) a
+                     , (SELECT 0 b
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                        UNION ALL SELECT 4
+                        UNION ALL SELECT 5
+                        UNION ALL SELECT 6
+                        UNION ALL SELECT 7
+                        UNION ALL SELECT 8
+                        UNION ALL SELECT 9
+                     ) b
+                     , (SELECT 0 c
+                        UNION ALL SELECT 1
+                        UNION ALL SELECT 2
+                        UNION ALL SELECT 3
+                        UNION ALL SELECT 4
+                        UNION ALL SELECT 5
+                        UNION ALL SELECT 6
+                        UNION ALL SELECT 7
+                        UNION ALL SELECT 8
+                        UNION ALL SELECT 9
+                     ) c
+                     , (SELECT #{year} y) d
+                 WHERE a*100 + b*10 + c < DayOfYear(CONCAT(y, '1231'))
+                 AND CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY BETWEEN CONVERT('${year}-${month}-1 00:00:00', DATETIME) AND  DATE_ADD(DATE_ADD(CONVERT('${year}-${month}-1 00:00:00', DATETIME), INTERVAL 1 MONTH),INTERVAL -1 DAY)
+                 ) e
+                 LEFT OUTER JOIN
+                 ( SELECT DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS DATE_DAY, COUNT(*) AS KNOWLEDGE_COUNT FROM TB_KNOWLEDGE GROUP BY DATE_DAY ) f
+                 ON e.dt = f.DATE_DAY
+                 ORDER BY e.dt
+		]]>
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+
+			SELECT
+				tk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU,
+				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO) AS RECOMMEND_CNT
+			FROM
+				TB_KNOWLEDGE tk
+			<where>
+				AND KNOWLG_NO != 1
+			</where>
+			ORDER BY KNOWLG_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+        	
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeListCount" resultType="int">
+ 	
+			SELECT
+				COUNT(*)
+			FROM
+				TB_KNOWLEDGE
+				
+ 	</select>
+ 	
+ 	<select id="selectInterestsList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+
+        	SELECT
+        		ti.*,
+        		(SELECT KNOWLG_MAP_TYPE FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS KNOWLG_MAP_TYPE,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO)) AS UP_NM,
+				(SELECT COUNT(*) FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS INTERESTS_CNT
+        	FROM
+        		TB_INTERESTS ti
+        	ORDER BY KNOWLG_MAP_TYPE, KNOWLG_MAP_NO
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+
+ 	</select>
+ 	
+ 	<select id="selectInterestsListCount" resultType="int">
+
+        	SELECT
+        		COUNT(*)
+        	FROM
+        		TB_INTERESTS
+
+ 	</select>
+ 	
+</mapper>

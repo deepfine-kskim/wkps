@@ -1,0 +1,74 @@
+package egovframework.com.wkp.bbs.service;
+
+import java.sql.Date;
+import java.util.List;
+
+import lombok.Data;
+
+@Data
+public class RequestVO {
+
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private long requstNo;
+	
+	private String knowlgMapType;
+	
+	private long knowlgMapNo;
+
+	private String upNm;
+	
+	private String knowlgMapNm;
+	
+	private String title;
+	
+	private String cont;  
+	
+	private long inqCnt;
+	
+	private String answerYn;
+	
+	private String answerId;
+	
+	private Date answerDtm;
+	
+	private String answerDisplayName;
+	
+	private String answerOu;
+	
+	private String answerCont;
+	
+	private String registerId;
+	
+	private Date registDtm;
+	
+	private String updaterId;
+	
+	private Date updDtm;
+	
+	private String displayName;
+	
+	private String ou;
+	
+	private String delYn;
+	
+	private long atchFileNo;
+	
+	private Boolean isNew;
+	
+	private Integer page;
+	
+	private Integer itemCountPerPage = 10;
+	
+	private Integer itemOffset = 0;
+	
+	private String searchType;
+	
+	private String searchText;
+	
+	private List<RequestVO> requestList;
+	
+}

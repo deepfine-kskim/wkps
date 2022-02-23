@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogDAO">
+
+	<sql id="selectListCondition">
+		WHERE DEL_YN = 'N'
+
+		<if test="searchText != null and searchText != '' and searchKey != null">
+			<if test="searchKey == 'REGISTER_ID'">
+				AND REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText} '%')
+			</if>
+		</if>
+
+	</sql>
+
+	<select id="selectList" parameterType="LogVO" resultType="LogVO">
+		SELECT
+		a.*
+		, e.DISPLAY_NAME as REGISTER_NAME
+		, e.ou
+		, e.USER_FULL_NAME as registerFullName
+		FROM TB_USER_LOG a
+		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+
+		WHERE a.DEL_YN = 'N'
+		<if test="searchText != null and searchText != '' and searchKey != null">
+			<if test="searchKey == 'REGISTER_ID'">
+				AND a.REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText} '%')
+			</if>
+		</if>
+
+		ORDER BY a.LOG_NO DESC
+		LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+	</select>
+
+	<select id="selectListCount" parameterType="LogVO" resultType="int">
+		SELECT count(*)
+		FROM TB_USER_LOG
+		<include refid="selectListCondition"/>
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="logNo" parameterType="LogVO">
+		INSERT INTO TB_USER_LOG (
+			  	LOG_NO
+			  , REGISTER_ID
+			  , LOG_TYPE
+			  , LOG_SUBJECT_TYPE
+			  , USER_IP
+			  , CONT
+		) VALUES (
+		      	#{logNo}
+		      , #{registerId}
+		      , #{logType}
+		      , #{logSubjectType}
+		      , #{userIp}
+		      , #{cont}
+		)
+	</insert>
+
+</mapper>

@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommonDAO">
+ 	
+	<select id="selectTargetList" parameterType="TargetVO" resultType="TargetVO">
+	
+			SELECT
+				a.TARGET_NO, b.TARGET_TYPE_CD, b.SORT_ORDR, b.TARGET_CODE, a.REGIST_DTM
+			FROM
+				TB_TARGET a, TB_TARGET_DETAIL b
+			WHERE
+				a.TARGET_NO = #{targetNo}
+			AND
+				a.TARGET_NO = b.TARGET_NO
+			AND
+				a.DEL_YN = 'N'	
+			ORDER BY b.SORT_ORDR
+	
+	</select>
+	
+	<insert id="insertTarget" useGeneratedKeys="true" keyProperty="targetNo" parameterType="TargetVO">
+		
+			INSERT INTO TB_TARGET
+			(REGIST_DTM, DEL_YN)
+			VALUES
+			(SYSDATE(), 'N')	
+		
+	</insert>
+	
+	<insert id="insertTargetDetail" parameterType="TargetVO">
+		
+			INSERT INTO TB_TARGET_DETAIL
+			( TARGET_NO, SORT_ORDR, TARGET_TYPE_CD, TARGET_CODE )
+			VALUES
+			( #{targetNo}, #{sortOrdr}, #{targetTypeCd}, #{targetCode} )	
+		
+	</insert>
+	
+	<select id="selectDisplayTargetList" parameterType="map" resultType="TargetVO">
+	
+			SELECT 		TB.TARGET_NO, TB.TARGET_TYPE_CD, TB.SORT_ORDR, TB.TARGET_CODE
+							
+				,
+							
+			(				 CASE WHEN TB.TARGET_TYPE_CD = 'ORG' THEN (SELECT OU FROM TB_ORG O WHERE O.OU_CODE = TB.TARGET_CODE)
+									WHEN TB.TARGET_TYPE_CD = 'USER' THEN (SELECT DISPLAY_NAME FROM TB_USER U WHERE U.SID = TB.TARGET_CODE)
+									WHEN TB.TARGET_TYPE_CD = 'GROUP' THEN (SELECT GROUP_NM FROM TB_GROUP G WHERE G.GROUP_NO = TB.TARGET_CODE)
+							 END
+			) AS DISP_NAME			
+															 
+				
+				
+			FROM
+				TB_TARGET_DETAIL TB
+			WHERE
+				TB.TARGET_NO = #{targetNo}
+			ORDER BY TB.SORT_ORDR
+	
+	</select>
+	
+	<select id="selectExcellenceUserList" parameterType="ExcellenceUserVO" resultType="ExcellenceUserVO">
+	
+			SELECT
+				teu.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = teu.SID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = teu.SID)) AS OU,
+				(SELECT SUM(MILEAGE_SCORE) FROM TB_USER_MILEAGE tum WHERE tum.SID = teu.SID) AS MILEAGE_SCORE
+			FROM
+				TB_EXCELLENCE_USER teu
+			ORDER BY RKI
+	
+	</select>
+	
+	<insert id="insertExcellenceUser" parameterType="ExcellenceUserVO">
+		
+			INSERT INTO TB_EXCELLENCE_USER
+			(SID, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM)
+			VALUES
+			(#{sid}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE())
+			
+	</insert>
+	
+	<insert id="deleteExcellenceUser" parameterType="ExcellenceUserVO">
+		
+			DELETE 
+			FROM 
+				TB_EXCELLENCE_USER
+			<where>
+				<if test="sid != null and sid !='' ">
+				AND SID = #{sid}
+				</if>
+				<if test="rki != null and rki !='' ">
+				AND RKI = #{rki}
+				</if>								
+			</where>
+		
+	</insert>
+	
+	<select id="selectExcellenceOrgList" parameterType="ExcellenceOrgVO" resultType="ExcellenceOrgVO">
+	
+			SELECT
+				teo.*,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = teo.OU_CODE) AS OU,
+				(SELECT SUM(MILEAGE_SCORE) FROM TB_ORG_MILEAGE tom WHERE tom.OU_CODE = teo.OU_CODE) AS MILEAGE_SCORE
+			FROM
+				TB_EXCELLENCE_ORG teo
+			ORDER BY RKI
+	
+	</select>
+	
+	<insert id="insertExcellenceOrg" parameterType="ExcellenceOrgVO">
+		
+			INSERT INTO TB_EXCELLENCE_ORG
+			(OU_CODE, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM)
+			VALUES
+			(#{ouCode}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE())
+			
+	</insert>
+	
+	<insert id="deleteExcellenceOrg" parameterType="ExcellenceUserVO">
+		
+			DELETE 
+			FROM 
+				TB_EXCELLENCE_ORG
+			<where>
+				<if test="ouCode != null and ouCode !='' ">
+				AND OU_CODE = #{ouCode}
+				</if>
+				<if test="rki != null and rki !='' ">
+				AND RKI = #{rki}
+				</if>
+			</where>
+		
+	</insert>
+	
+	<select id="selectRecommendList" parameterType="RecommendVO" resultType="RecommendVO">
+	
+			SELECT
+				trk.*,
+				(SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY,
+				(SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT,
+				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT
+			FROM
+				TB_RECOMMEND_KNOWLEDGE trk
+			<where>
+	        	<if test="knowlgMapType != null and knowlgMapType != ''">
+	        	AND trk.KNOWLG_MAP_TYPE = #{knowlgMapType}
+	        	</if>
+			</where>
+			ORDER BY KNOWLG_MAP_TYPE, RKI
+	
+	</select>
+	
+	<insert id="insertRecommend" parameterType="RecommendVO">
+		
+			INSERT INTO TB_RECOMMEND_KNOWLEDGE
+			(KNOWLG_MAP_TYPE, RKI, TITLE, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{knowlgMapType}, #{rki}, #{title}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			
+	</insert>
+	
+	<delete id="deleteRecommend" parameterType="RecommendVO">
+		
+			DELETE
+			FROM
+				TB_RECOMMEND_KNOWLEDGE
+			<where>
+				<if test="knowlgMapType != null and knowlgMapType !='' ">
+				AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+				</if>
+				<if test="rki != null and rki !='' ">
+				AND RKI = #{rki}
+				</if>
+			</where>				
+		
+	</delete>
+	
+	<select id="selectPersonalizeList" parameterType="PersonalizeVO" resultType="PersonalizeVO">
+	
+			SELECT
+				trk.*,
+				(SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY,
+				(SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT,
+				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.title = trk.title ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = trk.OU_CODE) AS OU
+			FROM
+				TB_PERSONALIZE_KNOWLEDGE trk
+			<where>
+	        	<if test="knowlgMapType != null and knowlgMapType != ''">
+	        	AND trk.KNOWLG_MAP_TYPE = #{knowlgMapType}
+	        	</if>
+	        	<if test="ouCode != null and ouCode !=''">
+	        	AND trk.OU_CODE = #{ouCode}
+	        	</if>
+			</where>
+			ORDER BY KNOWLG_MAP_TYPE, RKI
+	
+	</select>
+	
+	<insert id="insertPersonalize" parameterType="PersonalizeVO">
+		
+			INSERT INTO TB_PERSONALIZE_KNOWLEDGE
+			(OU_CODE, KNOWLG_MAP_TYPE, RKI, TITLE, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{ouCode}, #{knowlgMapType}, #{rki}, #{title}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			
+	</insert>
+	
+	<delete id="deletePersonalize" parameterType="PersonalizeVO">
+		
+			DELETE
+			FROM
+				TB_PERSONALIZE_KNOWLEDGE
+			<where>
+				<if test="ouCode != null and ouCode !='' ">
+				AND OU_CODE = #{ouCode}
+				</if>
+				<if test="knowlgMapType != null and knowlgMapType !='' ">
+				AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+				</if>
+				<if test="rki != null and rki !='' ">
+				AND RKI = #{rki}
+				</if>
+			</where>
+		
+	</delete>
+	
+	<select id="selectGroupList" parameterType="GroupVO" resultType="GroupVO">
+	
+			SELECT
+				*
+			FROM
+				TB_GROUP
+			<where>
+				AND REGISTER_ID = #{registerId}
+			</where>	
+			
+	</select>
+	
+	<select id="selectGroupDetail" parameterType="GroupVO" resultType="GroupVO">
+			
+			SELECT
+				tgd.*,
+				(SELECT OU FROM TB_USER tu WHERE tu.SID = tgd.TARGET_CODE) AS OU_CODE,
+				( CASE WHEN tgd.TARGET_TYPE_CD = 'ORG' THEN (SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tgd.TARGET_CODE)
+				       WHEN tgd.TARGET_TYPE_CD = 'USER' THEN (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tgd.TARGET_CODE)
+				   END
+				) AS TARGET_NAME
+			FROM
+				TB_GROUP_DETAIL tgd
+			<where>
+				AND REGISTER_ID = #{registerId}
+				AND GROUP_NO = #{groupNo}
+				AND DEL_YN = "N"
+			</where>
+	
+	</select>
+	
+	<select id="selectGroupName" parameterType="long" resultType="String">
+	
+			SELECT
+				GROUP_NM
+			FROM
+				TB_GROUP
+			<where>
+				AND GROUP_NO = #{groupNo}
+			</where>
+			
+	</select>
+	
+	<select id="insertGroupCheck" parameterType="GroupVO" resultType="int">
+ 		
+			SELECT 
+				COUNT(*)
+			FROM TB_GROUP 
+			WHERE 
+				GROUP_Nm = #{groupNm}
+ 		
+ 	</select>
+	
+	<insert id="insertGroup" useGeneratedKeys="true" keyProperty="groupNo" parameterType="GroupVO">
+		
+			INSERT INTO TB_GROUP
+			(GROUP_NM, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{groupNm}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+		
+	</insert>
+	
+	<insert id="deleteGroup" parameterType="GroupVO">
+		
+			DELETE
+			FROM
+			TB_GROUP
+			WHERE
+				GROUP_NO = #{groupNo}
+		
+	</insert>
+	
+	<insert id="insertGroupDetail" parameterType="GroupVO">
+	
+			INSERT INTO TB_GROUP_DETAIL
+			(GROUP_NO, SORT_ORDR, TARGET_TYPE_CD, TARGET_CODE, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{groupNo}, #{sortOrdr}, #{targetTypeCd}, #{targetCode}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			
+	</insert>
+	
+	<select id="selectSortOrder" parameterType="UserVO" resultType="int">
+	
+			SELECT
+				CASE WHEN MAX(SORT_ORDR) IS NOT NULL THEN MAX(SORT_ORDR)
+				     WHEN MAX(SORT_ORDR) IS NULL THEN -1
+				END AS SORT_ORDR
+			FROM 
+				TB_GROUP_DETAIL
+			<where>
+				<if test="groupNo != null and groupNo !=''">
+				AND	GROUP_NO = #{groupNo}
+				AND TARGET_TYPE_CD = #{targetTypeCd}
+				</if>
+			</where>
+				
+	</select>
+	
+	<delete id="deleteGroupDetail" parameterType="UserVO">
+	
+			DELETE
+			FROM
+				TB_GROUP_DETAIL
+			<where>
+				<if test="groupNo != null and groupNo !=''">
+				AND GROUP_NO = #{groupNo}
+				AND TARGET_CODE = #{targetCode}
+				</if>
+			</where>
+			
+	</delete>
+	
+	<select id="selectMileageScore" parameterType="UserVO" resultType="UserVO">
+	
+			SELECT
+				IFNULL(SUM(MILEAGE_SCORE),0) AS MILEAGE_SCORE
+			FROM 
+				TB_USER_MILEAGE
+			<where>
+				<if test="sid != null and sid !=''">
+				AND	SID = #{sid}
+				</if>
+			</where>
+				
+	</select>
+	
+	<update id="updateMyBG" parameterType="UserVO">
+	
+			UPDATE
+				TB_USER
+			SET
+				ATCH_FILE_NO = #{atchFileNo}
+			<where>
+				<if test="sid != null and sid !=''">
+				AND SID = #{sid}
+				</if>
+			</where>
+			
+	</update>
+	
+	<update id="deleteMyBG" parameterType="UserVO">
+	
+			UPDATE
+				TB_USER
+			SET
+				ATCH_FILE_NO = NULL
+			<where>
+				<if test="sid != null and sid !=''">
+				AND SID = #{sid}
+				</if>
+			</where>
+			
+	</update>
+	
+	<select id="selectTopMileageUserList" resultType="ExcellenceUserVO">
+ 		
+			SELECT
+				SID
+				, SUM(MILEAGE_SCORE) AS MILEAGE_SCORE
+			FROM
+				TB_USER_MILEAGE
+			WHERE
+				REGIST_DTM BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
+    		AND SID != 'admin' 
+			GROUP BY SID
+			ORDER BY MILEAGE_SCORE DESC
+			LIMIT 3
+ 		
+ 	</select>
+ 	
+ 	<select id="selectTopMileageOrgList" resultType="ExcellenceOrgVO">
+ 		
+			SELECT
+				OU_CODE
+				, SUM(MILEAGE_SCORE) AS MILEAGE_SCORE
+			FROM
+				TB_ORG_MILEAGE
+			WHERE
+				REGIST_DTM BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
+			GROUP BY OU_CODE
+			ORDER BY MILEAGE_SCORE DESC
+			LIMIT 3
+ 		
+ 	</select>
+ 	
+ 	<select id="selectTopRecommendKnowledgeList" parameterType="RecommendVO" resultType="RecommendVO">
+	
+			SELECT
+				TITLE
+				, KNOWLG_MAP_TYPE
+			FROM (
+				SELECT
+					tk.TITLE,
+					tk.KNOWLG_MAP_TYPE,
+					(tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT,
+					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
+				FROM
+					TB_KNOWLEDGE tk					
+	       		WHERE DEL_YN = 'N'
+	        	AND KNOWLG_NO != 0
+	  	  		AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+	    		AND APRV_YN = 'Y'
+	    		AND REGISTER_ID != 'admin' 
+	    		ORDER BY POINT DESC
+	   		) AS T
+			WHERE ROW_NUM = 1
+			LIMIT 2
+			
+	</select>
+	
+ 	<select id="selectTopPersonalizeKnowledgeList" parameterType="PersonalizeVO" resultType="PersonalizeVO">
+	
+			SELECT
+				OU_CODE
+				, TITLE
+				, KNOWLG_MAP_TYPE
+			FROM (
+				SELECT
+					tk.OU_CODE,
+					tk.TITLE,
+					tk.KNOWLG_MAP_TYPE,
+					(tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT,
+					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
+				FROM
+					TB_KNOWLEDGE tk					
+	       		WHERE DEL_YN = 'N'
+	        	AND KNOWLG_NO != 0
+	  	  		AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+	  	  		AND OU_CODE = #{ouCode}
+	    		AND APRV_YN = 'Y'
+	    		AND REGISTER_ID != 'admin'
+	    		ORDER BY POINT DESC
+	   		) AS T
+			WHERE ROW_NUM = 1
+			LIMIT 2
+			
+	</select>
+	
+</mapper>

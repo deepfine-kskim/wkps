@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommunityDAO">
+
+ 	<select id="loadCommunity" parameterType="map" resultType="CommunityVO">
+			SELECT 
+				*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tc.APPROVER_ID) AS APPROVER_NAME,
+				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = (SELECT OU_CODE FROM TB_USER WHERE SID = tc.APPROVER_ID)) AS APPROVER_OU
+			FROM TB_COMMUNITY tc
+			WHERE tc.DEL_YN = 'N' AND tc.CMMNTY_NO = #{cmmntyNo}
+ 	</select>
+ 	
+ 	<select id="loadMyCommunity" parameterType="map" resultType="CommunityVO">
+			SELECT * FROM TB_COMMUNITY C
+			INNER JOIN  TB_COMMUNITY_MEMBER CM ON C.CMMNTY_NO = CM.CMMNTY_NO AND C.DEL_YN = 'N' AND CM.DEL_YN = 'N'
+			WHERE CM.USER_SID = #{userSid}
+ 	</select>
+ 	
+ 	<select id="selectNewCommunity" parameterType="map" resultType="CommunityVO">
+ 	        
+			SELECT * FROM TB_COMMUNITY 
+			WHERE APRV_YN = 'Y' AND DEL_YN = 'N'  
+			ORDER BY APRV_DTM DESC
+ 	</select>
+ 	
+ 	<select id="selectBestCommunity" parameterType="map" resultType="CommunityVO">
+ 	        SELECT COUNT(CM.MBER_NO) AS M_CNT
+			 , MAX(C.CMMNTY_NO) AS CMMNTY_NO
+			 , MAX(C.CMMNTY_NM) AS CMMNTY_NM
+			 , MAX(C.CMMNTY_DESC) AS CMMNTY_DESC
+			 , MAX(C.KEYWORD01) AS KEYWORD01
+			 , MAX(C.KEYWORD02) AS KEYWORD02
+			 , MAX(C.KEYWORD03) AS KEYWORD03
+			 , MAX(C.KEYWORD04) AS KEYWORD04
+			 , MAX(C.KEYWORD05) AS KEYWORD05
+			 , MAX(C.KEYWORD06) AS KEYWORD06
+			 , MAX(C.KEYWORD07) AS KEYWORD07
+			 , MAX(C.KEYWORD08) AS KEYWORD08
+			 , MAX(C.KEYWORD09) AS KEYWORD09
+			 , MAX(C.KEYWORD10) AS KEYWORD10
+			 FROM TB_COMMUNITY C
+			INNER JOIN  TB_COMMUNITY_MEMBER CM ON C.CMMNTY_NO = CM.CMMNTY_NO AND C.DEL_YN = 'N'  AND C.APRV_YN = 'Y' AND CM.DEL_YN = 'N'
+			GROUP BY C.CMMNTY_NO
+			ORDER BY M_CNT DESC
+ 	</select>
+ 	
+ 	<select id="selectTotalCommunity" parameterType="map" resultType="CommunityVO">
+			SELECT * FROM TB_COMMUNITY 
+			WHERE APRV_YN = 'Y' AND DEL_YN = 'N'
+			ORDER BY APRV_DTM
+ 	</select>
+ 	
+ 	<select id="findCommunity" parameterType="map" resultType="CommunityVO">
+ 	   SELECT * FROM TB_COMMUNITY
+ 	   <where>
+ 	        AND DEL_YN = 'N'
+ 	   		AND APRV_YN = 'Y'
+       		<if test='search_value != null and search_value != "" '>
+	       		<if test='search_type != null and search_type != "01" '>
+	       		AND CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
+	       		</if>
+	       		<if test='search_type != null and search_type != "02" '>
+	       		AND CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
+	       		</if>
+	       		<if test='search_type != null and search_type != "03" '>
+	       		AND ( KEYWORD01 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD02 LIKE CONCAT('%',#{search_value},'%') 
+	       		OR KEYWORD03 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD04 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD05 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD06 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD07 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD08 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD09 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD10 LIKE CONCAT('%',#{search_value},'%')
+	       		)
+	       		</if>
+	        </if>
+      </where>
+      ORDER BY CMMNTY_NO DESC
+      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+            LIMIT #{limit} OFFSET #{startIndex}
+      </if>
+ 	</select>
+ 	
+ 	<select id="findCommunityTotalCount" parameterType="map" resultType="int">
+ 	   SELECT count(*) FROM TB_COMMUNITY
+ 	   <where>
+ 	        AND DEL_YN = 'N'
+ 	   		AND APRV_YN = 'Y'
+       		<if test='search_value != null and search_value != "" '>
+	       		<if test='search_type != null and search_type != "01" '>
+	       		AND CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
+	       		</if>
+	       		<if test='search_type != null and search_type != "02" '>
+	       		AND CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
+	       		</if>
+	       		<if test='search_type != null and search_type != "03" '>
+	       		AND ( KEYWORD01 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD02 LIKE CONCAT('%',#{search_value},'%') 
+	       		OR KEYWORD03 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD04 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD05 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD06 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD07 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD08 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD09 LIKE CONCAT('%',#{search_value},'%')
+	       		OR KEYWORD10 LIKE CONCAT('%',#{search_value},'%')
+	       		)
+	       		</if>
+	        </if>
+      </where>
+ 	</select>
+ 	
+	<insert id="insertCommunity" parameterType="CommunityVO">
+	
+	<selectKey keyProperty="cmmntyNo" resultType="long" order="BEFORE">
+	     SELECT NEXTVAL(SEQ_COMMUNITY_NO)
+    </selectKey>
+	
+			INSERT INTO TB_COMMUNITY
+			(
+				CMMNTY_NO,
+				CMMNTY_NM,
+				CMMNTY_DESC,	
+				APRV_YN,
+				MEM_APRV_YN,
+				MEM_PUB_YN,
+				REGISTER_ID,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				KEYWORD01,
+				KEYWORD02,
+				KEYWORD03,
+				KEYWORD04,
+				KEYWORD05,
+				KEYWORD06,
+				KEYWORD07,
+				KEYWORD08,
+				KEYWORD09,
+				KEYWORD10,
+				DEL_YN
+			)
+			VALUES
+			(
+				#{cmmntyNo},
+				#{cmmntyNm},
+				#{cmmntyDesc},	
+				#{aprvYn},
+				#{memAprvYn},
+				#{memPubYn},
+				#{registerId},
+				now(),
+				#{updaterId},
+				now(),
+				#{keyword01},
+				#{keyword02},
+				#{keyword03},
+				#{keyword04},
+				#{keyword05},
+				#{keyword06},
+				#{keyword07},
+				#{keyword08},
+				#{keyword09},
+				#{keyword10},
+				'N'
+			)			
+	</insert>
+	
+	<update id="updateCommunity" parameterType="CommunityVO">
+	        UPDATE TB_COMMUNITY SET
+		        CMMNTY_NM = #{cmmntyNm},
+		        CMMNTY_DESC = #{cmmntyDesc},
+		        APRV_YN = #{aprvYn},
+		        MEM_APRV_YN = #{memAprvYn},
+		        MEM_PUB_YN = #{memPubYn},
+		        UPDATER_ID = #{updaterId},
+		        KEYWORD01 = #{keyword01},
+				KEYWORD02 = #{keyword02},
+				KEYWORD03 = #{keyword03},
+				KEYWORD04 = #{keyword04},
+				KEYWORD05 = #{keyword05},
+				KEYWORD06 = #{keyword06},
+				KEYWORD07 = #{keyword07},
+				KEYWORD08 = #{keyword08},
+				KEYWORD09 = #{keyword09},
+				KEYWORD10 = #{keyword10},
+		        UPD_DTM = now()
+	        WHERE CMMNTY_NO = #{cmmntyNo}
+	</update>
+	
+	<update id="deleteCommunity" parameterType="CommunityVO">
+			UPDATE TB_COMMUNITY SET
+		        DEL_YN = 'Y',
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE CMMNTY_NO = #{cmmntyNo}
+	</update>
+	
+	
+	<select id="loadCommunityNotice" parameterType="map" resultType="CommunityNoticeVO">
+			SELECT * FROM TB_COMMUNITY_NOTICE CN 
+			LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CN.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
+			WHERE CN.DEL_YN = 'N'  AND CN.NOTICE_NO = #{noticeNo}
+ 	</select>
+ 	
+ 	<select id="loadCommunityNoticePrev" parameterType="map" resultType="CommunityNoticeVO">
+ 	
+			SELECT * FROM TB_COMMUNITY_NOTICE WHERE DEL_YN = 'N'  AND NOTICE_NO <![CDATA[<]]> #{noticeNo} AND CMMNTY_NO = #{cmmntyNo}
+			ORDER BY NOTICE_NO DESC
+			LIMIT 1
+ 	</select>
+ 	
+ 	<select id="loadCommunityNoticeNext" parameterType="map" resultType="CommunityNoticeVO">
+			SELECT * FROM TB_COMMUNITY_NOTICE WHERE DEL_YN = 'N'  AND NOTICE_NO <![CDATA[>]]> #{noticeNo} AND CMMNTY_NO = #{cmmntyNo}
+			ORDER BY NOTICE_NO ASC
+			LIMIT 1
+ 	</select>
+ 	
+	<select id="findCommunityNotice" parameterType="map" resultType="CommunityNoticeVO">
+ 	   SELECT * FROM TB_COMMUNITY_NOTICE CN
+ 	   LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CN.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
+ 	   <where>
+ 	        AND CN.DEL_YN = 'N'
+ 	   		AND CN.CMMNTY_NO = #{cmmntyNo}
+       		<if test='search_value != null and search_value != "" '>
+	           AND (( CN.TITLE LIKE CONCAT('%',#{search_value},'%')))
+	        </if>
+      </where>
+      ORDER BY CN.NOTICE_NO DESC
+      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+            LIMIT #{limit} OFFSET #{startIndex}
+      </if>
+ 	</select>
+ 	
+ 	<select id="findCommunityNoticeTotalCount" parameterType="map" resultType="int">
+ 	   SELECT count(*) FROM TB_COMMUNITY_NOTICE
+ 	   <where>
+ 	        AND DEL_YN = 'N'
+ 	   		AND CMMNTY_NO = #{cmmntyNo}
+       		<if test='search_value != null and search_value != "" '>
+	           AND (( TITLE LIKE CONCAT('%',#{search_value},'%')))
+	        </if>
+      </where>
+ 	</select>
+ 	
+	<insert id="insertCommunityNotice" parameterType="CommunityNoticeVO">
+		
+			INSERT INTO TB_COMMUNITY_NOTICE
+			(
+				TITLE,
+				CONT,
+				INQ_CNT,
+				CMMNTY_NO,
+				MBER_NO,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				ATCH_FILE_NO,
+				LINK1,
+				LINK2,
+				DEL_YN
+			)
+			VALUES
+			(
+		
+				#{title},
+				#{cont},
+				0,	
+				#{cmmntyNo},
+				#{mberNo},
+				now(),
+				#{updaterId},
+				now(),
+				#{atchFileNo},
+				#{link1},
+				#{link2},
+				'N'
+			)		
+	</insert>
+	
+	<update id="updateCommunityNotice" parameterType="CommunityNoticeVO">
+	        UPDATE TB_COMMUNITY_NOTICE SET
+		        TITLE = #{title},
+		        CONT = #{cont},
+		        INQ_CNT = #{inqCnt},
+		        ATCH_FILE_NO = #{atchFileNo},
+				LINK1 = #{link1},
+				LINK2 = #{link2},
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<update id="deleteCommunityNotice" parameterType="CommunityNoticeVO">
+			UPDATE TB_COMMUNITY_NOTICE SET
+		        DEL_YN = 'Y',
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<update id="updateCommunityNoticeInq" parameterType="CommunityNoticeVO">
+	        UPDATE TB_COMMUNITY_NOTICE SET
+		        INQ_CNT = #{inqCnt}
+	        WHERE NOTICE_NO = #{noticeNo}
+	</update>
+	
+	<select id="loadCommunityFreeboard" parameterType="map" resultType="CommunityFreeboardVO">
+			SELECT * FROM TB_COMMUNITY_FREEBOARD CF
+			LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CF.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
+			WHERE CF.DEL_YN = 'N'  AND CF.PSTG_NO = #{pstgNo}
+ 	</select>
+ 	<select id="loadCommunityFreeboardPrev" parameterType="map" resultType="CommunityFreeboardVO">
+ 	
+			SELECT * FROM TB_COMMUNITY_FREEBOARD WHERE DEL_YN = 'N'  AND PSTG_NO <![CDATA[<]]> #{pstgNo} AND CMMNTY_NO = #{cmmntyNo}
+			ORDER BY PSTG_NO DESC
+			LIMIT 1
+ 	</select>
+ 	
+ 	<select id="loadCommunityFreeboardNext" parameterType="map" resultType="CommunityFreeboardVO">
+			SELECT * FROM TB_COMMUNITY_FREEBOARD WHERE DEL_YN = 'N'  AND PSTG_NO <![CDATA[>]]> #{pstgNo} AND CMMNTY_NO = #{cmmntyNo}
+			ORDER BY PSTG_NO ASC
+			LIMIT 1
+ 	</select>
+ 	<select id="findCommunityFreeboard" parameterType="map" resultType="CommunityFreeboardVO">
+ 	   SELECT * FROM TB_COMMUNITY_FREEBOARD CF
+ 	   LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CF.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
+ 	   <where>
+ 	        AND CF.DEL_YN = 'N'
+ 	   		AND CF.CMMNTY_NO = #{cmmntyNo}
+       		<if test='search_value != null and search_value != "" '>
+	           AND (( CF.TITLE LIKE CONCAT('%',#{search_value},'%')))
+	        </if>
+      </where>
+      ORDER BY CF.PSTG_NO DESC
+      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+            LIMIT #{limit} OFFSET #{startIndex}
+      </if>
+ 	</select>
+ 	
+ 	<select id="findCommunityFreeboardTotalCount" parameterType="map" resultType="int">
+ 	   SELECT count(*) FROM TB_COMMUNITY_FREEBOARD
+ 	   <where>
+ 	        AND DEL_YN = 'N'
+ 	   		AND CMMNTY_NO = #{cmmntyNo}
+       		<if test='search_value != null and search_value != "" '>
+	           AND (( TITLE LIKE CONCAT('%',#{search_value},'%')))
+	        </if>
+      </where>
+ 	</select>
+ 	
+	<insert id="insertCommunityFreeboard" parameterType="CommunityFreeboardVO">
+		
+			INSERT INTO TB_COMMUNITY_FREEBOARD
+			(
+		
+				CMMNTY_NO,
+				TITLE,
+				CONT,
+				INQ_CNT,
+				MBER_NO,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				ATCH_FILE_NO,
+				LINK1,
+				LINK2,
+				
+				DEL_YN
+			)
+			VALUES
+			(
+				
+				#{cmmntyNo},
+				#{title},
+				#{cont},
+				0,	
+				#{mberNo},
+				now(),
+				#{updaterId},
+				now(),
+				#{atchFileNo},
+				#{link1},
+				#{link2},
+				'N'
+			)			
+		
+	</insert>
+	<update id="updateCommunityFreeboard" parameterType="CommunityFreeboardVO">
+	        UPDATE TB_COMMUNITY_FREEBOARD SET
+		        TITLE = #{title},
+		        CONT = #{cont},
+		        INQ_CNT = #{inqCnt},
+		        <if test="atchFileNo != null">ATCH_FILE_NO = #{atchFileNo},</if>
+				LINK1 = #{link1},
+				LINK2 = #{link2},
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE PSTG_NO = #{pstgNo}
+	</update>
+	
+	<update id="updateCommunityFreeboardInq" parameterType="CommunityFreeboardVO">
+	        UPDATE TB_COMMUNITY_FREEBOARD SET
+		        INQ_CNT = #{inqCnt}
+	        WHERE PSTG_NO = #{pstgNo}
+	</update>
+	
+	<update id="deleteCommunityFreeboard" parameterType="CommunityFreeboardVO">
+			UPDATE TB_COMMUNITY_FREEBOARD SET
+		        DEL_YN = 'Y',
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE PSTG_NO = #{pstgNo}
+	</update>
+	
+ 	<select id="findCommunityKnowledgeTotalCount" parameterType="map" resultType="int">
+	        SELECT
+	        	COUNT(*)
+	        FROM(
+				SELECT
+					*,
+					ROW_NUMBER() OVER(PARTITION BY TITLE ORDER BY KNOWLG_NO DESC ) AS ROW_NUM
+				FROM
+					TB_KNOWLEDGE
+				<where>
+					AND DEL_YN = 'N'
+					AND CMMNTY_NO = #{cmmntyNo}
+				</where>
+	        ) AS T
+	        WHERE ROW_NUM = 1
+ 	</select>
+	
+	<insert id="insertCommunityComment" parameterType="CommunityCommentVO" useGeneratedKeys="true" keyProperty="commentNo">
+		
+			INSERT INTO TB_COMMUNITY_COMMENT
+			(
+				CMMNTY_NO,
+				PSTG_NO,
+				COMMENT,
+				MBER_NO,
+				REGIST_DTM,
+				DEL_YN
+			)
+			VALUES
+			(
+				
+				#{cmmntyNo},
+				#{pstgNo},
+				#{comment},
+				#{mberNo},
+				now(),
+				'N'
+			)			
+		
+	</insert>
+	
+	<update id="deleteCommunityComment" parameterType="CommunityCommentVO">
+		
+			UPDATE TB_COMMUNITY_COMMENT SET
+				DEL_YN = 'Y'
+			WHERE COMMENT_NO = #{commentNo}
+		
+	</update>
+	<update id="updateCommunityComment" parameterType="CommunityCommentVO">
+		
+			UPDATE TB_COMMUNITY_COMMENT SET
+				COMMENT = #{comment}
+			WHERE COMMENT_NO = #{commentNo}
+		
+	</update>
+	<select id="getCommunityComment" parameterType="map" resultType="CommunityCommentVO">
+			SELECT * FROM TB_COMMUNITY_COMMENT WHERE COMMENT_NO = #{commentNo}
+	</select>
+	<select id="selectCommunityComment" parameterType="map" resultType="CommunityCommentVO">
+			SELECT 
+				cc.*
+				, (SELECT CMMNTY_NICKNM FROM TB_COMMUNITY_MEMBER WHERE MBER_NO = cc.MBER_NO) AS CMMNTY_NICKNM			
+			FROM TB_COMMUNITY_COMMENT cc
+			WHERE PSTG_NO = #{pstgNo}
+			AND DEL_YN = 'N'
+			ORDER BY COMMENT_NO DESC
+	</select>
+	
+	<select id="loadCommunityMember" parameterType="map" resultType="CommunityMemberVO">
+			SELECT * FROM TB_COMMUNITY_MEMBER WHERE DEL_YN = 'N'  AND MBER_NO = #{mberNo}
+ 	</select>
+ 	<select id="loadCommunityMemberByUserSid" parameterType="map" resultType="CommunityMemberVO">
+			SELECT * FROM TB_COMMUNITY_MEMBER WHERE DEL_YN = 'N'  AND USER_SID = #{userSid}
+ 	</select>
+ 	<select id="loadCommunityMemberByNickname" parameterType="map" resultType="CommunityMemberVO">
+			SELECT * FROM TB_COMMUNITY_MEMBER WHERE DEL_YN = 'N'  AND CMMNTY_NO = #{cmmntyNo} AND CMMNTY_NICKNM = #{cmmntyNicknm}
+ 	</select>
+ 	<select id="loadCommunityMemberByRole" parameterType="map" resultType="CommunityMemberVO">
+			SELECT *
+			FROM TB_COMMUNITY_MEMBER CM
+			LEFT OUTER JOIN TB_USER U ON  CM.USER_SID = U.SID
+			WHERE CM.DEL_YN = 'N' AND CM.CMMNTY_NO = #{cmmntyNo} AND CM.CMMNTY_ROLE_CD = #{cmmntyRoleCd}
+ 	</select>
+ 	
+ 	<select id="findCommunityMember" parameterType="map" resultType="CommunityMemberVO">
+	 	   SELECT * 
+	 	   FROM TB_COMMUNITY_MEMBER CM
+	 	   LEFT OUTER JOIN TB_USER U ON  CM.USER_SID = U.SID
+	 	   <where>
+	 	        AND CM.DEL_YN = 'N'
+	 	   		AND CM.CMMNTY_NO = #{cmmntyNo}
+	       		<if test='nickname != null and nickname != "" '>
+	       			<if test='search_type != null and search_type == "01" '>
+	       				AND (( CM.CMMNTY_NICKNM LIKE CONCAT('%',#{nickname},'%')) OR  ( U.DISPLAY_NAME LIKE CONCAT('%',#{nickname},'%')) )
+	       			</if>
+	       			<if test='search_type != null and search_type == "02" '>
+	       				AND ( U.OU LIKE CONCAT('%',#{nickname},'%')) 
+	       			</if>
+	       			<if test='search_type == null and search_type == "" '>
+	       				AND (( CM.CMMNTY_NICKNM LIKE CONCAT('%',#{nickname},'%')) OR  ( U.DISPLAY_NAME LIKE CONCAT('%',#{nickname},'%')) OR ( U.OU LIKE CONCAT('%',#{nickname},'%')) )
+	       			</if>
+		        </if>
+		        <if test='joinReq != null and joinReq == "Y" '>
+		           AND CM.APRV_YN = 'N'
+		        </if>
+		        <if test='joinReq != null and joinReq == "N" '>
+		           AND CM.APRV_YN = 'Y'
+		        </if>
+		        <if test='staff != null and staff == "Y" '>
+		           AND CM.CMMNTY_ROLE_CD IS NOT NULL
+		        </if>
+		        <if test='staff != null and staff == "N" '>
+		           AND CM.CMMNTY_ROLE_CD IS NULL
+		        </if>
+	      </where>
+	      ORDER BY CM.MBER_NO DESC
+	      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+	            LIMIT #{limit} OFFSET #{startIndex}
+	      </if>
+ 	</select>
+ 	
+ 	<select id="findCommunityMemberTotalCount" parameterType="map" resultType="int">
+	 	   SELECT COUNT(*)
+	 	   FROM TB_COMMUNITY_MEMBER CM
+	 	   LEFT OUTER JOIN TB_USER U ON  CM.USER_SID = U.SID
+	 	   <where>
+	 	        AND CM.DEL_YN = 'N'
+	 	   		AND CM.CMMNTY_NO = #{cmmntyNo}
+	       		<if test='nickname != null and nickname != "" '>
+	       			<if test='search_type != null and search_type == "01" '>
+	       				AND (( CM.CMMNTY_NICKNM LIKE CONCAT('%',#{nickname},'%')) OR  ( U.DISPLAY_NAME LIKE CONCAT('%',#{nickname},'%')) )
+	       			</if>
+	       			<if test='search_type != null and search_type == "02" '>
+	       				AND ( U.OU LIKE CONCAT('%',#{nickname},'%')) 
+	       			</if>
+	       			<if test='search_type == null and search_type == "" '>
+	       				AND (( CM.CMMNTY_NICKNM LIKE CONCAT('%',#{nickname},'%')) OR  ( U.DISPLAY_NAME LIKE CONCAT('%',#{nickname},'%')) OR ( U.OU LIKE CONCAT('%',#{nickname},'%')) )
+	       			</if>
+		        </if>
+		        <if test='joinReq != null and joinReq == "Y" '>
+		           AND CM.APRV_YN = 'N'
+		        </if>
+		        <if test='joinReq != null and joinReq == "N" '>
+		           AND CM.APRV_YN = 'Y'
+		        </if>
+		        <if test='staff != null and staff == "Y" '>
+		           AND CM.CMMNTY_ROLE_CD IS NOT NULL
+		        </if>
+		        <if test='staff != null and staff == "N" '>
+		           AND CM.CMMNTY_ROLE_CD IS NULL
+		        </if>
+	      </where>
+ 	</select>
+ 	
+ 	<select id="getFreeBoardCount" parameterType="map" resultType="int">
+ 			SELECT COUNT(*) FROM TB_COMMUNITY_FREEBOARD WHERE CMMNTY_NO = #{cmmntyNo} AND MBER_NO = #{mberNo}
+ 	</select>
+ 	
+ 	<select id="getCommentBoardCount" parameterType="map" resultType="int">
+ 			SELECT COUNT(*) FROM TB_COMMUNITY_COMMENT WHERE CMMNTY_NO = #{cmmntyNo} AND MBER_NO = #{mberNo}
+ 	</select>
+ 	
+ 	<select id="getCommunityMemberNickname" parameterType="map" resultType="CommunityMemberVO">
+ 			SELECT * FROM TB_COMMUNITY_MEMBER WHERE DEL_YN = 'N' AND CMMNTY_NO = #{cmmntyNo} AND CMMNTY_NICKNM = #{nickname} 
+ 	</select>
+ 	
+ 	<select id="getCommunityMemberUser" parameterType="map" resultType="CommunityMemberVO">
+ 			SELECT * FROM TB_COMMUNITY_MEMBER WHERE APRV_YN = 'Y' AND DEL_YN = 'N' AND CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
+ 	</select>
+ 	<select id="getCommunityMember" parameterType="map" resultType="CommunityMemberVO">
+ 			SELECT * FROM TB_COMMUNITY_MEMBER WHERE DEL_YN = 'N' AND MBER_NO = #{mberNo}
+ 	</select>
+ 	
+ 	<insert id="insertCommunityMember" parameterType="CommunityMemberVO">
+			INSERT INTO TB_COMMUNITY_MEMBER
+			(
+				CMMNTY_NO,
+				CMMNTY_ROLE_CD,
+				CMMNTY_NICKNM,
+				REGISTER_ID,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				APRV_YN,
+				APRV_DTM,
+				USER_SID,
+				DEL_YN
+			)
+			VALUES
+			(
+				#{cmmntyNo},
+				#{cmmntyRoleCd},
+				#{cmmntyNicknm},
+				#{registerId},
+				now(),
+				#{updaterId},
+				now(),
+				#{aprvYn},
+				#{aprvDtm},
+				#{userSid},
+				'N'
+			)		
+	</insert>
+	<update id="updateCommunityMember" parameterType="CommunityMemberVO">
+	        UPDATE TB_COMMUNITY_MEMBER SET
+		        CMMNTY_ROLE_CD = #{cmmntyRoleCd},
+		        CMMNTY_NICKNM = #{cmmntyNicknm},
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE MBER_NO = #{mberNo}
+	</update>
+	
+	<update id="deleteCommunityMember" parameterType="CommunityMemberVO">
+			UPDATE TB_COMMUNITY_MEMBER SET
+		        DEL_YN = 'Y',
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE MBER_NO = #{mberNo}
+	</update>
+	<update id="deleteCommunityMemberByNo" parameterType="map">
+			UPDATE TB_COMMUNITY_MEMBER SET
+		        DEL_YN = 'Y',
+		        UPD_DTM = now()
+	        WHERE MBER_NO = #{mberNo}
+	</update>
+	<update id="updateCommunityMemberRole" parameterType="map">
+			UPDATE TB_COMMUNITY_MEMBER SET
+		        CMMNTY_ROLE_CD = #{cmmntyRoleCd},
+		        UPD_DTM = now()
+	        WHERE MBER_NO = #{mberNo}
+	</update>
+	
+	<update id="updateCommunityMemberConfirm">
+		     UPDATE TB_COMMUNITY_MEMBER SET
+			        APRV_YN = 'Y',
+			        APRV_DTM = now()
+		     WHERE MBER_NO = #{mberNo}
+	</update>
+	<update id="updateCommunityMemberReject">
+		     UPDATE TB_COMMUNITY_MEMBER SET
+			        APRV_YN = 'N',
+			        APRV_DTM = now()
+		     WHERE MBER_NO = #{mberNo}
+	</update>
+	
+	<select id="getAtchFile" parameterType="map" resultType="AtchFileVO">
+			SELECT * FROM
+				TB_ATTACH_FILE_DETAIL
+			WHERE ATCH_FILE_NO = #{atchFileNo}
+ 	</select>
+ 	
+ 	<insert id="insertCommunityEvent" parameterType="CommunityEventVO">
+			INSERT INTO TB_COMMUNITY_EVENT
+			(
+				USER_ID,
+				EXPIRE_DTM,
+				EVENT_TYPE,
+				CMMNTY_NO,
+				PSTG_NO,
+				COMMENT_NO
+			)
+			VALUES
+			(
+				#{userId},
+				#{expireDtm},
+				#{eventType},
+				#{cmmntyNo},
+				#{pstgNo},
+				#{commentNo}
+			)	
+ 	</insert>
+ 	
+ 	<update id="clearCommunityEvent" parameterType="map">
+		 	UPDATE TB_COMMUNITY_EVENT SET
+				 EXPIRE_DTM = #{expireDtm}
+			WHERE EVENT_NO = #{eventNo}
+ 	</update>
+ 	
+ 	<select id="selectCommunityEvent" parameterType="map" resultType="CommunityEventVO">
+		 	SELECT CE.*,
+		 	C.CMMNTY_NM,
+		 	CF.TITLE AS PSTG_TITLE,
+		 	CC.COMMENT AS PSTG_COMMENT,
+			CF.REGIST_DTM AS PSTG_DTM
+			
+		 	FROM TB_COMMUNITY_EVENT CE
+		 	LEFT OUTER JOIN TB_COMMUNITY C ON CE.CMMNTY_NO = C.CMMNTY_NO
+		 	LEFT OUTER JOIN TB_COMMUNITY_FREEBOARD CF ON CE.PSTG_NO = CF.PSTG_NO
+		 	LEFT OUTER JOIN TB_COMMUNITY_COMMENT CC ON CE.COMMENT_NO = CC.COMMENT_NO
+		 	WHERE CE.USER_ID = #{userId}
+		 	AND CE.EXPIRE_DTM > #{nowDtm}
+		 	
+		 	ORDER BY CE.CMMNTY_NO, CE.EVENT_TYPE 
+ 	</select>
+ 	
+ 	<select id="selectCommunityCount" parameterType="map" resultType="int">
+ 			SELECT 
+ 				COUNT(*)
+ 			FROM
+ 				TB_COMMUNITY
+ 			<where>
+ 				AND APRV_YN = 'N'
+				AND DEL_YN = 'N'
+				<if test="userId !=null and userId !=''">
+				AND REGISTER_ID = #{userId}
+				</if>
+ 			</where>
+ 	</select>
+ 	
+ 	<select id="selectCommunityApply" parameterType="map" resultType="CommunityEventVO">
+		 	SELECT CE.*,
+		 	C.CMMNTY_NM,
+		 	CF.TITLE AS PSTG_TITLE,
+		 	CC.COMMENT AS PSTG_COMMENT,
+			CF.REGIST_DTM AS PSTG_DTM
+			
+		 	FROM TB_COMMUNITY_EVENT CE
+		 	LEFT OUTER JOIN TB_COMMUNITY C ON CE.CMMNTY_NO = C.CMMNTY_NO
+		 	LEFT OUTER JOIN TB_COMMUNITY_FREEBOARD CF ON CE.PSTG_NO = CF.PSTG_NO
+		 	LEFT OUTER JOIN TB_COMMUNITY_COMMENT CC ON CE.COMMENT_NO = CC.COMMENT_NO
+		 	WHERE CE.USER_ID = #{userId}
+		 	AND CE.CMMNTY_NO = #{cmmntyNo}
+		 	AND CE.EXPIRE_DTM > #{nowDtm}
+		 	AND EVENT_TYPE = '5'
+		 	ORDER BY CE.CMMNTY_NO, CE.EVENT_TYPE 
+ 	</select>
+</mapper>

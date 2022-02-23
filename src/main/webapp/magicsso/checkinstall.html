@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>MagicPass ActiveX 설치확인</title>
+<script type="text/javascript">
+var isIniline = true;
+var mpxversion="1,0,4,9"; // current = 1.0.4.9
+var mlxversion="1,0,2,9";   // current = 1.0.2.7
+
+function isInstall(_prd){
+	if(_prd =="iniline") isIniline = false;	
+}
+function magicPasXInstallCheck(){
+	var nInstall;
+	var typePlatform = navigator.platform;
+	if(isIniline){
+		var thisArray="";
+		var iputArray2 = "";
+		try{
+			var code = document.objMagicPassX_check.GetVersion();
+			alert("code : "+code);
+			var xversion =  document.objMagicPassX_check.Result;
+			alert(xversion);
+			thisArray = String(xversion).split('.');
+			inputArray2 = mpxversion.split(',');
+		}catch(errorObject){
+			return 2;
+		}
+		for(var i=0; i<4;i++){
+			if(parseInt(thisArray[i],10) > parseInt(inputArray2[i], 10)){
+				return 0;
+			}else if(parseInt(thisArray[i],10) < parseInt(inputArray2[i], 10)){
+				return 1;
+			}
+		}
+		return 0;
+	}else{
+		return 2;
+	}
+}
+function magicLoaderXInstallCheck(){
+	var nInstall;
+	var typePlatform = navigator.platform;
+	if(isIniline){
+		var thisArray="";
+		var iputArray2 = "";
+		try{
+			var code = document.objMagicLoaderX_check.GetVersion();
+			alert("code : "+code);
+			var xversion =  document.objMagicLoaderX_check.Result;
+			alert(xversion);
+			thisArray = String(xversion).split('.');
+			inputArray2 = mlxversion.split(',');
+		}catch(errorObject){
+			return 2;
+		}
+		for(var i=0; i<4;i++){
+			if(parseInt(thisArray[i],10) > parseInt(inputArray2[i], 10)){
+				return 0;
+			}else if(parseInt(thisArray[i],10) < parseInt(inputArray2[i], 10)){
+				return 1;
+			}
+		}
+		return 0;
+	}else
+		return 2;
+}
+function loadMPX_INIplugin(){
+	var mpxDiv = document.createElement("div");
+	mpxDiv.setAttribute("style","line-height:0;font-size:0;");
+	mpxDiv.setAttribute("name","iniline_plugin");
+	mpxDiv.setAttribute("id","iniline_plugin");
+	mpxDiv.innerHTML = '<object id="objMagicPassX_check" CLASSID="CLSID:AD6870C0-44B7-42FB-A119-C2C6BD9CD005"  onerror=isInstall("iniline") onerrorupdate=isInstall("iniline") width=0 height=0></object>';
+	document.getElementById("loadDiv").appendChild(mpxDiv);
+	alert(magicPasXInstallCheck());
+
+}
+
+function loadMLX_INIplugin(){
+
+	var mlxDiv = document.createElement("div");
+	mlxDiv.setAttribute("style","line-height:0;font-size:0;");
+	mlxDiv.setAttribute("name","iniline_plugin");
+	mlxDiv.setAttribute("id","iniline_plugin");
+	mlxDiv.innerHTML = '<object id="objMagicLoaderX_check" CLASSID="CLSID:3D64E58D-CB55-4344-B809-CFE38F900838"  onerror=isInstall("iniline") onerrorupdate=isInstall("iniline") width=0 height=0></object>';
+	document.getElementById("loadDiv").appendChild(mlxDiv);
+	alert(magicLoaderXInstallCheck());
+}
+</script>
+</head>
+<body>
+<form>
+<input type="button" id="insChkBtn" name="insChkBtn" value="MagicPassX 설치확인" onclick="loadMPX_INIplugin();return false;" />
+<input type="button" id="insChk2Btn" name="insChk2Btn" value="MagicLoaderX 설치확인" onclick="loadMLX_INIplugin();return false;" />
+</form>
+<div id="loadDiv"></div>
+</body>
+</html>

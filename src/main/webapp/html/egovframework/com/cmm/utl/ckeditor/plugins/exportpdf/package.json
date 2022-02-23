@@ -1,0 +1,108 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ckeditor4-plugin-exportpdf@1.0.1",
+        "scope": null,
+        "escapedName": "ckeditor4-plugin-exportpdf",
+        "name": "ckeditor4-plugin-exportpdf",
+        "rawSpec": "1.0.1",
+        "spec": "1.0.1",
+        "type": "version"
+      },
+      "/home/ckeditor/repository/git-new/ckeditor-presets"
+    ]
+  ],
+  "_from": "ckeditor4-plugin-exportpdf@1.0.1",
+  "_hasShrinkwrap": false,
+  "_id": "ckeditor4-plugin-exportpdf@1.0.1",
+  "_inCache": true,
+  "_location": "/ckeditor4-plugin-exportpdf",
+  "_nodeVersion": "10.20.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/ckeditor4-plugin-exportpdf_1.0.1_1600945882406_0.583561270083385"
+  },
+  "_npmUser": {
+    "name": "ckeditor",
+    "email": "npm@cksource.com"
+  },
+  "_npmVersion": "6.14.4",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ckeditor4-plugin-exportpdf@1.0.1",
+    "scope": null,
+    "escapedName": "ckeditor4-plugin-exportpdf",
+    "name": "ckeditor4-plugin-exportpdf",
+    "rawSpec": "1.0.1",
+    "spec": "1.0.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ckeditor4-plugin-exportpdf/-/ckeditor4-plugin-exportpdf-1.0.1.tgz",
+  "_shasum": "52586d577cf6ec5a4da773b1c072228255cc4278",
+  "_shrinkwrap": null,
+  "_spec": "ckeditor4-plugin-exportpdf@1.0.1",
+  "_where": "/home/ckeditor/repository/git-new/ckeditor-presets",
+  "author": {
+    "name": "CKSource",
+    "url": "http://cksource.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/ckeditor/ckeditor4/issues/"
+  },
+  "dependencies": {},
+  "description": "Plugin adds export to PDF functionality to CKEditor 4.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-KJS2G89Keid+bwYGORsjmo4rct2U0zhI/SClpGySKi4jxo8G5aH968Zlur56F8wA+WiTbXvxeU4yli7Rdfe6FA==",
+    "shasum": "52586d577cf6ec5a4da773b1c072228255cc4278",
+    "tarball": "https://registry.npmjs.org/ckeditor4-plugin-exportpdf/-/ckeditor4-plugin-exportpdf-1.0.1.tgz",
+    "fileCount": 44,
+    "unpackedSize": 85676,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.13\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJfbH7bCRA9TVsSAnZWagAAcGkQAIhvxYvzSx5Z1fT9Zn2z\nV6KgdvZw962HQguIVvzRn7Y0vsSuiuO9fyKJ7wZugg8KgPJiTr+F1jxjADE3\nl97c3sqFtZsqyUtMYYYRCdGNeKxMQZwuwCV4GeLIhPtH1QamrKUTnM0n9Ge4\nCE21sfzTeXqWsovLUqyP1a/5rg6d0g37MMy9jZniyUNwlvl6jicD0rNbnM3Y\neFyffI4Q/NGy8umefxaw0mclFRhJsOVkr3Q9L1Uo59niV40EdMvXmCaiQMYY\nE3c8ANsyLSy/SmAKC0WRyKw//jvYlYXlNXFQoqmvwiAgGenYytFxgUjpxF/t\nIG2UhbMqLnfTU+NaW9cG7idwu8IMU1JBfwc0Q6di4AjxEJbZmaBwhbHPK7bU\nfh3z/CyPKVTNQBOsrMZgRd9YrsbJYfWnP/XfDTa1TGGe5QzKJzLPIkgAeVYU\nt/znub+2CdZLh+GsR/rw0dPVHbs9Hct1shA/Ye6LSeAIuFF2mmm4U3P25llJ\nQ9MbPeNkGxpCVyKvCvRWTlGP0/iACTdsRs9S5CiJLQfewAzbHousn1/Lvxqh\nJwKR+/8jp0Epre0eLF0MGLGq4eLOQcuUPjiOHznxOvF47mAB7APSDoVkcleq\npprekL4uJBZwRd4YfQS/0cO+r0JSBB6T5hSai1NFDLVRrfz9PShYndSsYKwb\nc106\r\n=y59l\r\n-----END PGP SIGNATURE-----\r\n"
+  },
+  "homepage": "https://ckeditor.com/export-to-pdf-word/",
+  "keywords": [
+    "ckeditor",
+    "ckeditor4",
+    "ckeditor 4",
+    "ckeditor4-plugin",
+    "WYSIWYG",
+    "WYSIWYM",
+    "text",
+    "rich-text",
+    "richtext",
+    "editor",
+    "editing",
+    "html",
+    "contentEditable",
+    "PDF",
+    "print PDF",
+    "save PDF",
+    "convert to PDF",
+    "export PDF",
+    "export to PDF",
+    "PDF converter",
+    "HTML to PDF",
+    "HTML2PDF"
+  ],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "main": "plugin.js",
+  "maintainers": [
+    {
+      "name": "ckeditor",
+      "email": "npm@cksource.com"
+    }
+  ],
+  "name": "ckeditor4-plugin-exportpdf",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "ckeditor4": ">=4.6.1"
+  },
+  "readme": "ERROR: No README data found!",
+  "version": "1.0.1"
+}

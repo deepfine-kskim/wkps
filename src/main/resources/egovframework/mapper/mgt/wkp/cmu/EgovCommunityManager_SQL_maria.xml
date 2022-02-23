@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommunityManageDAO">
+
+	
+	<update id="updateCommunityAprv" parameterType="map">
+		   UPDATE TB_COMMUNITY 
+		   SET
+		   	APRV_YN = #{aprvYn},
+		   	APRV_DTM = now(),
+		   	REJECT_COMMENT = #{rejectComment},
+		   	APPROVER_ID = #{approverId}
+		   WHERE CMMNTY_NO = #{cmmntyNo}
+	</update>
+
+
+ 	<select id="findCommunity" parameterType="map" resultType="CommunityVO">
+	 	   SELECT 
+	 	   	C.CMMNTY_NO
+	 	   	, C.CMMNTY_NM
+	 	   	, CM.CMMNTY_NICKNM
+	 	   	, C.REGIST_DTM
+	 	   	, C.APRV_YN
+	 	   	, CASE WHEN DATEDIFF(C.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+	 	   FROM TB_COMMUNITY C
+	 	   INNER JOIN TB_COMMUNITY_MEMBER CM ON C.CMMNTY_NO = CM.CMMNTY_NO AND CM.CMMNTY_ROLE_CD = '00'
+	 	   <where>
+	 	        AND C.DEL_YN = 'N'
+	 	        <if test='aprvYn != null and aprvYn != "" '>
+	 	   		AND C.APRV_YN = #{aprvYn}
+	 	   		</if>
+	       		<if test='search_value != null and search_value != "" '>
+		       		<if test='search_type != null and search_type != "01" '>
+		       		AND C.CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
+		       		</if>
+		       		<if test='search_type != null and search_type != "02" '>
+		       		AND C.CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
+		       		</if>
+		        </if>
+	      </where>
+	      ORDER BY C.CMMNTY_NO DESC
+	      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+	            LIMIT #{limit} OFFSET #{startIndex}
+	      </if>
+ 	</select>
+ 	
+ 	<select id="findCommunityTotalCount" parameterType="map" resultType="int">
+	 	   SELECT count(*) FROM TB_COMMUNITY
+	 	   <where>
+	 	        AND DEL_YN = 'N'
+	 	   		<if test='aprvYn != null and aprvYn != "" '>
+	 	   		AND APRV_YN = #{aprvYn}
+	 	   		</if>
+	       		<if test='search_value != null and search_value != "" '>
+		       		<if test='search_type != null and search_type != "01" '>
+		       		AND CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
+		       		</if>
+		       		<if test='search_type != null and search_type != "02" '>
+		       		AND CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
+		       		</if>
+		        </if>
+	      </where>
+ 	</select> 	
+ 	
+ 	<select id="findBanner" parameterType="map" resultType="CommunityBannerVO">
+	 	   SELECT 
+	 	   	* 
+	 	   FROM TB_COMMUNITY_BANNER CB
+	 	   LEFT OUTER JOIN TB_ATTACH_FILE_DETAIL AFD ON CB.ATCH_FILE_NO = AFD.ATCH_FILE_NO AND AFD.FILE_SN = 0
+	 	   <where>
+	 	        AND CB.DEL_YN = 'N'
+	       		<if test='search_value != null and search_value != "" '>
+		       		AND CB.TITLE LIKE CONCAT('%',#{search_value},'%')
+		        </if>
+		        <if test='useYn != null and useYn != "" '>
+		       		AND CB.USE_YN = #{useYn}
+		        </if>
+	      </where>
+	      ORDER BY CB.BANNER_NO DESC
+	      <if test="startIndex &gt; -1 and limit &gt; -1 ">
+    	        LIMIT #{limit} OFFSET #{startIndex}
+    	  </if>
+ 	</select>
+ 	
+ 	<select id="findBannerTotalCount" parameterType="map" resultType="int">
+	 	   SELECT 
+	 	   	count(*)
+	 	   FROM TB_COMMUNITY_BANNER
+	 	   <where>
+	 	        AND DEL_YN = 'N'
+	       		<if test='search_value != null and search_value != "" '>
+		       		AND TITLE LIKE CONCAT('%',#{search_value},'%')
+		        </if>
+		        <if test='useYn != null and useYn != "" '>
+		       		AND USE_YN = #{useYn}
+		        </if>
+	      </where>
+ 	</select>
+ 	
+ 	<select id="getBanner" parameterType="map" resultType="CommunityBannerVO">
+	 	   SELECT 
+	 	   	* 
+	 	   FROM TB_COMMUNITY_BANNER CB
+	 	   LEFT OUTER JOIN TB_ATTACH_FILE_DETAIL AFD ON CB.ATCH_FILE_NO = AFD.ATCH_FILE_NO AND AFD.FILE_SN = 0
+	 	   WHERE CB.BANNER_NO = #{bannerNo}
+ 	</select>
+ 	
+	<insert id="insertBanner" parameterType="CommunityBannerVO">
+			INSERT INTO TB_COMMUNITY_BANNER
+			(
+				TITLE,
+				LINK,
+				USE_YN,	
+				ETC,
+				REGIST_ID,
+				REGIST_DTM,
+				UPDATER_ID,
+				UPD_DTM,
+				ATCH_FILE_NO,
+				DEL_YN
+			)
+			VALUES
+			(
+				#{title},
+				#{link},
+				#{useYn},	
+				#{etc},
+				#{registId},
+				now(),
+				#{updaterId},
+				now(),
+				#{atchFileNo},
+				'N'
+			)			
+	</insert>
+	
+	<update id="updateBanner" parameterType="CommunityBannerVO">
+	        UPDATE TB_COMMUNITY_BANNER
+	        SET
+	            TITLE = #{title},
+				LINK = #{link},
+				USE_YN = #{useYn},	
+				ETC = #{etc},
+				UPDATER_ID = #{updaterId},
+				UPD_DTM = now(),
+				ATCH_FILE_NO = #{atchFileNo}
+	        WHERE BANNER_NO = #{bannerNo}
+	</update>
+	
+	<update id="deleteBanner" parameterType="CommunityBannerVO">
+			UPDATE TB_COMMUNITY_BANNER
+			SET
+		        DEL_YN = 'Y',
+		        UPDATER_ID = #{updaterId},
+		        UPD_DTM = now()
+	        WHERE BANNER_NO = #{bannerNo}
+	</update>	
+ 	
+</mapper>

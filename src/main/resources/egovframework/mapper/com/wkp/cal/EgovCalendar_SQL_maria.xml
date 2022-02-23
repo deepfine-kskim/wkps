@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CalendarDAO">
+
+	<select id="findCalendar" parameterType="map" resultType="CalendarVO">
+		SELECT * FROM TB_CALENDAR 
+		WHERE CALENDAR_TYPE_CD = '05' AND  CMMNTY_NO = #{cmmntyNo}
+		ORDER BY CALENDAR_NO ASC
+		<if test="startIndex &gt; -1 and limit &gt; -1 ">
+            LIMIT #{limit} OFFSET #{startIndex}
+        </if>
+	</select>
+	<select id="findCalendarTotalCount" parameterType="map" resultType="int">
+		SELECT count(*) FROM TB_CALENDAR 
+		WHERE CALENDAR_TYPE_CD = '05' AND  CMMNTY_NO = #{cmmntyNo}
+		
+	</select>
+
+ 	<select id="selectCalendarList" parameterType="map" resultType="CalendarVO">
+ 		
+			SELECT *
+			FROM TB_CALENDAR
+				
+			WHERE DEL_YN = 'N' AND
+			(REGISTER_ID = #{USER_SID} OR (TARGET_NO IN (
+			
+				SELECT TARGET_NO FROM TB_TARGET_DETAIL TD WHERE (TD.TARGET_TYPE_CD = 'ORG' AND TD.TARGET_CODE = #{OU_CODE}) OR (TD.TARGET_TYPE_CD = 'USER' AND TD.TARGET_CODE = #{USER_SID}) OR
+				(TD.TARGET_TYPE_CD = 'GROUP' AND (
+				
+				SELECT COUNT(*) FROM TB_GROUP_DETAIL GD
+				WHERE GD.GROUP_NO = TD.TARGET_CODE AND
+				( 
+				GD.REGISTER_ID = #{USER_SID} OR ( (GD.TARGET_TYPE_CD = 'ORG' AND GD.TARGET_CODE = #{OU_CODE}) OR (GD.TARGET_TYPE_CD = 'USER' AND GD.TARGET_CODE = #{USER_SID}) )
+				)
+				
+				) > 0 )			   
+			))) AND
+			(			 
+			(
+			date_format(BNGN_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			AND date_format(BNGN_DTM, '%Y-%m-%d')  <![CDATA[<]]> #{end_date}
+			
+			AND date_format(END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			AND date_format(END_DTM, '%Y-%m-%d') <![CDATA[<]]> #{end_date}
+			)
+			OR
+			(
+			date_format(BNGN_DTM, '%Y-%m-%d') <![CDATA[<]]> #{start_date}
+			AND date_format(END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			)
+			OR
+			(
+			date_format(END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{end_date}
+			AND date_format(BNGN_DTM, '%Y-%m-%d') <![CDATA[<]]> #{end_date}
+			)
+			)
+			ORDER BY CALENDAR_NO ASC
+ 		
+ 	</select>
+ 	
+ 	<select id="selectCalendarListDayFromCommunity" parameterType="map" resultType="CalendarVO">
+ 		
+			SELECT *
+			FROM TB_CALENDAR C
+			INNER JOIN TB_COMMUNITY_CALENDAR CC ON C.CALENDAR_NO = CC.CALENDAR_NO AND CC.CMMNTY_NO = #{cmmntyNo}
+				
+			WHERE C.DEL_YN = 'N' AND
+			C.CALENDAR_TYPE_CD = '05' AND
+			(
+			date_format(C.BNGN_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			AND date_format(C.BNGN_DTM, '%Y-%m-%d')  <![CDATA[<]]> #{end_date}
+			
+			AND date_format(C.END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			AND date_format(C.END_DTM, '%Y-%m-%d') <![CDATA[<]]> #{end_date}
+			)
+			OR
+			(
+			date_format(C.BNGN_DTM, '%Y-%m-%d') <![CDATA[<]]> #{start_date}
+			AND date_format(C.END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{start_date}
+			)
+			OR
+			(
+			date_format(C.END_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{end_date}
+			AND date_format(C.BNGN_DTM, '%Y-%m-%d') <![CDATA[<]]> #{end_date}
+			)
+								
+			ORDER BY C.CALENDAR_NO ASC
+ 		
+ 	</select>
+ 	
+
+	<insert id="insertCalendar" parameterType="CalendarVO" useGeneratedKeys="true" keyProperty="calendarNo">
+		
+			INSERT INTO TB_CALENDAR
+			(
+			   CALENDAR_TYPE_CD,
+			   TITLE,
+			   CONT,
+			   BNGN_DTM,
+			   END_DTM,
+			   PLC,
+			   ATTENDESS,
+			   CNFDNT_YN,
+			   REGISTER_ID,
+			   REGIST_DTM,
+			   CMMNTY_NO,
+			   UPDATER_ID,
+			   UPD_DTM,
+			   TARGET_NO,
+			   DEL_YN
+			)
+			VALUES
+			(
+			   #{calendarTypeCd},
+			   #{title},
+			   #{cont},
+			   #{bngnDtm},
+			   #{endDtm},
+			   #{plc},
+			   #{attendess},
+			   #{cnfdntYn},
+			   #{registerId},
+			   now(),
+			   #{cmmntyNo},
+			   #{updaterId},
+			   now(),
+			    #{targetNo},
+			   'N'
+			)			
+		
+	</insert>
+	
+	<update id="updateCalendar" parameterType="CalendarVO">
+		   UPDATE TB_CALENDAR SET
+		   
+		       CALENDAR_TYPE_CD = #{calendarTypeCd},
+			   TITLE = #{title},
+			   CONT = #{cont},
+			   BNGN_DTM = #{bngnDtm},
+			   END_DTM = #{endDtm},
+			   PLC = #{plc},
+			   ATTENDESS = #{attendess},
+			   CNFDNT_YN = #{cnfdntYn},
+			   CMMNTY_NO = #{cmmntyNo},
+			   TARGET_NO = #{targetNo},
+			   UPDATER_ID = #{updaterId},
+			   UPD_DTM = now()
+			   
+		   WHERE CALENDAR_NO = #{calendarNo}
+						
+		
+	</update>	
+	
+	<update id="deleteCalendar" parameterType="map">
+		UPDATE TB_CALENDAR SET
+		   
+		       DEL_YN = 'Y'
+			   
+		   WHERE CALENDAR_NO = #{calendarNo}
+			
+	</update>
+	<select id="getCalendar" parameterType="map" resultType="CalendarVO">
+		SELECT * FROM TB_CALENDAR WHERE CALENDAR_NO = #{calendarNo}
+			
+	</select>
+ 	
+ 	<insert id="insertCommunityCalendar" parameterType="map">
+ 	INSERT INTO TB_COMMUNITY_CALENDAR
+ 	(
+ 		CALENDAR_NO,
+ 		CMMNTY_NO
+ 	)VALUES(
+ 	    #{calendarNo},
+ 	    #{cmmntyNo}
+ 	)
+ 	</insert>
+ 	
+ 	<delete id="deleteCommunityCalendar" parameterType="map">
+ 	DELETE FROM TB_COMMUNITY_CALENDAR
+ 	WHERE CALENDAR_NO = #{calendarNo}
+ 	</delete>
+ 	<select id="getCalendarCommunity" parameterType="map" resultType="CommunityVO">
+ 	SELECT * FROM TB_COMMUNITY_CALENDAR CC
+ 	INNER JOIN  TB_COMMUNITY C ON CC.CMMNTY_NO = C.CMMNTY_NO
+ 	WHERE CC.CALENDAR_NO = #{calendarNo}
+ 	</select>
+ 	
+</mapper>

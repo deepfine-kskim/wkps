@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDAO">
+
+    <sql id="selectListCondition">
+        <where>
+        	<if test="displayName != null and displayName != ''">
+        	AND DISPLAY_NAME LIKE CONCAT('%',#{displayName},'%')
+        	</if>
+        	<if test="ouCode != null and ouCode != ''">
+        	AND OU_CODE = #{ouCode}
+        	</if>
+        	<if test="sid != null and sid != ''">
+        	AND SID = #{sid}
+        	</if>
+        </where>
+    </sql>
+ 	
+ 	 <select id="selectUserList" parameterType="UserVO" resultType="UserVO">
+ 		
+			SELECT
+				tu.*,
+				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = tu.OU_CODE) AS OU
+			FROM
+				TB_USER tu
+			<include refid="selectListCondition" />
+			ORDER BY tu.ORDR
+ 		
+ 	</select>
+ 	
+ 	<select id="selectUserRoleCheck" parameterType="UserVO" resultType="int">
+ 		
+			SELECT 
+				COUNT(*)
+			FROM TB_ROLE
+			<where>
+				AND SID = #{sid}
+				<if test="approverYn != null and approverYn !=''">
+				AND (ROLE_CD = 'ROLE_ADMIN' OR ROLE_CD = 'ROLE_KNOWLEDGE' OR ROLE_CD = 'ROLE_ORG')
+				</if>
+			</where>
+			
+ 		
+ 	</select>
+ 	
+ 	<select id="selectUserDetail" parameterType="UserVO" resultType="UserVO">
+ 		
+			SELECT 
+				tu.*,
+				IFNULL(tr.ROLE_CD,'ROLE_USER') AS ROLE_CD,
+				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = tu.OU_CODE) AS OU,
+				IFNULL((SELECT NICK_NAME FROM TB_USER_NICK_NAME tun WHERE tun.SID = #{sid}),tu.DISPLAY_NAME) AS NICK_NAME
+			FROM
+				TB_USER tu
+				LEFT JOIN TB_ROLE tr on tu.SID = tr.SID
+			WHERE 
+				tu.SID = #{sid}
+ 		
+ 	</select>
+ 	
+	<insert id="insertUser" parameterType="UserVO">
+		
+			INSERT INTO TB_USER
+			(SID, UID, OU_CODE, PARENT_OU_CODE, TOP_OU_CODE, OU, DISPLAY_NAME, USER_FULL_NAME, ORDR, POSITION_CODE, POSITION)
+			VALUES
+			(#{sid}, #{uid}, #{ouCode}, #{parentOuCode}, #{topOuCode}, #{ou}, #{displayName}, #{userFullName}, #{ordr}, #{positionCode}, #{position})
+			ON DUPLICATE KEY
+			UPDATE
+				UID = #{uid},
+				OU_CODE = #{ouCode},
+				PARENT_OU_CODE =  #{parentOuCode},
+				TOP_OU_CODE = #{topOuCode},
+				OU = #{ou},
+				DISPLAY_NAME = #{displayName},
+				USER_FULL_NAME = #{userFullName},
+				ORDR = #{ordr},
+				POSITION_CODE = #{positionCode},
+				POSITION = #{position}
+			
+	</insert>
+	
+ 	 <select id="selectManagerList" parameterType="UserVO" resultType="UserVO">
+ 		
+			SELECT 
+				tr.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tr.SID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = tr.SID)) AS OU,
+				CASE WHEN tr.ROLE_CD = 'ROLE_ADMIN' THEN '시스템 관리자'
+				     WHEN tr.ROLE_CD = 'ROLE_KNOWLEDGE' THEN '지식 관리자'
+				     WHEN tr.ROLE_CD = 'ROLE_SURVEY' THEN '설문 관리자'
+				     WHEN tr.ROLE_CD = 'ROLE_COMMUNITY' THEN '커뮤니티 관리자'
+				     WHEN tr.ROLE_CD = 'ROLE_ORG' THEN '부서 지식 관리자'
+				END AS ROLE_NM
+			FROM
+				TB_ROLE tr
+			<include refid="selectListCondition" />
+ 		
+ 	</select>
+ 	
+ 	<insert id="insertManager" parameterType="UserVO">
+		
+			INSERT INTO TB_ROLE
+			(SID, ROLE_CD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{sid}, #{roleCd}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N') 			
+		
+	</insert>
+	
+	<delete id="deleteManager" parameterType="UserVO">
+	
+			DELETE
+			FROM
+				TB_ROLE
+			<where>
+				AND SID = #{sid}
+			</where>
+			
+	</delete>
+	
+	<update id="updateManager" parameterType="UserVO">
+	
+			UPDATE
+				TB_ROLE
+			SET
+				ROLE_CD = #{roleCd}
+			<where>
+				AND SID = #{sid}
+			</where>
+	
+	</update>
+	
+	<insert id="insertNickName" parameterType="UserVO">
+
+			INSERT INTO TB_USER_NICK_NAME
+  			(SID, NICK_NAME)
+  			VALUES
+			(#{sid}, #{nickName})
+			ON DUPLICATE KEY
+			UPDATE
+				NICK_NAME = #{nickName}
+			
+	</insert>
+	
+ 	<insert id="insertRequestManager" parameterType="UserVO">
+		
+			INSERT INTO TB_REQUEST_MANAGER
+			(SID, REGIST_DTM)
+			VALUES
+			(#{sid}, SYSDATE())
+		
+	</insert>
+	
+	<delete id="deleteRequestManager" parameterType="UserVO">
+			
+			DELETE
+			FROM
+				TB_REQUEST_MANAGER
+			<where>
+				AND SID = #{sid}
+			</where>
+	
+	</delete>
+	
+ 	 <select id="selectRequestManagerList" parameterType="UserVO" resultType="UserVO">
+ 		
+			SELECT 
+				trm.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trm.SID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = trm.SID)) AS OU
+			FROM
+				TB_REQUEST_MANAGER trm
+			<include refid="selectListCondition" />
+ 		
+ 	</select>
+ 	
+ 	<insert id="insertOrgManager" parameterType="UserVO">
+		
+			INSERT INTO TB_ROLE
+			(SID, ROLE_CD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{sid}, 'ROLE_ORG', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+		
+	</insert>
+
+</mapper>

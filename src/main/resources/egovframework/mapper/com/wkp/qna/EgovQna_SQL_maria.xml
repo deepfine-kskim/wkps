@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QnaDAO">
+
+    <sql id="selectListCondition">
+        WHERE DEL_YN = 'N'
+        <if test="slctnYn != null">
+            AND SLCTN_YN = #{slctnYn}
+        </if>
+
+        <if test="myQuestion">
+            AND REGISTER_ID = #{registerId}
+        </if>
+
+        <if test="myAnswer">
+            AND QUESTION_NO in (SELECT question_no FROM TB_ANSWER
+            WHERE REGISTER_ID = #{registerId}
+            GROUP BY question_no)
+        </if>
+
+        <if test="searchText != null and searchText != '' and searchKey != null">
+            <if test="searchKey == 'TITLE' ">
+                AND TITLE LIKE '%' #{searchText } '%'
+            </if>
+            <if test="searchKey == 'REGISTER_ID'">
+                AND REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
+            </if>
+        </if>
+    </sql>
+
+    <select id="selectQuestionList" parameterType="QuestionVO" resultType="QuestionVO">
+        SELECT
+          a.QUESTION_NO
+        , a.TITLE
+        , a.CONT
+        , a.SLCTN_YN
+        , a.REGISTER_ID
+        , a.REGIST_DTM
+        , a.UPDATER_ID
+        , a.UPD_DTM
+        , a.DEL_YN
+        , a.ATCH_FILE_NO
+        , b.DISPLAY_NAME as REGISTER_NAME
+        , c.DISPLAY_NAME as UPDATER_NAME
+        FROM TB_QUESTION a
+        LEFT OUTER JOIN TB_USER b ON a.REGISTER_ID = b.SID
+        LEFT OUTER JOIN TB_USER c ON a.UPDATER_ID = c.SID
+        WHERE a.DEL_YN = 'N'
+        <if test="slctnYn != null">
+            AND a.SLCTN_YN = #{slctnYn}
+        </if>
+
+        <if test="myQuestion">
+            AND a.REGISTER_ID = #{registerId}
+        </if>
+
+        <if test="myAnswer">
+            AND a.QUESTION_NO in (SELECT question_no FROM TB_ANSWER
+            WHERE REGISTER_ID = #{registerId}
+            GROUP BY question_no)
+        </if>
+
+        <if test="searchText != null and searchText != '' and searchKey != null">
+            <if test="searchKey == 'TITLE' ">
+                AND a.TITLE LIKE '%' #{searchText } '%'
+            </if>
+            <if test="searchKey == 'REGISTER_ID'">
+                AND a.REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
+            </if>
+        </if>
+
+        ORDER BY a.QUESTION_NO DESC
+        LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+    </select>
+
+    <select id="selectQuestionListCount" parameterType="QuestionVO" resultType="int">
+        SELECT count(*)
+        FROM TB_QUESTION
+        <include refid="selectListCondition" />
+    </select>
+
+    <select id="selectQuestionWaitCount" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM TB_QUESTION
+        WHERE DEL_YN = 'N'
+        AND SLCTN_YN = 'N'
+    </select>
+
+    <insert id="insertQuestion" parameterType="QuestionVO">
+        INSERT INTO TB_QUESTION (
+              TITLE
+            , CONT
+            , REGISTER_ID
+            , UPDATER_ID
+            , ATCH_FILE_NO
+        ) VALUES (
+              #{title}
+            , #{cont}
+            , #{registerId}
+            , #{registerId}
+            , #{atchFileNo}
+        )
+    </insert>
+
+    <select id="selectQuestionDetail" parameterType="QuestionVO" resultType="QuestionVO">
+        SELECT
+            c.*
+            , d.*
+            , e.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_QUESTION c
+         LEFT OUTER JOIN
+            ( SELECT
+                        a.ATCH_FILE_NO, b.FILE_CN, b.FILE_SN, b.FILE_STRE_COURS, b.STRE_FILE_NM,
+                        b.FILE_EXTSN, b.ORIGNL_FILE_NM, b.FILE_SIZE, a.REGIST_DTM
+                    FROM
+                        TB_ATTACH_FILE a, TB_ATTACH_FILE_DETAIL b
+                    WHERE
+                        a.ATCH_FILE_NO in (
+                            SELECT ATCH_FILE_NO FROM TB_QUESTION
+                            WHERE DEL_YN = 'N'
+                            AND QUESTION_NO = #{questionNo}
+                        )
+                    AND
+                        a.ATCH_FILE_NO = b.ATCH_FILE_NO
+                    AND
+                        a.DEL_YN = 'N') d
+        ON c.ATCH_FILE_NO = d.ATCH_FILE_NO
+        LEFT OUTER JOIN TB_USER e ON c.REGISTER_ID = e.SID
+        WHERE c.DEL_YN = 'N'
+        AND c.QUESTION_NO = #{questionNo}
+    </select>
+
+    <update id="updateQuestion" parameterType="QuestionVO">
+        UPDATE TB_QUESTION
+        <set>
+            TITLE = #{title} ,
+            CONT = #{cont} ,
+            UPDATER_ID = #{updaterId} ,
+            ATCH_FILE_NO = #{atchFileNo} ,
+            UPD_DTM = current_timestamp(),
+        </set>
+        <where>
+                QUESTION_NO = #{questionNo}
+            AND REGISTER_ID = #{registerId}
+        </where>
+
+    </update>
+
+    <update id="updateQuestionComplete" parameterType="QuestionVO">
+        UPDATE TB_QUESTION
+        <set>
+            UPDATER_ID = #{updaterId} ,
+            UPD_DTM = current_timestamp(),
+            SLCTN_YN = 'Y'
+        </set>
+        <where>
+                QUESTION_NO = #{questionNo}
+            AND REGISTER_ID = #{registerId}
+        </where>
+
+    </update>
+
+    <update id="deleteQuestion" parameterType="QuestionVO">
+        UPDATE TB_QUESTION
+        <set>
+            UPDATER_ID = #{updaterId} ,
+            UPD_DTM = current_timestamp(),
+            DEL_YN = 'Y'
+        </set>
+        <where>
+                QUESTION_NO = #{questionNo}
+            AND REGISTER_ID = #{registerId}
+        </where>
+
+    </update>
+
+    <select id="selectQuestionPre" parameterType="QuestionVO" resultType="QuestionVO">
+        SELECT *
+        FROM TB_QUESTION
+        WHERE QUESTION_NO IN (
+            SELECT * FROM (
+                (
+                SELECT QUESTION_NO FROM TB_QUESTION
+                <include refid="selectListCondition" />
+                AND QUESTION_NO > #{questionNo}  ORDER BY QUESTION_NO LIMIT 1
+                ) as QUESTION_NO
+            )
+        )
+
+    </select>
+
+    <select id="selectQuestionNext" parameterType="QuestionVO" resultType="QuestionVO">
+        SELECT *
+        FROM TB_QUESTION
+        WHERE QUESTION_NO IN (
+            SELECT * FROM (
+                (
+                    SELECT QUESTION_NO FROM TB_QUESTION
+                    <include refid="selectListCondition" />
+                    AND QUESTION_NO <![CDATA[<]]> #{questionNo}  ORDER BY QUESTION_NO DESC LIMIT 1
+                ) as QUESTION_NO
+            )
+        )
+    </select>
+
+    <select id="selectAnswerList" parameterType="AnswerVO" resultType="AnswerVO">
+        SELECT
+              a.*
+            , COALESCE(b.CNT, 0) as RECOMMEND_COUNT
+            , CASE WHEN c.REGISTER_ID IS NULL THEN FALSE ELSE TRUE END AS MINE
+            , h.*
+            , i.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_ANSWER a
+        LEFT OUTER JOIN (
+        SELECT COUNT(ANSWER_NO) AS CNT , ANSWER_NO FROM TB_ANSWER_RECOMMEND
+                WHERE ANSWER_NO IN (
+                SELECT ANSWER_NO FROM TB_ANSWER
+                WHERE DEL_YN = 'N'
+                AND QUESTION_NO = #{questionNo}
+                )
+                GROUP BY ANSWER_NO
+        ) b ON a.ANSWER_NO = b.ANSWER_NO
+        LEFT OUTER JOIN (
+            SELECT * FROM TB_ANSWER_RECOMMEND
+            WHERE ANSWER_NO IN (
+                SELECT ANSWER_NO FROM TB_ANSWER
+                WHERE DEL_YN = 'N'
+                AND QUESTION_NO = #{questionNo}
+            ) AND REGISTER_ID = #{registerId}
+        ) c ON a.ANSWER_NO = c.ANSWER_NO
+         LEFT OUTER JOIN
+            ( SELECT
+                        f.ATCH_FILE_NO, g.FILE_CN, g.FILE_SN, g.FILE_STRE_COURS, g.STRE_FILE_NM,
+                        g.FILE_EXTSN, g.ORIGNL_FILE_NM, g.FILE_SIZE
+                    FROM
+                        TB_ATTACH_FILE f, TB_ATTACH_FILE_DETAIL g
+                    WHERE
+                        f.ATCH_FILE_NO in (
+                            SELECT ATCH_FILE_NO FROM TB_ANSWER
+                            WHERE DEL_YN = 'N'
+                            AND QUESTION_NO = #{questionNo}
+                        )
+                    AND
+                        f.ATCH_FILE_NO = g.ATCH_FILE_NO
+                    AND
+                        f.DEL_YN = 'N') h
+        ON a.ATCH_FILE_NO = h.ATCH_FILE_NO
+        LEFT OUTER JOIN TB_USER i ON a.REGISTER_ID = i.SID
+        WHERE a.DEL_YN = 'N'
+        AND a.QUESTION_NO = #{questionNo}
+        ORDER BY a.SLCTN_YN DESC, a.ANSWER_NO DESC
+    </select>
+
+    <select id="selectAnswer" parameterType="AnswerVO" resultType="AnswerVO">
+        SELECT
+              a.*
+            , h.*
+            , b.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_ANSWER a
+         LEFT OUTER JOIN
+            ( SELECT
+                        f.ATCH_FILE_NO, g.FILE_CN, g.FILE_SN, g.FILE_STRE_COURS, g.STRE_FILE_NM,
+                        g.FILE_EXTSN, g.ORIGNL_FILE_NM, g.FILE_SIZE
+                    FROM
+                        TB_ATTACH_FILE f, TB_ATTACH_FILE_DETAIL g
+                    WHERE
+                        f.ATCH_FILE_NO in (
+                            SELECT ATCH_FILE_NO FROM TB_ANSWER
+                            WHERE DEL_YN = 'N'
+                            AND QUESTION_NO = #{questionNo}
+                        )
+                    AND
+                        f.ATCH_FILE_NO = g.ATCH_FILE_NO
+                    AND
+                        f.DEL_YN = 'N') h
+        ON a.ATCH_FILE_NO = h.ATCH_FILE_NO
+        LEFT OUTER JOIN TB_USER b ON a.REGISTER_ID = b.SID
+        WHERE a.DEL_YN = 'N'
+        AND a.ANSWER_NO = #{answerNo}
+        ORDER BY a.SLCTN_YN DESC, a.ANSWER_NO DESC
+    </select>
+
+    <select id="selectAnswerSelectionList" parameterType="AnswerVO" resultType="AnswerVO">
+        SELECT
+            c.*
+            , d.*
+            , e.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_ANSWER c
+        LEFT OUTER JOIN
+            ( SELECT
+                        a.ATCH_FILE_NO, b.FILE_CN, b.FILE_SN, b.FILE_STRE_COURS, b.STRE_FILE_NM,
+                        b.FILE_EXTSN, b.ORIGNL_FILE_NM, b.FILE_SIZE
+                    FROM
+                        TB_ATTACH_FILE a, TB_ATTACH_FILE_DETAIL b
+                    WHERE
+                        a.ATCH_FILE_NO in (
+                            SELECT ATCH_FILE_NO FROM TB_ANSWER
+                            WHERE DEL_YN = 'N'
+                            AND QUESTION_NO = #{questionNo}
+                            AND SLCTN_YN = 'Y'
+                        )
+                    AND
+                        a.ATCH_FILE_NO = b.ATCH_FILE_NO
+                    AND
+                        a.DEL_YN = 'N') d
+        ON c.ATCH_FILE_NO = d.ATCH_FILE_NO
+        LEFT OUTER JOIN TB_USER e ON c.REGISTER_ID = e.SID
+        WHERE c.DEL_YN = 'N'
+        AND c.QUESTION_NO = #{questionNo}
+        AND c.SLCTN_YN = 'Y'
+        ORDER BY c.ANSWER_NO
+    </select>
+
+    <update id="updateAnswerSelection" parameterType="AnswerVO">
+        UPDATE TB_ANSWER
+        <set>
+            UPDATER_ID = #{updaterId} ,
+            UPD_DTM = current_timestamp(),
+            SLCTN_YN = 'Y'
+        </set>
+        <where>
+                DEL_YN = 'N'
+            AND QUESTION_NO = #{questionNo}
+            AND ANSWER_NO = #{answerNo}
+        </where>
+
+    </update>
+
+    <insert id="insertAnswer"  useGeneratedKeys="true" keyProperty="answerNo"  parameterType="AnswerVO">
+         INSERT INTO TB_ANSWER (
+              ANSWER_NO
+            , CONT
+            , REGISTER_ID
+            , UPDATER_ID
+            , QUESTION_NO
+            , ATCH_FILE_NO
+        ) VALUES (
+              #{answerNo}
+            , #{cont}
+            , #{registerId}
+            , #{registerId}
+            , #{questionNo}
+            , #{atchFileNo}
+        )
+    </insert>
+
+    <select id="selectAnswerRecommendCount" parameterType="AnswerRecommendVO" resultType="int">
+        SELECT COUNT(*) FROM TB_ANSWER_RECOMMEND
+        WHERE ANSWER_NO = #{answerNo}
+    </select>
+
+    <insert id="insertAnswerRecommend" parameterType="AnswerRecommendVO">
+        INSERT INTO TB_ANSWER_RECOMMEND (
+              ANSWER_NO
+            , REGISTER_ID
+        ) VALUES (
+              #{answerNo}
+            , #{registerId}
+        )
+    </insert>
+
+    <delete id="deleteAnswerRecommend" parameterType="AnswerRecommendVO">
+        DELETE FROM TB_ANSWER_RECOMMEND
+        WHERE ANSWER_NO = #{answerNo}
+        AND REGISTER_ID = #{registerId}
+    </delete>
+
+    <select id="selectMyAnswerSelectionCount" parameterType="AnswerVO"  resultType="int">
+        SELECT COUNT(*) FROM TB_ANSWER
+        WHERE DEL_YN = 'N'
+          AND REGISTER_ID = #{registerId}
+          AND SLCTN_YN = 'Y'
+    </select>
+
+    <select id="selectMyAnswerCount" parameterType="AnswerVO" resultType="int">
+        SELECT COUNT(*) FROM TB_ANSWER
+        WHERE DEL_YN = 'N'
+        AND REGISTER_ID = #{registerId}
+    </select>
+
+    <select id="selectMyQuestionCount" parameterType="AnswerVO" resultType="int">
+        SELECT COUNT(*) FROM TB_QUESTION
+        WHERE DEL_YN = 'N'
+        AND REGISTER_ID = #{registerId}
+    </select>
+
+</mapper>

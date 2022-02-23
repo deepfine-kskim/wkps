@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrgDAO">
+
+    <sql id="selectListCondition">
+        <where>
+        	AND STATUS = 'C'
+        	<if test="ou != null and ou != ''">
+        	AND OU LIKE '%' #{ou} '%'
+        	</if>
+        	<if test="ouCode != null and ouCode != ''">
+        	AND OU_CODE = #{ouCode}
+        	</if>
+        	<if test="ouLevel != null and ouLevel != ''">
+        	AND OU_LEVEL = #{ouLevel}
+        	</if>
+        </where>
+    </sql>
+    
+	<select id="selectOrgList" parameterType="OrgVO" resultType="OrgVO">
+		
+			SELECT 
+				*
+			FROM
+				TB_ORG
+			<include refid="selectListCondition" />
+			ORDER BY OU_ORDR
+			
+	</select>
+	
+	<select id="selectParentOrg" parameterType="OrgVO" resultType="OrgVO">
+		
+			SELECT 
+				PARENT_OU_CODE
+			FROM
+				TB_ORG
+			<where>
+				AND OU_CODE = #{ouCode}
+			</where>
+			
+	</select>
+ 	
+	<insert id="insertOrg" parameterType="OrgVO">
+		
+			INSERT INTO TB_ORG
+			(OU, TOP_OU_CODE, PARENT_OU_CODE, OU_CODE, CN, ORG_FULL_NAME, OU_LEVEL, OU_ORDR, STATUS)
+			VALUES
+			(#{ou}, #{topOuCode}, #{parentOuCode}, #{ouCode}, #{cn}, #{orgFullName}, #{ouLevel}, #{ouOrdr}, #{status})
+			ON DUPLICATE KEY
+			UPDATE
+				OU = #{ou},
+				TOP_OU_CODE = #{topOuCode},
+				PARENT_OU_CODE = #{parentOuCode},
+				CN = #{cn},
+				ORG_FULL_NAME = #{orgFullName},
+				OU_LEVEL = #{ouLevel},
+				OU_ORDR = #{ouOrdr},
+				STATUS = #{status}				
+		
+	</insert>
+	
+</mapper>

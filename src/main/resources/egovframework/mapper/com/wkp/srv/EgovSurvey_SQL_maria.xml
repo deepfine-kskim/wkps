@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyDAO">
+
+    <sql id="selectListCondition">
+    	<where>
+        	AND a.DEL_YN = 'N'
+
+		<choose>
+			<when test="aprvState != null and aprvState.name == 'WAIT'">
+				AND a.APRV_STATE = 'WAIT' 
+			</when>
+			<when test="aprvState != null and aprvState.name == 'DOING'">
+				AND a.APRV_STATE = 'DOING'
+			</when>
+			<when test="aprvState != null and aprvState.name == 'DONE'">
+				AND a.APRV_STATE = 'DONE'
+			</when>
+			<when test="aprvState != null and aprvState.name == 'MINE'">
+				AND (
+					a.APRV_STATE = 'DOING' or a.APRV_STATE = 'DONE'
+					AND
+					a.SURVEY_NO IN (SELECT DISTINCT(SURVEY_NO) FROM TB_SURVEY_ANSWER WHERE REGISTER_ID = #{registerId})
+				)
+			</when>
+			<when test="aprvState != null and aprvState.name == 'WRITE'">
+				AND a.REGISTER_ID = #{registerId}
+			</when>
+			<otherwise>
+				AND (
+					a.APRV_STATE = 'DOING' or a.APRV_STATE = 'DONE'
+					or (
+					<if test="registerId != null and registerId != ''">
+						a.REGISTER_ID = #{registerId} AND
+					</if>
+						(a.APRV_STATE = 'TEMPORARY' or a.APRV_STATE = 'WAIT' or a.APRV_STATE = 'CANCEL')
+					)
+				)
+			</otherwise>
+		</choose>
+
+		<if test="searchText != null and searchText != '' and searchKey != null">
+			<if test="searchKey.name() == 'TITLE' ">
+				AND a.TITLE LIKE '%' #{searchText } '%'
+			</if>
+			<if test="searchKey.name() == 'REGISTER_ID'">
+				AND a.REGISTER_ID IN (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
+			</if>
+		</if>
+		
+		<if test="isFront != null and isFront !=''">
+			AND (
+        		a.TARGET_RLS_YN = 'Y' 
+        		OR (
+        			a.TARGET_RLS_YN = 'N'
+        			AND (
+        				#{ouCode} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'ORG')
+        				OR
+        				#{registerId} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'USER')
+        				OR
+        				a.REGISTER_ID = #{registerId} 
+        			)
+        		)
+        	)
+		</if>
+		
+		</where>
+    </sql>
+
+    <select id="selectSurveyList" parameterType="SurveyVO" resultType="SurveyVO">
+        SELECT
+        	a.*
+        	, e.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_SURVEY a
+		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+        <include refid="selectListCondition"/>
+        ORDER BY a.SURVEY_NO DESC
+        LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+    </select>
+    
+    <select id="selectSurveyListCount" parameterType="SurveyVO" resultType="int">
+        SELECT count(*)
+        FROM TB_SURVEY a
+		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+        <include refid="selectListCondition"/>
+    </select>
+
+    <select id="selectSurveyListByMine" parameterType="SurveyVO" resultType="SurveyVO">
+		SELECT *
+		FROM TB_SURVEY
+		WHERE DEL_YN = 'N'
+		AND  REGISTER_ID = #{registerId}
+		ORDER BY SURVEY_NO DESC
+	</select>
+	
+	<select id="selectSurveyListCountByMine" parameterType="SurveyVO" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_SURVEY
+		WHERE DEL_YN = 'N'
+		AND  APRV_STATE = #{aprvState}
+		AND  REGISTER_ID = #{registerId}
+	</select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="surveyNo" parameterType="SurveyVO">
+		INSERT INTO TB_SURVEY (
+			  SURVEY_NO
+			, BNGN_DTM
+			, END_DTM
+			, RESLT_RLS_YN
+			, TITLE
+			, SURVEY_DESC
+			, APRV_STATE
+			, REGISTER_ID
+			, TARGET_YN
+			, TARGET_NO
+			, RLS_YN
+			, TARGET_RLS_YN
+		) VALUES (
+		      #{surveyNo}
+			, #{bngnDtm}
+			, #{endDtm}
+			, #{resltRlsYn}
+			, #{title}
+			, #{surveyDesc}
+			, #{aprvState.name}
+			, #{registerId}
+			, #{targetYn}
+			, #{targetNo}
+			, #{rlsYn}
+			, #{targetRlsYn}
+		)
+	</insert>
+
+    <select id="selectDetail" parameterType="SurveyVO" resultType="SurveyVO">
+		SELECT
+			  a.SURVEY_NO
+			, a.BNGN_DTM
+			, a.END_DTM
+			, a.RESLT_RLS_YN
+			, a.TITLE
+			, a.SURVEY_DESC
+			, a.APRV_STATE
+			, a.REGISTER_ID
+			, a.REGIST_DTM
+			, a.UPDATER_ID
+			, a.UPD_DTM
+			, a.TARGET_YN
+			, a.CHECK_DTM
+			, a.CHECK_CONT
+			, a.CHECK_REGISTER_ID
+			, a.TARGET_NO
+			, e.DISPLAY_NAME as REGISTER_NAME
+			, f.DISPLAY_NAME as CHECK_REGISTER_NAME
+			, f.OU as CHECK_REGISTER_OU
+			, a.RLS_YN
+			, a.TARGET_RLS_YN
+		FROM TB_SURVEY a
+        LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+        LEFT OUTER JOIN TB_USER f ON a.REGISTER_ID = f.SID
+		WHERE DEL_YN = 'N'
+		AND SURVEY_NO = #{surveyNo}
+	</select>
+
+
+    <select id="selectSurveyJoinCount" parameterType="SurveyVO" resultType="int">
+		SELECT COUNT(DISTINCT REGISTER_ID) as cnt FROM TB_SURVEY_ANSWER
+		WHERE
+			SURVEY_NO = #{surveyNo}
+	</select>
+
+    <update id="delete" parameterType="SurveyVO">
+        UPDATE TB_SURVEY
+        <set>
+            UPDATER_ID = #{updaterId} ,
+            UPD_DTM = current_timestamp(),
+            DEL_YN = 'Y'
+        </set>
+        <where>
+            SURVEY_NO = #{surveyNo}
+        </where>
+    </update>
+    
+	<update id="updateSurveyRelease" parameterType="SurveyVO">
+		UPDATE TB_SURVEY
+		<set>
+			RLS_YN = #{rlsYn}
+		</set>
+		<where>
+			SURVEY_NO = #{surveyNo}
+		</where>
+	</update>
+
+	<update id="updateSurvey" parameterType="SurveyVO">
+		UPDATE TB_SURVEY
+		<set>
+			  BNGN_DTM = #{bngnDtm}
+			, END_DTM = #{endDtm}
+			, RESLT_RLS_YN = #{resltRlsYn}
+			, TITLE = #{title}
+			, TARGET_YN =  #{targetYn}
+			, SURVEY_DESC = #{surveyDesc}
+			, APRV_STATE = #{aprvState.name}
+			, UPDATER_ID = #{updaterId}
+			, UPD_DTM = current_timestamp()
+			, RLS_YN = #{rlsYn}
+			, TARGET_RLS_YN = #{targetRlsYn}
+		</set>
+		<where>
+			SURVEY_NO = #{surveyNo}
+		</where>
+	</update>
+	
+	<update id="updateSurveyState" parameterType="SurveyVO">
+		UPDATE TB_SURVEY
+		<set>
+			  APRV_STATE = #{aprvState.name}
+			<if test="checkRegisterId != null and checkRegisterId != ''">
+				, CHECK_REGISTER_ID = #{checkRegisterId}
+				<if test="checkCont != null and checkCont != ''">
+				, CHECK_CONT = #{checkCont}
+				</if>
+				, CHECK_DTM = current_timestamp()
+			</if>
+		</set>
+		<where>
+			SURVEY_NO = #{surveyNo}
+		</where>
+	</update>
+	
+	<update id="updateRlsSurveyState" parameterType="SurveyVO">
+		UPDATE TB_SURVEY
+		<set>
+			  APRV_STATE = #{aprvState.name}
+			<if test="checkRegisterId != null and checkRegisterId != ''">
+				, CHECK_REGISTER_ID = #{checkRegisterId}
+				<if test="checkCont != null and checkCont != ''">
+				, CHECK_CONT = #{checkCont}
+				</if>
+				, CHECK_DTM = current_timestamp()
+			</if>
+		</set>
+		<where>
+			SURVEY_NO = #{surveyNo}
+		</where>
+	</update>
+
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="surveyQusNo" parameterType="SurveyQuestionVO">
+		INSERT INTO TB_SURVEY_QUESTION (
+			  SURVEY_QUS_NO
+			, QUS_TYPE_CD
+			, CONT
+			, ESNTL_YN
+			, ORDER_NO
+			, SURVEY_NO
+		) VALUES (
+			  #{surveyQusNo}
+			, #{qusTypeCd.name}
+			, #{cont}
+			, #{esntlYn}
+			, #{orderNo}
+			, #{surveyNo}
+		)
+	</insert>
+
+	<delete id="deleteQuestion" parameterType="map" >
+		DELETE FROM TB_SURVEY_QUESTION
+		WHERE SURVEY_NO = #{surveyNo}
+	</delete>
+
+	<delete id="deleteExample" parameterType="map" >
+		DELETE FROM TB_SURVEY_EXAMPLE
+		WHERE SURVEY_NO = #{surveyNo}
+	</delete>
+
+	<delete id="deleteAnswer" parameterType="map" >
+		DELETE FROM TB_SURVEY_ANSWER
+		WHERE SURVEY_NO = #{surveyNo}
+	</delete>
+
+    <select id="selectQuestionList" parameterType="SurveyQuestionVO" resultType="SurveyQuestionVO">
+		SELECT *
+		FROM TB_SURVEY_QUESTION
+		WHERE SURVEY_NO = #{surveyNo}
+		ORDER BY ORDER_NO
+	</select>
+
+ 	<select id="selectAnswerJoinCount" parameterType="SurveyAnswerVO" resultType="int">
+		SELECT count(*)
+		FROM TB_SURVEY_ANSWER
+		WHERE SURVEY_NO = #{surveyNo}
+		AND REGISTER_ID = #{registerId}
+	</select>
+
+	<insert id="insertExample" useGeneratedKeys="true" keyProperty="surveyExampleNo" parameterType="SurveyExampleVO">
+	INSERT INTO TB_SURVEY_EXAMPLE (
+		  SURVEY_QUS_NO
+		, SURVEY_EXAMPLE_NO
+		, SURVEY_NO
+		, CONT
+		, SKIP_NO
+		, ORDER_NO
+		, ATCH_FILE_NO
+	) VALUES (
+		  #{surveyQusNo}
+		, #{surveyExampleNo}
+		, #{surveyNo}
+		, #{cont}
+		, #{skipNo}
+		, #{orderNo}
+		, #{atchFileNo}
+	)
+	</insert>
+
+	<select id="selectExampleList" parameterType="SurveyExampleVO" resultType="SurveyExampleVO">
+		SELECT c.*, d.*
+		FROM TB_SURVEY_EXAMPLE c
+		LEFT OUTER JOIN
+		( SELECT
+				a.ATCH_FILE_NO, b.FILE_CN, b.FILE_SN, b.FILE_STRE_COURS, b.STRE_FILE_NM,
+				b.FILE_EXTSN, b.ORIGNL_FILE_NM, b.FILE_SIZE, a.REGIST_DTM
+			FROM
+				TB_ATTACH_FILE a, TB_ATTACH_FILE_DETAIL b
+			WHERE
+				a.ATCH_FILE_NO = b.ATCH_FILE_NO
+			AND
+				a.DEL_YN = 'N') d
+
+				ON c.ATCH_FILE_NO = d.ATCH_FILE_NO
+		WHERE SURVEY_QUS_NO = #{surveyQusNo}
+		ORDER BY c.ORDER_NO
+	</select>
+
+	<update id="updateSurveyDoingState">
+		UPDATE TB_SURVEY
+		SET APRV_STATE = 'DONE'
+		WHERE
+		APRV_STATE = 'DOING'
+		AND END_DTM <![CDATA[<=]]> NOW()
+	</update>
+
+	<insert id="insertAnswer" parameterType="SurveyAnswerVO">
+		INSERT INTO TB_SURVEY_ANSWER (
+			  SURVEY_QUS_NO
+			, SURVEY_EXAMPLE_NO
+			, SURVEY_NO
+			, QUS_ANSWER_CONT
+			, REGISTER_ID
+			, UPDATER_ID
+		) VALUES (
+			  #{surveyQusNo}
+			, #{surveyExampleNo}
+			, #{surveyNo}
+			, #{qusAnswerCont}
+			, #{registerId}
+			, #{registerId}
+		)
+	</insert>
+
+	<select id="selectAnswerUser" parameterType="map" resultType="SurveyAnswerVO">
+		SELECT *
+		FROM TB_USER 
+		WHERE SID IN (SELECT register_id from TB_SURVEY_ANSWER
+					 WHERE survey_example_no =  #{surveyExampleNo})
+	</select>
+
+	<update id="updateSurveyEndDate" parameterType="SurveyVO">
+		UPDATE TB_SURVEY
+		SET APRV_STATE = 'DOING'
+		, END_DTM = #{endDtm}
+		WHERE
+			SURVEY_NO = #{surveyNo}
+	</update>
+
+	<select id="selectResultList" resultType="SurveyStatisticsDTO" parameterType="SurveyStatisticsDTO">
+		SELECT t.* FROM (
+			SELECT
+				  a.survey_no
+				, b.SURVEY_QUS_NO
+				, b.QUS_TYPE_CD
+				, b.CONT
+				, c.SURVEY_EXAMPLE_NO
+				, c.CONT AS EX_CONT
+				, b.ORDER_NO
+				, c.ORDER_NO AS EX_ORDER_NO
+				, COALESCE(d.EX_COUNT, 0) AS EX_COUNT
+				, CASE WHEN e.SURVEY_EXAMPLE_NO IS NULL THEN FALSE ELSE TRUE END AS MINE
+			FROM TB_SURVEY a
+			INNER JOIN TB_SURVEY_QUESTION b ON a.SURVEY_NO = b.SURVEY_NO
+			INNER JOIN TB_SURVEY_EXAMPLE c ON b.SURVEY_QUS_NO = c.SURVEY_QUS_NO
+			LEFT OUTER JOIN (
+				SELECT   survey_no
+					   , SURVEY_QUS_NO
+						 , SURVEY_EXAMPLE_NO
+					   , COUNT(SURVEY_EXAMPLE_NO) AS EX_COUNT
+				FROM TB_SURVEY_ANSWER
+				WHERE survey_no = #{surveyNo}
+				GROUP BY survey_no, SURVEY_QUS_NO, SURVEY_EXAMPLE_NO
+			) d ON c.SURVEY_EXAMPLE_NO = d.SURVEY_EXAMPLE_NO
+			LEFT OUTER JOIN (
+				SELECT * FROM TB_SURVEY_ANSWER
+				WHERE survey_no = #{surveyNo}
+				AND REGISTER_ID = #{registerId}
+			) e ON c.SURVEY_EXAMPLE_NO = e.SURVEY_EXAMPLE_NO
+			where
+			a.survey_no = #{surveyNo}
+			AND a.del_yn = 'N'
+		) t ORDER BY t.ORDER_NO, t.EX_ORDER_NO
+	</select>
+
+	<select id="selectSurveyExcelList" resultType="SurveyExcelDTO" parameterType="SurveyExcelDTO">
+		SELECT
+			  a.REGISTER_ID
+			, a.REGIST_DTM
+			, a.QUS_ANSWER_CONT
+			, b.title
+			, c.QUS_TYPE_CD
+			, c.ORDER_NO
+			, c.CONT
+			, d.CONT AS EX_CONT
+			, d.ORDER_NO AS EX_ORDER_NO
+	        , e.DISPLAY_NAME as REGISTER_NAME
+		FROM TB_SURVEY_ANSWER a
+		INNER JOIN TB_SURVEY b ON b.SURVEY_NO = a.SURVEY_NO
+		INNER JOIN TB_SURVEY_QUESTION c ON c.SURVEY_QUS_NO = a.SURVEY_QUS_NO
+		INNER JOIN TB_SURVEY_EXAMPLE d ON d.SURVEY_EXAMPLE_NO = a.SURVEY_EXAMPLE_NO
+	    LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+		WHERE a.SURVEY_NO = #{surveyNo}
+	</select>
+		
+	<select id="selectQuestionNumberList" resultType="SurveyQuestionVO" parameterType="SurveyQuestionVO">
+		SELECT SURVEY_QUS_NO
+		FROM TB_SURVEY_QUESTION
+		WHERE SURVEY_NO = #{surveyNo}
+		ORDER BY ORDER_NO
+	</select>
+	
+	<select id="selectAnswerUserList" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">
+		SELECT *
+		FROM TB_SURVEY_ANSWER a
+	    LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID		
+		WHERE SURVEY_NO = #{surveyNo}
+		GROUP BY REGISTER_ID
+		ORDER BY a.REGIST_DTM
+	</select>
+	
+	<select id="selectAnswer" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">
+		SELECT 
+			IFNULL(a.QUS_ANSWER_CONT, CONCAT(d.ORDER_NO, '(', d.CONT, ')')) AS QUS_ANSWER_CONT
+		FROM TB_SURVEY_ANSWER a
+		INNER JOIN TB_SURVEY_EXAMPLE d ON d.SURVEY_EXAMPLE_NO = a.SURVEY_EXAMPLE_NO
+		WHERE a.SURVEY_NO = #{surveyNo} AND a.SURVEY_QUS_NO = #{surveyQusNo} AND a.REGISTER_ID = #{registerId}
+	</select>
+
+</mapper>

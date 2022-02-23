@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KnowledgeDAO">
+
+    <sql id="selectListCondition">
+        <where>
+        	AND DEL_YN = 'N'
+        	AND KNOWLG_NO != 0
+	        <if test="searchText != null and searchText != '' and searchType != null">
+	            <if test="searchType == 'TITLE' ">
+	                AND TITLE LIKE '%' #{searchText } '%'
+	            </if>
+	            <if test="searchType == 'REGISTER_ID'">
+					AND REGISTER_ID IN (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
+	            </if>
+	        </if>
+	        <if test="searchDate != null and searchDate != ''">
+	       		<if test="searchDate == 'WEEK'">
+	       			AND REGIST_DTM BETWEEN DATE_ADD(SYSDATE(), INTERVAL -1 WEEK) AND SYSDATE()
+	       		</if>
+	        	<if test="searchDate == 'MONTH'">
+	        		AND REGIST_DTM BETWEEN DATE_ADD(SYSDATE(), INTERVAL -1 MONTH) AND SYSDATE()
+	        	</if>
+	        	<if test="searchDate == 'YEAR'">
+	        		AND REGIST_DTM BETWEEN DATE_ADD(SYSDATE(), INTERVAL -1 YEAR) AND SYSDATE()
+	        	</if>
+	        	<if test="searchDate == 'SELECT'">
+	        		AND REGIST_DTM BETWEEN CONVERT(#{startDate},DATETIME) AND CONVERT(#{endDate},DATETIME)
+	        	</if>
+	        </if>
+	        <if test="searchWriter != null and searchWriter != ''">
+	       		<if test="searchWriter == 'MINE'">
+	       			AND REGISTER_ID = #{sid}
+	       		</if>
+	        	<if test="searchWriter == 'SELECT'">
+	        		<if test="userList != null and !userList.isEmpty()">
+	        		AND (
+	        			REGISTER_ID IN
+	        			<foreach item="user" collection="userList" open="(" separator="," close=")">
+        					#{user}
+  						</foreach>
+  					)
+	        		</if>
+	        	</if>
+	        </if>
+        	<if test="knowlgMapType != null and knowlgMapType != ''">
+        		AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+        	</if>
+        	<if test="knowlgMapNo != null and knowlgMapNo != ''">
+        		AND KNOWLG_MAP_NO = #{knowlgMapNo}
+        	</if>
+        	<if test="registerId != null and registerId != ''">
+        		AND REGISTER_ID = #{registerId}
+        	</if>
+        	<if test="approverId != null and approverId != ''">
+        		AND APPROVER_ID = #{approverId}
+        	</if>
+        	<choose>
+        		<when test="cmmntyNo != null and cmmntyNo != ''">
+				AND CMMNTY_NO = #{cmmntyNo}
+        		</when>
+        		<otherwise>
+        		AND (CMMNTY_NO IS NULL OR CMMNTY_NO = 0)
+        		</otherwise>
+        	</choose>
+        	<if test="isMyList != 'YES'">
+        	<choose>
+        		<when test="aprvYn != null and aprvYn != ''">
+        		AND (APRV_YN = #{aprvYn} AND (APRV_CONT IS NULL OR APRV_CONT = ""))  	
+        		</when>
+        		<otherwise>
+        		AND APRV_YN = 'Y'
+        		</otherwise>
+        	</choose>
+        	</if>
+        </where>
+    </sql>
+    
+ 	<select id="selectKnowledgeMapList" parameterType="KnowledgeMapVO" resultType="KnowledgeMapVO"> 
+ 		
+			SELECT
+				*
+			FROM
+				TB_KNOWLEDGE_MAP
+			<where>
+				AND DEL_YN = 'N'
+	        	<if test="knowlgMapType != null and knowlgMapType != ''">
+	        	AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+	        	</if>
+				<if test="upNo != null and upNo != '' and upNo != -1">
+				AND UP_NO = #{upNo}
+				</if>
+				<if test="upNo == -1">
+				AND (UP_NO IS NULL OR UP_NO = 0)
+				</if>
+			</where>
+			ORDER BY SORT_ORDR
+ 		
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeMap" parameterType="KnowledgeMapVO" resultType="KnowledgeMapVO"> 
+ 		
+			SELECT
+				tkm.*,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = #{knowlgMapNo})) AS UP_NM
+			FROM
+				TB_KNOWLEDGE_MAP tkm
+			<where>
+				AND DEL_YN = 'N'
+				AND KNOWLG_MAP_NO = #{knowlgMapNo}
+			</where>
+ 		
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+ 		
+			SELECT 
+				*
+			FROM (
+				SELECT
+					tk.*,
+					(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
+					(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU,
+					CASE WHEN DATEDIFF(tk.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW,
+					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
+				FROM
+					TB_KNOWLEDGE tk
+	        	<include refid="selectListCondition" />
+	        	<!-- WHERE  DEL_YN = 'N'
+        			AND KNOWLG_NO != 1
+        			AND (CMMNTY_NO IS NULL OR CMMNTY_NO = 0) -->
+			) AS T
+			WHERE ROW_NUM = 1
+			ORDER BY KNOWLG_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+			 		
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeHistoryList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+
+			SELECT
+				tk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tk.OU_CODE) AS OU
+			FROM
+				TB_KNOWLEDGE tk
+			<where>
+				AND TITLE = #{title}
+				AND KNOWLG_NO != #{knowlgNo}
+				AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+				AND KNOWLG_MAP_NO = #{knowlgMapNo}
+				AND DEL_YN = 'N'
+				AND APRV_YN = 'Y'
+			</where>
+			ORDER BY KNOWLG_NO DESC
+			 		
+ 	</select>
+ 	
+	<select id="selectKnowledgeListCount" parameterType="KnowledgeVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM(
+				SELECT
+					*,
+					ROW_NUMBER() OVER(PARTITION BY TITLE ORDER BY KNOWLG_NO DESC ) AS ROW_NUM
+				FROM
+					TB_KNOWLEDGE
+	        <include refid="selectListCondition" />
+	        ) AS T
+	        WHERE ROW_NUM = 1
+	        
+    </select>
+    
+    <select id="selectKnowledgeLastUpdated" parameterType="KnowledgeVO" resultType="java.sql.Date"> 
+ 		
+			SELECT
+				REGIST_DTM	
+			FROM
+				TB_KNOWLEDGE tk
+	        <where>
+				AND TITLE = #{title}
+				AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+				AND KNOWLG_MAP_NO = #{knowlgMapNo}
+				AND DEL_YN = 'N'
+				AND APRV_YN = 'Y'
+	        </where>
+			ORDER BY KNOWLG_NO DESC
+			LIMIT 1
+			  	 		
+ 	</select>
+    
+    <select id="selectKnowledgeDetail" parameterType="KnowledgeVO" resultType="KnowledgeVO"> 
+ 		
+			SELECT
+				tk.*,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
+				(SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO) AS UP_NO,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO)) AS UP_NM,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU	
+			FROM
+				TB_KNOWLEDGE tk
+	        <where>
+	        	AND DEL_YN = 'N'
+	        	<if test="title != null and title != ''">
+	        	AND TITLE = #{title}
+	        	</if>
+	        	<if test="knowlgNo != null and knowlgNo != ''">
+	        	AND KNOWLG_NO = #{knowlgNo}
+	        	</if>
+	        </where>
+			ORDER BY KNOWLG_NO DESC
+			LIMIT 1
+			  	 		
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeContentsList" parameterType="KnowledgeVO" resultType="KnowledgeContentsVO"> 
+ 		
+			SELECT
+				*	
+			FROM
+				TB_KNOWLEDGE_CONTENTS
+			WHERE 
+				KNOWLG_NO = #{knowlgNo}
+				AND TITLE = #{title}
+			  	 		
+ 	</select>
+ 	
+ 	<select id="selectKnowledgeContentsDetail" parameterType="KnowledgeContentsVO" resultType="KnowledgeContentsVO"> 
+ 		
+			SELECT
+				*	
+			FROM
+				TB_KNOWLEDGE_CONTENTS
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				AND TITLE = #{title}
+				AND SORT_ORDR = #{sortOrdr}
+			</where>
+			
+ 	</select>
+ 	
+	<insert id="insertKnowledge" parameterType="KnowledgeVO" useGeneratedKeys="true" keyProperty="knowlgNo">
+		
+			INSERT INTO TB_KNOWLEDGE
+			(TITLE, KNOWLG_MAP_NO, KNOWLG_MAP_TYPE, SUMMRY, APRV_YN, APPROVER_ID, RLS_YN, REAL_NM_YN, COPERTN_WRITNG_YN, OU_CODE, INQ_CNT, CMMNTY_NO, DOWNLOAD_CNT, ATCH_FILE_NO, RELATE_KNOWLG_NO, TARGET_NO, KEYWORD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN )
+			VALUES
+			(#{title}, #{knowlgMapNo}, #{knowlgMapType}, #{summry}, #{aprvYn}, #{approverId}, #{rlsYn}, #{realNmYn}, #{copertnWritngYn}, #{ouCode}, 0, #{cmmntyNo}, 0, #{atchFileNo}, #{relateKnowlgNo}, #{targetNo}, #{keyword}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N' )	
+ 		
+ 	</insert>
+ 	
+ 	<insert id="insertKnowledgeContents" parameterType="KnowledgeVO">
+ 		
+			INSERT INTO TB_KNOWLEDGE_CONTENTS
+			(KNOWLG_NO, TITLE, SORT_ORDR, SUBTITLE, CONT)
+			VALUES
+			(#{knowlgNo}, #{title}, #{sortOrdr}, #{subtitle}, #{cont})
+			ON DUPLICATE KEY
+			UPDATE
+				SUBTITLE = #{subtitle},
+				CONT = #{cont}				
+ 			
+ 	</insert>
+ 	
+ 	<update id="updateKnowledgeContents" parameterType="KnowledgeVO">
+ 	
+ 			UPDATE
+ 				TB_KNOWLEDGE_CONTENTS
+ 			SET
+ 				CONT = #{cont}
+ 			<where>
+ 				AND KNOWLG_NO = #{knowlgNo}
+ 				AND SORT_ORDR = #{sortOrdr}
+ 			</where>
+ 	</update>
+ 	
+	<insert id="insertPreview" parameterType="KnowledgeVO">
+		
+			INSERT INTO TB_KNOWLEDGE
+			(KNOWLG_NO, TITLE, KNOWLG_MAP_NO, KNOWLG_MAP_TYPE, SUMMRY, APRV_YN, RLS_YN, REAL_NM_YN, COPERTN_WRITNG_YN, OU_CODE, INQ_CNT, CMMNTY_NO, DOWNLOAD_CNT, ATCH_FILE_NO, RELATE_KNOWLG_NO, TARGET_NO, KEYWORD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN )
+			VALUES
+			(1, #{title}, #{knowlgMapNo}, #{knowlgMapType}, #{summry}, 'N', #{rlsYn}, #{realNmYn}, 'N', #{ouCode}, 0, #{cmmntyNo}, 0, #{atchFileNo}, #{relateKnowlgNo}, #{targetNo}, #{keyword}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N' )
+			ON DUPLICATE KEY
+			UPDATE
+				KNOWLG_MAP_NO = #{knowlgMapNo},
+				KNOWLG_MAP_TYPE = #{knowlgMapType},
+				SUMMRY = #{summry},
+				RLS_YN = #{rlsYn},
+				REAL_NM_YN = #{realNmYn},
+				COPERTN_WRITNG_YN = 'N',
+				OU_CODE = #{ouCode},
+				INQ_CNT = 0,
+				CMMNTY_NO = #{cmmntyNo},
+				DOWNLOAD_CNT = 0,
+				ATCH_FILE_NO = #{atchFileNo},
+				RELATE_KNOWLG_NO = #{relateKnowlgNo},
+				TARGET_NO = #{targetNo},
+				KEYWORD = #{keyword},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			
+ 	</insert>
+ 	
+ 	<insert id="insertRelateKnowledge" useGeneratedKeys="true" keyProperty="relateKnowlgNo" parameterType="KnowledgeVO">
+		
+			INSERT INTO TB_RELATE_KNOWLEDGE
+			(REGIST_DTM, DEL_YN)
+			VALUES
+			(SYSDATE(), 'N')
+		
+	</insert>
+	
+	<insert id="insertRelateKnowledgeDetail" parameterType="KnowledgeVO">
+		
+			INSERT INTO TB_RELATE_KNOWLEDGE_DETAIL
+			(RELATE_KNOWLG_NO, SORT_ORDR, TITLE)
+			VALUES
+			( #{relateKnowlgNo}, #{sortOrdr}, #{relateKnowlgTitle} )			
+		
+	</insert>
+	
+	<select id="selectRelateKnowledgeList" parameterType="long" resultType="String">
+			SELECT
+				TITLE
+			FROM
+				TB_RELATE_KNOWLEDGE_DETAIL
+			WHERE
+				RELATE_KNOWLG_NO = #{relateKnowlgNo}
+			ORDER BY SORT_ORDR
+	</select>
+	
+	<select id="selectRelateKnowledgeListDelChk" parameterType="long" resultType="KnowledgeVO">
+			SELECT
+				RELATE_KNOWLG_NO,
+				SORT_ORDR,
+				TITLE
+			FROM
+				TB_RELATE_KNOWLEDGE_DETAIL
+			WHERE
+				RELATE_KNOWLG_NO = #{relateKnowlgNo}
+			ORDER BY SORT_ORDR
+	</select>
+	
+	<delete id="deleteRelateKnowlg" parameterType="RelateKnowlgVO">
+	
+			DELETE
+			FROM
+				TB_RELATE_KNOWLEDGE_DETAIL
+			<where>
+				AND RELATE_KNOWLG_NO = #{relateKnowlgNo}
+				AND SORT_ORDR = #{sortOrdr}
+			</where>
+	
+	</delete>
+	
+	<update id="updateKnowlg" parameterType="KnowledgeVO">
+	
+			UPDATE
+				TB_KNOWLEDGE
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				AND TITLE = #{title}
+			</where>
+	
+	</update>
+	
+	<update id="updateApproval" parameterType="KnowledgeVO">
+	
+			UPDATE
+				TB_KNOWLEDGE
+			SET
+				APRV_YN = #{aprvYn},
+				APRV_CONT = #{aprvCont},
+				APPROVER_ID = #{approverId}
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				AND TITLE = #{title}
+			</where>
+	
+	</update>
+	
+	<insert id="insertUserMileage" parameterType="KnowledgeVO">
+		
+			INSERT INTO TB_USER_MILEAGE
+			(MILEAGE_TYPE, KNOWLG_NO, MILEAGE_SCORE, SID, REGIST_DTM)
+			VALUES
+			(#{mileageType}, #{knowlgNo}, #{mileageScore}, #{registerId}, SYSDATE())			
+		
+	</insert>
+	
+	<insert id="insertOrgMileage" parameterType="KnowledgeVO">
+		
+			INSERT INTO TB_ORG_MILEAGE
+			(MILEAGE_TYPE, KNOWLG_NO, MILEAGE_SCORE, OU_CODE, REGIST_DTM)
+			VALUES
+			(#{mileageType}, #{knowlgNo}, #{mileageScore}, #{ouCode}, SYSDATE())
+		
+	</insert>
+	
+	<delete id="deleteUserMileage" parameterType="KnowledgeVO">
+	
+			DELETE
+			FROM
+				TB_USER_MILEAGE
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				<if test="mileageType != null and  mileageType !=''">
+				AND MILEAGE_TYPE = #{mileageType}
+				</if>
+			</where>
+	
+	</delete>
+	
+	<delete id="deleteOrgMileage" parameterType="KnowledgeVO">
+		
+			DELETE
+			FROM
+				TB_ORG_MILEAGE
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+			</where>
+	
+	</delete>
+	
+	<select id="selectUserMileageList" parameterType="UserMileageVO" resultType="UserMileageVO">
+	
+			SELECT
+				tum.*,
+				tu.DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tu.OU_CODE) AS OU,
+				SUM(MILEAGE_SCORE) AS TOTAL_SCORE
+			FROM
+				TB_USER_MILEAGE tum
+			LEFT JOIN TB_USER tu ON tu.SID = tum.SID
+			<where>
+	        	<if test="searchText != null and searchText != ''">
+	        	AND tu.DISPLAY_NAME LIKE '%' #{searchText} '%'
+	        	</if>	        
+	        </where>
+			GROUP BY tum.SID
+			ORDER BY tum.REGIST_DTM DESC
+			LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+			
+	</select>
+	
+	<select id="selectUserMileageListCount" parameterType="KnowledgeVO" resultType="int">
+	
+			SELECT
+				COUNT(*)
+			FROM(
+				SELECT
+					tum.*,
+					tu.DISPLAY_NAME,
+					(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tu.OU_CODE) AS OU,
+					SUM(MILEAGE_SCORE) AS TOTAL_SCORE
+				FROM
+					TB_USER_MILEAGE tum
+				LEFT JOIN TB_USER tu ON tu.SID = tum.SID
+				<where>
+		        	<if test="searchText != null and searchText != ''">
+		        	AND tu.DISPLAY_NAME LIKE '%' #{searchText} '%'
+		        	</if>	        
+		        </where>
+				GROUP BY tum.SID
+			) T
+	        
+    </select>
+	
+	<select id="selectUserMileageDetail" parameterType="UserMileageVO" resultType="UserMileageVO">
+	
+			SELECT
+				tum.*,
+				tu.DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tu.OU_CODE) AS OU,
+				(SELECT TITLE FROM TB_KNOWLEDGE tk WHERE tk.KNOWLG_NO = tum.KNOWLG_NO) AS TITLE
+			FROM
+				TB_USER_MILEAGE tum
+			LEFT JOIN TB_USER tu ON tu.SID = tum.SID
+	        <where>
+	        	AND tum.SID = #{sid}
+	        	<if test="searchText != null and searchText != ''">
+	        	AND tu.DISPLAY_NAME LIKE '%' #{searchText} '%'
+	        	</if>
+	        </where>
+			ORDER BY tum.REGIST_DTM DESC
+	        LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+			
+	</select>
+	
+	<select id="selectUserMileageDetailCount" parameterType="UserMileageVO" resultType="int">
+	
+			SELECT
+				COUNT(*)
+			FROM(
+				SELECT
+					tum.*,
+					tu.DISPLAY_NAME,
+					(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = tu.OU_CODE) AS OU,
+					(SELECT TITLE FROM TB_KNOWLEDGE tk WHERE tk.KNOWLG_NO = tum.KNOWLG_NO) AS TITLE
+				FROM
+					TB_USER_MILEAGE tum
+				LEFT JOIN TB_USER tu ON tu.SID = tum.SID
+		        <where>
+		        	AND tum.SID = #{sid}
+		        	<if test="searchText != null and searchText != ''">
+		        	AND tu.DISPLAY_NAME LIKE '%' #{searchText} '%'
+		        	</if>
+		        </where>
+			) T
+			
+	</select>
+	
+	<select id="selectOrgMileageList" parameterType="OrgMileageVO" resultType="OrgMileageVO">
+	
+			SELECT
+				tom.*,
+				tr.OU,
+				SUM(tom.MILEAGE_SCORE) AS TOTAL_SCORE
+			FROM
+				TB_ORG_MILEAGE tom
+			LEFT JOIN TB_ORG tr ON tr.OU_CODE = tom.OU_CODE
+	        <where>
+	        	<if test="searchText != null and searchText != ''">
+	        	AND tr.OU LIKE '%' #{searchText} '%'
+	        	</if>
+	        </where>
+			GROUP BY tom.OU_CODE
+			ORDER BY tom.REGIST_DTM DESC
+			LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+			
+	</select>
+	
+	<select id="selectOrgMileageListCount" parameterType="OrgMileageVO" resultType="int">
+	
+			SELECT
+				COUNT(*)
+			FROM(
+				SELECT
+					tom.*,
+					tr.OU,
+					SUM(tom.MILEAGE_SCORE) AS TOTAL_SCORE
+				FROM
+					TB_ORG_MILEAGE tom
+				LEFT JOIN TB_ORG tr ON tr.OU_CODE = tom.OU_CODE
+		        <where>
+		        	<if test="searchText != null and searchText != ''">
+		        	AND tr.OU LIKE '%' #{searchText} '%'
+		        	</if>
+		        </where>
+				GROUP BY tom.OU_CODE
+			) T
+			
+	</select>
+	
+	<select id="selectOrgMileageDetail" parameterType="OrgMileageVO" resultType="OrgMileageVO">
+	
+			SELECT
+				tom.*,
+				tr.OU,
+				(SELECT TITLE FROM TB_KNOWLEDGE tk WHERE tk.KNOWLG_NO = tom.KNOWLG_NO) AS TITLE
+			FROM
+				TB_ORG_MILEAGE tom
+			LEFT JOIN TB_ORG tr ON tr.OU_CODE = tom.OU_CODE
+	        <where>
+				AND tom.OU_CODE = #{ouCode}
+	        	<if test="searchText != null and searchText != ''">
+	        	AND tr.OU LIKE '%' #{searchText} '%'
+	        	</if>
+	        </where>
+			ORDER BY tom.REGIST_DTM
+	        LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+			
+	</select>
+	
+	<select id="selectOrgMileageDetailCount" parameterType="OrgMileageVO" resultType="int">
+	
+			SELECT
+				COUNT(*)
+			FROM(
+				SELECT
+					tom.*,
+					tr.OU,
+					(SELECT TITLE FROM TB_KNOWLEDGE tk WHERE tk.KNOWLG_NO = tom.KNOWLG_NO) AS TITLE
+				FROM
+					TB_ORG_MILEAGE tom
+				LEFT JOIN TB_ORG tr ON tr.OU_CODE = tom.OU_CODE
+		        <where>
+					AND tom.OU_CODE = #{ouCode}
+		        	<if test="searchText != null and searchText != ''">
+		        	AND tr.OU LIKE '%' #{searchText} '%'
+		        	</if>
+		        </where>
+			) T
+			
+	</select>
+	
+	<select id="selectErrorStatementList" parameterType="ErrorStatementVO" resultType="ErrorStatementVO">
+			
+			SELECT
+				*
+				, CASE WHEN DATEDIFF(REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+			FROM
+				TB_ERROR_KNOWLEDGE_STATEMENT
+			<where>
+				AND DEL_YN = 'N'
+				<if test="registerId != null and registerId != ''">
+				AND REGISTER_ID = #{registerId}
+				</if>
+				<if test="searchText != null and searchText != ''">
+        		AND STATMNT_TITLE LIKE '%' #{searchText} '%'
+        		</if>
+        		<if test="answerYn != null and answerYn != ''">
+        		AND ANSWER_YN = #{answerYn}
+        		</if>		
+			</where>
+			ORDER BY REGIST_DTM DESC
+			
+	</select>
+	
+	<select id="selectErrorStatementListCount" parameterType="ErrorStatementVO" resultType="int">
+	
+			SELECT
+				COUNT(*)
+			FROM
+				TB_ERROR_KNOWLEDGE_STATEMENT
+			<where>
+				AND DEL_YN = 'N'
+				<if test="registerId != null and registerId != ''">
+				AND REGISTER_ID = #{registerId}
+				</if>
+				<if test="searchText != null and searchText != ''">
+        		AND STATMNT_TITLE LIKE '%' #{searchText} '%'
+        		</if>
+        		<if test="answerYn != null and answerYn != ''">
+        		AND ANSWER_YN = #{answerYn}
+        		</if>		
+			</where>
+				
+	</select>
+	
+    <select id="selectErrorStatementPre" parameterType="ErrorStatementVO" resultType="ErrorStatementVO">
+
+        SELECT 
+        	*
+        FROM 
+        	TB_ERROR_KNOWLEDGE_STATEMENT
+        WHERE 
+        	STATMNT_NO IN (
+            	SELECT * FROM (
+                	(
+                		SELECT STATMNT_NO FROM TB_ERROR_KNOWLEDGE_STATEMENT
+						<where>
+							AND DEL_YN = 'N'
+							AND STATMNT_NO <![CDATA[>]]> #{statmntNo}
+							<if test="registerId != null and registerId != ''">
+							AND REGISTER_ID = #{registerId}
+							</if>
+							<if test="searchText != null and searchText != ''">
+			        		AND STATMNT_TITLE LIKE '%' #{searchText} '%'
+			        		</if>
+			        		<if test="answerYn != null and answerYn != ''">
+			        		AND ANSWER_YN = #{answerYn}
+			        		</if>
+						</where>
+						ORDER BY STATMNT_NO LIMIT 1
+                	) as STATMNT_NO
+            	)
+        	)
+
+    </select>
+
+    <select id="selectErrorStatementNext" parameterType="ErrorStatementVO" resultType="ErrorStatementVO">
+        
+        SELECT 
+        	*
+        FROM 
+        	TB_ERROR_KNOWLEDGE_STATEMENT
+        WHERE 
+        	STATMNT_NO IN (
+            	SELECT * FROM (
+                	(
+                    	SELECT STATMNT_NO FROM TB_ERROR_KNOWLEDGE_STATEMENT
+						<where>
+							AND DEL_YN = 'N'
+                    		AND STATMNT_NO <![CDATA[<]]> #{statmntNo}
+							<if test="registerId != null and registerId != ''">
+							AND REGISTER_ID = #{registerId}
+							</if>
+							<if test="searchText != null and searchText != ''">
+			        		AND STATMNT_TITLE LIKE '%' #{searchText} '%'
+			        		</if>
+			        		<if test="answerYn != null and answerYn != ''">
+			        		AND ANSWER_YN = #{answerYn}
+			        		</if>
+						</where>
+						 ORDER BY STATMNT_NO DESC LIMIT 1
+                	) as STATMNT_NO
+            	)
+        	)
+        	
+    </select>
+	
+	<select id="selectErrorStatementDetail" parameterType="ErrorStatementVO" resultType="ErrorStatementVO">
+			
+			SELECT
+				teks.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = teks.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = teks.REGISTER_ID)) AS OU,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = teks.ANSWER_ID) AS ANSWER_DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = teks.ANSWER_ID)) AS ANSWER_OU
+			FROM
+				TB_ERROR_KNOWLEDGE_STATEMENT teks
+			<where>
+				AND STATMNT_NO = #{statmntNo}
+			</where>
+	
+	</select>
+	
+	<insert id="insertErrorStatement" parameterType="ErrorStatementVO">
+	
+			INSERT INTO TB_ERROR_KNOWLEDGE_STATEMENT
+			(TITLE, STATMNT_TITLE, CONT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{title}, #{statmntTitle}, #{cont}, 'N', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')	
+	
+	</insert>
+	
+	<update id="updateErrorStatement" parameterType="ErrorStatementVO">
+	
+			UPDATE
+				TB_ERROR_KNOWLEDGE_STATEMENT
+			SET
+				TITLE = #{title},
+				STATMNT_TITLE = #{statmntTitle},
+				CONT = #{cont},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			<where>
+				AND STATMNT_NO = #{statmntNo}
+			</where>	
+	
+	</update>
+	
+	<update id="updateErrorStatementAnswer" parameterType="ErrorStatementVO">
+	
+			UPDATE
+				TB_ERROR_KNOWLEDGE_STATEMENT
+			SET
+				ANSWER_ID = #{answerId},
+				ANSWER_CONT = #{answerCont},
+				ANSWER_YN = 'Y',
+				ANSWER_DTM = SYSDATE()
+			<where>
+				AND STATMNT_NO = #{statmntNo}
+			</where>
+	
+	</update>
+	
+	<select id="selectBookmarkList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+	
+			SELECT
+				*
+			FROM
+				TB_BOOKMARK_KNOWLEDGE
+			<where>
+				AND REGISTER_ID = #{registerId}
+			</where>
+	
+	</select>
+	
+	<insert id="insertBookmark" parameterType="KnowledgeVO">
+	
+			INSERT INTO TB_BOOKMARK_KNOWLEDGE
+			(TITLE, REGISTER_ID, REGIST_DTM)
+			VALUES
+			(#{title}, #{registerId}, SYSDATE())	
+	
+	</insert>
+	
+	<delete id="deleteBookmark" parameterType="KnowledgeVO">
+	
+			DELETE
+			FROM
+				TB_BOOKMARK_KNOWLEDGE
+			<where>
+				AND TITLE = #{title}
+				AND REGISTER_ID = #{registerId}
+			</where>
+	
+	</delete>
+	
+	<delete id="deleteKnowledge" parameterType="KnowledgeVO">
+			
+			UPDATE 
+				TB_KNOWLEDGE
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				AND TITLE = #{title}
+			</where>
+			
+	</delete>
+	
+	<update id="updateInqCnt" parameterType="KnowledgeVO"> 
+		
+			UPDATE
+				TB_KNOWLEDGE
+			SET
+				INQ_CNT = INQ_CNT + 1
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+			</where>				
+	
+	</update>
+	
+	<insert id="insertRecommend" parameterType="KnowledgeVO">
+	
+			INSERT INTO TB_KNOWLEDGE_RECOMMEND
+			(KNOWLG_NO, REGISTER_ID, REGIST_DTM)
+			VALUES
+			(#{knowlgNo}, #{registerId}, SYSDATE())
+	
+	</insert>
+	
+	<delete id="deleteRecommend" parameterType="KnowledgeVO">
+	
+			DELETE
+			FROM
+				TB_KNOWLEDGE_RECOMMEND
+			<where>
+				AND KNOWLG_NO = #{knowlgNo}
+				AND REGISTER_ID = #{registerId}
+			</where>
+	
+	</delete>
+		
+	<select id="selectRecommendCount" parameterType="KnowledgeVO" resultType="int">
+    
+        	SELECT
+        		COUNT(*)
+        	FROM
+        		TB_KNOWLEDGE_RECOMMEND
+        	<where>
+        		AND KNOWLG_NO = #{knowlgNo}
+        	</where>
+        	
+    </select>
+    
+	<select id="selectRecommend" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+    
+        	SELECT
+        		*
+        	FROM
+        		TB_KNOWLEDGE_RECOMMEND
+        	<where>
+        		AND KNOWLG_NO = #{knowlgNo}
+        		AND REGISTER_ID = #{registerId}
+        	</where>
+        	
+    </select>
+    
+	<insert id="insertInterests" parameterType="KnowledgeVO">
+	
+			INSERT INTO TB_INTERESTS
+			(KNOWLG_MAP_NO, REGISTER_ID, REGIST_DTM)
+			VALUES
+			(#{knowlgMapNo}, #{registerId}, SYSDATE())
+	
+	</insert>
+	
+	<delete id="deleteInterests" parameterType="KnowledgeVO">
+	
+			DELETE
+			FROM
+				TB_INTERESTS
+			<where>
+				AND KNOWLG_MAP_NO = #{knowlgMapNo}
+				AND REGISTER_ID = #{registerId}
+			</where>
+	
+	</delete>
+	
+	<select id="selectInterests" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+    
+        	SELECT
+        		*
+        	FROM
+        		TB_INTERESTS
+        	<where>
+        		AND KNOWLG_MAP_NO = #{knowlgMapNo}
+        		AND REGISTER_ID = #{registerId}
+        	</where>
+        	
+    </select>
+    
+	<select id="selectInterestsList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+    
+        	SELECT
+        		ti.*,
+        		(SELECT KNOWLG_MAP_TYPE FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS KNOWLG_MAP_TYPE,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
+				(SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO) AS UP_NO,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = ti.KNOWLG_MAP_NO)) AS UP_NM
+        	FROM
+        		TB_INTERESTS ti
+        	<where>
+        		AND REGISTER_ID = #{registerId}
+        	</where>
+        	ORDER BY KNOWLG_MAP_TYPE, KNOWLG_MAP_NM
+        	
+    </select>
+    
+    <insert id="insertKnowledgeMap" parameterType="KnowledgeMapVO" useGeneratedKeys="true" keyProperty="knowlgMapNo">
+		
+			INSERT INTO TB_KNOWLEDGE_MAP
+			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NM, UP_NO, SORT_ORDR, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{knowlgMapType}, #{knowlgMapNm}, #{upNo}, #{sortOrdr}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')		
+		
+	</insert>
+			
+	<delete id="updateKnowledgeMap" parameterType="KnowledgeMapVO">
+		
+			UPDATE TB_KNOWLEDGE_MAP
+			SET
+				KNOWLG_MAP_TYPE = #{knowlgMapType},
+				KNOWLG_MAP_NM = #{knowlgMapNm},
+				UP_NO = #{upNo},
+				SORT_ORDR = #{sortOrdr},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			WHERE
+				KNOWLG_MAP_NO = #{knowlgMapNo}
+			
+	</delete>
+	
+	<update id="deleteKnowledgeMap" parameterType="KnowledgeMapVO">
+		
+			UPDATE TB_KNOWLEDGE_MAP
+			SET 
+				DEL_YN = 'Y',
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			WHERE
+				KNOWLG_MAP_NO = #{knowlgMapNo}
+		
+	</update>
+	
+	<select id="selectKnowledgeTitle" resultType="String">
+			
+			SELECT
+				DISTINCT(TITLE) AS TITLE
+			FROM
+				TB_KNOWLEDGE
+			
+	</select>
+	
+	<update id="updateKnowledgeLink" parameterType="KnowledgeVO">
+			
+			<![CDATA[
+			UPDATE TB_KNOWLEDGE_CONTENTS
+			SET
+				CONT = REPLACE(CONT, #{title}, '<a href=\"/kno/knowledgeDetail.do?title=${title}\">${title}</a>')
+			]]>
+			
+	</update>
+	
+	<select id="selectKnowledgeMapLogList" resultType="LogVO">
+		
+		SELECT
+			a.*
+			, e.DISPLAY_NAME as REGISTER_NAME
+			, e.ou
+			, e.USER_FULL_NAME as registerFullName
+		FROM
+			TB_USER_LOG a
+			LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+		<where>
+			AND a.DEL_YN = 'N'
+			AND a.LOG_SUBJECT_TYPE = 'KNOWLGMAP'
+		</where>
+		ORDER BY a.LOG_NO DESC
+		LIMIT 30 OFFSET 0
+	
+	</select>
+ 	 	
+</mapper>

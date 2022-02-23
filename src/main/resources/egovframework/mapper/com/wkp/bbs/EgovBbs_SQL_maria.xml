@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BbsDAO">
+
+    <sql id="selectListCondition">
+        <where>
+        	AND DEL_YN = 'N'
+	        <if test="searchType != null and searchText != null and searchText != ''">
+	            <if test="searchType == 'TITLE' ">
+	                AND TITLE LIKE '%' #{searchText} '%'
+	            </if>
+	            <if test="searchType == 'REGISTER_ID'">
+					AND REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
+	            </if>
+	        </if>
+        </where>
+    </sql>
+    
+ 	<select id="selectNoticeList" parameterType="NoticeVO" resultType="NoticeVO">
+ 		
+			SELECT
+				tn.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tn.REGISTER_ID) AS DISPLAY_NAME,
+				CASE WHEN DATEDIFF(REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+ 			FROM
+				TB_NOTICE tn
+			<include refid="selectListCondition" />
+        	ORDER BY NOTICE_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+        	
+ 	</select>
+ 	
+	<select id="selectNoticeListCount" parameterType="NoticeVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_NOTICE
+	        <include refid="selectListCondition" />
+	        
+    </select>
+ 	
+ 	<select id="selectNoticeDetail" parameterType="NoticeVO" resultType="NoticeVO">
+ 		
+			SELECT 
+				tn.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tn.REGISTER_ID) AS DISPLAY_NAME
+			FROM
+				TB_NOTICE tn
+			WHERE 
+				NOTICE_NO = #{noticeNo}
+ 		
+ 	</select>
+ 	
+    <select id="selectNoticePre" parameterType="NoticeVO" resultType="NoticeVO">
+
+        SELECT 
+        	*
+        FROM 
+        	TB_NOTICE
+        WHERE 
+        	NOTICE_NO IN (
+            	SELECT * FROM (
+                	(
+                		SELECT NOTICE_NO FROM TB_NOTICE
+                		<include refid="selectListCondition" />
+                		AND NOTICE_NO > #{noticeNo}  ORDER BY NOTICE_NO LIMIT 1
+                	) as NOTICE_NO
+            	)
+        	)
+
+    </select>
+
+    <select id="selectNoticeNext" parameterType="NoticeVO" resultType="NoticeVO">
+        
+        SELECT 
+        	*
+        FROM 
+        	TB_NOTICE
+        WHERE 
+        	NOTICE_NO IN (
+            	SELECT * FROM (
+                	(
+                    	SELECT NOTICE_NO FROM TB_NOTICE
+                    	<include refid="selectListCondition" />
+                    	AND NOTICE_NO <![CDATA[<]]> #{noticeNo}  ORDER BY NOTICE_NO DESC LIMIT 1
+                	) as NOTICE_NO
+            	)
+        	)
+        	
+    </select>
+ 	
+	<insert id="insertNotice" parameterType="NoticeVo">
+		
+			INSERT INTO TB_NOTICE
+			(TITLE, CONT, ATCH_FILE_NO, INQ_CNT, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{title}, #{cont}, #{atchFileNo}, 0, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+		
+	</insert>
+	
+	<insert id="updateNotice" parameterType="NoticeVo">
+		
+			UPDATE
+				TB_NOTICE
+			SET
+				TITLE = #{title},
+				CONT = #{cont},
+				ATCH_FILE_NO = #{atchFileNo},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			<where>
+				AND NOTICE_NO = #{noticeNo}
+			</where>		
+		
+	</insert>
+	
+	<insert id="deleteNotice" parameterType="NoticeVo">
+		
+			UPDATE
+				TB_NOTICE
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND NOTICE_NO = #{noticeNo}
+			</where>		
+		
+	</insert>
+	
+ 	<select id="selectFaqList" parameterType="FaqVO" resultType="FaqVO">
+ 		
+			SELECT 
+				tf.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tf.REGISTER_ID) AS DISPLAY_NAME
+			FROM
+				TB_FAQ tf
+			<include refid="selectListCondition" />
+			<if test="faqType != null and faqType !=''">
+	        	AND FAQ_TYPE = #{faqType}
+	        </if>
+        	ORDER BY FAQ_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+				 		
+ 	</select>
+ 	
+ 	<select id="selectFaqListCount" parameterType="FaqVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_FAQ
+	        <include refid="selectListCondition" />
+			<if test="faqType != null and faqType !=''">
+	        	AND FAQ_TYPE = #{faqType}
+	        </if>
+	        
+    </select>
+    
+ 	<select id="selectFaqDetail" parameterType="FaqVO" resultType="FaqVO">
+ 		
+			SELECT 
+				tf.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tf.REGISTER_ID) AS DISPLAY_NAME
+			FROM
+				TB_FAQ tf
+			WHERE 
+				FAQ_NO = #{faqNo}
+ 		
+ 	</select>
+ 	
+ 	<select id="selectFaqPre" parameterType="FaqVO" resultType="FaqVO">
+
+	        SELECT 
+	        	*
+	        FROM 
+	        	TB_FAQ
+	        WHERE 
+	        	FAQ_NO IN (
+	            	SELECT * FROM (
+	                	(
+	               			SELECT FAQ_NO FROM TB_FAQ
+	                		<include refid="selectListCondition" />
+	                		AND FAQ_NO > #{faqNo}  ORDER BY FAQ_NO LIMIT 1
+	                	) as FAQ_NO
+	            	)
+	        	)
+
+    </select>
+
+    <select id="selectFaqNext" parameterType="FaqVO" resultType="FaqVO">
+
+	        SELECT 
+	        	*
+	        FROM 
+	        	TB_FAQ
+	        WHERE 
+	        	FAQ_NO IN (
+	           		SELECT * FROM (
+	                	(
+	                    	SELECT FAQ_NO FROM TB_FAQ
+	                    	<include refid="selectListCondition" />
+	                    	AND FAQ_NO <![CDATA[<]]> #{faqNo}  ORDER BY FAQ_NO DESC LIMIT 1
+	                	) as FAQ_NO
+	            	)
+	        	)
+        
+    </select>
+ 	
+ 	<insert id="insertFaq" parameterType="FaqVo">
+		
+			INSERT INTO TB_FAQ
+			(FAQ_TYPE, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{faqType}, #{title}, #{cont}, #{atchFileNo}, 0, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')			
+		
+	</insert>
+	
+	<insert id="updateFaq" parameterType="FaqVo">
+		
+			UPDATE
+				TB_FAQ
+			SET
+				TITLE = #{title},
+				CONT = #{cont},
+				ATCH_FILE_NO = #{atchFileNo},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			<where>
+				AND FAQ_NO = #{faqNo}
+			</where>			
+		
+	</insert>
+	
+	<insert id="deleteFaq" parameterType="FaqVo">
+		
+			UPDATE
+				TB_FAQ
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND FAQ_NO = #{faqNo}
+			</where>						
+		
+	</insert>
+	
+	<update id="updateInqCnt" parameterType="NoticeVo">
+		
+			UPDATE
+				TB_NOTICE
+			SET
+				INQ_CNT = INQ_CNT + 1
+			<where>
+				AND NOTICE_NO = #{noticeNo}
+			</where>
+	
+	</update>
+	
+ 	<select id="selectRequestList" parameterType="RequestVO" resultType="RequestVO">
+ 		
+			SELECT
+				trk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.REGISTER_ID) AS DISPLAY_NAME,
+				CASE WHEN DATEDIFF(REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+ 			FROM
+				TB_REQUEST_KNOWLEDGE trk
+			<include refid="selectListCondition" />
+        	ORDER BY REQUST_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+        	
+ 	</select>
+ 	
+	<select id="selectRequestListCount" parameterType="RequestVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_REQUEST_KNOWLEDGE
+	        <include refid="selectListCondition" />
+	        
+    </select>
+    
+	<select id="selectRequestListCountByMine" parameterType="RequestVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_REQUEST_KNOWLEDGE
+	        <where>
+        		AND DEL_YN = 'N'
+	        	AND REGISTER_ID = #{registerId}
+	        	AND ANSWER_YN = #{answerYn}
+	        </where>
+	        
+    </select>
+ 	
+ 	<select id="selectRequestDetail" parameterType="RequestVO" resultType="RequestVO">
+ 		
+			SELECT 
+				trk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tr WHERE tr.SID = trk.REGISTER_ID)) AS OU,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.ANSWER_ID) AS ANSWER_DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tr WHERE tr.SID = trk.ANSWER_ID)) AS ANSWER_OU,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = trk.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = trk.KNOWLG_MAP_NO)) AS UP_NM
+			FROM
+				TB_REQUEST_KNOWLEDGE trk
+			WHERE 
+				REQUST_NO = #{requstNo}
+ 		
+ 	</select>
+ 	
+    <select id="selectRequestPre" parameterType="RequestVO" resultType="RequestVO">
+
+        SELECT 
+        	*
+        FROM 
+        	TB_REQUEST_KNOWLEDGE
+        WHERE 
+        	REQUST_NO IN (
+            	SELECT * FROM (
+                	(
+                		SELECT REQUST_NO FROM TB_REQUEST_KNOWLEDGE
+                		<include refid="selectListCondition" />
+                		AND REQUST_NO > #{requstNo} ORDER BY REQUST_NO LIMIT 1
+                	) as REQUST_NO
+            	)
+        	)
+
+    </select>
+
+    <select id="selectRequestNext" parameterType="RequestVO" resultType="RequestVO">
+        
+        SELECT 
+        	*
+        FROM 
+        	TB_REQUEST_KNOWLEDGE
+        WHERE 
+        	REQUST_NO IN (
+            	SELECT * FROM (
+                	(
+                    	SELECT REQUST_NO FROM TB_REQUEST_KNOWLEDGE
+                    	<include refid="selectListCondition" />
+                    	AND REQUST_NO <![CDATA[<]]> #{requstNo} ORDER BY REQUST_NO DESC LIMIT 1
+                	) as REQUST_NO
+            	)
+        	)
+        	
+    </select>
+ 	
+	<insert id="insertRequest" parameterType="RequestVo">
+		
+			INSERT INTO TB_REQUEST_KNOWLEDGE
+			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NO, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{knowlgMapType}, #{knowlgMapNo}, #{title}, #{cont}, #{atchFileNo}, 0, 'N', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+		
+	</insert>
+	
+	<insert id="updateRequest" parameterType="RequestVo">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				KNOWLG_MAP_TYPE = #{knowlgMapType},
+				KNOWLG_MAP_NO = #{knowlgMapNo},
+				TITLE = #{title},
+				CONT = #{cont},
+				ATCH_FILE_NO = #{atchFileNo},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>		
+		
+	</insert>
+	
+	<insert id="deleteRequest" parameterType="RequestVo">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>		
+		
+	</insert>
+	
+	<update id="updateRequestInqCnt" parameterType="RequestVo">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				INQ_CNT = INQ_CNT + 1
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>
+	
+	</update>
+	
+	<update id="updateRequestAnswer" parameterType="RequestVo">
+	
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				ANSWER_ID = #{answerId},
+				ANSWER_CONT = #{answerCont},
+				ANSWER_YN = 'Y',
+				ANSWER_DTM = SYSDATE()
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>
+	
+	</update>
+ 	
+</mapper>

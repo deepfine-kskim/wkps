@@ -23,21 +23,22 @@
                         </div>
                         <div class="mside_tog_cont">
                             <ul id="metismenu" class="tree_list tree_line list-group">
-                            	<c:forEach var="main" items="${knowledgeMapList }" varStatus="status"> 
-                            	<c:if test="${main.upNo eq 0}">
-                                <li class="list-group-item<c:if test="${knowlgMap.upNo eq main.knowlgMapNo}"> active</c:if>">
-                                    <a href="#">${main.knowlgMapNm }</a>
-									<ul class="list-group sub_list">
-									<c:forEach var="sub" items="${knowledgeMapList }">
-                                   	<c:if test="${sub.upNo eq main.knowlgMapNo }">
-                                        <li>
-                                        	<a href="javascript:;" class="lnk<c:if test="${knowlgMap.knowlgMapNo eq sub.knowlgMapNo }"> on</c:if>" data-no="${sub.knowlgMapNo }">${sub.knowlgMapNm }</a>
-                                        </li> 
+                            	<c:forEach var="main" items="${knowledgeMapList }" varStatus="status">
+									<%-- 하드코딩::행정포탈 자료실 메뉴(knowlgMapNo = 119) 임시 숨김처리 --%>
+									<c:if test="${main.upNo eq 0 and main.knowlgMapNo ne 119}">
+									<li class="list-group-item<c:if test="${knowlgMap.upNo eq main.knowlgMapNo}"> active</c:if>">
+										<a href="#">${main.knowlgMapNm }</a>
+										<ul class="list-group sub_list">
+										<c:forEach var="sub" items="${knowledgeMapList }">
+										<c:if test="${sub.upNo eq main.knowlgMapNo }">
+											<li>
+												<a href="javascript:;" class="lnk<c:if test="${knowlgMap.knowlgMapNo eq sub.knowlgMapNo }"> on</c:if>" data-no="${sub.knowlgMapNo }">${sub.knowlgMapNm }</a>
+											</li>
+										</c:if>
+										</c:forEach>
+										</ul>
+									</li>
 									</c:if>
-									</c:forEach>
-                            		</ul>
-                                </li>
-                                </c:if>
                                 </c:forEach>
                             </ul>
                         </div>

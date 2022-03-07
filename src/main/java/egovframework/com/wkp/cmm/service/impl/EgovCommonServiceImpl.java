@@ -118,7 +118,7 @@ public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements Eg
 	public int insertRecommend(RecommendVO recommendVO) {
 		int result = 0;
 		try{
-			commonDAO.insertRecommend(recommendVO);
+			result = commonDAO.insertRecommend(recommendVO);
 		} catch (Exception e) {
 			result = -1;
 		}

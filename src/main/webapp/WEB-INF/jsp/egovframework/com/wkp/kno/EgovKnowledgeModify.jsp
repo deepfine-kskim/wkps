@@ -57,7 +57,7 @@
 				<form:form id="mdfFrm" class="form-horizontal" action="/kno/modifyKnowledge.do" modelAttribute="knowledgeVO">
                 <div id="contents" class="col-md-9">
                     <div class="page-body">
-                        <p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>
+                        <%--<p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>--%>
                             <input type="hidden" name="title" value="${knowledgeDetail.title }">
                         	<input type="hidden" name="knowlgNo" value="${knowledgeDetail.knowlgNo }">
 							<input type="hidden" name="sortOrdr" value="${knowledgeContents.sortOrdr }">
@@ -66,9 +66,9 @@
                                 <legend class="sr-only">지식 편집</legend>
                                 <div class="brd_write_area wiki_frms">
                                     <div class="form-group">
-                                        <label for="inpText" class="col-sm-2 control-label"><span class="req">*</span> 내용</label>
+                                        <label for="inpText" class="col-sm-2 control-label"><%--<span class="req">*</span> --%>내용</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" required>
+                                            <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" <%--required--%>>
                                             ${knowledgeContents.cont}
                                             </textarea>
                                         </div>
@@ -208,10 +208,10 @@
 		
 		$("#submit").click(function() {
             var cont = CKEDITOR.instances.inpText.getData();
-            if(cont == ''){
+            /*if(cont == ''){
             	alert("내용을 입력해주세요.");
             	return false;
-            }
+            }*/
             /*
             var type = '${knowledgeDetail.knowlgMapType }';
             if((type == 'REPORT' || type == 'REFERENCE') && $('input[name=approverId]').val() == undefined){

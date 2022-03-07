@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inpText" class="col-sm-2 control-label"><span class="req">*</span> 내용</label>
+                                        <label for="inpText" class="col-sm-2 control-label"><%--<span class="req">*</span>--%>내용</label>
                                         <div class="col-sm-10">
                                             <div class="opt_btns">
                                                 <button type="button" class="btn btn-default outline ico_btn file_add" data-toggle="collapse" data-target="#converterFrm" aria-expanded="false" aria-controls="converterFrm" title="파일변환"><i class="glyphicon glyphicon-paperclip" aria-hidden="true"></i><span class="sr-only">파일변환</span></button><span> 파일변환</span>
@@ -126,13 +126,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" required="required"></textarea>
+                                            <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" <%--required="required"--%>></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inpMemo" class="col-sm-2 control-label"><span class="req">*</span> 지식요약</label>
+                                        <label for="inpMemo" class="col-sm-2 control-label"><%--<span class="req">*</span>--%>지식요약</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" required></textarea>
+                                            <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" <%--required--%>></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -152,9 +152,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="keyword" class="col-md-2 control-label"><span class="req">*</span> 검색 키워드</label>
+                                        <label for="keyword" class="col-md-2 control-label"><%--<span class="req">*</span>--%>검색 키워드</label>
                                         <div class="col-md-10">
-                                            <input type="text" id="keyword" name="keyword" data-role="tagsinput" class="form-control inp_keyword" required="required" />
+                                            <input type="text" id="keyword" name="keyword" data-role="tagsinput" class="form-control inp_keyword" <%--required="required"--%> />
                                             <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 최대 10개까지 등록 가능합니다. 입력후 엔터키를 눌러주세요.</p>
                                         </div>
                                     </div>
@@ -994,7 +994,11 @@
             	alert("지식맵을 선택해주세요.");
             	return false;
             }
-            var cont = CKEDITOR.instances.inpText.getData();
+			if($.trim($('#inpSubject').val()) === '') {
+				alert("제목을 입력해주세요.");
+				return false;
+			}
+            /*var cont = CKEDITOR.instances.inpText.getData();
             if(cont == ''){
             	alert("내용을 입력해주세요.");
             	return false;
@@ -1002,7 +1006,7 @@
             if($('#keyword').val() == ''){
             	alert("키워드를 입력해주세요.");
             	return false;
-            }
+            }*/
             /*
             var type = $('#typeSel').val();
             if((type == 'REPORT' || type == 'REFERENCE') && $('input[name=approverId]').val() == undefined){

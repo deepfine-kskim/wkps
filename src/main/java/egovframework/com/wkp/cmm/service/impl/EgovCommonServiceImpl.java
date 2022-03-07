@@ -36,37 +36,62 @@ public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements Eg
     public List<TargetVO> selectDisplayTargetList(Long targetNo){
     	return commonDAO.selectDisplayTargetList(targetNo);
     }
-    
+
+	/**
+	 * 우수 사용자 목록 조회
+	 * @param excellenceUserVO VO
+	 * @return 우수 사용자 목록
+	 */
 	@Override
 	public List<ExcellenceUserVO> selectExcellenceUserList(ExcellenceUserVO excellenceUserVO) {
         return commonDAO.selectExcellenceUserList(excellenceUserVO);
 	}
-	
+
+	/**
+	 * 우수 사용자 등록
+	 * @param excellenceUserVO VO
+	 * @return 등록 건수
+	 */
 	@Override
 	public int insertExcellenceUser(ExcellenceUserVO excellenceUserVO) {
 		int result = 0;
-		try{
+		try {
 			result = commonDAO.insertExcellenceUser(excellenceUserVO);
 		} catch (Exception e) {
 			result = -1;
 		}
 		return result;
 	}
-	
+
+	/**
+	 * 우수 사용자 삭제
+	 * @param excellenceUserVO VO
+	 * @return 삭제 건수
+	 */
 	@Override
 	public int deleteExcellenceUser(ExcellenceUserVO excellenceUserVO) {
 		return commonDAO.deleteExcellenceUser(excellenceUserVO);
 	}
 
+	/**
+	 * 우수 부서 목록 조회
+	 * @param excellenceOrgVO VO
+	 * @return 우수 부서 목록
+	 */
 	@Override
 	public List<ExcellenceOrgVO> selectExcellenceOrgList(ExcellenceOrgVO excellenceOrgVO) {
         return commonDAO.selectExcellenceOrgList(excellenceOrgVO);
 	}
 
+	/**
+	 * 우수 부서 등록
+	 * @param excellenceOrgVO VO
+	 * @return 등록 건수
+	 */
 	@Override
 	public int insertExcellenceOrg(ExcellenceOrgVO excellenceOrgVO) {
 		int result = 0;
-		try{
+		try {
 			result = commonDAO.insertExcellenceOrg(excellenceOrgVO);
 		} catch (Exception e) {
 			result = -1;
@@ -74,6 +99,11 @@ public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements Eg
 		return result;
 	}
 
+	/**
+	 * 우수 부서 삭제
+	 * @param excellenceOrgVO VO
+	 * @return 삭제 건수
+	 */
 	@Override
 	public int deleteExcellenceOrg(ExcellenceOrgVO excellenceOrgVO) {
 		return commonDAO.deleteExcellenceOrg(excellenceOrgVO);

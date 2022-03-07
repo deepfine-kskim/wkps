@@ -34,101 +34,111 @@ public class EgovUserManageController {
 	
 	@Resource(name="authorityResource")
 	AuthorityResourceMetadata authorityResource;
-	
+
+	/**
+	 * 사용자 관리 > 우수 사용자 > 목록 조회
+	 * @param excellenceUserVO VO
+	 * @param model Model
+	 * @return View Page
+	 */
 	@RequestMapping("/excellentUser.do")
 	public String excellentUser(@ModelAttribute("excellenceUserVO") ExcellenceUserVO excellenceUserVO, Model model) {
-		
 		try {
             List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(excellenceUserVO);
-            model.addAttribute("excellenceUserList", excellenceUserList);		
+            model.addAttribute("excellenceUserList", excellenceUserList);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
 		return "/mgt/wkp/ugm/EgovExcellentUser";
-		
 	}
-	
+
+	/**
+	 * 사용자 관리 > 우수 사용자 > 등록
+	 * @param excellenceUserVO VO
+	 * @param redirect Model
+	 * @return Redirect
+	 */
 	@RequestMapping("/insertExcellentUser.do")
 	public String insertExcellentUser(@ModelAttribute("excellenceUserVO") ExcellenceUserVO excellenceUserVO, RedirectAttributes redirect) {
-		
 		try {
 			UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			excellenceUserVO.setRegisterId(user.getSid());
-            int result = commonService.insertExcellenceUser(excellenceUserVO);
-            if(result <= 0) {
-            	redirect.addFlashAttribute("errMsg", "등록할 수 없습니다.");
-            }
+			int result = commonService.insertExcellenceUser(excellenceUserVO);
+			if (result <= 0) {
+				redirect.addFlashAttribute("errMsg", "등록할 수 없습니다.");
+			}
 		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+			LOGGER.error("[" + e.getClass() + "] :" + e.getMessage());
 		}
-		
 		return "redirect:/adm/excellentUser.do";
-		
 	}
-	
+
+	/**
+	 * 사용자 관리 > 우수 사용자 > 삭제
+	 * @param excellenceUserVO VO
+	 * @return Redirect
+	 */
 	@RequestMapping("/deleteExcellentUser.do")
 	public String deleteExcellentUser(@ModelAttribute("excellenceUserVO") ExcellenceUserVO excellenceUserVO) {
-		
 		try {
-			UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-			excellenceUserVO.setRegisterId(user.getSid());
-			
             commonService.deleteExcellenceUser(excellenceUserVO);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
 		return "redirect:/adm/excellentUser.do";
-		
 	}
-	
+
+	/**
+	 * 사용자 관리 > 우수 부서 > 목록 조회
+	 * @param excellenceOrgVO VO
+	 * @param model Model
+	 * @return View Page
+	 */
 	@RequestMapping("/excellentOrg.do")
 	public String excellentDept(@ModelAttribute("excellenceOrgVO") ExcellenceOrgVO excellenceOrgVO, Model model) {
-		
 		try {
 			List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(excellenceOrgVO);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
 		return "/mgt/wkp/ugm/EgovExcellentOrg";
 	}
-	
+
+	/**
+	 * 사용자 관리 > 우수 부서 > 등록
+	 * @param excellenceOrgVO VO
+	 * @param redirect Model
+	 * @return Redirect
+	 */
 	@RequestMapping("/insertExcellentOrg.do")
 	public String insertExcellentOrg(@ModelAttribute("excellenceOrgVO") ExcellenceOrgVO excellenceOrgVO, RedirectAttributes redirect) {
-		
 		try {
 			UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			excellenceOrgVO.setRegisterId(user.getSid());
-			
-            int result = commonService.insertExcellenceOrg(excellenceOrgVO);
-            if(result <= 0) {
-            	redirect.addFlashAttribute("errMsg", "등록할 수 없습니다.");
-            }
+			int result = commonService.insertExcellenceOrg(excellenceOrgVO);
+			if (result <= 0) {
+				redirect.addFlashAttribute("errMsg", "등록할 수 없습니다.");
+			}
 		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+			LOGGER.error("[" + e.getClass() + "] :" + e.getMessage());
 		}
-		
 		return "redirect:/adm/excellentOrg.do";
-		
 	}
-	
+
+	/**
+	 * 사용자 관리 > 우수 부서 > 삭제
+	 * @param excellenceOrgVO VO
+	 * @return Redirect
+	 */
 	@RequestMapping("/deleteExcellentOrg.do")
 	public String deleteExcellentOrg(@ModelAttribute("excellenceOrgVO") ExcellenceOrgVO excellenceOrgVO) {
-		
 		try {
-			UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-			excellenceOrgVO.setRegisterId(user.getSid());
-			
-            commonService.deleteExcellenceOrg(excellenceOrgVO);
+			commonService.deleteExcellenceOrg(excellenceOrgVO);
 		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+			LOGGER.error("[" + e.getClass() + "] :" + e.getMessage());
 		}
-		
 		return "redirect:/adm/excellentOrg.do";
-		
 	}
 	
 	@RequestMapping("/manager.do")

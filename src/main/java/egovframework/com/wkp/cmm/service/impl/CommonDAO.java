@@ -58,27 +58,57 @@ public class CommonDAO extends EgovComAbstractDAO {
 		param.put("targetNo", targetNo);
 		return selectList("CommonDAO.selectDisplayTargetList", param);
 	}
-	
+
+	/**
+	 * 우수 사용자 목록 조회
+	 * @param excellenceUserVO VO
+	 * @return 우수 사용자 목록
+	 */
 	public List<ExcellenceUserVO> selectExcellenceUserList(ExcellenceUserVO excellenceUserVO) {
 		return selectList("CommonDAO.selectExcellenceUserList", excellenceUserVO);
 	}
 
+	/**
+	 * 우수 사용자 등록
+	 * @param excellenceUserVO VO
+	 * @return 등록 건수
+	 */
 	public int insertExcellenceUser(ExcellenceUserVO excellenceUserVO) {
 		return insert("CommonDAO.insertExcellenceUser", excellenceUserVO);
 	}
-	
+
+	/**
+	 * 우수 사용자 삭제
+	 * @param excellenceUserVO VO
+	 * @return 삭제 건수
+	 */
 	public int deleteExcellenceUser(ExcellenceUserVO excellenceUserVO) {
 		return delete("CommonDAO.deleteExcellenceUser", excellenceUserVO);
 	}
 
+	/**
+	 * 우수 부서 목록 조회
+	 * @param excellenceOrgVO VO
+	 * @return 우수 부서 목록
+	 */
 	public List<ExcellenceOrgVO> selectExcellenceOrgList(ExcellenceOrgVO excellenceOrgVO) {
 		return selectList("CommonDAO.selectExcellenceOrgList", excellenceOrgVO);
 	}
 
+	/**
+	 * 우수 부서 등록
+	 * @param excellenceOrgVO VO
+	 * @return 등록 건수
+	 */
 	public int insertExcellenceOrg(ExcellenceOrgVO excellenceOrgVO) {
 		return insert("CommonDAO.insertExcellenceOrg", excellenceOrgVO);
 	}
-	
+
+	/**
+	 * 우수 부서 삭제
+	 * @param excellenceOrgVO VO
+	 * @return 삭제 건수
+	 */
 	public int deleteExcellenceOrg(ExcellenceOrgVO excellenceOrgVO) {
 		return delete("CommonDAO.deleteExcellenceOrg", excellenceOrgVO);
 	}

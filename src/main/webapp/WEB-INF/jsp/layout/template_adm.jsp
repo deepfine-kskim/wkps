@@ -87,7 +87,6 @@
 		</div>
 		<!-- //adm-sidebar -->
     	<div id="adm-contents">
-    		${pageContext.request.contextPath }
 			<tiles:insertAttribute name="contents" />
     	</div>
     	<!-- //adm-contents -->

@@ -157,7 +157,8 @@ public class EgovFileMngUtil {
 					|| fileExt.equals("avi")
 					|| fileExt.equals("bmp")
 					|| fileExt.equals("png")
-					|| fileExt.equals("exe"))) {
+					|| fileExt.equals("exe")
+					|| fileExt.equals("hwpx"))) {
 				filePath = storePathString + File.separator + newName;
 				file.transferTo(new File(EgovWebUtil.filePathBlackList(filePath)));
 			} else {
@@ -271,7 +272,8 @@ public class EgovFileMngUtil {
 					|| fileExt.equals("avi")
 					|| fileExt.equals("bmp")
 					|| fileExt.equals("png")
-					|| fileExt.equals("exe"))) {
+					|| fileExt.equals("exe")
+					|| fileExt.equals("hwpx"))) {
 				filePath = storePathString + File.separator + newName;
 				file.transferTo(new File(EgovWebUtil.filePathBlackList(filePath)));
 			} else {

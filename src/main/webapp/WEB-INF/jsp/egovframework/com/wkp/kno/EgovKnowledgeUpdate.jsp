@@ -863,8 +863,8 @@
 							            		'PPTX', 'PPT', 'TXT', 'GIF', 
 							            		'JPG', 'JPEG', 'MP4', 'MP3', 'WMV',
 							            		'MPEG', 'MPG', 'AVI', 'PNG', 'PSD', 'BMP', 
-							            		'DOC', 'XLSM', 'OTF', 'EXE']) == -1) {
-            		alert('업로드가 불가능한 확장자 파일이 포함되어 있습니다.\n\n업로드 가능한 확장자\n[gif, png, jpg, jpeg, doc, docx, xls, xlsx, hwp, pdf, ai, zip, egg, pptx, ppt, txt, mp4, wmv, avi, psd, bmp, xlsm, otf, exe]');
+							            		'DOC', 'XLSM', 'OTF', 'EXE', 'HWPX']) == -1) {
+            		alert('업로드가 불가능한 확장자 파일이 포함되어 있습니다.\n\n업로드 가능한 확장자\n[gif, png, jpg, jpeg, doc, docx, xls, xlsx, hwp, pdf, ai, zip, egg, pptx, ppt, txt, mp4, wmv, avi, psd, bmp, xlsm, otf, exe, hwpx]');
             		return false;
             	}
             }

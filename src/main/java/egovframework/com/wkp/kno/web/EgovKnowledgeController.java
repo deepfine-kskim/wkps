@@ -495,15 +495,9 @@ public class EgovKnowledgeController {
     		, RedirectAttributes redirectAttributes) {
 
         try {
-        	
-        	//System.out.println("knowledgeVO - " + knowledgeVO);
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-			
 			knowledgeVO.setRegisterId(userVO.getSid());
 			knowledgeVO.setOuCode(userVO.getOuCode());
-			//System.out.println("userVO.getSid() - " + userVO.getSid());
-			//System.out.println("userVO.getOuCode() - " + userVO.getOuCode());
-
             List<FileVO> file = new ArrayList<FileVO>();
             long atchFileNo = 0;
 			final Map<String, MultipartFile> files = multiRequest.getFileMap();
@@ -515,9 +509,6 @@ public class EgovKnowledgeController {
             if (!mFiles.isEmpty()) {
 	            for(MultipartFile mFile : mFiles) {
 	            	files.put(mFile.getOriginalFilename(), mFile);
-	                //System.out.println("-------------------1 " + mFile.getOriginalFilename());
-	                //System.out.println("-------------------2 " + mFile.getName());
-	                //System.out.println("-------------------3 " + mFile);
 	            }
 	            
 	            Iterator<String> mapIter = files.keySet().iterator();

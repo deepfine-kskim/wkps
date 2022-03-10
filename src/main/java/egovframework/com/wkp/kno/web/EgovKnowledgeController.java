@@ -621,7 +621,7 @@ public class EgovKnowledgeController {
                             sortOrdr += 1;
                         } else {
                             end = -3;
-                            subTitle = knowledgeVO.getTitle();
+                            subTitle = "";
                             sortOrdr = 1;
                         }
 
@@ -880,7 +880,7 @@ public class EgovKnowledgeController {
                             sortOrdr += 1;
                         } else {
                             end = -3;
-                            subTitle = knowledgeVO.getTitle();
+                            subTitle = "";
                             sortOrdr = 1;
                         }
 
@@ -1034,7 +1034,7 @@ public class EgovKnowledgeController {
                             sortOrdr += 1;
                         } else {
                             end = -3;
-                            subTitle = knowledgeVO.getTitle();
+                            subTitle = "";
                             sortOrdr = 1;
                         }
 
@@ -1197,7 +1197,7 @@ public class EgovKnowledgeController {
                             sortOrdr += 1;
                         } else {
                             end = -3;
-                            subTitle = knowledgeVO.getTitle();
+                            subTitle = "";
                             sortOrdr = 1;
                         }
 

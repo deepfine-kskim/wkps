@@ -129,8 +129,10 @@
                                             </div>
                                             <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" <%--required--%> >
                                             <c:forEach var="contents" items="${knowledgeContentsList }">
-                                            <p>[==${contents.subtitle }==]</p>
-                                            ${contents.cont} 
+                                                <c:if test="${not empty contents.subtitle}">
+                                                    <p>[==${contents.subtitle}==]</p>
+                                                </c:if>
+                                                ${contents.cont}
                                             </c:forEach>
                                             </textarea>
                                         </div>

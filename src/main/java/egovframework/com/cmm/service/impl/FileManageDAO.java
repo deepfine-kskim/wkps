@@ -130,7 +130,7 @@ public class FileManageDAO extends EgovComAbstractDAO {
 		return (FileVO) selectOne("FileManageDAO.selectFileInf", fvo);
 	}
 
-	public int selectFileDetailMax(Long atchFileNo){
+	public Integer selectFileDetailMax(Long atchFileNo){
 		return selectOne("FileManageDAO.selectFileDetailMax", atchFileNo);
 	}
 	/**

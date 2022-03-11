@@ -108,7 +108,7 @@ public class EgovFileMngServiceImpl extends EgovAbstractServiceImpl implements E
 		return fileMngDAO.selectFileInf(fvo);
 	}
 	
-	public int selectFileDetailMax(Long atchFileNo){
+	public Integer selectFileDetailMax(Long atchFileNo){
 		return fileMngDAO.selectFileDetailMax(atchFileNo);
 	}
 

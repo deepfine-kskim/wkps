@@ -199,7 +199,10 @@ public class EgovFileMngUtil {
         storePathString += subPath + '/';
         
         //System.out.println("atchFileNo222 - " + atchFileNo);
-        int fileSn = fileMngService.selectFileDetailMax(atchFileNo);
+        Integer fileSn = fileMngService.selectFileDetailMax(atchFileNo);
+		if (fileSn == null) {
+			fileSn = 0;
+		}
         
 		File saveFolder = new File(EgovWebUtil.filePathBlackList(storePathString));
 

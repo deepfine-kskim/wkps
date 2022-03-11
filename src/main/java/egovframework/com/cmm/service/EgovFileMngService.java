@@ -79,7 +79,7 @@ public interface EgovFileMngService {
     public FileVO selectFileInf(FileVO fvo);
     
     
-    public int selectFileDetailMax(Long atchFileNo);
+    public Integer selectFileDetailMax(Long atchFileNo);
 
     /**
      * 파일 구분자에 대한 최대값을 구한다.

@@ -12,9 +12,9 @@
 		   <div class="row layout_side_row">
                 <div id="aside" class="col-md-3">
 					<ul class="nav nav-tabs nav-justified side_tabs">
-                        <li <c:if test="${knowlgMapType eq 'REPORT' }">class="active"</c:if>><a href="javasrcipt:;" class="dev-type" data-type="REPORT">행정자료</a></li>
-                        <li <c:if test="${knowlgMapType eq 'REFERENCE' }">class="active"</c:if>><a href="javasrcipt:;" class="dev-type" data-type="REFERENCE">업무참고자료</a></li>
-                        <li <c:if test="${knowlgMapType eq 'PERSONAL' }">class="active"</c:if>><a href="javasrcipt:;" class="dev-type" data-type="PERSONAL">개인별지식</a></li>
+                        <li <c:if test="${knowlgMapType eq 'REPORT' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REPORT">행정자료</a></li>
+                        <li <c:if test="${knowlgMapType eq 'REFERENCE' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REFERENCE">업무참고자료</a></li>
+                        <li <c:if test="${knowlgMapType eq 'PERSONAL' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="PERSONAL">개인별지식</a></li>
                     </ul>
                     <div class="side_card_box mside_tog">
                         <div class="side_top hidden-sm hidden-lg hidden-md">
@@ -95,7 +95,7 @@
                                     <div class="col-sm-6">
                                         <ol class="breadcrumb">
                                             <li>
-                                            	<a href="javasrcipt:;" class="dev-type" data-type="${knowlgMapType }">
+                                            	<a href="javascript:;" class="dev-type" data-type="${knowlgMapType }">
                                             	<i class="fa fa-file-text-o ico"></i>
                                             	<c:choose>
 													<c:when test="${knowlgMapType eq 'REPORT' }">행정자료</c:when>

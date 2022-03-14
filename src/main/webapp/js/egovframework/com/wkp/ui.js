@@ -63,17 +63,17 @@ var customUi = {
     treeList: function () {
         $('.tree_list').each(function() {
             var tree = $(this);
-            $('li', tree).each(function() {
+            /*$('li', tree).each(function() {
                 var subList = $(this).children('.sub_list').length;
                 if (subList) {
                     $(this).prepend('<a href="#" class="ico"><span class="sr-only">버튼</span></a>');
                 }
-            });
+            });*/
             tree.metisMenu({
                 triggerElement: 'a',
                 toggle: false
             });
-
+            tree.find('.sub_list').css('display', '');
         });
 
     },

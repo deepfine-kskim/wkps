@@ -27,8 +27,9 @@
 									<%-- 하드코딩::행정포탈 자료실 메뉴(knowlgMapNo = 119) 임시 숨김처리 --%>
 									<c:if test="${main.upNo eq 0 and main.knowlgMapNo ne 119}">
 									<li class="list-group-item<c:if test="${knowlgMap.upNo eq main.knowlgMapNo}"> active</c:if>">
+										<a href="#" class="ico"><span class="sr-only">버튼</span></a>
 										<a href="#">${main.knowlgMapNm }</a>
-										<ul class="list-group sub_list">
+										<ul class="list-group sub_list" style="display: none;">
 										<c:forEach var="sub" items="${knowledgeMapList }">
 										<c:if test="${sub.upNo eq main.knowlgMapNo }">
 											<li>

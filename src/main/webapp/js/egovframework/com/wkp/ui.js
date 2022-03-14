@@ -300,6 +300,11 @@ var customUi = {
         $('.inp_set_area').each(function() {
             var radios = $(this).find('input[type="radio"]');
             var btnTog = $(this).find('.inp_tog_cont');
+
+            if ($(this).find('input[type="radio"]:checked').hasClass('inp_tog')) {
+                btnTog.show();
+            }
+
             radios.on('change', function() {
                 if($(this).hasClass('inp_tog')){
                     btnTog.show();

@@ -672,6 +672,8 @@ public class EgovKnowledgeController {
             List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
             
             List<RelateKnowlgVO> relateKnowlgVo = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
+
+            List<TargetVO> targetVOList = commonService.selectDisplayTargetList(knowledgeDetail.getTargetNo());
             
             knowledgeDetail.setRelateKnowledgeList(relateKnowledgeList);
             
@@ -720,6 +722,7 @@ public class EgovKnowledgeController {
             model.addAttribute("parentList", parentList);
             model.addAttribute("childList", childList);
             model.addAttribute("groupList", groupList);
+            model.addAttribute("targetVOList", targetVOList);
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}

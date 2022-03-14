@@ -184,13 +184,21 @@
                                         <label for="svTarget1" class="col-sm-2 control-label"><span class="req">*</span> 공개범위</label>
                                         <div class="col-sm-10 tree_chk_area">
                                             <label for="svTarget1" class="radio-inline">
-                                                <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="checked" /> 전체
+
+                                                <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" /> 전체
                                             </label>
                                             <label for="svTarget2" class="radio-inline">
-                                                <form:radiobutton path="rlsYn" id="svTarget2" value="N" class="inp_tog" /> 지정
+                                                <form:radiobutton path="rlsYn" id="svTarget2" value="N" checked="${knowledgeDetail.rlsYn eq 'N' ? 'checked' : ''}" class="inp_tog" /> 지정
                                             </label>
                                             <a href="#selectGrpPopup" class="btn btn-xs btn-primary inp_tog_cont" data-toggle="modal" data-target="#selectGrpPopup">부서/개인/그룹 선택</a>
                                             <div id="rlsList" class="tag_grp_area">
+                                                <c:forEach var="targetVO" items="${targetVOList}">
+                                                    <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
+                                                    <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
+                                                    <c:set var="target" value="${targetVO.dispName}"/>
+                                                    <input type="hidden" name="${type2}" value="${targetVO.targetCode}"/>
+                                                    <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove">x</i><span class="sr-only">삭제</span></span>
+                                                </c:forEach>
                                             </div>
                                         </div>
                                     </div>

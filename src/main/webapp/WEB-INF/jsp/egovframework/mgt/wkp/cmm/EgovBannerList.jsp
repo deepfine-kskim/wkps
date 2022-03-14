@@ -90,7 +90,7 @@ $(function() {
                                         </div>
                                         <div class="input-group">
                                             <label for="search_value" class="sr-only">검색어 입력</label>
-                                            <input type="text" id="search_value" name="search_value" class="form-control" value="${search_value }" placeholder="커뮤니티명 입력" />
+                                            <input type="text" id="search_value" name="search_value" class="form-control flow-enter-search" value="${search_value }" placeholder="커뮤니티명 입력" data-search-button="btn_search"/>
                                             <span class="input-group-btn"><button  class="btn btn-default" id="btn_search" >검색</button></span>
                                         </div>
                                     </fieldset>

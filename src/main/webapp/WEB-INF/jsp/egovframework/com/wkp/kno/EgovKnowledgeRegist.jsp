@@ -213,7 +213,7 @@
 	                                    <legend class="sr-only">키워드 검색</legend>
 	                                    <div class="input-group">
 	                                        <label for="rltText" class="sr-only">키워드 검색</label>
-	                                        <input type="text" id="rltText" name="rltText" class="form-control" placeholder="제목 및 키워드로 검색 후 선택해 주시기 바랍니다.">
+	                                        <input type="text" id="rltText" name="rltText" class="form-control flow-enter-search" placeholder="제목 및 키워드로 검색 후 선택해 주시기 바랍니다." data-search-button="rltBtn">
 	                                        <span class="input-group-btn"><a href="javascript:;" id="rltBtn" class="btn btn-default">검색</a></span>
 	                                    </div>
 	                                </fieldset>
@@ -257,7 +257,7 @@
 	                                            <legend class="sr-only">이름 검색영역</legend>
 	                                            <div class="input-group">
 	                                                <label for="orgText" class="sr-only">이름 입력</label>
-	                                                <input type="text" id="orgText" name="orgText" class="form-control" placeholder="부서 검색(2글자 이상)">
+	                                                <input type="text" id="orgText" name="orgText" class="form-control flow-enter-search" placeholder="부서 검색(2글자 이상)" data-search-button="orgBtn">
 	                                                <span class="input-group-btn"><a href="javascript:;" id="orgBtn" class="btn btn-default">검색</a></span>
 	                                            </div>
 	                                        </fieldset>
@@ -300,7 +300,7 @@
 	                                            <legend class="sr-only">이름 검색영역</legend>
 	                                            <div class="input-group">
 	                                                <label for="userText" class="sr-only">이름 입력</label>
-	                                                <input type="text" id="userText" name="userText" class="form-control" placeholder="이름 검색(2글자 이상)">
+	                                                <input type="text" id="userText" name="userText" class="form-control flow-enter-search" placeholder="이름 검색(2글자 이상)" data-search-button="userBtn">
 	                                                <span class="input-group-btn"><a href="javascript:;" id="userBtn" class="btn btn-default">검색</a></span>
 	                                            </div>
 	                                        </fieldset>
@@ -428,7 +428,7 @@
 	                                            <legend class="sr-only">이름 검색영역</legend>
 	                                            <div class="input-group">
 	                                                <label for="lnkText" class="sr-only">이름 입력</label>
-	                                                <input type="text" id="lnkText" name="lnkText" class="form-control" placeholder="키워드 검색">
+	                                                <input type="text" id="lnkText" name="lnkText" class="form-control flow-enter-search" placeholder="키워드 검색" data-search-button="lnkSrchBtn">
 	                                                <span class="input-group-btn"><a href="javascript:;" id="lnkSrchBtn" class="btn btn-default">검색</a></span>
 	                                            </div>
 	                                        </fieldset>

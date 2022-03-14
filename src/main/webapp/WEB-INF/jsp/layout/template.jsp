@@ -65,5 +65,6 @@
 <script src="/js/egovframework/com/wkp/jquery.mCustomScrollbar.concat.min.js"></script>
 <!-- <script src="/js/egovframework/com/wkp/jquery.datetimepicker.full.js"></script> -->
 <script src="/js/egovframework/com/wkp/ui.js"></script>
+<script src="/js/deepfine.common.js"></script>
 </body>
 </html>

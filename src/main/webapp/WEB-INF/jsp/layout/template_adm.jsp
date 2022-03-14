@@ -96,5 +96,6 @@
 <script src="/js/egovframework/mgt/wkp/bootstrap-datetimepicker.min.js"></script>
 <script src="/js/egovframework/mgt/wkp/hummingbird-treeview-1.3.js"></script>
 <script src="/js/egovframework/mgt/wkp/adm.js"></script>
+<script src="/js/deepfine.common.js"></script>
 </body>
 </html>

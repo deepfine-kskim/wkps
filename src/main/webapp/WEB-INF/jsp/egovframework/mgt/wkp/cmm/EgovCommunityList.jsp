@@ -96,7 +96,7 @@ $(function() {
                                         </div>
                                         <div class="input-group">
                                             <label for="search_value" class="sr-only">검색어 입력</label>
-                                            <input type="text" id="search_value" name="search_value" class="form-control" placeholder="검색어" value="${search_value }"/>
+                                            <input type="text" id="search_value" name="search_value" class="form-control flow-enter-search" placeholder="검색어" value="${search_value }" data-search-button="btn_search"/>
                                             <span class="input-group-btn"><button class="btn btn-default" id="btn_search">검색</button></span>
                                         </div>
                                     </fieldset>

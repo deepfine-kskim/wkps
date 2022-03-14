@@ -82,7 +82,7 @@
                                     <label for="mbSrch" class="col-sm-2 control-label">추가</label>
                                     <div class="col-sm-10">
                                         <div class="input-group">
-                                            <input type="text" id="mbSrch" name="userName" class="form-control" placeholder="이름 검색(2글자 이상 입력)" />
+                                            <input type="text" id="mbSrch" name="userName" class="form-control flow-enter-search" placeholder="이름 검색(2글자 이상 입력)" data-search-button="srchBtn"/>
                                             <span class="input-group-btn"><button type="button" id="srchBtn" class="btn btn-default">검색</button></span>
                                         </div>
                                         <p class="help-block"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> 관리자로 등록할 사용자의 이름을 검색 후 등록해 주세요.</p>

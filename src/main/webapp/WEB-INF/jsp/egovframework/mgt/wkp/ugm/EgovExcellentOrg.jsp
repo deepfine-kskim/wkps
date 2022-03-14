@@ -77,7 +77,7 @@
                             <label for="mbSrch" class="col-sm-2 control-label">부서명</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    <input type="text" id="mbSrch" name="ou" class="form-control flow-enter-submit" placeholder="부서명 검색(2글자 이상 입력)" />
+                                    <input type="text" id="mbSrch" name="ou" class="form-control flow-enter-search" placeholder="부서명 검색(2글자 이상 입력)" data-search-button="srchBtn" />
                                     <span class="input-group-btn"><button type="button" id="srchBtn" class="btn btn-default">검색</button></span>
                                 </div>
                                 <p class="help-block"><i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i> 등록할 부서명을 검색 후 등록해 주세요.</p>
@@ -126,14 +126,6 @@
         if (errMsg != '') {
             alert(errMsg);
         }
-
-        /* enter submit 방지 */
-        $('.flow-enter-submit').off('keydown').on('keydown', function (e) {
-            if (e.keyCode === 13 ) {
-                e.preventDefault();
-                $('#srchBtn').click();
-            }
-        });
 
         /* 우수 부서 등록 */
         $('.flow-action-save').off('click').on('click', function () {

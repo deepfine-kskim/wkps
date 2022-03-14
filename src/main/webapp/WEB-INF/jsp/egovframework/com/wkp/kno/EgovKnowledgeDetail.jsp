@@ -25,8 +25,9 @@
                             	<c:forEach var="main" items="${knowledgeMapList}" varStatus="status">
                             	<c:if test="${main.upNo eq 0}">
                                 <li class="list-group-item<c:if test="${knowledgeDetail.upNo eq main.knowlgMapNo}"> active</c:if>">
+                                    <a href="#" class="ico"><span class="sr-only">버튼</span></a>
                                     <a href="#">${main.knowlgMapNm}</a>
-									<ul class="list-group sub_list">
+									<ul class="list-group sub_list" style="display: none;">
 									<c:forEach var="sub" items="${knowledgeMapList}">
                                    	<c:if test="${sub.upNo eq main.knowlgMapNo}">
                                         <li>
@@ -157,7 +158,7 @@
                                         <div id="wikiDoc${contents.sortOrdr}" class="wiki_box">
                                             <div class="wiki_header">
                                                 <h2 class="h2"><span class="num">${contents.sortOrdr}.</span> ${contents.subtitle}</h2>
-                                                <c:if test="${loginVO.sid eq knowledgeDetail.registerId || loginVO.ouCode eq knowledgeDetail.ouCode}"><a href="javascript:;" class="edit_lnk text-danger mdfBtn" data-ordr="${contents.sortOrdr}">[편집]</a></c:if>
+                                                <a href="javascript:;" class="edit_lnk text-danger mdfBtn" data-ordr="${contents.sortOrdr}">[편집]</a>
                                             </div>
                                             <div class="wiki_body">
                                                 <div class="wiki_paras">
@@ -234,8 +235,6 @@
                             </ul>
                         </div>
                         <div class="row brd_foot_btns">
-                        	<c:choose>
-                            <c:when test="${knowledgeDetail.copertnWritngYn eq 'Y' || loginVO.sid eq knowledgeDetail.registerId || loginVO.ouCode eq knowledgeDetail.ouCode}">
                             <div class="col-sm-6">
                             	<a href="javascript:;" id="updBtn" class="btn btn-black">수정</a>
                             	<c:if test="${knowledgeDetail.registerId == user.sid or user.sid == 'admin'}">
@@ -243,29 +242,15 @@
                                 </c:if>
                             </div>
                             <div class="col-sm-6 text-right">
-                            <c:choose>
-                            	<c:when test="${not empty cmmntyNo && cmmntyNo != 0}">
-                                <a href="/cmu/communityKnowledgeList.do?cmmntyNo=${cmmntyNo}" class="btn btn-black">목록</a>
-                                </c:when>
-                                <c:otherwise>
-                                <a href="javascript:;" class="btn btn-black dev-list">목록</a>
-                                </c:otherwise>
-                            </c:choose>
+                                <c:choose>
+                                    <c:when test="${not empty cmmntyNo && cmmntyNo != 0}">
+                                    <a href="/cmu/communityKnowledgeList.do?cmmntyNo=${cmmntyNo}" class="btn btn-black">목록</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                    <a href="javascript:;" class="btn btn-black dev-list">목록</a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-                            </c:when>
-                            <c:otherwise>
-                            <div class="col-sm-12 text-right">
-                            <c:choose>
-                            	<c:when test="${not empty cmmntyNo && cmmntyNo != 0}">
-                                <a href="/cmu/communityKnowledgeList.do?cmmntyNo=${cmmntyNo}" class="btn btn-black">목록</a>
-                                </c:when>
-                                <c:otherwise>
-                                <a href="javascript:;" class="btn btn-black dev-list">목록</a>
-                                </c:otherwise>
-                            </c:choose>
-                            </div>
-                            </c:otherwise>
-                            </c:choose>
                         </div>
                     </div>
                     <!-- //page-body -->

@@ -25,6 +25,7 @@
 			FROM
 				TB_USER tu
 			<include refid="selectListCondition" />
+			AND DEL_YN = 'N'
 			ORDER BY tu.ORDR
  		
  	</select>
@@ -58,13 +59,19 @@
 				tu.SID = #{sid}
  		
  	</select>
- 	
+
+	<update id="deleteUser">
+		UPDATE TB_USER
+    	   SET DEL_YN = 'Y'
+  		 WHERE DEL_YN = 'N'
+	</update>
+
 	<insert id="insertUser" parameterType="UserVO">
 		
 			INSERT INTO TB_USER
-			(SID, UID, OU_CODE, PARENT_OU_CODE, TOP_OU_CODE, OU, DISPLAY_NAME, USER_FULL_NAME, ORDR, POSITION_CODE, POSITION)
+			(SID, UID, OU_CODE, PARENT_OU_CODE, TOP_OU_CODE, OU, DISPLAY_NAME, USER_FULL_NAME, ORDR, POSITION_CODE, POSITION, DEL_YN)
 			VALUES
-			(#{sid}, #{uid}, #{ouCode}, #{parentOuCode}, #{topOuCode}, #{ou}, #{displayName}, #{userFullName}, #{ordr}, #{positionCode}, #{position})
+			(#{sid}, #{uid}, #{ouCode}, #{parentOuCode}, #{topOuCode}, #{ou}, #{displayName}, #{userFullName}, #{ordr}, #{positionCode}, #{position}, 'N')
 			ON DUPLICATE KEY
 			UPDATE
 				UID = #{uid},
@@ -76,8 +83,9 @@
 				USER_FULL_NAME = #{userFullName},
 				ORDR = #{ordr},
 				POSITION_CODE = #{positionCode},
-				POSITION = #{position}
-			
+				POSITION = #{position},
+				DEL_YN = 'N'
+
 	</insert>
 	
  	 <select id="selectManagerList" parameterType="UserVO" resultType="UserVO">

@@ -72,5 +72,9 @@ public class UserDAO extends EgovComAbstractDAO {
 	public int insertOrgManager(UserVO userVO) {
 		return insert("UserDAO.insertOrgManager", userVO);
 	}
+
+	public void deleteUser() {
+		update("UserDAO.deleteUser");
+	}
 	
 }

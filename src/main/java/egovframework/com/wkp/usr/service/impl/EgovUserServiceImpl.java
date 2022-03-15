@@ -96,4 +96,8 @@ public class EgovUserServiceImpl extends EgovAbstractServiceImpl implements Egov
 		return userDAO.insertOrgManager(userVO);
 	}
 
+	@Override
+	public void deleteUser() {
+		userDAO.deleteUser();
+	}
 }

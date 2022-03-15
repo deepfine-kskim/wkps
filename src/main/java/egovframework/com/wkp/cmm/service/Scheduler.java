@@ -42,7 +42,9 @@ public class Scheduler {
 			
 			UserVO userVO= new UserVO();
 			String line;
-		
+
+			userService.deleteUser();
+
 			while ((line = br.readLine()) != null) {
 				String[] arr = line.split("[|]");
 				userVO.setSid(arr[0]);

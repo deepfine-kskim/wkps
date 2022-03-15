@@ -1,33 +1,47 @@
 package egovframework.com.wkp.kno.web;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
+import egovframework.com.cmm.EgovComException;
+import egovframework.com.cmm.EgovWebUtil;
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.EgovProperties;
+import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.kf.common.DCUtil;
+import egovframework.com.utl.fcc.service.EgovStringUtil;
+import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+import egovframework.com.wkp.cmm.service.*;
+import egovframework.com.wkp.kno.service.*;
+import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
+import egovframework.com.wkp.usr.service.EgovOrgService;
+import egovframework.com.wkp.usr.service.EgovUserService;
+import egovframework.com.wkp.usr.service.OrgVO;
+import egovframework.com.wkp.usr.service.UserVO;
+import kr.dogfoot.hwplib.object.HWPFile;
+import kr.dogfoot.hwplib.object.bindata.EmbeddedBinaryData;
+import kr.dogfoot.hwplib.object.bodytext.Section;
+import kr.dogfoot.hwplib.object.bodytext.control.Control;
+import kr.dogfoot.hwplib.object.bodytext.control.ControlTable;
+import kr.dogfoot.hwplib.object.bodytext.control.ControlType;
+import kr.dogfoot.hwplib.object.bodytext.control.gso.*;
+import kr.dogfoot.hwplib.object.bodytext.control.gso.shapecomponent.ShapeComponentNormal;
+import kr.dogfoot.hwplib.object.bodytext.control.gso.shapecomponenteach.polygon.PositionXY;
+import kr.dogfoot.hwplib.object.bodytext.control.table.Cell;
+import kr.dogfoot.hwplib.object.bodytext.control.table.Row;
+import kr.dogfoot.hwplib.object.bodytext.paragraph.Paragraph;
+import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPChar;
+import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPCharType;
+import kr.dogfoot.hwplib.object.docinfo.BorderFill;
+import kr.dogfoot.hwplib.object.docinfo.CharShape;
+import kr.dogfoot.hwplib.object.docinfo.ParaShape;
+import kr.dogfoot.hwplib.object.docinfo.parashape.Alignment;
+import kr.dogfoot.hwplib.reader.HWPReader;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.fit.pdfdom.PDFDomTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -42,62 +56,19 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.zwobble.mammoth.DocumentConverter;
 import org.zwobble.mammoth.Result;
 
-import egovframework.com.cmm.EgovComException;
-import egovframework.com.cmm.EgovWebUtil;
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.com.cmm.service.FileVO;
-import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.utl.wed.comm.ListWithPageNavigation;
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.cmm.service.GroupVO;
-import egovframework.com.wkp.cmm.service.PersonalizeVO;
-import egovframework.com.wkp.cmm.service.RecommendVO;
-import egovframework.com.wkp.cmm.service.TargetVO;
-import egovframework.com.wkp.cmm.service.XlsxConverter;
-import egovframework.com.wkp.kno.service.EgovKnowledgeService;
-import egovframework.com.wkp.kno.service.ErrorStatementVO;
-import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
-import egovframework.com.wkp.kno.service.KnowledgeMapVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.com.wkp.kno.service.RelateKnowlgVO;
-import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
-import egovframework.com.wkp.usr.service.EgovOrgService;
-import egovframework.com.wkp.usr.service.EgovUserService;
-import egovframework.com.wkp.usr.service.OrgVO;
-import egovframework.com.wkp.usr.service.UserVO;
-import kr.dogfoot.hwplib.object.HWPFile;
-import kr.dogfoot.hwplib.object.bindata.EmbeddedBinaryData;
-import kr.dogfoot.hwplib.object.bodytext.Section;
-import kr.dogfoot.hwplib.object.bodytext.control.Control;
-import kr.dogfoot.hwplib.object.bodytext.control.ControlTable;
-import kr.dogfoot.hwplib.object.bodytext.control.ControlType;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlArc;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlCurve;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlEllipse;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlLine;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlOLE;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlObjectLinkLine;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlPicture;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlPolygon;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.ControlRectangle;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.GsoControl;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.GsoControlType;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.shapecomponent.ShapeComponentNormal;
-import kr.dogfoot.hwplib.object.bodytext.control.gso.shapecomponenteach.polygon.PositionXY;
-import kr.dogfoot.hwplib.object.bodytext.control.table.Cell;
-import kr.dogfoot.hwplib.object.bodytext.control.table.Row;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.Paragraph;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPChar;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPCharType;
-import kr.dogfoot.hwplib.object.docinfo.BorderFill;
-import kr.dogfoot.hwplib.object.docinfo.CharShape;
-import kr.dogfoot.hwplib.object.docinfo.ParaShape;
-import kr.dogfoot.hwplib.object.docinfo.parashape.Alignment;
-import kr.dogfoot.hwplib.reader.HWPReader;
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/kno")
@@ -125,6 +96,9 @@ public class EgovKnowledgeController {
 	
 	@Resource(name = "userService")
 	private EgovUserService userService;
+
+    @Resource(name = "dcUtil")
+    private DCUtil dcUtil;
 
     @RequestMapping("/knowledgeList.do")
     public String knowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
@@ -590,6 +564,12 @@ public class EgovKnowledgeController {
                 knowledgeVO.setTargetNo(targetNo);
             }
 
+            /* 내용이 있고, 요약이 공란이면 내용의 앞부분을 요약으로 자동 등록 */
+            if (StringUtils.isNotEmpty(knowledgeVO.getCont()) && StringUtils.isEmpty(knowledgeVO.getSummry())) {
+                String summary = getSummaryFromContent(knowledgeVO);
+                knowledgeVO.setSummry(summary);
+            }
+
             int result = knowledgeService.insertKnowledge(knowledgeVO);
 
             if (result > 0) {
@@ -850,6 +830,12 @@ public class EgovKnowledgeController {
 
                 long targetNo = commonService.insertTarget(targetVO);
                 knowledgeVO.setTargetNo(targetNo);
+            }
+
+            /* 내용이 있고, 요약이 공란이면 내용의 앞부분을 요약으로 자동 등록 */
+            if (StringUtils.isNotEmpty(knowledgeVO.getCont()) && StringUtils.isEmpty(knowledgeVO.getSummry())) {
+                String summary = getSummaryFromContent(knowledgeVO);
+                knowledgeVO.setSummry(summary);
             }
 
             int result = knowledgeService.insertKnowledge(knowledgeVO);
@@ -1939,52 +1925,52 @@ public class EgovKnowledgeController {
     	
     	return sb;
     }
-    
+
     @RequestMapping(value="/addKnowledge.do")
 	public void addKnowledge(ModelMap model) {
-		
+
 		try {
 			RecommendVO recommendVO = new RecommendVO();
-			
+
 			recommendVO.setKnowlgMapType("REPORT");
 			commonService.deleteRecommend(recommendVO);
 			List<RecommendVO> reportRecommendKnowledgeList = commonService.selectTopRecommendKnowledgeList(recommendVO);
-			
+
 			for(int i = 0; i < reportRecommendKnowledgeList.size(); i++) {
 				reportRecommendKnowledgeList.get(i).setRki(i+1);
 				reportRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(reportRecommendKnowledgeList.get(i));
 			}
-			
+
 			recommendVO.setKnowlgMapType("REFERENCE");
 			commonService.deleteRecommend(recommendVO);
 			List<RecommendVO> referenceRecommendKnowledgeList = commonService.selectTopRecommendKnowledgeList(recommendVO);
-			
+
 			for(int i = 0; i < referenceRecommendKnowledgeList.size(); i++) {
 				referenceRecommendKnowledgeList.get(i).setRki(i+1);
 				referenceRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(referenceRecommendKnowledgeList.get(i));
 			}
-			
+
 			recommendVO.setKnowlgMapType("PERSONAL");
 			commonService.deleteRecommend(recommendVO);
 			List<RecommendVO> pesonalRecommendKnowledgeList = commonService.selectTopRecommendKnowledgeList(recommendVO);
-			
+
 			for(int i = 0; i < pesonalRecommendKnowledgeList.size(); i++) {
 				pesonalRecommendKnowledgeList.get(i).setRki(i+1);
 				pesonalRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(pesonalRecommendKnowledgeList.get(i));
 			}
-			
+
 			PersonalizeVO personalizeVO = new PersonalizeVO();
-			
+
 			List<OrgVO> orgList = orgService.selectOrgList(new OrgVO());
-			
+
 			for(int i = 0; i < orgList.size(); i++) {
 	            OrgVO orgVO = new OrgVO();
 	            orgVO.setOuCode(orgList.get(i).getOuCode());
 	            String parentOuCode = orgService.selectParentOrg(orgVO).getParentOuCode();
-	            
+
 	            if(parentOuCode.equals("6410000")){
 	            	parentOuCode = orgList.get(i).getOuCode();
 	            } else {
@@ -1997,48 +1983,68 @@ public class EgovKnowledgeController {
 	            		}
 	            	}
 	            }
-	            
+
 				personalizeVO.setOuCode(orgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("REPORT");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> reportPersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
-								
+
 				for(int j = 0; j < reportPersonalizeKnowledgeList.size(); j++) {
 					reportPersonalizeKnowledgeList.get(j).setRki(j+1);
 					reportPersonalizeKnowledgeList.get(j).setRegisterId("admin");
 					reportPersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
 					commonService.insertPersonalize(reportPersonalizeKnowledgeList.get(j));
 				}
-				
+
 				personalizeVO.setOuCode(orgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("REFERENCE");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> referencePersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
-				
+
 				for(int j = 0; j < referencePersonalizeKnowledgeList.size(); j++) {
 					referencePersonalizeKnowledgeList.get(j).setRki(j+1);
 					referencePersonalizeKnowledgeList.get(j).setRegisterId("admin");
 					referencePersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
 					commonService.insertPersonalize(referencePersonalizeKnowledgeList.get(j));
 				}
-				
+
 				personalizeVO.setOuCode(orgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("PERSONAL");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> pesonalPersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
-				
+
 				for(int j = 0; j < pesonalPersonalizeKnowledgeList.size(); j++) {
-					pesonalPersonalizeKnowledgeList.get(j).setRki(j+1); 
+					pesonalPersonalizeKnowledgeList.get(j).setRki(j+1);
 					pesonalPersonalizeKnowledgeList.get(j).setRegisterId("admin");
 					pesonalPersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
 					commonService.insertPersonalize(pesonalPersonalizeKnowledgeList.get(j));
 				}
-				
+
 			}
-			
+
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
 	}
-    
+
+    /* 내용의 앞부분 추출 */
+    public String getSummaryFromContent(KnowledgeVO knowledgeVO) {
+        final int MAX_SUMMARY_LENGTH = 60;
+        String summary;
+
+        // 목차가 존재하는 경우 목차를 요약으로 등록
+        if (knowledgeVO.getCont().contains("[==") && knowledgeVO.getCont().contains("==]")) {
+            summary = knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==") + 3, knowledgeVO.getCont().indexOf("==]"));
+        } else {
+            summary = knowledgeVO.getCont();
+        }
+
+        // 파일 변환을 통해 입력된 내용인 경우 HTML 태그가 존재하므로 제거 처리
+        summary = EgovStringUtil.getHtmlStrCnvr(summary).replaceAll("&#39;", "'");
+        summary = dcUtil.removeTag(summary);
+        summary = EgovWebUtil.removeCRLF(summary);
+
+        return summary.substring(0, Math.min(summary.length(), MAX_SUMMARY_LENGTH));
+    }
+
 }

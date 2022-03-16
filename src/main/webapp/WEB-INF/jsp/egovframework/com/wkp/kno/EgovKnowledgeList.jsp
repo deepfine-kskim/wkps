@@ -449,6 +449,10 @@
         </div>
 <script>
     $(function () {
+		let errMsg = '${errMsg}';
+		if (errMsg != '') {
+			alert(errMsg);
+		}
     			
     	var searchDate = "${searchDate}";
     	if(searchDate == 'SELECT'){

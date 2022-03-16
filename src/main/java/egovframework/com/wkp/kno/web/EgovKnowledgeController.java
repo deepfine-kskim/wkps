@@ -233,7 +233,8 @@ public class EgovKnowledgeController {
             , @RequestParam(value = "knowledgeNo", required = false) Long knowledgeNo
             , @RequestParam(value = "cmmntyNo", required = false) Long cmmntyNo
             , @RequestParam(value = "title", required = false) String title
-            , Model model) {
+            , Model model
+            , RedirectAttributes redirect) {
     	
         try {
             UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
@@ -283,7 +284,7 @@ public class EgovKnowledgeController {
                 }
 
                 if (!result) {
-                    model.addAttribute("errMsg", "열람 권한이 없습니다.");
+                    redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
                     return "redirect:/kno/knowledgeList.do";
                 }
             }

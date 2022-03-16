@@ -230,7 +230,7 @@
                             	</c:url>
                                 <li><button type="button" class="btn btn-sm btn-primary outline" data-clipboard-text="${copyUrl}">링크복사</button></li>
                                 <li><button type="button" id="bookmarkBtn" class="btn btn-sm btn-primary outline on">즐겨찾기</button></li>
-                                <li><a href="#reportPopup" data-toggle="modal" data-target="#reportPopup"  class="btn btn-sm btn-primary outline">오류신고</a></li>
+                                <%--<li><a href="#reportPopup" data-toggle="modal" data-target="#reportPopup"  class="btn btn-sm btn-primary outline">오류신고</a></li>--%>
                                 <li><button type="button" id="recommendBtn" class="btn btn-sm btn-primary outline tog_on_btn like_btn<c:if test="${isRecommend}"> on</c:if>">추천 <span id="recommendCnt" class="text-danger">(${recommendCount})</span></button></li>
                             </ul>
                         </div>

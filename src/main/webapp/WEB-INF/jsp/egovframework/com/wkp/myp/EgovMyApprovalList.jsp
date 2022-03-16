@@ -10,7 +10,7 @@
 
                 <div class="page-body">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation"><a href="/myp/errorList.do">오류 신고</a></li>
+                        <%--<li role="presentation"><a href="/myp/errorList.do">오류 신고</a></li>--%>
                         <li role="presentation" class="active"><a href="/myp/approvalList.do">지식 등록</a></li>
                     </ul>
                     <p class="help-block text-right text-black mb_5"><span class="text-danger">※ [반려사유]</span> 클릭 시 반려 사유를 확인하실 수 있습니다.</p>

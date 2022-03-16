@@ -38,7 +38,7 @@
                                     <h3>지식 신고/등록</h3>
                                 </div>
                                 <ul class="dot_list tit_st_list under">
-                                    <li><div class="tit"><a href="/myp/errorList.do">오류 신고</a></div> <div class="data text-danger text-right"><a href="/myp/errorList.do">${errorCnt }건</a></div></li>
+                                    <%--<li><div class="tit"><a href="/myp/errorList.do">오류 신고</a></div> <div class="data text-danger text-right"><a href="/myp/errorList.do">${errorCnt }건</a></div></li>--%>
                                     <li><div class="tit"><a href="/myp/approvalList.do">지식 등록</a></div>  <div class="data text-danger text-right"><a href="/myp/approvalList.do">${myCnt }건</a></div></li>
                                 </ul>
                             </div>

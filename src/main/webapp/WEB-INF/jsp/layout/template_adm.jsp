@@ -53,7 +53,7 @@
 							<!-- <li class="sub_menu <c:if test="${url == '/adm/approvalList.do' || url == '/adm/approvalDetail.do'}">active</c:if>"><a href="/adm/approvalList.do">지식 승인 관리</a></li> -->
 			                <li class="sub_menu <c:if test="${url == '/adm/recommendList.do' }">active</c:if>"><a href="/adm/recommendList.do">추천 지식 관리</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/personalizeList.do' }">active</c:if>"><a href="/adm/personalizeList.do">맞춤 지식 관리</a></li>
-			                <li class="sub_menu <c:if test="${url == '/adm/errorList.do' || url == '/adm/errorDetail.do' }">active</c:if>"><a href="/adm/errorList.do">오류 신고</a></li>
+			                <%--<li class="sub_menu <c:if test="${url == '/adm/errorList.do' || url == '/adm/errorDetail.do' }">active</c:if>"><a href="/adm/errorList.do">오류 신고</a></li>--%>
 			                <li class="sub_menu <c:if test="${url == '/adm/knowledgeMapList.do' }">active</c:if>"><a href="/adm/knowledgeMapList.do">지식 맵 관리</a></li>
 		                </ul>
 		            </li>

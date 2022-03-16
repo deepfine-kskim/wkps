@@ -98,7 +98,7 @@
 	                <thead>
 	                    <tr>
 							<th scope="col">지식요청</th>
-	                        <th scope="col">오류신고</th>
+	                        <%--<th scope="col">오류신고</th>--%>
 	                        <th scope="col">설문조사</th>
 	                        <th scope="col">커뮤니티</th>
 	                    </tr>
@@ -106,7 +106,7 @@
 	                <tbody>
 	                	<tr>
 							<td><a href="/req/requestList.do">${myRequestCnt }</a></td>
-	                		<td><a href="/myp/errorList.do">${myErrorCnt }</a></td>
+	                		<%--<td><a href="/myp/errorList.do">${myErrorCnt }</a></td>--%>
 	                		<td><a href="/srv/list.do">${mySurveyCnt }</a></td>
 	                		<td><a href="/cmu/community.do">${myCommunityCnt }</a></td>
 	                	</tr>

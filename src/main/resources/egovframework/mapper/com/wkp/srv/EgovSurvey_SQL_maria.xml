@@ -158,7 +158,7 @@
 		FROM TB_SURVEY a
         LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
         LEFT OUTER JOIN TB_USER f ON a.REGISTER_ID = f.SID
-		WHERE DEL_YN = 'N'
+		WHERE a.DEL_YN = 'N'
 		AND SURVEY_NO = #{surveyNo}
 	</select>
 

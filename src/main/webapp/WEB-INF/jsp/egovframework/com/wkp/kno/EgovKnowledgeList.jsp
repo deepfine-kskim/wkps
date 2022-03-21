@@ -352,10 +352,10 @@
                                 <table class="table text-center table-bordered table-hover brd_list">
                                     <caption class="sr-only">게시판 목록</caption>
                                     <colgroup>
-                                        <col style="width:9%;">
-                                        <col style="width:9%;">
+                                        <col style="width:6%;">
+                                        <col style="width:13%;">
                                         <col>
-                                        <!-- <col style="width:10%;"> -->
+                                        <col style="width:12%;">
                                         <col style="width:12%;">
                                     </colgroup>
                                     <thead>
@@ -363,40 +363,34 @@
                                             <th scope="col">번호</th>
                                             <th scope="col">유형</th>
                                             <th scope="col">제목</th>
-                                            <!-- <th scope="col">작성자</th> -->
                                             <th scope="col">등록일</th>
+                                            <th scope="col">${knowlgMapType eq 'PERSONAL' ? '게시자' : '부서'}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <c:choose>
                                     	<c:when test="${not empty knowledgeList.list && fn:length(knowledgeList.list) > 0 }">
-                                    	<c:forEach var="knowledge" items="${knowledgeList.list }" varStatus="status">
-                                        <tr>
-                                            <td>${knowledgeList.pageNavigation.totalItemCount - ((knowledgeList.pageNavigation.pageIndex - 1) * knowledgeList.pageNavigation.itemCountPerPage + status.index) }</td>
-                                            <td class="text-primary">
-                                            <c:choose>
-                                            	<c:when test="${knowlgMapType eq 'REPORT' }">행정자료</c:when>
-                                            	<c:when test="${knowlgMapType eq 'REFERENCE' }">업무참고자료</c:when>
-                                            	<c:otherwise>개인별지식</c:otherwise>
-                                            </c:choose>
-                                            </td>
-                                            <td class="text-left">
-                                                <p class="subject">
-                                                    <a href="javascript:;" class="dev-detail" data-knowlgno="${knowledge.knowlgNo }" data-title="${knowledge.title }">${knowledge.title }</a>
-                                                    <c:if test="${knowledge.isNew }"><span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></c:if>
-                                                </p>
-                                            </td>
-                                            <!-- <td>${knowledge.displayName }</td> -->
-                                            <td>${knowledge.registDtm }</td>
-                                        </tr>
-                                    	</c:forEach>
+											<c:forEach var="knowledge" items="${knowledgeList.list }" varStatus="status">
+												<tr>
+													<td>${knowledgeList.pageNavigation.totalItemCount - ((knowledgeList.pageNavigation.pageIndex - 1) * knowledgeList.pageNavigation.itemCountPerPage + status.index) }</td>
+													<td class="text-primary"><c:out value="${knowledge.knowlgMapNm}"/></td>
+													<td class="text-left">
+														<p class="subject">
+															<a href="javascript:;" class="dev-detail" data-knowlgno="${knowledge.knowlgNo }" data-title="${knowledge.title }">${knowledge.title }</a>
+															<c:if test="${knowledge.isNew }"><span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></c:if>
+														</p>
+													</td>
+													<td>${knowledge.registDtm }</td>
+													<td>${knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ou}</td>
+												</tr>
+											</c:forEach>
                                     	</c:when>
                                         <c:otherwise>
-                                        <!-- 데이터 없을시 -->
-                                        <tr>
-                                            <td colspan="5" class="empty">등록된 게시글이 없습니다.</td>
-                                        </tr>
-                                        <!-- //데이터 없을시 -->
+											<!-- 데이터 없을시 -->
+											<tr>
+												<td colspan="5" class="empty">등록된 게시글이 없습니다.</td>
+											</tr>
+											<!-- //데이터 없을시 -->
                                         </c:otherwise>
                                     </c:choose>
                                     </tbody>

@@ -100,7 +100,7 @@
  	</select>
  	
  	<select id="selectKnowledgeMap" parameterType="KnowledgeMapVO" resultType="KnowledgeMapVO"> 
- 		
+
 			SELECT
 				tkm.*,
 				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = #{knowlgMapNo})) AS UP_NM
@@ -114,27 +114,44 @@
  	</select>
  	
  	<select id="selectKnowledgeList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
- 		
-			SELECT 
-				*
-			FROM (
-				SELECT
-					tk.*,
-					(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
-					(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU,
-					CASE WHEN DATEDIFF(tk.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW,
-					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
-				FROM
-					TB_KNOWLEDGE tk
-	        	<include refid="selectListCondition" />
-	        	<!-- WHERE  DEL_YN = 'N'
-        			AND KNOWLG_NO != 1
-        			AND (CMMNTY_NO IS NULL OR CMMNTY_NO = 0) -->
-			) AS T
-			WHERE ROW_NUM = 1
-			ORDER BY KNOWLG_NO DESC
-        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
-			 		
+		SELECT *
+		     , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM AS KNOWLG_MAP_NM
+		  FROM (SELECT KNOWLG_NO
+				     , TITLE
+				     , KNOWLG_MAP_NO
+				     , KNOWLG_MAP_TYPE
+				     , SUMMRY
+				     , APRV_YN
+				     , APRV_CONT
+				     , APPROVER_ID
+				     , RLS_YN
+				     , REAL_NM_YN
+				     , COPERTN_WRITNG_YN
+				     , OU_CODE
+				     , INQ_CNT
+				     , CMMNTY_NO
+				     , DOWNLOAD_CNT
+				     , REGISTER_ID
+				     , REGIST_DTM
+				     , UPDATER_ID
+				     , UPD_DTM
+				     , DEL_YN
+				     , ATCH_FILE_NO
+				     , RELATE_KNOWLG_NO
+				     , TARGET_NO
+				     , KEYWORD
+					 , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME
+					 , (SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU
+					 , CASE WHEN DATEDIFF(tk.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+					 , ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
+		   		     , (SELECT UP_NO FROM TB_KNOWLEDGE_MAP WHERE KNOWLG_MAP_NO = tk.KNOWLG_MAP_NO) AS UP_NO
+				  FROM TB_KNOWLEDGE tk
+				<include refid="selectListCondition" />) AS TB_KNOWLEDGE
+		 INNER JOIN TB_KNOWLEDGE_MAP ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.UP_NO
+ 		 WHERE TB_KNOWLEDGE.ROW_NUM = 1
+		   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
+		 ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC
+         LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
  	</select>
  	
  	<select id="selectKnowledgeHistoryList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
@@ -158,19 +175,15 @@
  	</select>
  	
 	<select id="selectKnowledgeListCount" parameterType="KnowledgeVO" resultType="int">
-	
-	        SELECT
-	        	COUNT(*)
-	        FROM(
-				SELECT
-					*,
-					ROW_NUMBER() OVER(PARTITION BY TITLE ORDER BY KNOWLG_NO DESC ) AS ROW_NUM
-				FROM
-					TB_KNOWLEDGE
-	        <include refid="selectListCondition" />
-	        ) AS T
-	        WHERE ROW_NUM = 1
-	        
+	    SELECT COUNT(*)
+	      FROM (SELECT *
+				     , ROW_NUMBER() OVER(PARTITION BY TITLE ORDER BY KNOWLG_NO DESC ) AS ROW_NUM
+					 , (SELECT UP_NO FROM TB_KNOWLEDGE_MAP WHERE KNOWLG_MAP_NO = tk.KNOWLG_MAP_NO) AS UP_NO
+				  FROM TB_KNOWLEDGE tk
+				<include refid="selectListCondition" />) AS TB_KNOWLEDGE
+		 INNER JOIN TB_KNOWLEDGE_MAP ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.UP_NO
+		 WHERE TB_KNOWLEDGE.ROW_NUM = 1
+		   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
     </select>
     
     <select id="selectKnowledgeLastUpdated" parameterType="KnowledgeVO" resultType="java.sql.Date"> 

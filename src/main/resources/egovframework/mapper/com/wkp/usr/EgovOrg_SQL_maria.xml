@@ -19,14 +19,24 @@
     </sql>
     
 	<select id="selectOrgList" parameterType="OrgVO" resultType="OrgVO">
-		
-			SELECT 
-				*
-			FROM
-				TB_ORG
-			<include refid="selectListCondition" />
-			ORDER BY OU_ORDR
-			
+		SELECT OU
+		     , TOP_OU_CODE
+		     , PARENT_OU_CODE
+		     , OU_CODE
+		     , CN
+		     , ORG_FULL_NAME
+		     , OU_LEVEL
+		     , OU_ORDR
+		     , TELEPHONE_NUMBER
+		     , OU_FAX
+		     , OU_MAIL
+		     , IS_SIDO_ONLY
+		     , STATUS
+		     , IS_VIRTUAL
+		     , VIR_PARENT_OU_CODE
+		  FROM TB_ORG
+		<include refid="selectListCondition" />
+		 ORDER BY OU_ORDR ASC
 	</select>
 	
 	<select id="selectParentOrg" parameterType="OrgVO" resultType="OrgVO">

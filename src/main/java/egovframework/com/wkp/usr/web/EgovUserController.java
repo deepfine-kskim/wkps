@@ -15,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -132,17 +129,16 @@ public class EgovUserController {
 	
 	@RequestMapping(value = "/userList.do")
 	public ModelAndView userList(@ModelAttribute("userVO") UserVO userVO, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		
 		ModelAndView mav = new ModelAndView("jsonView");
-		
-		try {
-			List<UserVO> userList = userService.selectUserList(userVO);
-			mav.addObject("userList", userList);
-		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-		
+		List<UserVO> userList = userService.selectUserList(userVO);
+		mav.addObject("userList", userList);
 		return mav;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/userListByOuCode.do")
+	public List<UserVO> userListByOuCode(@RequestBody UserVO userVO) {
+		return userService.selectUserListByOuCode(userVO);
 	}
 	
 	@ResponseBody

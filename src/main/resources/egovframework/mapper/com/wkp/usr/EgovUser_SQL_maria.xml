@@ -17,18 +17,49 @@
         </where>
     </sql>
  	
- 	 <select id="selectUserList" parameterType="UserVO" resultType="UserVO">
- 		
-			SELECT
-				tu.*,
-				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = tu.OU_CODE) AS OU
-			FROM
-				TB_USER tu
+	<select id="selectUserList" parameterType="UserVO" resultType="UserVO">
+		SELECT SID
+		     , UID
+		     , OU_CODE
+		     , PARENT_OU_CODE
+		     , TOP_OU_CODE
+		     , OU
+		     , USER_FULL_NAME
+		     , DISPLAY_NAME
+		     , POSITION_CODE
+		     , POSITION
+		     , TITLE_CODE
+		     , TITLE
+		     , TITLE_OR_POSITION
+		     , MAIL
+		     , TELEPHONE_NUMBER
+		     , FACSIMILE_TELEPHONE_NUMBER
+		     , ORG_FULL_NAME
+		     , ORDR
+		     , MOBILE
+		     , JOB_TITLE
+		     , JOB_TITLE_DATE
+		     , ATCH_FILE_NO
+		     , DEL_YN
+		  FROM TB_USER
 			<include refid="selectListCondition" />
-			AND DEL_YN = 'N'
-			ORDER BY tu.ORDR
- 		
- 	</select>
+		   AND DEL_YN = 'N'
+		 ORDER BY ORDR ASC
+	</select>
+
+	<select id="selectUserListByOuCode" parameterType="UserVO" resultType="UserVO">
+		SELECT SID
+		     , OU_CODE
+		     , OU
+		     , DISPLAY_NAME
+		  FROM TB_USER
+		 WHERE DEL_YN = 'N'
+		   AND OU_CODE IN
+		<foreach collection="ouCodeList" item="ouCode" open="(" close=")" separator=",">
+			#{ouCode}
+		</foreach>
+		 ORDER BY ORDR ASC
+	</select>
  	
  	<select id="selectUserRoleCheck" parameterType="UserVO" resultType="int">
  		
@@ -103,7 +134,7 @@
 			FROM
 				TB_ROLE tr
 			<include refid="selectListCondition" />
- 		
+
  	</select>
  	
  	<insert id="insertManager" parameterType="UserVO">
@@ -179,7 +210,7 @@
 			FROM
 				TB_REQUEST_MANAGER trm
 			<include refid="selectListCondition" />
- 		
+
  	</select>
  	
  	<insert id="insertOrgManager" parameterType="UserVO">

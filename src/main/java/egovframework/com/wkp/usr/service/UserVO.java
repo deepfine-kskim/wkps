@@ -87,4 +87,6 @@ public class UserVO {
 	
 	private List<UserVO> userList;
 
+	private List<String> ouCodeList;
+
 }

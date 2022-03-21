@@ -5,6 +5,8 @@ import java.util.List;
 public interface EgovUserService {
 	
     public List<UserVO> selectUserList(UserVO userVO);
+
+    public List<UserVO> selectUserListByOuCode(UserVO userVO);
     
     public int selectUserRoleCheck(UserVO userVO);
     

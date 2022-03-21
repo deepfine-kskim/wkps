@@ -20,6 +20,11 @@ public class EgovUserServiceImpl extends EgovAbstractServiceImpl implements Egov
 	public List<UserVO> selectUserList(UserVO userVO) {
 		return userDAO.selectUserList(userVO);
 	}
+
+	@Override
+	public List<UserVO> selectUserListByOuCode(UserVO userVO) {
+		return userDAO.selectUserListByOuCode(userVO);
+	}
 	
 	@Override
 	public int selectUserRoleCheck(UserVO userVO) {

@@ -12,6 +12,10 @@ public class UserDAO extends EgovComAbstractDAO {
 	public List<UserVO> selectUserList(UserVO userVO) {
 		return selectList("UserDAO.selectUserList", userVO);
 	}
+
+	public List<UserVO> selectUserListByOuCode(UserVO userVO) {
+		return selectList("UserDAO.selectUserListByOuCode", userVO);
+	}
 	
 	public int selectUserRoleCheck(UserVO userVO) {
 		return selectOne("UserDAO.selectUserRoleCheck", userVO);

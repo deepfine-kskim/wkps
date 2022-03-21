@@ -29,17 +29,10 @@ public class EgovOrgController {
 	private EgovOrgService orgService;
 
 	@RequestMapping(value = "/orgList.do")
-	public ModelAndView orgList(@ModelAttribute("orgVO") OrgVO orgVO, ModelMap model) {
-		
+	public ModelAndView orgList(@ModelAttribute("orgVO") OrgVO orgVO) {
 		ModelAndView mav = new ModelAndView("jsonView");
-		
-		try {
-			List<OrgVO> orgList = orgService.selectOrgList(orgVO);
-			mav.addObject("orgList", orgList);
-		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-		
+		List<OrgVO> orgList = orgService.selectOrgList(orgVO);
+		mav.addObject("orgList", orgList);
 		return mav;
 	}
 	

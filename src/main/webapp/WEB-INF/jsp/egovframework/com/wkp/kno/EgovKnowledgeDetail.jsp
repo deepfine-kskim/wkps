@@ -23,21 +23,31 @@
                         <div class="mside_tog_cont">
                             <ul class="tree_list tree_line list-group">
                             	<c:forEach var="main" items="${knowledgeMapList}" varStatus="status">
-                            	<c:if test="${main.upNo eq 0}">
-                                <li class="list-group-item<c:if test="${knowledgeDetail.upNo eq main.knowlgMapNo}"> active</c:if>">
-                                    <a href="#" class="ico"><span class="sr-only">버튼</span></a>
-                                    <a href="#">${main.knowlgMapNm}</a>
-									<ul class="list-group sub_list" style="display: none;">
-									<c:forEach var="sub" items="${knowledgeMapList}">
-                                   	<c:if test="${sub.upNo eq main.knowlgMapNo}">
-                                        <li>
-                                        	<a href="javascript:;" class="lnk<c:if test="${knowledgeDetail.knowlgMapNo eq sub.knowlgMapNo}"> on</c:if>" data-no="${sub.knowlgMapNo}">${sub.knowlgMapNm}</a>
-                                        </li>
-									</c:if>
-									</c:forEach>
-                            		</ul>
-                                </li>
-                                </c:if>
+                                    <c:if test="${main.upNo eq 0}">
+                                        <c:if test="${main.showYn eq 'Y'}">
+                                            <c:if test="${empty main.link}">
+                                                <li class="list-group-item<c:if test="${knowledgeDetail.upNo eq main.knowlgMapNo}"> active</c:if>">
+                                                    <a href="#" class="ico"><span class="sr-only">버튼</span></a>
+                                                    <a href="#">${main.knowlgMapNm}</a>
+                                                    <ul class="list-group sub_list" style="display: none;">
+                                                    <c:forEach var="sub" items="${knowledgeMapList}">
+                                                        <c:if test="${sub.upNo eq main.knowlgMapNo}">
+                                                            <li>
+                                                                <a href="javascript:;" class="lnk<c:if test="${knowledgeDetail.knowlgMapNo eq sub.knowlgMapNo}"> on</c:if>" data-no="${sub.knowlgMapNo}">${sub.knowlgMapNm}</a>
+                                                            </li>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    </ul>
+                                                </li>
+                                            </c:if>
+                                            <c:if test="${not empty main.link}">
+                                                <li class="list-group-item<c:if test="${knowledgeDetail.upNo eq main.knowlgMapNo}"> active</c:if>">
+                                                    <a href="#" class="ico"><span class="sr-only">버튼</span></a>
+                                                    <a href="${main.link}">${main.knowlgMapNm}</a>
+                                                </li>
+                                            </c:if>
+                                        </c:if>
+                                    </c:if>
                                 </c:forEach>
                             </ul>
                         </div>

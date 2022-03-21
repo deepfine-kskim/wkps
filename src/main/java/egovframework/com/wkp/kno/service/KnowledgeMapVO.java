@@ -36,5 +36,9 @@ public class KnowledgeMapVO {
 	private char delYn;
 	
 	private List<KnowledgeMapVO> knowledgeMapList;
+
+	private String link;
+
+	private String showYn;
 	
 }

@@ -247,7 +247,7 @@
                         <div class="row brd_foot_btns">
                             <div class="col-sm-6">
                             	<a href="javascript:;" id="updBtn" class="btn btn-black">수정</a>
-                            	<c:if test="${knowledgeDetail.registerId == user.sid or user.sid == 'admin'}">
+                            	<c:if test="${knowledgeDetail.registerId == user.sid or user.roleCd eq 'ROLE_ADMIN'}">
                                 	<a href="javascript:;" id="delBtn" class="btn btn-danger">삭제</a>
                                 </c:if>
                             </div>

@@ -138,9 +138,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inpMemo" class="col-sm-2 control-label"><%--<span class="req">*</span>--%>지식요약</label>
+                                        <label for="inpMemo" class="col-sm-2 control-label"><span class="req">*</span> 지식요약</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" <%--required--%>>${knowledgeDetail.summry }</textarea>
+                                            <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" required>${knowledgeDetail.summry }</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -567,6 +567,10 @@
             }
             if($.trim($('#inpSubject').val()) === '') {
                 alert("제목을 입력해주세요.");
+                return false;
+            }
+            if($.trim($('#inpMemo').val()) === '') {
+                alert("지식 요약 내용을 입력해주세요.");
                 return false;
             }
             /*var cont = CKEDITOR.instances.inpText.getData();

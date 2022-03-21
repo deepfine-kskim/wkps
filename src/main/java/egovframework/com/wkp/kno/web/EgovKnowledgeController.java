@@ -565,12 +565,6 @@ public class EgovKnowledgeController {
                 knowledgeVO.setTargetNo(targetNo);
             }
 
-            /* 내용이 있고, 요약이 공란이면 내용의 앞부분을 요약으로 자동 등록 */
-            if (StringUtils.isNotEmpty(knowledgeVO.getCont()) && StringUtils.isEmpty(knowledgeVO.getSummry())) {
-                String summary = getSummaryFromContent(knowledgeVO);
-                knowledgeVO.setSummry(summary);
-            }
-
             int result = knowledgeService.insertKnowledge(knowledgeVO);
 
             if (result > 0) {
@@ -831,12 +825,6 @@ public class EgovKnowledgeController {
 
                 long targetNo = commonService.insertTarget(targetVO);
                 knowledgeVO.setTargetNo(targetNo);
-            }
-
-            /* 내용이 있고, 요약이 공란이면 내용의 앞부분을 요약으로 자동 등록 */
-            if (StringUtils.isNotEmpty(knowledgeVO.getCont()) && StringUtils.isEmpty(knowledgeVO.getSummry())) {
-                String summary = getSummaryFromContent(knowledgeVO);
-                knowledgeVO.setSummry(summary);
             }
 
             int result = knowledgeService.insertKnowledge(knowledgeVO);
@@ -2027,25 +2015,4 @@ public class EgovKnowledgeController {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
 	}
-
-    /* 내용의 앞부분 추출 */
-    public String getSummaryFromContent(KnowledgeVO knowledgeVO) {
-        final int MAX_SUMMARY_LENGTH = 60;
-        String summary;
-
-        // 목차가 존재하는 경우 목차를 요약으로 등록
-        if (knowledgeVO.getCont().contains("[==") && knowledgeVO.getCont().contains("==]")) {
-            summary = knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==") + 3, knowledgeVO.getCont().indexOf("==]"));
-        } else {
-            summary = knowledgeVO.getCont();
-        }
-
-        // 파일 변환을 통해 입력된 내용인 경우 HTML 태그가 존재하므로 제거 처리
-        summary = EgovStringUtil.getHtmlStrCnvr(summary).replaceAll("&#39;", "'");
-        summary = dcUtil.removeTag(summary);
-        summary = EgovWebUtil.removeCRLF(summary);
-
-        return summary.substring(0, Math.min(summary.length(), MAX_SUMMARY_LENGTH));
-    }
-
 }

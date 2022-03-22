@@ -579,6 +579,11 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
+                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
+                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
+                    }
+
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -841,6 +846,11 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
+                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
+                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
+                    }
+
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -994,6 +1004,11 @@ public class EgovKnowledgeController {
                     long upNo = 0;
                     String subTitle = "";
                     String cont = "";
+
+                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
+                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
+                    }
 
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
@@ -1157,6 +1172,11 @@ public class EgovKnowledgeController {
                     long upNo = 0;
                     String subTitle = "";
                     String cont = "";
+
+                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
+                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
+                    }
 
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);

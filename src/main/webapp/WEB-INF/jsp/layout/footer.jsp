@@ -54,9 +54,9 @@
                             </fieldset>
                         </div>
                         <div class="hummingbird-treeview well chk_tree_area">
-                            <div class="checkbox">
+                            <%--<div class="checkbox">
                                 <label for="allChk1"><input type="checkbox" id="allChk1" class="all_chk" /> 전체선택</label>
-                            </div>
+                            </div>--%>
                             <!-- 트리 열어둘 경우 <i class="fa ti-minus"></i> 아이콘 + 열어둘 자식 ul에 open 클래스 달기 -->
                             <ul id="orgList" class="chk_tree_list hummingbird-base treeview">
                                 <c:forEach var="top" items="${topList}" varStatus="topStatus">
@@ -97,9 +97,9 @@
                             </fieldset>
                         </div>
                         <div class="hummingbird-treeview well chk_tree_area">
-                            <div class="checkbox">
+                            <%--<div class="checkbox">
                                 <label for="allSrchChk"><input type="checkbox" id="allSrchChk" class="all_chk" /> 전체선택</label>
-                            </div>
+                            </div>--%>
                             <ul id="userList" class="chk_tree_list hummingbird-base treeview">
                                 <c:forEach var="top" items="${topList}" varStatus="topStatus">
                                     <li class="flow-action-userList">
@@ -134,9 +134,9 @@
                             <c:when test="${not empty groupList}">
                                 <div class="hummingbird-treeview well chk_tree_area">
                                     <!-- 트리 열어둘 경우 <i class="fa ti-minus"></i> 아이콘 + 열어둘 자식 ul에 open 클래스 달기 -->
-                                    <div class="checkbox">
+                                    <%--<div class="checkbox">
                                         <label for="allSrchGrp"><input type="checkbox" id="allSrchGrp" class="all_chk" /> 전체선택</label>
-                                    </div>
+                                    </div>--%>
                                     <ul id="grpList" class="chk_tree_list hummingbird-base treeview">
                                         <c:forEach var="group" items="${groupList}" varStatus="status">
                                             <li><label for="allSrchGrp-${status.index}"><input id="allSrchGrp-${status.index}" name="groupList" data-id="allSrchGrp-${status.index}" type="checkbox" value="${group.groupNo}" data-name="${group.groupNm}">${group.groupNm}</label></li>

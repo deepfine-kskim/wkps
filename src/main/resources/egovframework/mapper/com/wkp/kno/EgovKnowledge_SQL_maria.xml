@@ -9,7 +9,7 @@
         	AND KNOWLG_NO != 0
 	        <if test="searchText != null and searchText != '' and searchType != null">
 	            <if test="searchType == 'TITLE' ">
-	                AND TITLE LIKE '%' #{searchText } '%'
+	                AND (TITLE LIKE '%' #{searchText } '%' OR KEYWORD LIKE '%' #{searchText } '%')
 	            </if>
 	            <if test="searchType == 'REGISTER_ID'">
 					AND REGISTER_ID IN (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')

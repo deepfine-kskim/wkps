@@ -49,7 +49,7 @@
                                                 	<input type="text" class="form-control" name="knowledgeMapList[${knowlgMap.knowlgMapNo }].knowlgMapNm" value="${knowlgMap.knowlgMapNm }" placeholder="분류명을 입력해주세요." readonly="readonly" data-no="${knowlgMap.knowlgMapNo }" required />
                                                 </div>
                                                 <div class="col-xs-2 text-center btns">
-                                                    <button type="button" class="btn btn-xs btn-danger del_btn" data-no="${knowlgMap.knowlgMapNo }">삭제</button>
+                                                    <button type="button" class="btn btn-xs btn-danger del_btn" data-no="${knowlgMap.knowlgMapNo }" data-target="${knowlgMapType}">삭제</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -247,13 +247,30 @@
 		});*/
 		
    		$('.map_cate_box').on('click', '.del_btn', function(e) {
-           	e.preventDefault();
+            e.preventDefault();
            	if(confirm('정말 삭제하시겠습니까?')){
-               	var knowlgMapNo = $(this).data('no');			
-               	var form = $("form[name=insertFrm]");
-               	form.find("input[name=knowlgMapNo]").val(knowlgMapNo);
-               	form.attr("action", "/adm/deleteKnowledgeMap.do");
-               	form.submit();	
+                const $this = $(this);
+                const knowlgMapNo = $(this).data('no');
+
+                $.ajax({
+                    url: '/adm/deleteKnowledgeMap.do',
+                    type: 'post',
+                    data: JSON.stringify({ knowlgMapNo: knowlgMapNo }),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (data) {
+                        const target = $this.data('target');
+                        const isTab = !!$('.dev-tab[data-type=' + target + ']').length;
+                        if (isTab) {
+                            $('.dev-tab[data-type=' + target + ']').click();
+                        } else {
+                            $('.inp_set[data-no=' + target + ']').click();
+                        }
+                    },
+                    error: function () {
+                        alert('처리 중 오류가 발생했습니다.');
+                    }
+                });
            	}
    		});
    		/*$('.map_cate_box').on('click', '.del_btn', function(e) {
@@ -276,7 +293,7 @@
      	
      	$('.map_cate_box').on('click', '.inp_set', function(e) {
      		var no =  $(this).data('no');
-     		
+
      		if(no != undefined){
 	     		$.ajax({
 	     			url : '/adm/knowledgeMap.do',
@@ -296,7 +313,7 @@
 	     					inpTags +=       '<div class="row type0">';
 	     					inpTags +=           '<div class="col-xs-10"><input type="text" class="form-control" placeholder="분류명을 입력해주세요." name="knowledgeMapList['+data.knowledgeMapList[i].knowlgMapNo+'].knowlgMapNm" value="' + data.knowledgeMapList[i].knowlgMapNm + '" /></div>';
 	     					inpTags +=           '<div class="col-xs-2 text-center btns">';
-	      					inpTags +=               '<button type="button" class="btn btn-xs btn-danger del_btn" data-no="'+ data.knowledgeMapList[i].knowlgMapNo +'">삭제</button>';
+	      					inpTags +=               '<button type="button" class="btn btn-xs btn-danger del_btn" data-no="'+ data.knowledgeMapList[i].knowlgMapNo +'" data-target=' + data.knowledgeMapList[i].upNo + '>삭제</button>';
 	      					inpTags +=           '</div>';
 	      					inpTags +=       '</div>';
 	      					inpTags +=   '</div>';
@@ -331,6 +348,10 @@
            	var type = $(this).data('type');
            	var form = $("form[name=insertFrm]");
            	form.find("input[name=knowlgMapType]").val(type);
+           	form.find("input[name=knowlgMapNo]").val(0);
+           	form.find("input[name=knowlgMapNm]").val("");
+           	form.find("input[name=upNo]").val(0);
+           	form.find("input[name=sortOrdr]").val(0);
            	form.attr("action", "/adm/knowledgeMapList.do");
            	form.submit();
         });

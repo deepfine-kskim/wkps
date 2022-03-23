@@ -997,17 +997,15 @@
 				KNOWLG_MAP_NO = #{knowlgMapNo}
 			
 	</delete>
-	
+
+	<!-- 지식맵 삭제 -->
 	<update id="deleteKnowledgeMap" parameterType="KnowledgeMapVO">
-		
-			UPDATE TB_KNOWLEDGE_MAP
-			SET 
-				DEL_YN = 'Y',
-				UPDATER_ID = #{registerId},
-				UPD_DTM = SYSDATE()
-			WHERE
-				KNOWLG_MAP_NO = #{knowlgMapNo}
-		
+		/* KnowledgeDAO.deleteKnowledgeMap */
+		UPDATE TB_KNOWLEDGE_MAP
+		   SET DEL_YN = 'Y'
+		     , UPDATER_ID = #{registerId}
+		     , UPD_DTM = SYSDATE()
+		 WHERE KNOWLG_MAP_NO = #{knowlgMapNo} OR UP_NO = #{knowlgMapNo}
 	</update>
 	
 	<select id="selectKnowledgeTitle" resultType="String">

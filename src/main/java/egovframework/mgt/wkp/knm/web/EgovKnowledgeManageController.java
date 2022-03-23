@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -367,21 +365,17 @@ public class EgovKnowledgeManageController {
 		return "redirect:/adm/knowledgeMapList.do";
 		
 	}
-	
+
+	/**
+	 * 지식맵 삭제
+	 */
+	@ResponseBody
 	@RequestMapping("/deleteKnowledgeMap.do")
-	public String deleteKnowledgeMap(@ModelAttribute("knowledgeMapVO") KnowledgeMapVO knowledgeMapVO,  Model model){
-		
-		try {
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-            knowledgeMapVO.setRegisterId(user.getSid());
-            
-			int result = knowledgeService.deleteKnowledgeMap(knowledgeMapVO);
-		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-		
-		return "redirect:/adm/knowledgeMapList.do";
-		
+	public KnowledgeMapVO deleteKnowledgeMap(@RequestBody KnowledgeMapVO knowledgeMapVO) {
+		UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        knowledgeMapVO.setRegisterId(user.getSid());
+		knowledgeService.deleteKnowledgeMap(knowledgeMapVO);
+		return knowledgeMapVO;
 	}
 
 }

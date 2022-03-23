@@ -95,7 +95,7 @@
                             </div>
                             <!-- side_card_box -->
                         </div>
-                    </div>                
+                    </div>
                 </div>
                 <!-- //ASIDE -->
                 <div id="contents" class="col-md-9">
@@ -147,6 +147,7 @@
 	                                            <form:select id="brdSrchSel" path="searchType" class="form-control">
 	                                                <option value="TITLE" <c:if test="${searchType eq 'TITLE' }">selected="selected"</c:if>>제목</option>
 	                                                <option value="REGISTER_ID" <c:if test="${searchType eq 'REGISTER_ID' }">selected="selected"</c:if>>작성자</option>
+	                                                <option value="OU" <c:if test="${searchType eq 'OU' }">selected="selected"</c:if>>부서</option>
 	                                            </form:select>
                                             </div>
                                             <div class="input-group">
@@ -373,7 +374,7 @@
 											<c:forEach var="knowledge" items="${knowledgeList.list }" varStatus="status">
 												<tr>
 													<td>${knowledgeList.pageNavigation.totalItemCount - ((knowledgeList.pageNavigation.pageIndex - 1) * knowledgeList.pageNavigation.itemCountPerPage + status.index) }</td>
-													<td class="text-primary"><c:out value="${knowledge.knowlgMapNm}"/></td>
+													<td class="text-primary"><c:out value="${knowledge.parentKnowlgMapNm}"/></td>
 													<td class="text-left">
 														<p class="subject">
 															<a href="javascript:;" class="dev-detail" data-knowlgno="${knowledge.knowlgNo }" data-title="${knowledge.title }">${knowledge.title }</a>
@@ -413,11 +414,11 @@
 		                                </a>
 		                            </li>
 		                            </c:if>
-		                            
+
 		                            <c:forEach var="i" begin="${knowledgeList.pageNavigation.numberStart }" end="${knowledgeList.pageNavigation.numberEnd }" step="1">
 		                            <li <c:if test="${i == knowledgeList.pageNavigation.pageIndex }">class="active"</c:if>><a href="javascript:;" class="dev-page" data-page="${i}">${i}</a></li>
 		                            </c:forEach>
-		
+
 		                            <c:if test="${knowledgeList.pageNavigation.canNextSection == true}">
 		                            <li>
 		                                <a href="javascript:;" aria-label="Next" title="다음" class="dev-page" data-page="${knowledgeList.pageNavigation.numberEnd+1 }">
@@ -456,17 +457,17 @@
 		if (errMsg != '') {
 			alert(errMsg);
 		}
-    			
+
     	var searchDate = "${searchDate}";
     	if(searchDate == 'SELECT'){
     		$('#schDate4').trigger('change');
     	}
-    	
+
     	var searchWriter = "${searchWriter}";
     	if(searchWriter =='SELECT'){
     		$('#selWriter3').trigger('change');
     	}
- 		
+
     	<c:forEach var="user" items="${userList }">
    			$.ajax({
     			url : '/usr/userList.do',
@@ -477,10 +478,10 @@
     			success : function(data) {
     				$('#userList').prepend('<li>---------------------------------------------------------------------------</li>');
     				if(data.userList.length > 0){
-                  		//$('#userList li').remove(); 
+                  		//$('#userList li').remove();
                       	for(var i=0; i < data.userList.length; i++){
                       		$('#userList').prepend('<li><label for="allSrchChk-'+i+'"><input id="allSrchChk-'+i+'" name="userList" data-id="allSrchChk-'+i+'" type="checkbox" value="'+data.userList[i].sid+'" data-name="'+data.userList[i].displayName+'" data-ou="'+data.userList[i].ou+'" checked>'+data.userList[i].ou+' '+data.userList[i].displayName+'</label></li>');
-                      	}	
+                      	}
     				}
     			},
     			error : function(){
@@ -491,27 +492,27 @@
 
     	var searchInfo = "${searchInfo}";
     	document.getElementById('wikiSrchStr').value = searchInfo;
-    	
+
         $('.dev-page').on('click', function (e) {
         	e.preventDefault();
             var page = $(this).data('page');
             var form = $("form[name=knowledgeFrm]");
             form.find("input[name=page]").val(page);
-            
+
             form.submit();
         });
-        
+
         $('.dev-detail').on('click', function (e) {
         	e.preventDefault();
             var knowlgNo = $(this).data('knowlgno');
-            var title = $(this).data('title');            
+            var title = $(this).data('title');
             var form = $("form[name=knowledgeFrm]");
             form.find("input[name=knowlgNo]").val(knowlgNo);
             form.find("input[name=title]").val(title);
             form.attr("action", "/kno/knowledgeDetail.do");
             form.submit();
         });
-        
+
      	$('.dev-type').on('click', function(e) {
         	e.preventDefault();
      		var type = $(this).data('type');
@@ -521,7 +522,7 @@
             form.attr("action", "/kno/knowledgeList.do");
             form.submit();
      	});
-        
+
      	$('.lnk').on('click', function(e) {
         	e.preventDefault();
      		var no = $(this).data('no');
@@ -531,7 +532,7 @@
             document.getElementById('wikiSrchStr').value = '';
             form.submit();
      	});
-     	
+
         $("#interestBtn").click(function(e) {
         	var knowlgMapNo = '${knowlgMap.knowlgMapNo }';
         	if(knowlgMapNo != 0){
@@ -558,19 +559,19 @@
         		alert("지식맵을 선택해주세요.");
         	}
         });
-        
+
 		$("#orgBtn").click(function(e){
 			var ou = $("input[name=orgText]").val();
-			
+
 			if(ou == ''){
 				alert("부서를 입력해주세요.");
 				return false;
 			}
-			
+
      		$.ajax({
      			url : '/org/orgList.do',
      			data : {
-     				ou : ou 
+     				ou : ou
      			},
      			dataType: "json",
      			success : function(data) {
@@ -589,15 +590,15 @@
      			}
      		});
 		});
-		
+
 		$("#userBtn").click(function(e){
 			var displayName = $("input[name=userText]").val();
-			
+
 			if(displayName == ''){
 				alert("이름을 입력해주세요.");
 				return false;
 			}
-			
+
      		$.ajax({
      			url : '/usr/userList.do',
      			data : {
@@ -607,10 +608,10 @@
      			success : function(data) {
      				$('#userList').prepend('<li>---------------------------------------------------------------------------</li>');
      				if(data.userList.length > 0){
-                   		//$('#userList li').remove(); 
+                   		//$('#userList li').remove();
                        	for(var i=0; i < data.userList.length; i++){
                        		$('#userList').prepend('<li><label for="allSrchChk-'+i+'"><input id="allSrchChk-'+i+'" name="userList" data-id="allSrchChk-'+i+'" type="checkbox" value="'+data.userList[i].sid+'" data-name="'+data.userList[i].displayName+'" data-ou="'+data.userList[i].ou+'">'+data.userList[i].ou+' '+data.userList[i].displayName+'</label></li>');
-                       	}	
+                       	}
      				} else{
                    		$('#userList').prepend('<li>검색 결과가 없습니다.</li>');
                    	}
@@ -620,19 +621,19 @@
      			}
      		});
 		});
-		
+
 		var orgLi = [];
 		$("#rlsChk").click(function(e){
 			$('input:checkbox[name="orgList"]').each(function(e){
 				if(this.checked){
 					var list = $('#rlsList').children('#orgName').text();
 					var data = $(this).data('name');
-					
+
 					//console.log("orgLi.indexOf(data) - " + orgLi.indexOf(data));
 					if(orgLi.indexOf(data) < 0) {
 						orgLi.push(data);
 					}
-					
+
 					//console.log("orgLi - " + orgLi);
 					//console.log("orgLi - " + orgLi);
 					//console.log("list.indexOf(data) - " + list.indexOf(data));
@@ -643,17 +644,17 @@
 					}
 				}
 			});
-			
+
 			$('input:checkbox[name="userList"]').each(function(e){
 				if(this.checked){
 					var list = $('#rlsList').children('#usersName').text();
 					var data = $(this).data('name');
-					
+
 					//console.log("orgLi.indexOf(data) - " + orgLi.indexOf(data));
 					if(orgLi.indexOf(data) < 0) {
 						orgLi.push(data);
 					}
-					
+
 					//console.log("orgLi - " + orgLi);
 					//console.log("orgLi - " + orgLi);
 					//console.log("list.indexOf(data) - " + list.indexOf(data));
@@ -664,13 +665,13 @@
 					}
 				}
 			});
-			
+
 			$( 'input[name="allChk1"]' ).attr( 'checked', false );
 			//$( 'input[name="orgList"]' ).attr( 'checked', false );
 			$( 'input[name="allSrchChk"]' ).attr( 'checked', false );
 			//$( 'input[name="userList"]' ).attr( 'checked', false );
 		});
-		
+
 		$("#userList .fa").click(function(e){
 			var tmp = $(this);
 			var ouCode = $(this).data('code');
@@ -689,9 +690,9 @@
      				alert("에러가 발생하였습니다.");
      			}
      		});
-		});			
+		});
     });
-		
+
     function postData(knowlgMapType, upNo, knowlgMapNo){
     	var f=document.insertData;  //폼 name
     	if(upNo == '') {
@@ -700,7 +701,7 @@
     	if(knowlgMapNo == '') {
     		knowlgMapNo = 0;
     	}
-    	
+
     	f.knowlgMapType.value = knowlgMapType;  //POST방식으로 넘기고 싶은 값
     	f.upNo.value = upNo;  //POST방식으로 넘기고 싶은 값
     	f.knowlgMapNo.value = knowlgMapNo;  //POST방식으로 넘기고 싶은 값

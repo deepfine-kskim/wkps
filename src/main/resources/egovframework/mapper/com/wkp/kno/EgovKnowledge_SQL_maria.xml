@@ -5,8 +5,6 @@
 
     <sql id="selectListCondition">
         <where>
-        	AND DEL_YN = 'N'
-        	AND KNOWLG_NO != 0
 	        <if test="searchText != null and searchText != '' and searchType != null">
 	            <if test="searchType == 'TITLE' ">
 	                AND (TITLE LIKE '%' #{searchText } '%' OR KEYWORD LIKE '%' #{searchText } '%')
@@ -14,6 +12,9 @@
 	            <if test="searchType == 'REGISTER_ID'">
 					AND REGISTER_ID IN (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText } '%')
 	            </if>
+				<if test="searchType == 'OU'">
+					AND OU LIKE '%' #{searchText} '%'
+				</if>
 	        </if>
 	        <if test="searchDate != null and searchDate != ''">
 	       		<if test="searchDate == 'WEEK'">
@@ -115,43 +116,52 @@
  	
  	<select id="selectKnowledgeList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
 		SELECT *
-		     , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM AS KNOWLG_MAP_NM
-		  FROM (SELECT KNOWLG_NO
-				     , TITLE
-				     , KNOWLG_MAP_NO
-				     , KNOWLG_MAP_TYPE
-				     , SUMMRY
-				     , APRV_YN
-				     , APRV_CONT
-				     , APPROVER_ID
-				     , RLS_YN
-				     , REAL_NM_YN
-				     , COPERTN_WRITNG_YN
-				     , OU_CODE
-				     , INQ_CNT
-				     , CMMNTY_NO
-				     , DOWNLOAD_CNT
-				     , REGISTER_ID
-				     , REGIST_DTM
-				     , UPDATER_ID
-				     , UPD_DTM
-				     , DEL_YN
-				     , ATCH_FILE_NO
-				     , RELATE_KNOWLG_NO
-				     , TARGET_NO
-				     , KEYWORD
-					 , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME
-					 , (SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU
-					 , CASE WHEN DATEDIFF(tk.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
-					 , ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
-		   		     , (SELECT UP_NO FROM TB_KNOWLEDGE_MAP WHERE KNOWLG_MAP_NO = tk.KNOWLG_MAP_NO) AS UP_NO
-				  FROM TB_KNOWLEDGE tk
-				<include refid="selectListCondition" />) AS TB_KNOWLEDGE
-		 INNER JOIN TB_KNOWLEDGE_MAP ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.UP_NO
- 		 WHERE TB_KNOWLEDGE.ROW_NUM = 1
-		   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
-		 ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC
-         LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+          FROM (SELECT TB_KNOWLEDGE.KNOWLG_NO
+		             , TB_KNOWLEDGE.TITLE
+		             , TB_KNOWLEDGE.KNOWLG_MAP_NO
+		             , TB_KNOWLEDGE.KNOWLG_MAP_TYPE
+		             , TB_KNOWLEDGE.SUMMRY
+		             , TB_KNOWLEDGE.APRV_YN
+		             , TB_KNOWLEDGE.APRV_CONT
+		             , TB_KNOWLEDGE.APPROVER_ID
+		             , TB_KNOWLEDGE.RLS_YN
+		             , TB_KNOWLEDGE.REAL_NM_YN
+		             , TB_KNOWLEDGE.COPERTN_WRITNG_YN
+		             , TB_KNOWLEDGE.OU_CODE
+		             , TB_KNOWLEDGE.INQ_CNT
+		             , TB_KNOWLEDGE.CMMNTY_NO
+		             , TB_KNOWLEDGE.DOWNLOAD_CNT
+		             , TB_KNOWLEDGE.REGISTER_ID
+		             , TB_KNOWLEDGE.REGIST_DTM
+		             , TB_KNOWLEDGE.UPDATER_ID
+		             , TB_KNOWLEDGE.UPD_DTM
+		             , TB_KNOWLEDGE.DEL_YN
+		             , TB_KNOWLEDGE.ATCH_FILE_NO
+		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
+		             , TB_KNOWLEDGE.TARGET_NO
+		             , TB_KNOWLEDGE.KEYWORD
+		             , TB_USER.DISPLAY_NAME
+		             , TB_USER.OU
+                     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
+		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+		             , ROW_NUMBER() OVER(PARTITION BY TB_KNOWLEDGE.TITLE ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC) AS ROW_NUM
+		          FROM TB_KNOWLEDGE
+		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
+		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
+		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		                          , TB_KNOWLEDGE_MAP.DEL_YN
+		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
+		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
+		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
+                 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
+		 		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+		<include refid="selectListCondition" />
+		   AND ROW_NUM = 1
+		 ORDER BY KNOWLG_NO DESC
+		 LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
  	</select>
  	
  	<select id="selectKnowledgeHistoryList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
@@ -175,15 +185,51 @@
  	</select>
  	
 	<select id="selectKnowledgeListCount" parameterType="KnowledgeVO" resultType="int">
-	    SELECT COUNT(*)
-	      FROM (SELECT *
-				     , ROW_NUMBER() OVER(PARTITION BY TITLE ORDER BY KNOWLG_NO DESC ) AS ROW_NUM
-					 , (SELECT UP_NO FROM TB_KNOWLEDGE_MAP WHERE KNOWLG_MAP_NO = tk.KNOWLG_MAP_NO) AS UP_NO
-				  FROM TB_KNOWLEDGE tk
-				<include refid="selectListCondition" />) AS TB_KNOWLEDGE
-		 INNER JOIN TB_KNOWLEDGE_MAP ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.UP_NO
-		 WHERE TB_KNOWLEDGE.ROW_NUM = 1
-		   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
+		SELECT COUNT(1)
+          FROM (SELECT TB_KNOWLEDGE.KNOWLG_NO
+		             , TB_KNOWLEDGE.TITLE
+		             , TB_KNOWLEDGE.KNOWLG_MAP_NO
+		             , TB_KNOWLEDGE.KNOWLG_MAP_TYPE
+		             , TB_KNOWLEDGE.SUMMRY
+		             , TB_KNOWLEDGE.APRV_YN
+		             , TB_KNOWLEDGE.APRV_CONT
+		             , TB_KNOWLEDGE.APPROVER_ID
+		             , TB_KNOWLEDGE.RLS_YN
+		             , TB_KNOWLEDGE.REAL_NM_YN
+		             , TB_KNOWLEDGE.COPERTN_WRITNG_YN
+		             , TB_KNOWLEDGE.OU_CODE
+		             , TB_KNOWLEDGE.INQ_CNT
+		             , TB_KNOWLEDGE.CMMNTY_NO
+		             , TB_KNOWLEDGE.DOWNLOAD_CNT
+		             , TB_KNOWLEDGE.REGISTER_ID
+		             , TB_KNOWLEDGE.REGIST_DTM
+		             , TB_KNOWLEDGE.UPDATER_ID
+		             , TB_KNOWLEDGE.UPD_DTM
+		             , TB_KNOWLEDGE.DEL_YN
+		             , TB_KNOWLEDGE.ATCH_FILE_NO
+		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
+		             , TB_KNOWLEDGE.TARGET_NO
+		             , TB_KNOWLEDGE.KEYWORD
+		             , TB_USER.DISPLAY_NAME
+		             , TB_USER.OU
+                     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
+		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+		             , ROW_NUMBER() OVER(PARTITION BY TB_KNOWLEDGE.TITLE ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC) AS ROW_NUM
+		          FROM TB_KNOWLEDGE
+		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
+		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
+		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		                          , TB_KNOWLEDGE_MAP.DEL_YN
+		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
+		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
+		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
+                 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
+		 		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+		<include refid="selectListCondition" />
+		   AND ROW_NUM = 1
     </select>
     
     <select id="selectKnowledgeLastUpdated" parameterType="KnowledgeVO" resultType="java.sql.Date"> 

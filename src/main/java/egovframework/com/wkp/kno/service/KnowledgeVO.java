@@ -28,7 +28,9 @@ public class KnowledgeVO {
 	private long knowlgMapNo;
 	
 	private String knowlgMapNm;
-	
+
+	private String parentKnowlgMapNm;
+
 	private long upNo;
 	
 	private String upNm;

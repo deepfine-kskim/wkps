@@ -44,7 +44,7 @@
 											<c:if test="${not empty main.link}">
 												<li class="list-group-item<c:if test="${knowlgMap.upNo eq main.knowlgMapNo}"> active</c:if>">
 													<a href="#" class="ico"><span class="sr-only">버튼</span></a>
-													<a href="${main.link}">${main.knowlgMapNm}</a>
+													<a href="${main.link}" target="_blank">${main.knowlgMapNm}</a>
 												</li>
 											</c:if>
 										</c:if>

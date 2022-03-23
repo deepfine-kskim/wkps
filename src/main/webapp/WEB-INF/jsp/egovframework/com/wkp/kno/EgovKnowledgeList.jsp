@@ -354,7 +354,7 @@
                                     <caption class="sr-only">게시판 목록</caption>
                                     <colgroup>
                                         <col style="width:6%;">
-                                        <col style="width:13%;">
+                                        <col style="width:14%;">
                                         <col>
                                         <col style="width:12%;">
                                         <col style="width:12%;">
@@ -374,7 +374,7 @@
 											<c:forEach var="knowledge" items="${knowledgeList.list }" varStatus="status">
 												<tr>
 													<td>${knowledgeList.pageNavigation.totalItemCount - ((knowledgeList.pageNavigation.pageIndex - 1) * knowledgeList.pageNavigation.itemCountPerPage + status.index) }</td>
-													<td class="text-primary"><c:out value="${knowledge.parentKnowlgMapNm}"/></td>
+													<td class="text-primary" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;"><c:out value="${knowledge.parentKnowlgMapNm}"/></td>
 													<td class="text-left">
 														<p class="subject">
 															<a href="javascript:;" class="dev-detail" data-knowlgno="${knowledge.knowlgNo }" data-title="${knowledge.title }">${knowledge.title }</a>

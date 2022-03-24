@@ -579,11 +579,6 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
-                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
-                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
-                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
-                    }
-
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -602,6 +597,18 @@ public class EgovKnowledgeController {
                             cont = knowledgeVO.getCont().substring(end + 3, next);
                         } else {
                             cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                        }
+
+                        // 목차 아래에 빈 줄이 생기는 현상 제거
+                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                            int a = cont.indexOf("</p>");
+                            int b = cont.indexOf("<br />");
+                            if (a != -1 && b != -1) {
+                                if (a > b) {
+                                    cont = cont.replaceFirst("<br />", "");
+                                }
+                            }
+                            cont = cont.replaceFirst("</p>", "");
                         }
 
                         knowledgeContentsVO.setKnowlgNo(knowledgeVO.getKnowlgNo());
@@ -846,11 +853,6 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
-                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
-                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
-                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
-                    }
-
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -869,6 +871,18 @@ public class EgovKnowledgeController {
                             cont = knowledgeVO.getCont().substring(end + 3, next);
                         } else {
                             cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                        }
+
+                        // 목차 아래에 빈 줄이 생기는 현상 제거
+                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                            int a = cont.indexOf("</p>");
+                            int b = cont.indexOf("<br />");
+                            if (a != -1 && b != -1) {
+                                if (a > b) {
+                                    cont = cont.replaceFirst("<br />", "");
+                                }
+                            }
+                            cont = cont.replaceFirst("</p>", "");
                         }
 
                         knowledgeContentsVO.setKnowlgNo(knowledgeVO.getKnowlgNo());
@@ -1005,11 +1019,6 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
-                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
-                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
-                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
-                    }
-
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -1028,6 +1037,18 @@ public class EgovKnowledgeController {
                             cont = knowledgeVO.getCont().substring(end + 3, next);
                         } else {
                             cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                        }
+
+                        // 목차 아래에 빈 줄이 생기는 현상 제거
+                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                            int a = cont.indexOf("</p>");
+                            int b = cont.indexOf("<br />");
+                            if (a != -1 && b != -1) {
+                                if (a > b) {
+                                    cont = cont.replaceFirst("<br />", "");
+                                }
+                            }
+                            cont = cont.replaceFirst("</p>", "");
                         }
 
                         knowledgeContentsVO.setKnowlgNo(knowledgeVO.getKnowlgNo());
@@ -1173,11 +1194,6 @@ public class EgovKnowledgeController {
                     String subTitle = "";
                     String cont = "";
 
-                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
-                        knowledgeVO.setCont(knowledgeVO.getCont().substring(knowledgeVO.getCont().indexOf("[==")));
-                        knowledgeVO.setCont(knowledgeVO.getCont().replaceFirst("<p>", "").replaceFirst("</p>", "").replaceFirst("<br />", ""));
-                    }
-
                     while (start != -1) {
                         start = knowledgeVO.getCont().indexOf("[==", start);
                         if (start != -1) {
@@ -1196,6 +1212,18 @@ public class EgovKnowledgeController {
                             cont = knowledgeVO.getCont().substring(end + 3, next);
                         } else {
                             cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                        }
+
+                        // 목차 아래에 빈 줄이 생기는 현상 제거
+                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                            int a = cont.indexOf("</p>");
+                            int b = cont.indexOf("<br />");
+                            if (a != -1 && b != -1) {
+                                if (a > b) {
+                                    cont = cont.replaceFirst("<br />", "");
+                                }
+                            }
+                            cont = cont.replaceFirst("</p>", "");
                         }
 
                         knowledgeContentsVO.setKnowlgNo(1);

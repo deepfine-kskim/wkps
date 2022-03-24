@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -294,15 +295,24 @@ public class EgovUserManageController {
 		
 	}*/
 
-	@RequestMapping("/temporaryUserImport.do")
-	public String temporaryUserImport(@ModelAttribute("excellenceOrgVO") ExcellenceOrgVO excellenceOrgVO, Model model) {
+	@ResponseBody
+	@RequestMapping("/tempUserImport.do")
+	public String tempUserImport() {
 		scheduler.userImport();
-		try {
-			List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(excellenceOrgVO);
-			model.addAttribute("excellenceOrgList", excellenceOrgList);
-		} catch (NullPointerException e) {
-			LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-		return "/mgt/wkp/ugm/EgovExcellentOrg";
+		return "success";
+	}
+
+	@ResponseBody
+	@RequestMapping("/tempTopMileageUser.do")
+	public String tempTopMileageUser() {
+		scheduler.topMileageUser();
+		return "success";
+	}
+
+	@ResponseBody
+	@RequestMapping("/tempTopMileageOrg.do")
+	public String tempTopMileageOrg() {
+		scheduler.topMileageOrg();
+		return "success";
 	}
 }

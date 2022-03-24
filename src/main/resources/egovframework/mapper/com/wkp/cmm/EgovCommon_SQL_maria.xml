@@ -385,7 +385,7 @@
     		AND SID != 'admin' 
 			GROUP BY SID
 			ORDER BY MILEAGE_SCORE DESC
-			LIMIT 3
+			LIMIT 5
  		
  	</select>
  	
@@ -400,7 +400,7 @@
 				REGIST_DTM BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
 			GROUP BY OU_CODE
 			ORDER BY MILEAGE_SCORE DESC
-			LIMIT 3
+			LIMIT 5
  		
  	</select>
  	

@@ -25,6 +25,7 @@
         </div>
     </div>
     <a id="scrollTopBtn" href="#header" title="맨위로 이동"><i class="fa fa-angle-up"></i><span class="sr-only">TOP</span></a>
+    <a id="scrollBottomBtn" href="#footer" title="맨아래로 이동"><i class="fa fa-angle-down"></i><span class="sr-only">BOTTOM</span></a>
 </footer>
 
 <!-- 조직그룹 선택 팝업 -->

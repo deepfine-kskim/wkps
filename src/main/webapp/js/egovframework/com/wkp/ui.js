@@ -60,6 +60,22 @@ var customUi = {
             return false;
         });
     },
+    bottomBtn: function() {
+        var bottomBtn = $('#scrollBottomBtn');
+        $(window).scroll(function() {
+            if($(this).scrollTop() != 0) {
+                bottomBtn.fadeIn(100);
+            } else {
+                bottomBtn.fadeOut(100);
+            }
+        });
+        bottomBtn.click(function() {
+            $('body,html').animate({
+                scrollTop:$(document).height()
+            },100);
+            return false;
+        });
+    },
     treeList: function () {
         $('.tree_list').each(function() {
             var tree = $(this);
@@ -399,6 +415,7 @@ var customUi = {
     customUi.gnb();
     customUi.mGnb();
     customUi.topBtn();
+    customUi.bottomBtn();
     customUi.treeList();
     customUi.treeView();
     customUi.grpEditView();

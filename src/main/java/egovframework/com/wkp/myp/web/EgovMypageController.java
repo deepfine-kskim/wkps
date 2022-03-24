@@ -362,4 +362,12 @@ public class EgovMypageController {
 		return "redirect:/myp/mypage.do";
 	}
 
+	@RequestMapping("/deleteBookmark.do")
+	public String deleteBookmark(@ModelAttribute KnowledgeVO knowledgeVO) {
+		UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		knowledgeVO.setRegisterId(userVO.getSid());
+		knowledgeService.deleteBookmark(knowledgeVO);
+		return "redirect:/myp/mypage.do";
+	}
+
 }

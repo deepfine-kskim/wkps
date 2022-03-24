@@ -412,4 +412,9 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 		}
 		return logList;
 	}
+
+	@Override
+	public int deleteBookmark(KnowledgeVO KnowledgeVO) {
+		return knowledgeDAO.deleteBookmark(KnowledgeVO);
+	}
 }

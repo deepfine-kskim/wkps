@@ -256,4 +256,8 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public List<LogVO> selectKnowledgeMapLogList() {
 		return selectList("KnowledgeDAO.selectKnowledgeMapLogList");
 	}
+
+	public int deleteBookmark(KnowledgeVO KnowledgeVO) {
+		return delete("KnowledgeDAO.deleteBookmark", KnowledgeVO);
+	}
 }

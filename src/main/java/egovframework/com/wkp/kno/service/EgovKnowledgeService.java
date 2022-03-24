@@ -119,4 +119,6 @@ public interface EgovKnowledgeService {
     public int updateKnowledgeLink(KnowledgeVO knowledgeVO);
 	
     public List<LogVO> selectKnowledgeMapLogList();
+
+	public int deleteBookmark(KnowledgeVO KnowledgeVO);
 }

@@ -820,15 +820,12 @@
 	</update>
 	
 	<select id="selectBookmarkList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
-	
-			SELECT
-				*
-			FROM
-				TB_BOOKMARK_KNOWLEDGE
-			<where>
-				AND REGISTER_ID = #{registerId}
-			</where>
-	
+		SELECT TITLE
+		     , REGISTER_ID
+		     , REGIST_DTM
+		  FROM TB_BOOKMARK_KNOWLEDGE
+		 WHERE REGISTER_ID = #{registerId}
+		 ORDER BY REGIST_DTM DESC
 	</select>
 	
 	<insert id="insertBookmark" parameterType="KnowledgeVO">
@@ -841,15 +838,9 @@
 	</insert>
 	
 	<delete id="deleteBookmark" parameterType="KnowledgeVO">
-	
-			DELETE
-			FROM
-				TB_BOOKMARK_KNOWLEDGE
-			<where>
-				AND TITLE = #{title}
-				AND REGISTER_ID = #{registerId}
-			</where>
-	
+		DELETE FROM TB_BOOKMARK_KNOWLEDGE
+		 WHERE TITLE = #{title}
+		   AND REGISTER_ID = #{registerId}
 	</delete>
 	
 	<delete id="deleteKnowledge" parameterType="KnowledgeVO">

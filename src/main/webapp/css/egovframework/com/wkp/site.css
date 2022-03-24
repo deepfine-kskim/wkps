@@ -871,7 +871,7 @@ i, address {font-style:normal;}
 .dot_list > li a:hover, .dot_list > li:hover a {text-decoration:underline;}
 .mypage_grid .grid2 .tit {width:100px;}
 .myp_slider_box .item {overflow:hidden;}
-.myp_slider_box .dot_list {height:140px;}
+.myp_slider_box .dot_list {height:210px;overflow-y:auto;}
 .myp_slider_box .owl-stage-outer {margin-bottom:15px;}
 .myp_slider_box .owl-nav {text-align:center;line-height:40px;margin-bottom:-40px;}
 .myp_slider_box .counter {text-align:center;line-height:40px;font-size:16px;color:#999;}

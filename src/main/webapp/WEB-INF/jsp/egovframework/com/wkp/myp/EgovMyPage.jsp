@@ -50,9 +50,12 @@
                                 </div>
                                 <div class="list_slider owl-carousel owl-theme">
                                     <div class="item">
-                                        <ul class="dot_list">
-                                        	<c:forEach var="bookmark" items="${bookmarkList }">
-                                        	<li><a href="/kno/knowledgeDetail.do?title=${bookmark.title }">${bookmark.title }</a></li>
+                                        <ul class="dot_list tit_st_list">
+                                        	<c:forEach var="bookmark" items="${bookmarkList}">
+                                                <li>
+                                                    <div class="tit"><a href="/kno/knowledgeDetail.do?title=${bookmark.title}">${bookmark.title}</a></div>
+                                                    <div class="data text-danger text-right" style="padding-right: 10px;"><a href="/myp/deleteBookmark.do?title=${bookmark.title}" onclick="return confirm('삭제하시겠습니까?');">[삭제]</a></div>
+                                        	    </li>
                                         	</c:forEach>                                            
                                         </ul>
                                     </div>

@@ -219,67 +219,6 @@
                                         </div>
                                     </div>
                                 </div>
-				                <!-- 조직그룹 선택 팝업 -->
-				                <!-- <div class="modal fade" id="selectGrpPopup" tabindex="-1" role="dialog" aria-labelledby="selectGrpPopupLabel">
-				                    <div class="modal-dialog" role="document">
-					                    <div class="modal-content">
-					                        <div class="modal-header">
-					                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					                            <h4 class="modal-title" id="selectGrpPopupLabel">부서/개인 선택</h4>
-					                        </div>
-					                        <div class="modal-body">
-					                            <ul class="nav nav-tabs" role="tablist">
-					                                <li role="presentation" class="active"><a href="#selectGrpTab1" aria-controls="selectGrpTab1" role="tab" data-toggle="tab">부서</a></li>
-					                                <li role="presentation"><a href="#selectGrpTab2" aria-controls="selectGrpTab2" role="tab" data-toggle="tab">개인</a></li>
-					                            </ul>
-					                            <div class="tab-content">
-					                                <div id="selectGrpTab1" class="tab-pane active" role="tabpanel">
-					                                    <div class="srch_area">
-					                                        <fieldset>
-					                                            <legend class="sr-only">이름 검색영역</legend>
-					                                            <div class="input-group">
-					                                                <label for="orgText" class="sr-only">이름 입력</label>
-					                                                <input type="text" id="orgText" name="orgText" class="form-control" placeholder="부서 검색(2글자 이상)">
-					                                                <span class="input-group-btn"><a href="javascript:;" id="orgBtn" class="btn btn-default">검색</a></span>
-					                                            </div>
-					                                        </fieldset>
-					                                    </div>
-					                                    <div class="hummingbird-treeview well chk_tree_area">
-					                                        <div class="checkbox">
-					                                            <label for="allChk1"><input type="checkbox" id="allChk1" class="all_chk" /> 전체선택</label>
-					                                        </div>
-					                                        트리 열어둘 경우 <i class="fa ti-minus"></i> 아이콘 + 열어둘 자식 ul에 open 클래스 달기
-					                                        <ul id="orgList" class="chk_tree_list hummingbird-base treeview">
-					                                        </ul>
-					                                    </div>
-					                                </div>
-					                                <div id="selectGrpTab2" class="tab-pane" role="tabpanel">
-					                                    <div class="srch_area">
-					                                        <fieldset>
-					                                            <legend class="sr-only">이름 검색영역</legend>
-					                                            <div class="input-group">
-					                                                <label for="userText" class="sr-only">이름 입력</label>
-					                                                <input type="text" id="userText" name="userText" class="form-control" placeholder="이름 검색(2글자 이상)">
-					                                                <span class="input-group-btn"><a href="javascript:;" id="userBtn" class="btn btn-default">검색</a></span>
-					                                            </div>
-					                                        </fieldset>
-					                                    </div>
-					                                    <div class="hummingbird-treeview well chk_tree_area">
-					                                        <div class="checkbox">
-					                                            <label for="allSrchChk"><input type="checkbox" id="allSrchChk" class="all_chk" /> 전체선택</label>
-					                                        </div>
-					                                        <ul id="userList" class="chk_tree_list hummingbird-base treeview">
-					                                        </ul>
-					                                    </div>
-					                                </div>
-					                            </div>
-					                        </div>
-					                        <div class="modal-footer">
-					                            <button type="button" id="rlsChk" class="btn btn-blue" data-dismiss="modal">확인</button>
-					                        </div>
-					                    </div>
-				                    </div>
-				                </div> -->
 				                <div class="modal fade" id="selectGrpPopup" tabindex="-1" role="dialog" aria-labelledby="selectGrpPopupLabel">
 				                    <div class="modal-dialog" role="document">
 					                    <div class="modal-content">
@@ -312,23 +251,19 @@
 				                                                <li>
 				                                                	<i class="fa fa-plus" data-code="${top.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }" />${top.ou }</label>
 				                                                    <ul>
-				                                                    	<c:forEach var="parent" items="${parentList }" varStatus="parentStatus">
-				                                                    	<c:if test="${parent.parentOuCode eq top.ouCode }">
+				                                                    	<c:forEach var="parent" items="${top.nextDepthList }" varStatus="parentStatus">
 				                                                        <li>
 				                                                            <i class="fa fa-plus" data-code="${parent.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }" />${parent.ou }</label>
 				                                                            <ul class="not_depth_list">
-				                                                            	<c:forEach var="child" items="${childList }" varStatus="childStatus">
-				                                                            	<c:if test="${child.parentOuCode eq parent.ouCode }">
+				                                                            	<c:forEach var="child" items="${parent.nextDepthList }" varStatus="childStatus">
 				                                                                <li>
 				                                                                	<i class="fa fa-plus" data-code="${child.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }" />${child.ou }</label>
 				                                                                	<ul>
 				                                                                	</ul>
 				                                                                </li>
-				                                                                </c:if>
 				                                                                </c:forEach>
 				                                                            </ul>
 				                                                        </li>
-				                                                        </c:if>
 				                                                        </c:forEach>
 				                                                    </ul>
 				                                                </li>

@@ -2,6 +2,8 @@ package egovframework.com.wkp.usr.service;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class OrgVO {
 
@@ -39,5 +41,7 @@ public class OrgVO {
 	private String isVirtual;
 	
 	private String virParentOUCode;
+
+	private List<OrgVO> nextDepthList;
 
 }

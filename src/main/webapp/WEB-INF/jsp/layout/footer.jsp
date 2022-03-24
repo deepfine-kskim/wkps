@@ -64,21 +64,17 @@
                                     <li>
                                         <i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1}"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1}" value="${top.ouCode}" data-id="customChk-${topStatus.index+1}" data-name="${top.ou}" />${top.ou}</label>
                                         <ul>
-                                            <c:forEach var="parent" items="${parentList}" varStatus="parentStatus">
-                                                <c:if test="${parent.parentOuCode eq top.ouCode}">
+                                            <c:forEach var="parent" items="${top.nextDepthList}" varStatus="parentStatus">
                                                     <li>
                                                         <i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1}-${parentStatus.index+1}"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1}-${parentStatus.index+1}" value="${parent.ouCode}"data-id="customChk-${topStatus.index+1}-${parentStatus.index+1}" data-name="${parent.ou}" />${parent.ou}</label>
                                                         <ul class="not_depth_list">
-                                                            <c:forEach var="child" items="${childList}" varStatus="childStatus">
-                                                                <c:if test="${child.parentOuCode eq parent.ouCode}">
+                                                            <c:forEach var="child" items="${parent.nextDepthList}" varStatus="childStatus">
                                                                     <li>
                                                                         <i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1}-${parentStatus.index+1}-${childStatus.index+1}"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1}-${parentStatus.index+1}-${childStatus.index+1}" value="${child.ouCode}" data-id="customChk-${topStatus.index+1}-${parentStatus.index+1}-${childStatus.index+1}" data-name="${child.ou}" />${child.ou}</label>
                                                                     </li>
-                                                                </c:if>
                                                             </c:forEach>
                                                         </ul>
                                                     </li>
-                                                </c:if>
                                             </c:forEach>
                                         </ul>
                                     </li>
@@ -106,23 +102,19 @@
                                     <li class="flow-action-userList">
                                         <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}" class="flow-action-checkUserList" />${top.ou}</label>
                                         <ul class="flow-user-list" data-ou-code="${top.ouCode}">
-                                            <c:forEach var="parent" items="${parentList}" varStatus="parentStatus">
-                                                <c:if test="${parent.parentOuCode eq top.ouCode}">
+                                            <c:forEach var="parent" items="${top.nextDepthList}" varStatus="parentStatus">
                                                     <li>
                                                         <i class="fa fa-plus" data-code="${parent.ouCode}"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}" />${parent.ou}</label>
                                                         <ul class="not_depth_list flow-user-list" data-ou-code="${parent.ouCode}">
-                                                            <c:forEach var="child" items="${childList}" varStatus="childStatus">
-                                                                <c:if test="${child.parentOuCode eq parent.ouCode}">
+                                                            <c:forEach var="child" items="${parent.nextDepthList}" varStatus="childStatus">
                                                                     <li>
                                                                         <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}" />${child.ou}</label>
                                                                         <ul class="flow-user-list" data-ou-code="${child.ouCode}">
                                                                         </ul>
                                                                     </li>
-                                                                </c:if>
                                                             </c:forEach>
                                                         </ul>
                                                     </li>
-                                                </c:if>
                                             </c:forEach>
                                         </ul>
                                     </li>

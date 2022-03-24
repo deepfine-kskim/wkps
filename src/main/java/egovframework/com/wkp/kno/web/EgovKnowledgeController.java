@@ -69,6 +69,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/kno")
@@ -194,18 +195,25 @@ public class EgovKnowledgeController {
             
             orgVO.setOuLevel(4);
             List<OrgVO> childList = orgService.selectOrgList(orgVO);
-            
+
+            parentList.forEach(parent -> {
+                String ouCode = parent.getOuCode();
+                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                parent.setNextDepthList(list);
+            });
+
+            topList.forEach(top -> {
+                String ouCode = top.getOuCode();
+                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                top.setNextDepthList(list);
+            });
+
             model.addAttribute("knowledgeMapList", knowledgeMapList);
             model.addAttribute("knowledgeList", knowledgeList);
             model.addAttribute("isInterests", isInterests);
             model.addAttribute("excellenceUserList", excellenceUserList);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
-            //model.addAttribute("groupList", groupList);
             model.addAttribute("topList", topList);
-            model.addAttribute("parentList", parentList);
-            model.addAttribute("childList", childList);
-            
-            //System.out.println("model - " + model);
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -433,6 +441,18 @@ public class EgovKnowledgeController {
             
             orgVO.setOuLevel(4);
             List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+            parentList.forEach(parent -> {
+                String ouCode = parent.getOuCode();
+                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                parent.setNextDepthList(list);
+            });
+
+            topList.forEach(top -> {
+                String ouCode = top.getOuCode();
+                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                top.setNextDepthList(list);
+            });
             
 			/*
 			 * knowledgeMapVO.setUpNo(knowledgeVO.getUpNo());
@@ -451,8 +471,6 @@ public class EgovKnowledgeController {
             model.addAttribute("excellenceUserList", excellenceUserList);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
             model.addAttribute("topList", topList);
-            model.addAttribute("parentList", parentList);
-            model.addAttribute("childList", childList);
             model.addAttribute("knowledgeVO", knowledgeVO);
             
 		} catch (NullPointerException e) {
@@ -696,6 +714,18 @@ public class EgovKnowledgeController {
             
             orgVO.setOuLevel(4);
             List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+            parentList.forEach(parent -> {
+                String ouCode = parent.getOuCode();
+                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                parent.setNextDepthList(list);
+            });
+
+            topList.forEach(top -> {
+                String ouCode = top.getOuCode();
+                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                top.setNextDepthList(list);
+            });
             
             model.addAttribute("knowledgeDetail", knowledgeDetail);
             model.addAttribute("relateKnowlgVo", relateKnowlgVo);
@@ -706,8 +736,6 @@ public class EgovKnowledgeController {
             model.addAttribute("excellenceOrgList", excellenceOrgList);
             model.addAttribute("excellenceUserList", excellenceUserList);
             model.addAttribute("topList", topList);
-            model.addAttribute("parentList", parentList);
-            model.addAttribute("childList", childList);
             model.addAttribute("groupList", groupList);
             model.addAttribute("targetVOList", targetVOList);
         } catch (NullPointerException e) {

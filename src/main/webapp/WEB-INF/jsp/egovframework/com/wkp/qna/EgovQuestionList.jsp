@@ -13,8 +13,8 @@
 	
 	    <div class="page-body">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="/qna/list.do">Q&A</a></li>
                 <li role="presentation"><a href="/qna/faqList.do">FAQ</a></li>
+                <li role="presentation" class="active"><a href="/qna/list.do">Q&A</a></li>
             </ul>
 	        <div class="well well-primary outline msg_box">
 	        	<span class="text-primary">진행중인 질문</span>이 <a href="/qna/list.do?type=DOING" class="text-danger underline">${waitCount}건</a>이 있습니다.

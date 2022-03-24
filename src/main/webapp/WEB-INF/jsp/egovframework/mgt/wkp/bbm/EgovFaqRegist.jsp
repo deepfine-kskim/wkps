@@ -36,10 +36,11 @@
                                             <option value="REQUEST">지식요청</option>
                                             <option value="SURVEY">설문조사</option>
                                             <option value="COMMUNITY">커뮤니티</option>
-                                            <option value="QNA">Q&A</option>
+                                            <option value="ETC">기타</option>
+                                            <%--<option value="QNA">Q&A</option>
                                             <option value="FAQ">FAQ</option>
                                             <option value="NOTICE">공지사항</option>
-                                            <option value="CALENDAR">일정</option>
+                                            <option value="CALENDAR">일정</option>--%>
                                         </form:select>
                                     </div>
                                 </div>

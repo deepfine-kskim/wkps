@@ -26,10 +26,11 @@
                         <li role="presentation" <c:if test="${faqType eq 'REQUEST'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REQUEST">지식요청</a></li>
                         <li role="presentation" <c:if test="${faqType eq 'SURVEY'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="SURVEY">설문조사</a></li>
                         <li role="presentation" <c:if test="${faqType eq 'COMMUNITY'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="COMMUNITY">커뮤니티</a></li>
-                        <li role="presentation" <c:if test="${faqType eq 'QNA'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="QNA">Q&A</a></li>
+                        <li role="presentation" <c:if test="${faqType eq 'ETC'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="ETC">기타</a></li>
+                        <%--<li role="presentation" <c:if test="${faqType eq 'QNA'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="QNA">Q&A</a></li>
                         <li role="presentation" <c:if test="${faqType eq 'FAQ'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="FAQ">FAQ</a></li>
                         <li role="presentation" <c:if test="${faqType eq 'NOTICE'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="NOTICE">공지사항</a></li>
-                        <li role="presentation" <c:if test="${faqType eq 'CALENDAR'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="CALENDAR">일정</a></li>
+                        <li role="presentation" <c:if test="${faqType eq 'CALENDAR'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="CALENDAR">일정</a></li>--%>
                     </ul>
                     <!-- 총게시물, 게시물 검색 -->
                     <div class="brd_top">

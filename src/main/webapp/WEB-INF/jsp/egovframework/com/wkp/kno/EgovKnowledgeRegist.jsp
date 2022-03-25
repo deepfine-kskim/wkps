@@ -120,7 +120,7 @@
                                                     <div class="col-xs-9 col-sm-10">
                                                         <label for="convFile" class="sr-only">파일변환</label>
                                                         <input type="file" id="convFile" name="convFile" class="form-control" />
-                                                        <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 10MB 이하의 파일만 변환이 가능합니다.</p>
+                                                        <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 권장하는 파일의 크기는 10MB 입니다.</p>
                                                     </div>
                                                     <div class="col-xs-3 col-sm-2">
                                                         <button type="button" id="convert" class="btn btn-black btn-block">변환</button>
@@ -150,7 +150,7 @@
                                             <span class="file-input btn-file btn btn-xs btn-black outline">
                                                <i class="ti-save" aria-hidden="true"></i> 파일찾기 <input type="file" id="atchFile" name="atchFile" multiple="multiple" />
                                             </span>
-                                            <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 100MB 이하의 파일만 첨부가 가능합니다</p>
+                                            <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 300MB 이하의 파일만 첨부가 가능합니다.</p>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -385,7 +385,7 @@
 	CKEDITOR.replace('inpText');
 	
 	$(function() {
-        $('#convFile').off('change').on('change', function (e) {
+        /*$('#convFile').off('change').on('change', function (e) {
             const MAX_FILE_SIZE = 10 * 1024 * 1024;
             for (let i = 0; i < this.files.length; i++) {
                 if (MAX_FILE_SIZE < this.files[i].size) {
@@ -394,10 +394,10 @@
                     return false;
                 }
             }
-        });
+        });*/
 
         $('#atchFile').off('change').on('change', function (e) {
-            const MAX_FILE_SIZE = 100 * 1024 * 1024;
+            const MAX_FILE_SIZE = 300 * 1024 * 1024;
             for (let i = 0; i < this.files.length; i++) {
                 if (MAX_FILE_SIZE < this.files[i].size) {
                     alert('첨부 가능한 파일의 최대 크기는 ' + (MAX_FILE_SIZE / 1024 / 1024) + 'MB 입니다.');
@@ -536,7 +536,7 @@
      			},
      			dataType: "json",
      			success : function(data) {
-                   	if(data.knowledgeList.length > 0){                   
+                   	if(data.knowledgeList.length > 0){
                    		//$('#relateList li').remove();
                        	for(var i=0; i < data.knowledgeList.length; i++){
                        		$('#relateList').prepend('<li><label for="relatedSrchChk-'+i+'"><input type="checkbox" name="relateKnowledgeList" id="relatedSrchChk-'+i+'" data-id="relatedSrchChk-'+i+'" value="'+data.knowledgeList[i].title+'"></label>'+data.knowledgeList[i].title+'</li>');

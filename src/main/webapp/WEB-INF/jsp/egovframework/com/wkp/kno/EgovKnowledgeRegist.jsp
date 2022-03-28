@@ -821,34 +821,36 @@
         		processData : false,
      			dataType: "json",
      			success : function(data) {
-     				$('#mapType').html(data.knowledgeDetail.knowlgMapType);
-     				$('#upNm').html(data.knowledgeDetail.upNm);
-     				$('#mapNm').html(data.knowledgeDetail.knowlgMapNm);
-     				$('#title').html(data.knowledgeDetail.title);
-     				$('#regDtm').html(data.knowledgeDetail.registDtm);
-     				$('#regId').html(data.knowledgeDetail.registerId);
-     				$('#summary').html(data.knowledgeDetail.summry);
-     				
-					for(var i=0; i < data.knowledgeContentsList.length; i++){
-						$('#idxList').append('<li><a href="#wikiDoc'+data.knowledgeContentsList[i].sortOrdr+'"><span class="num">'+data.knowledgeContentsList[i].sortOrdr+'.</span>'+ data.knowledgeContentsList[i].subtitle+'</a></li>');
-					}
-					
-					for(var i=0; i < data.knowledgeContentsList.length; i++){
-						var insertHtml = ''; 
-						insertHtml += '<div id="wikiDoc'+data.knowledgeContentsList[i].sortOrdr+'" class="wiki_box">';
-						insertHtml += '    <div class="wiki_header">';
-						insertHtml += '        <h2 class="h2"><span class="num">'+data.knowledgeContentsList[i].sortOrdr+'.</span> '+data.knowledgeContentsList[i].subtitle+'</h2>';
-						insertHtml += '    </div>';
-						insertHtml += '    <div class="wiki_body">';
-						insertHtml += '        <div class="wiki_paras">';
-						insertHtml += '            '+data.knowledgeContentsList[i].cont+'';
-						insertHtml += '        </div>';
-						insertHtml += '    </div>';
-						insertHtml += '</div>';
-						$('#bodyList').append(insertHtml);
-						$('#bodyList').show();
-					}
-     			},
+                    $('#idxList').empty();
+                    $('#idxList').closest('.wiki_index').nextAll().remove();
+                    $('#mapType').html($('#typeSel option:selected').text());
+                    $('#upNm').html($('#mainSel option:selected').text());
+                    $('#mapNm').html($('#subSel option:selected').text());
+                    $('#title').html($('#inpSubject').val());
+                    $('#summary').html($('#inpMemo').val());
+                    $('#regDtm').html(data.dateTime);
+                    $('#regId').html(data.userName);
+
+                    for (var i = 0; i < data.knowledgeContentsList.length; i++) {
+                        $('#idxList').append('<li><a href="#wikiDoc' + data.knowledgeContentsList[i].sortOrdr + '"><span class="num">' + data.knowledgeContentsList[i].sortOrdr + '.</span>' + data.knowledgeContentsList[i].subtitle + '</a></li>');
+                    }
+
+                    for (var i = 0; i < data.knowledgeContentsList.length; i++) {
+                        var insertHtml = '';
+                        insertHtml += '<div id="wikiDoc' + data.knowledgeContentsList[i].sortOrdr + '" class="wiki_box">';
+                        insertHtml += '    <div class="wiki_header">';
+                        insertHtml += '        <h2 class="h2"><span class="num">' + data.knowledgeContentsList[i].sortOrdr + '.</span> ' + data.knowledgeContentsList[i].subtitle + '</h2>';
+                        insertHtml += '    </div>';
+                        insertHtml += '    <div class="wiki_body">';
+                        insertHtml += '        <div class="wiki_paras">';
+                        insertHtml += '            ' + data.knowledgeContentsList[i].cont + '';
+                        insertHtml += '        </div>';
+                        insertHtml += '    </div>';
+                        insertHtml += '</div>';
+                        $('#bodyList').append(insertHtml);
+                        $('#bodyList').show();
+                    }
+                },
      			error : function(){
      				alert("에러가 발생하였습니다.");
      			}

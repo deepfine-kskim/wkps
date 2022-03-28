@@ -157,7 +157,6 @@
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-		 		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
                    AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
                    AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
@@ -229,7 +228,6 @@
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-		 		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
                    AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
                    AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
@@ -298,7 +296,6 @@
 		               FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		    ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
 	     WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
            AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
            AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 		<if test="title != null and title != ''">
@@ -458,33 +455,6 @@
 		   AND SORT_ORDR = #{sortOrdr}
 	</update>
 
-	<insert id="insertPreview" parameterType="KnowledgeVO">
-		
-			INSERT INTO TB_KNOWLEDGE
-			(KNOWLG_NO, TITLE, KNOWLG_MAP_NO, KNOWLG_MAP_TYPE, SUMMRY, APRV_YN, RLS_YN, REAL_NM_YN, COPERTN_WRITNG_YN, OU_CODE, INQ_CNT, CMMNTY_NO, DOWNLOAD_CNT, ATCH_FILE_NO, RELATE_KNOWLG_NO, TARGET_NO, KEYWORD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN )
-			VALUES
-			(1, #{title}, #{knowlgMapNo}, #{knowlgMapType}, #{summry}, 'N', #{rlsYn}, #{realNmYn}, 'N', #{ouCode}, 0, #{cmmntyNo}, 0, #{atchFileNo}, #{relateKnowlgNo}, #{targetNo}, #{keyword}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N' )
-			ON DUPLICATE KEY
-			UPDATE
-				KNOWLG_MAP_NO = #{knowlgMapNo},
-				KNOWLG_MAP_TYPE = #{knowlgMapType},
-				SUMMRY = #{summry},
-				RLS_YN = #{rlsYn},
-				REAL_NM_YN = #{realNmYn},
-				COPERTN_WRITNG_YN = 'N',
-				OU_CODE = #{ouCode},
-				INQ_CNT = 0,
-				CMMNTY_NO = #{cmmntyNo},
-				DOWNLOAD_CNT = 0,
-				ATCH_FILE_NO = #{atchFileNo},
-				RELATE_KNOWLG_NO = #{relateKnowlgNo},
-				TARGET_NO = #{targetNo},
-				KEYWORD = #{keyword},
-				UPDATER_ID = #{registerId},
-				UPD_DTM = SYSDATE()
-			
- 	</insert>
- 	
  	<insert id="insertRelateKnowledge" useGeneratedKeys="true" keyProperty="relateKnowlgNo" parameterType="KnowledgeVO">
 		
 			INSERT INTO TB_RELATE_KNOWLEDGE

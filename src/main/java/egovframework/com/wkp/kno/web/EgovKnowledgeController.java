@@ -7,14 +7,11 @@ import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.kf.common.DCUtil;
-import egovframework.com.utl.fcc.service.EgovStringUtil;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cmm.service.*;
 import egovframework.com.wkp.kno.service.*;
 import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
 import egovframework.com.wkp.usr.service.EgovOrgService;
-import egovframework.com.wkp.usr.service.EgovUserService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import kr.dogfoot.hwplib.object.HWPFile;
@@ -36,7 +33,6 @@ import kr.dogfoot.hwplib.object.docinfo.CharShape;
 import kr.dogfoot.hwplib.object.docinfo.ParaShape;
 import kr.dogfoot.hwplib.object.docinfo.parashape.Alignment;
 import kr.dogfoot.hwplib.reader.HWPReader;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.fit.pdfdom.PDFDomTree;
@@ -68,6 +64,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1301,100 +1299,75 @@ public class EgovKnowledgeController {
      */
     @RequestMapping("/insertPreview.do")
     public ModelAndView insertPreview(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
-
     	ModelAndView mav = new ModelAndView("jsonView");
-    	
+
         try {
-			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-			
-			knowledgeVO.setRegisterId(userVO.getSid());
-			knowledgeVO.setOuCode(userVO.getOuCode());
-			knowledgeVO.setKnowlgNo(1);
+            List<KnowledgeContentsVO> knowledgeContentsList = new ArrayList<>();
+            KnowledgeContentsVO knowledgeContentsVO = new KnowledgeContentsVO();
+            UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
-            if (knowledgeVO.getCopertnWritngYn() == null) {
-                knowledgeVO.setCopertnWritngYn("N");
-            }
-            
-            int result = knowledgeService.insertPreview(knowledgeVO);
+            if (knowledgeVO.getCont() != null) {
+                int start = 0;
+                int end = 0;
+                int next = 0;
+                int sortOrdr = 0;
+                long upNo = 0;
+                String subTitle = "";
+                String cont = "";
 
-            if (result > 0) {
-                KnowledgeContentsVO knowledgeContentsVO = new KnowledgeContentsVO();
-
-                if (knowledgeVO.getCont() != null) {
-                    int start = 0;
-                    int end = 0;
-                    int next = 0;
-                    int sortOrdr = 0;
-                    long upNo = 0;
-                    String subTitle = "";
-                    String cont = "";
-
-                    while (start != -1) {
-                        start = knowledgeVO.getCont().indexOf("[==", start);
-                        if (start != -1) {
-                            end = knowledgeVO.getCont().indexOf("==]", start);
-                            subTitle = knowledgeVO.getCont().substring(start + 3, end);
-                            sortOrdr += 1;
-                        } else {
-                            end = -3;
-                            subTitle = "";
-                            sortOrdr = 1;
-                        }
-
-                        next = knowledgeVO.getCont().indexOf("[==", end);
-
-                        if (next != -1) {
-                            cont = knowledgeVO.getCont().substring(end + 3, next);
-                        } else {
-                            cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
-                        }
-
-                        // 목차 아래에 빈 줄이 생기는 현상 제거
-                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
-                            int a = cont.indexOf("</p>");
-                            int b = cont.indexOf("<br />");
-                            if (a != -1 && b != -1) {
-                                if (a > b) {
-                                    cont = cont.replaceFirst("<br />", "");
-                                }
-                            }
-                            cont = cont.replaceFirst("</p>", "");
-                        }
-
-                        knowledgeContentsVO.setKnowlgNo(1);
-                        knowledgeContentsVO.setTitle(knowledgeVO.getTitle());
-                        knowledgeContentsVO.setSortOrdr(sortOrdr);
-                        knowledgeContentsVO.setSubtitle(subTitle);
-                        knowledgeContentsVO.setCont(cont);
-                        knowledgeContentsVO.setUpNo(upNo);
-                        knowledgeContentsVO.setRegisterId(knowledgeVO.getRegisterId());
-
-                        knowledgeService.insertKnowledgeContents(knowledgeContentsVO);
-
-                        start = next;
+                while (start != -1) {
+                    start = knowledgeVO.getCont().indexOf("[==", start);
+                    if (start != -1) {
+                        end = knowledgeVO.getCont().indexOf("==]", start);
+                        subTitle = knowledgeVO.getCont().substring(start + 3, end);
+                        sortOrdr += 1;
+                    } else {
+                        end = -3;
+                        subTitle = "";
+                        sortOrdr = 1;
                     }
-                }
-                
-                KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
-                List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
-                
-                for(int i = 0 ; i < knowledgeContentsList.size(); i++) {
-                	knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&lt;", "<"));
-                	knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&gt;", ">"));
-                	knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&quot;", "\'"));
-                }
 
-                if(knowledgeVO.getCmmntyNo() !=0) {
-                	model.addAttribute("cmmntyNo", knowledgeVO.getCmmntyNo());
+                    next = knowledgeVO.getCont().indexOf("[==", end);
+
+                    if (next != -1) {
+                        cont = knowledgeVO.getCont().substring(end + 3, next);
+                    } else {
+                        cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                    }
+
+                    // 목차 아래에 빈 줄이 생기는 현상 제거
+                    if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                        int a = cont.indexOf("</p>");
+                        int b = cont.indexOf("<br />");
+                        if (a != -1 && b != -1) {
+                            if (a > b) {
+                                cont = cont.replaceFirst("<br />", "");
+                            }
+                        }
+                        cont = cont.replaceFirst("</p>", "");
+                    }
+
+                    knowledgeContentsVO.setSortOrdr(sortOrdr);
+                    knowledgeContentsVO.setSubtitle(subTitle);
+                    knowledgeContentsVO.setCont(cont);
+                    knowledgeContentsList.add(knowledgeContentsVO);
+
+                    start = next;
                 }
-                
-                model.addAttribute("knowledgeDetail", knowledgeDetail);
-                model.addAttribute("knowledgeContentsList", knowledgeContentsList);                
             }
 
+            for (int i = 0; i < knowledgeContentsList.size(); i++) {
+                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&lt;", "<"));
+                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&gt;", ">"));
+                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&quot;", "\'"));
+            }
+
+            model.addAttribute("dateTime", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            model.addAttribute("userName", userVO.getDisplayName());
+            model.addAttribute("knowledgeContentsList", knowledgeContentsList);
         } catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
+            LOGGER.error("[" + e.getClass() + "] :" + e.getMessage());
+        }
 
         return mav;
     }

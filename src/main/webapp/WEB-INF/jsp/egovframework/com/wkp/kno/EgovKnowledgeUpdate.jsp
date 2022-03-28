@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <!-- //ASIDE -->
-				<form:form id="updFrm" class="form-horizontal" action="/kno/insertUpdateKnowledge.do" modelAttribute="knowledgeVO" enctype="multipart/form-data">
+				<form:form id="updFrm" class="form-horizontal" action="${isOwner ? '/kno/insertUpdateKnowledge.do' : '/kno/insertUpdateKnowledgeRequest.do'}" modelAttribute="knowledgeVO" enctype="multipart/form-data">
                 <div id="contents" class="col-md-9">
                     <div class="page-body">
                         <p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>
@@ -61,6 +61,9 @@
                         	<input type="hidden" name="realNmYn" value="Y">
                         	<input type="hidden" name="cmmntyNo" value="${empty cmmntyNo?0:cmmntyNo}">
                         	<input type="hidden" name="aprvYn" value="Y"> <!-- 승인여부 -->
+                            <c:if test="${not isOwner}">
+                                <input type="hidden" name="knowlgNo" value="${knowledgeVO.knowlgNo}">
+                            </c:if>
                             <fieldset>
                                 <legend class="sr-only">게시판 글작성</legend>
                                 <div class="brd_write_area wiki_frms">
@@ -138,71 +141,81 @@
                                             </textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="inpMemo" class="col-sm-2 control-label"><span class="req">*</span> 지식요약</label>
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" required>${knowledgeDetail.summry }</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <strong class="col-sm-2 control-label">관련지식</strong>
-                                        <div class="col-sm-10">
-                                            <button type="button" class="btn btn-xs btn-black outline" data-toggle="modal" data-target="#relatedSelPopup">관련지식 검색</button>
-                                            <div id="rltList" class="tag_grp_area">
-                                            	<c:if test="${not empty knowledgeDetail.relateKnowlgNo }">
-		                                       		<c:forEach var="relateList" items="${relateKnowledgeList}">
-			                                       		<span class="tag_btn label label-default">${relateList}<input type="hidden" name="relateKnowledgeList" value="${relateList}"><i class="remove">x</i><span class="sr-only">삭제</span></span>
-		                                       		</c:forEach>
-		                                        </c:if>
+                                    <c:if test="${isOwner}">
+                                        <div class="form-group">
+                                            <label for="inpMemo" class="col-sm-2 control-label"><span class="req">*</span> 지식요약</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" id="inpMemo" name="summry" placeholder="요약내용을 입력하세요" required>${knowledgeDetail.summry }</textarea>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="atchFile" class="col-sm-2 control-label">첨부파일</label>
-                                        <c:if test="${not empty knowledgeDetail.atchFileNo }">
-                                        <div class="col-sm-8">
-										<input type="hidden" name="atchFileNo" value="${knowledgeDetail.atchFileNo}">                                       
-                                       		<c:forEach var="file" items="${fileList }"> 
-	                                       		<a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }" class="text-danger">${file.orignlFileNm }</a>
-	                                       		<a href="/cmm/fms/deleteFileInfs.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }"><i class="remove">x</i></a><span class="sr-only">삭제</span>                           	
-                                       		</c:forEach>
-                                       	</div>
-                                        </c:if>
-                                        <div class="col-sm-8">
-                                            <span class="file-input btn-file btn btn-xs btn-black outline">
-                                               <i class="ti-save" aria-hidden="true"></i> 파일찾기 <input type="file" id="atchFile" name="atchFile" multiple />
-                                            </span>
-                                            <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 300MB 이하의 파일만 첨부가 가능합니다.</p>
+                                        <div class="form-group">
+                                            <strong class="col-sm-2 control-label">관련지식</strong>
+                                            <div class="col-sm-10">
+                                                <button type="button" class="btn btn-xs btn-black outline" data-toggle="modal" data-target="#relatedSelPopup">관련지식 검색</button>
+                                                <div id="rltList" class="tag_grp_area">
+                                                    <c:if test="${not empty knowledgeDetail.relateKnowlgNo }">
+                                                        <c:forEach var="relateList" items="${relateKnowledgeList}">
+                                                            <span class="tag_btn label label-default">${relateList}<input type="hidden" name="relateKnowledgeList" value="${relateList}"><i class="remove">x</i><span class="sr-only">삭제</span></span>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="keyword" class="col-md-2 control-label"><%--<span class="req">*</span> --%>검색 키워드</label>
-                                        <div class="col-md-10">
-                                            <input type="text" id="keyword" name="keyword" data-role="tagsinput" class="form-control inp_keyword" value="${knowledgeDetail.keyword }" <%--required="required"--%> />
-                                            <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 최대 10개까지 등록 가능합니다. 입력후 엔터키를 눌러주세요.</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group inp_set_area">
-                                        <label for="svTarget1" class="col-sm-2 control-label"><span class="req">*</span> 공개범위</label>
-                                        <div class="col-sm-10 tree_chk_area">
-                                            <label for="svTarget1" class="radio-inline">
-
-                                                <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" /> 전체
-                                            </label>
-                                            <label for="svTarget2" class="radio-inline">
-                                                <form:radiobutton path="rlsYn" id="svTarget2" value="N" checked="${knowledgeDetail.rlsYn eq 'N' ? 'checked' : ''}" class="inp_tog" /> 지정
-                                            </label>
-                                            <a href="#selectGrpPopup" class="btn btn-xs btn-primary inp_tog_cont" data-toggle="modal" data-target="#selectGrpPopup">부서/개인/그룹 선택</a>
-                                            <div id="rlsList" class="tag_grp_area">
-                                                <c:forEach var="targetVO" items="${targetVOList}">
-                                                    <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
-                                                    <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
-                                                    <c:set var="target" value="${targetVO.dispName}"/>
-                                                    <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove flow-action-remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="${type2}" value="${targetVO.targetCode}"/></span>
+                                        <div class="form-group">
+                                            <label for="atchFile" class="col-sm-2 control-label">첨부파일</label>
+                                            <c:if test="${not empty knowledgeDetail.atchFileNo }">
+                                            <div class="col-sm-8">
+                                            <input type="hidden" name="atchFileNo" value="${knowledgeDetail.atchFileNo}">
+                                                <c:forEach var="file" items="${fileList }">
+                                                    <a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }" class="text-danger">${file.orignlFileNm }</a>
+                                                    <a href="/cmm/fms/deleteFileInfs.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }"><i class="remove">x</i></a><span class="sr-only">삭제</span>
                                                 </c:forEach>
                                             </div>
+                                            </c:if>
+                                            <div class="col-sm-8">
+                                                <span class="file-input btn-file btn btn-xs btn-black outline">
+                                                   <i class="ti-save" aria-hidden="true"></i> 파일찾기 <input type="file" id="atchFile" name="atchFile" multiple />
+                                                </span>
+                                                <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 300MB 이하의 파일만 첨부가 가능합니다.</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <label for="keyword" class="col-md-2 control-label"><%--<span class="req">*</span> --%>검색 키워드</label>
+                                            <div class="col-md-10">
+                                                <input type="text" id="keyword" name="keyword" data-role="tagsinput" class="form-control inp_keyword" value="${knowledgeDetail.keyword }" <%--required="required"--%> />
+                                                <p class="help-block"><i class="fa fa-exclamation-circle text-danger"></i> 최대 10개까지 등록 가능합니다. 입력후 엔터키를 눌러주세요.</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group inp_set_area">
+                                            <label for="svTarget1" class="col-sm-2 control-label"><span class="req">*</span> 공개범위</label>
+                                            <div class="col-sm-10 tree_chk_area">
+                                                <label for="svTarget1" class="radio-inline">
+
+                                                    <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" /> 전체
+                                                </label>
+                                                <label for="svTarget2" class="radio-inline">
+                                                    <form:radiobutton path="rlsYn" id="svTarget2" value="N" checked="${knowledgeDetail.rlsYn eq 'N' ? 'checked' : ''}" class="inp_tog" /> 지정
+                                                </label>
+                                                <a href="#selectGrpPopup" class="btn btn-xs btn-primary inp_tog_cont" data-toggle="modal" data-target="#selectGrpPopup">부서/개인/그룹 선택</a>
+                                                <div id="rlsList" class="tag_grp_area">
+                                                    <c:forEach var="targetVO" items="${targetVOList}">
+                                                        <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
+                                                        <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
+                                                        <c:set var="target" value="${targetVO.dispName}"/>
+                                                        <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove flow-action-remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="${type2}" value="${targetVO.targetCode}"/></span>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${not isOwner}">
+                                        <div class="form-group">
+                                            <label for="requestContent" class="col-sm-2 control-label">수정 내용 요약</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" id="requestContent" name="requestContent" placeholder="수정요청 부분을 요약기재하면 담당자에게 전달됩니다."></textarea>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                     <!--
                                      <div class="form-group">
                                         <strong class="col-md-2 control-label"><span class="req">*</span> 승인자 선택</strong>
@@ -592,7 +605,7 @@
                 alert("제목을 입력해주세요.");
                 return false;
             }
-            if($.trim($('#inpMemo').val()) === '') {
+            if($('#inpMemo').length != 0 && $.trim($('#inpMemo').val()) === '') {
                 alert("지식 요약 내용을 입력해주세요.");
                 return false;
             }

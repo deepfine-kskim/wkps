@@ -37,6 +37,10 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int insertKnowledge(KnowledgeVO knowledgeVO) {
 		return insert("KnowledgeDAO.insertKnowledge", knowledgeVO);
 	}
+
+	public int insertKnowledgeModificationRequest(KnowledgeVO knowledgeVO) {
+		return insert("KnowledgeDAO.insertKnowledgeModificationRequest", knowledgeVO);
+	}
 	
 	public int updateKnowledge(KnowledgeVO knowledgeVO) {
 		return update("KnowledgeDAO.updateKnowledge", knowledgeVO);
@@ -45,13 +49,21 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int deleteKnowledge(KnowledgeVO knowledgeVO) {
 		return delete("KnowledgeDAO.deleteKnowledge", knowledgeVO);
 	}
-	
+
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return insert("KnowledgeDAO.insertKnowledgeContents", knowledgeContentsVO);
+	}
+
+	public int insertKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO) {
+		return insert("KnowledgeDAO.insertKnowledgeModificationRequestContent", knowledgeContentsVO);
 	}
 	
 	public int updateKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return update("KnowledgeDAO.updateKnowledgeContents", knowledgeContentsVO);
+	}
+
+	public int updateKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO) {
+		return update("KnowledgeDAO.updateKnowledgeModificationRequestContent", knowledgeContentsVO);
 	}
 	
 	public int insertPreview(KnowledgeVO knowledgeVO) {

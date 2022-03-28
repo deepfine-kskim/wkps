@@ -36,4 +36,8 @@ public class KnowledgeContentsVO {
 	private String delYn;
 	
 	private List<KnowledgeContentsVO> knowledgeContentsList;
+
+	private String requestContent;
+
+	private long requestNo;
 }

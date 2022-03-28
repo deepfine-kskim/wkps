@@ -128,5 +128,10 @@ public class KnowledgeVO {
 	private List<KnowledgeContentsVO> knowledgeContentsList;
 	
 	private List<KnowledgeVO> knowledgeList;
-	
+
+	private String ownerId;
+
+	private String requestContent;
+
+	private long requestNo;
 }

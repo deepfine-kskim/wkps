@@ -70,7 +70,11 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 		egovLogService.insert(LogType.INSERT, LogSubjectType.KNOWLEDGE, knowledgeVO);
 		return knowledgeDAO.insertKnowledge(knowledgeVO);
 	}
-	
+
+	@Override
+	public int insertKnowledgeModificationRequest(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.insertKnowledgeModificationRequest(knowledgeVO);
+	}
 
 	@Override
 	public int updateKnowledge(KnowledgeVO knowledgeVO) {
@@ -83,15 +87,25 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 		egovLogService.insert(LogType.DELETE, LogSubjectType.KNOWLEDGE, knowledgeVO);
 		return knowledgeDAO.deleteKnowledge(knowledgeVO);
 	}
-	
+
 	@Override
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return knowledgeDAO.insertKnowledgeContents(knowledgeContentsVO);
 	}
-	
+
+	@Override
+	public int insertKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO) {
+		return knowledgeDAO.insertKnowledgeModificationRequestContent(knowledgeContentsVO);
+	}
+
 	@Override
 	public int updateKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return knowledgeDAO.updateKnowledgeContents(knowledgeContentsVO);
+	}
+
+	@Override
+	public int updateKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO) {
+		return knowledgeDAO.updateKnowledgeModificationRequestContent(knowledgeContentsVO);
 	}
 	
 	@Override

@@ -94,13 +94,11 @@ public class EgovKnowledgeController {
     
 	@Resource(name = "orgService")
 	private EgovOrgService orgService;
-	
-	@Resource(name = "userService")
-	private EgovUserService userService;
 
-    @Resource(name = "dcUtil")
-    private DCUtil dcUtil;
-
+    /**
+     * 지식백과 > 목록
+     * @return View Page
+     */
     @RequestMapping("/knowledgeList.do")
     public String knowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
             , @RequestParam(value = "errMsg", required = false) String errMsg
@@ -220,6 +218,10 @@ public class EgovKnowledgeController {
         return "/com/wkp/kno/EgovKnowledgeList";
     }
 
+    /**
+     * 지식백과 > 등록/수정 > 관련지식
+     * @return JSON
+     */
     @RequestMapping("/relateKnowledgeList.do")
     public ModelAndView relateKnowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
 
@@ -236,6 +238,10 @@ public class EgovKnowledgeController {
         return mav;
     }
 
+    /**
+     * 지식백과 > 상세
+     * @return View Page
+     */
     @RequestMapping("/knowledgeDetail.do")
     public String knowledgeDetail(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
             , @RequestParam(value = "knowledgeNo", required = false) Long knowledgeNo
@@ -243,160 +249,121 @@ public class EgovKnowledgeController {
             , @RequestParam(value = "title", required = false) String title
             , Model model
             , RedirectAttributes redirect) {
-    	
-        try {
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-            
-            if (title != null) {
-                knowledgeVO.setTitle(title);
-            }
-            
-            if (knowledgeNo != null) {
-                knowledgeVO.setKnowlgNo(knowledgeNo);
-            }
-            
-            if (cmmntyNo != null) {
-                knowledgeVO.setCmmntyNo(cmmntyNo);
-            }
-            
-        	knowledgeService.updateInqCnt(knowledgeVO);
-        	
-            KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
 
-            //System.out.println("knowledgeDetail - " + knowledgeDetail);
-            //System.out.println("sid - " + user.getSid());
-            if ( !user.getRoleCd().equals("ROLE_ADMIN") && !user.getSid().equals(knowledgeDetail.getRegisterId()) && knowledgeDetail.getRlsYn().equals("N")) {
-                TargetVO targetVO = new TargetVO();
-                targetVO.setTargetNo(knowledgeDetail.getTargetNo());
-                List<TargetVO> targetList = commonService.selectTargetList(targetVO);
-                
-                String sid = user.getSid();
-                //System.out.println("sid - " + sid);
-                String ouCode = user.getOuCode();
-                Boolean result = false;
-                int i = 0;
-                while (i < targetList.size()) {
-                    if (targetList.get(i).getTargetTypeCd().equals("USER")) {
-                        result = targetList.get(i).getTargetCode().equals(sid);
-                    }
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
-                    if (targetList.get(i).getTargetTypeCd().equals("ORG")) {
-                        result = targetList.get(i).getTargetCode().equals(ouCode);
-                    }
+        if (title != null) {
+            knowledgeVO.setTitle(title);
+        }
 
-                    if (result) {
-                        break;
-                    } else {
-                        i++;
-                    }
+        if (knowledgeNo != null) {
+            knowledgeVO.setKnowlgNo(knowledgeNo);
+        }
+
+        if (cmmntyNo != null) {
+            knowledgeVO.setCmmntyNo(cmmntyNo);
+        }
+
+        knowledgeService.updateInqCnt(knowledgeVO);
+
+        KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+
+        if (!user.getRoleCd().equals("ROLE_ADMIN") && !user.getSid().equals(knowledgeDetail.getRegisterId()) && knowledgeDetail.getRlsYn().equals("N")) {
+            TargetVO targetVO = new TargetVO();
+            targetVO.setTargetNo(knowledgeDetail.getTargetNo());
+            List<TargetVO> targetList = commonService.selectTargetList(targetVO);
+
+            String sid = user.getSid();
+            String ouCode = user.getOuCode();
+            Boolean result = false;
+            int i = 0;
+            while (i < targetList.size()) {
+                if (targetList.get(i).getTargetTypeCd().equals("USER")) {
+                    result = targetList.get(i).getTargetCode().equals(sid);
                 }
 
-                if (!result) {
-                    redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
-                    return "redirect:/kno/knowledgeList.do";
+                if (targetList.get(i).getTargetTypeCd().equals("ORG")) {
+                    result = targetList.get(i).getTargetCode().equals(ouCode);
+                }
+
+                if (result) {
+                    break;
+                } else {
+                    i++;
                 }
             }
 
-            if (knowledgeVO.getPage() != null) {
-                knowledgeDetail.setPage(knowledgeVO.getPage());
+            if (!result) {
+                redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                return "redirect:/kno/knowledgeList.do";
             }
+        }
 
-            if (knowledgeVO.getSearchText() != null) {
-                knowledgeDetail.setSearchText(knowledgeVO.getSearchText());
-            }
+        if (knowledgeVO.getPage() != null) {
+            knowledgeDetail.setPage(knowledgeVO.getPage());
+        }
 
-            FileVO fileVO = new FileVO();
-            fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
-            List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+        if (knowledgeVO.getSearchText() != null) {
+            knowledgeDetail.setSearchText(knowledgeVO.getSearchText());
+        }
 
-            List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+        FileVO fileVO = new FileVO();
+        fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
+        List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
 
-            List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
-            
-            List<RelateKnowlgVO> relateKnowlgVO = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
-            
-            //System.out.println("relateKnowlgVO - " + relateKnowlgVO);
+        List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
 
-            List<KnowledgeVO> knowledgeHistoryList = knowledgeService.selectKnowledgeHistoryList(knowledgeDetail);
-            
-            KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
-            knowledgeMapVO.setKnowlgMapType(knowledgeDetail.getKnowlgMapType());
-            List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
-            
-            int recommendCount = knowledgeService.selectRecommendCount(knowledgeVO);
-            
-            Boolean isRecommend = false;
-            knowledgeVO.setRegisterId(user.getSid());
-            if(knowledgeService.selectRecommend(knowledgeVO) != null) {
-            	isRecommend = true;
-            }
-            
-            if(knowledgeVO.getCmmntyNo() != 0) {
-            	model.addAttribute("cmmntyNo", knowledgeVO.getCmmntyNo());
-            }
-            
-			List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
-            List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
-            
-            //System.out.println("knowledgeHistoryList - " + knowledgeHistoryList);
-            //System.out.println("relateKnowledgeList - " + relateKnowledgeList);
-            model.addAttribute("relateKnowlgVO", relateKnowlgVO);
-            model.addAttribute("knowledgeDetail", knowledgeDetail);
-            model.addAttribute("knowledgeContentsList", knowledgeContentsList);
-            model.addAttribute("relateKnowledgeList", relateKnowledgeList);
-            model.addAttribute("fileList", fileList);
-            model.addAttribute("knowledgeHistoryList", knowledgeHistoryList);
-            model.addAttribute("knowledgeMapList", knowledgeMapList);
-            model.addAttribute("recommendCount", recommendCount);
-            model.addAttribute("isRecommend", isRecommend);
-            model.addAttribute("excellenceUserList", excellenceUserList);
-            model.addAttribute("excellenceOrgList", excellenceOrgList);
-            model.addAttribute("user", user);
-            model.addAttribute("lastUpdated", knowledgeService.selectKnowledgeLastUpdated(knowledgeDetail));
-            model.addAttribute("knowlgMapNo", knowledgeVO.getKnowlgMapNo());
-        } catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-        
-        //System.out.println("knowledgeVO Detail - " + knowledgeVO);
+        List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
+
+        List<RelateKnowlgVO> relateKnowlgVO = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
+
+        List<KnowledgeVO> knowledgeHistoryList = knowledgeService.selectKnowledgeHistoryList(knowledgeDetail);
+
+        KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
+        knowledgeMapVO.setKnowlgMapType(knowledgeDetail.getKnowlgMapType());
+        List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
+
+        int recommendCount = knowledgeService.selectRecommendCount(knowledgeVO);
+
+        Boolean isRecommend = false;
+        knowledgeVO.setRegisterId(user.getSid());
+        if (knowledgeService.selectRecommend(knowledgeVO) != null) {
+            isRecommend = true;
+        }
+
+        if (knowledgeVO.getCmmntyNo() != 0) {
+            model.addAttribute("cmmntyNo", knowledgeVO.getCmmntyNo());
+        }
+
+        List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
+        List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
+
+        // 담당자가 본인이고, 본인이 속한 부서의 지식 or 개인별지식 탭의 지식
+        boolean isOwner = (user.getSid().equals(knowledgeDetail.getOwnerId()) && user.getOuCode().equals(knowledgeDetail.getOuCode())) || "PERSONAL".equals(knowledgeDetail.getKnowlgMapType());
+
+        model.addAttribute("relateKnowlgVO", relateKnowlgVO);
+        model.addAttribute("knowledgeDetail", knowledgeDetail);
+        model.addAttribute("knowledgeContentsList", knowledgeContentsList);
+        model.addAttribute("relateKnowledgeList", relateKnowledgeList);
+        model.addAttribute("fileList", fileList);
+        model.addAttribute("knowledgeHistoryList", knowledgeHistoryList);
+        model.addAttribute("knowledgeMapList", knowledgeMapList);
+        model.addAttribute("recommendCount", recommendCount);
+        model.addAttribute("isRecommend", isRecommend);
+        model.addAttribute("excellenceUserList", excellenceUserList);
+        model.addAttribute("excellenceOrgList", excellenceOrgList);
+        model.addAttribute("user", user);
+        model.addAttribute("lastUpdated", knowledgeService.selectKnowledgeLastUpdated(knowledgeDetail));
+        model.addAttribute("knowlgMapNo", knowledgeVO.getKnowlgMapNo());
+        model.addAttribute("isOwner", isOwner);
 
         return "/com/wkp/kno/EgovKnowledgeDetail";
     }
-    
-    @RequestMapping("/deleteRelateKnowlg.do")
-    public String deleteRelateKnowlg(@ModelAttribute("relateKnowlgVO") RelateKnowlgVO relateKnowlgVO,
-    								 @RequestParam(value = "relateKnowlgNo", required = false) Long relateKnowlgNo,
-    								 @RequestParam(value = "sortOrdr", required = false) int sortOrdr)  {
 
-    	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
-
-    	if (isAuthenticated) {
-    		relateKnowlgVO.setRelateKnowlgNo(relateKnowlgNo);
-    		relateKnowlgVO.setSortOrdr(sortOrdr);
-    		knowledgeService.deleteRelateKnowlg(relateKnowlgVO);
-    	}
-    	
-    	return "redirect:/kno/knowledgeDetail.do";
-    }
-    
-    @RequestMapping("/deleteknowlg.do")
-    public String deleteknowlg(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO,
-    								 @RequestParam(value = "knowlgNo", required = false) int knowlgNo,
-    								 @RequestParam(value = "title", required = false) String title)  {
-
-    	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
-
-    	//System.out.println("222222222222");
-    	//System.out.println("knowledgeVO - " + knowledgeVO);
-    	if (isAuthenticated) {
-    		knowledgeVO.setTitle(title);
-    		knowledgeVO.setKnowlgNo(knowlgNo);
-    		knowledgeService.updateKnowlg(knowledgeVO);
-    	}
-    	
-    	return "redirect:/kno/knowledgeDetail.do";
-    }
-
+    /**
+     * 지식백과 > 등록/수정 > 지식맵 조회
+     * @return JSON
+     */
     @RequestMapping("/knowledgeMap.do")
     public ModelAndView knowledgeMap(@ModelAttribute("knowledgeMapVO") KnowledgeMapVO knowledgeMapVO, Model model) {
 
@@ -412,6 +379,10 @@ public class EgovKnowledgeController {
         return mav;
     }
 
+    /**
+     * 지식백과 > 등록
+     * @return View Page
+     */
     @RequestMapping("/insertKnowledgeView.do")
     public String insertKnowledgeView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
             , @RequestParam(value = "cmmntyNo", required = false) Long cmmntyNo
@@ -482,6 +453,10 @@ public class EgovKnowledgeController {
         return "/com/wkp/kno/EgovKnowledgeRegist";
     }
 
+    /**
+     * 지식백과 > 데이터 등록
+     * @return Redirect
+     */
     @RequestMapping("/insertKnowledge.do")
     public String insertKnowledge(final MultipartHttpServletRequest multiRequest
     		, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
@@ -490,6 +465,7 @@ public class EgovKnowledgeController {
         try {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			knowledgeVO.setRegisterId(userVO.getSid());
+			knowledgeVO.setOwnerId(userVO.getSid());
 			knowledgeVO.setOuCode(userVO.getOuCode());
             List<FileVO> file = new ArrayList<FileVO>();
             long atchFileNo = 0;
@@ -660,7 +636,11 @@ public class EgovKnowledgeController {
 
         return "redirect:/kno/knowledgeList.do";
     }
-    
+
+    /**
+     * 지식백과 > 수정
+     * @return View Page
+     */
     @RequestMapping("/updateKnowledgeView.do")
     public String updateKnowledgeView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
     		, Model model) {
@@ -738,13 +718,107 @@ public class EgovKnowledgeController {
             model.addAttribute("topList", topList);
             model.addAttribute("groupList", groupList);
             model.addAttribute("targetVOList", targetVOList);
+            model.addAttribute("isOwner", true);
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
         
         return "/com/wkp/kno/EgovKnowledgeUpdate";
     }
-    
+
+    /**
+     * 지식백과 > 수정
+     * @return View Page
+     */
+    @RequestMapping("/updateKnowledgeRequestView.do")
+    public String updateKnowledgeRequestView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
+            , Model model) {
+
+        try {
+            KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+
+            FileVO fileVO = new FileVO();
+            fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
+            List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+            List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+
+            List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
+
+            List<RelateKnowlgVO> relateKnowlgVo = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
+
+            List<TargetVO> targetVOList = commonService.selectDisplayTargetList(knowledgeDetail.getTargetNo());
+
+            knowledgeDetail.setRelateKnowledgeList(relateKnowledgeList);
+
+            KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
+
+            if (knowledgeVO.getKnowlgMapType() != null) {
+                knowledgeMapVO.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+                model.addAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
+            } else {
+                knowledgeVO.setKnowlgMapType("REPORT");
+                knowledgeMapVO.setKnowlgMapType("REPORT");
+                model.addAttribute("knowlgMapType", "REPORT");
+            }
+
+            UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+            GroupVO groupVO = new GroupVO();
+            groupVO.setRegisterId(userVO.getSid());
+            List<GroupVO> groupList;
+            groupList = commonService.selectGroupList(groupVO);
+
+
+            List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
+            List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
+            List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
+
+            OrgVO orgVO = new OrgVO();
+            orgVO.setOuLevel(2);
+            List<OrgVO> topList = orgService.selectOrgList(orgVO);
+
+            orgVO.setOuLevel(3);
+            List<OrgVO> parentList = orgService.selectOrgList(orgVO);
+
+            orgVO.setOuLevel(4);
+            List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+            parentList.forEach(parent -> {
+                String ouCode = parent.getOuCode();
+                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                parent.setNextDepthList(list);
+            });
+
+            topList.forEach(top -> {
+                String ouCode = top.getOuCode();
+                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                top.setNextDepthList(list);
+            });
+
+            model.addAttribute("knowledgeDetail", knowledgeDetail);
+            model.addAttribute("relateKnowlgVo", relateKnowlgVo);
+            model.addAttribute("knowledgeContentsList", knowledgeContentsList);
+            model.addAttribute("relateKnowledgeList", relateKnowledgeList);
+            model.addAttribute("fileList", fileList);
+            model.addAttribute("knowledgeMapList", knowledgeMapList);
+            model.addAttribute("excellenceOrgList", excellenceOrgList);
+            model.addAttribute("excellenceUserList", excellenceUserList);
+            model.addAttribute("topList", topList);
+            model.addAttribute("groupList", groupList);
+            model.addAttribute("targetVOList", targetVOList);
+            model.addAttribute("isOwner", false);
+        } catch (NullPointerException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
+
+        return "/com/wkp/kno/EgovKnowledgeUpdate";
+    }
+
+    /**
+     * 지식백과 > 데이터 수정
+     * @return Redirect
+     */
     @RequestMapping("/insertUpdateKnowledge.do")
     public String insertUpdateKnowledge(final MultipartHttpServletRequest multiRequest
     		, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
@@ -756,6 +830,7 @@ public class EgovKnowledgeController {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			
 			knowledgeVO.setRegisterId(userVO.getSid());
+            knowledgeVO.setOwnerId(userVO.getSid());
 			knowledgeVO.setOuCode(userVO.getOuCode());
 
             List<FileVO> file = new ArrayList<FileVO>();
@@ -944,96 +1019,57 @@ public class EgovKnowledgeController {
 
         return "redirect:/kno/knowledgeList.do";
     }
-    
-    
-    @RequestMapping("/updateKnowledge.do")
-    public String updateKnowledge(final MultipartHttpServletRequest multiRequest
-    		, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-    		, RedirectAttributes redirectAttributes) {
 
+    /**
+     * 지식백과 > 데이터 수정
+     * @return Redirect
+     */
+    @RequestMapping("/insertUpdateKnowledgeRequest.do")
+    public String insertUpdateKnowledgeRequest(final MultipartHttpServletRequest multiRequest, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
         try {
-			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-			
-			knowledgeVO.setRegisterId(userVO.getSid());
-			knowledgeVO.setOuCode(userVO.getOuCode());
+            KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+            UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+            knowledgeVO.setRegisterId(userVO.getSid());
 
             List<FileVO> file = new ArrayList<FileVO>();
+
             long atchFileNo = 0;
             final Map<String, MultipartFile> files = multiRequest.getFileMap();
-            
+
             List<MultipartFile> mFiles = multiRequest.getFiles("atchFile");
-            
             files.clear();
-            
-            if (!mFiles.isEmpty()) {
-	            for(MultipartFile mFile : mFiles) {
-	            	files.put(mFile.getOriginalFilename(), mFile);
-	            }
-	            
-	            Iterator<String> mapIter = files.keySet().iterator();
-	            while(mapIter.hasNext()){
-	                String key = mapIter.next();
-	                MultipartFile value = files.get(key);
-	            }
-	            file = fileUtil.parseFileInf(files, "KNO_", 0, "");
-	            atchFileNo = fileMngService.insertFileInfs(file);
-            }
-            knowledgeVO.setAtchFileNo(atchFileNo);
-                        
-            if (knowledgeVO.getCopertnWritngYn() == null) {
-                knowledgeVO.setCopertnWritngYn("N");
-            }
 
-            if (knowledgeVO.getRelateKnowledgeList() != null) {
-                long relateKnowlgNo = knowledgeService.insertRelateKnowledge(knowledgeVO);
-                knowledgeVO.setRelateKnowlgNo(relateKnowlgNo);
-            }
+            if (mFiles.isEmpty() != true) {
+                if((Long) knowledgeDetail.getAtchFileNo() != 0) {
+                    for(MultipartFile mFile : mFiles) {
+                        files.put(mFile.getOriginalFilename(), mFile);
+                    }
 
-            if (knowledgeVO.getRlsYn().equals("N")) {
-                TargetVO targetVO = new TargetVO();
-                
-                targetVO.setOrgList(knowledgeVO.getOrgList());
-                targetVO.setUserList(knowledgeVO.getUserList());
-                
-    			GroupVO groupVO = new GroupVO();
-    			groupVO.setRegisterId(userVO.getSid());
-    			List<String> orgList = new ArrayList<>();
-    			List<String> userList = new ArrayList<>();
-                for(String s:knowledgeVO.getGroupList()){
-                	groupVO.setGroupNo(Long.parseLong(s));
-                	List<GroupVO> group = commonService.selectGroupDetail(groupVO);
-                	for(GroupVO gv:group) {
-                		if(gv.getTargetTypeCd().equals("ORG")) {
-                			if(targetVO.getOrgList() != null) {
-                				targetVO.getOrgList().add(gv.getTargetCode());
-                			} else {
-                				orgList.add(gv.getTargetCode());
-                			}                			
-                		}
-                		
-                		if(gv.getTargetTypeCd().equals("USER")) {
-                			if(targetVO.getUserList() != null) {
-                				targetVO.getUserList().add(gv.getTargetCode());
-                			} else {
-                				userList.add(gv.getTargetCode());
-                			}
-                		}
-                	}
+                    Iterator<String> mapIter = files.keySet().iterator();
+                    while(mapIter.hasNext()){
+                        String key = mapIter.next();
+                        MultipartFile value = files.get(key);
+                    }
+
+                    file = fileUtil.parseFileInfs(knowledgeDetail.getAtchFileNo(), files, "KNO_", 0, "");
+                    fileMngService.updateFileInfs(file);
+                } else {
+                    for(MultipartFile mFile : mFiles) {
+                        files.put(mFile.getOriginalFilename(), mFile);
+                    }
+
+                    Iterator<String> mapIter = files.keySet().iterator();
+                    while(mapIter.hasNext()){
+                        String key = mapIter.next();
+                        MultipartFile value = files.get(key);
+                    }
+                    file = fileUtil.parseFileInf(files, "KNO_", 0, "");
+                    atchFileNo = fileMngService.insertFileInfs(file);
+                    knowledgeVO.setAtchFileNo(atchFileNo);
                 }
-                
-                if(orgList.size() > 0) {
-                	targetVO.setOrgList(orgList);
-                }
-                
-                if(userList.size() > 0) {
-                	targetVO.setUserList(userList);
-                }
-
-                long targetNo = commonService.insertTarget(targetVO);
-                knowledgeVO.setTargetNo(targetNo);
             }
 
-            int result = knowledgeService.insertKnowledge(knowledgeVO);
+            int result = knowledgeService.insertKnowledgeModificationRequest(knowledgeVO);
 
             if (result > 0) {
                 KnowledgeContentsVO knowledgeContentsVO = new KnowledgeContentsVO();
@@ -1079,38 +1115,32 @@ public class EgovKnowledgeController {
                             cont = cont.replaceFirst("</p>", "");
                         }
 
-                        knowledgeContentsVO.setKnowlgNo(knowledgeVO.getKnowlgNo());
-                        knowledgeContentsVO.setTitle(knowledgeVO.getTitle());
+                        knowledgeContentsVO.setRequestNo(knowledgeVO.getRequestNo());
                         knowledgeContentsVO.setSortOrdr(sortOrdr);
                         knowledgeContentsVO.setSubtitle(subTitle);
                         knowledgeContentsVO.setCont(cont);
-                        knowledgeContentsVO.setUpNo(upNo);
-                        knowledgeContentsVO.setRegisterId(knowledgeVO.getRegisterId());
-
-                        knowledgeService.insertKnowledgeContents(knowledgeContentsVO);
-
+                        knowledgeService.insertKnowledgeModificationRequestContent(knowledgeContentsVO);
                         start = next;
                     }
                 }
 
-                knowledgeVO.setMileageType("UPD");
-                knowledgeVO.setMileageScore(1.0f);
-                knowledgeService.insertUserMileage(knowledgeVO);
-                knowledgeService.insertOrgMileage(knowledgeVO);
-                
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		} catch (IOException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		} catch (EgovComException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        } catch (IOException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        } catch (EgovComException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
 
         return "redirect:/kno/knowledgeList.do";
     }
-    
+
+    /**
+     * 지식백과 > 편집
+     * @return View Page
+     */
     @RequestMapping("/modifyKnowledgeView.do")
     public String modifyKnowledgeView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
     		, Model model) {
@@ -1126,13 +1156,45 @@ public class EgovKnowledgeController {
             model.addAttribute("knowledgeContents", knowledgeContents);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
             model.addAttribute("excellenceUserList", excellenceUserList);
+            model.addAttribute("isOwner", true);
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
         
         return "/com/wkp/kno/EgovKnowledgeModify";
     }
-    
+
+    /**
+     * 지식백과 > 편집
+     * @return View Page
+     */
+    @RequestMapping("/modifyKnowledgeRequestView.do")
+    public String modifyKnowledgeRequestView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
+            , Model model) {
+
+        try {
+            KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+            KnowledgeContentsVO knowledgeContents = knowledgeService.selectKnowledgeContentsDetail(knowledgeVO);
+
+            List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
+            List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
+
+            model.addAttribute("knowledgeDetail", knowledgeDetail);
+            model.addAttribute("knowledgeContents", knowledgeContents);
+            model.addAttribute("excellenceOrgList", excellenceOrgList);
+            model.addAttribute("excellenceUserList", excellenceUserList);
+            model.addAttribute("isOwner", false);
+        } catch (NullPointerException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
+
+        return "/com/wkp/kno/EgovKnowledgeModify";
+    }
+
+    /**
+     * 지식백과 > 데이터 편집
+     * @return Redirect
+     */
     @RequestMapping("/modifyKnowledge.do")
     public String modifyKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
     		, RedirectAttributes redirectAttributes) {
@@ -1178,6 +1240,47 @@ public class EgovKnowledgeController {
 	    return "redirect:/kno/knowledgeList.do";
     }
 
+    /**
+     * 지식백과 > 데이터 편집
+     * @return Redirect
+     */
+    @RequestMapping("/modifyKnowledgeRequest.do")
+    public String modifyKnowledgeRequest(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
+        try {
+            KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+            List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeVO);
+            UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+            knowledgeDetail.setRequestContent(knowledgeVO.getRequestContent());
+            knowledgeDetail.setAtchFileNo(0);
+            knowledgeDetail.setRegisterId(userVO.getSid());
+
+            int result = knowledgeService.insertKnowledgeModificationRequest(knowledgeDetail);
+
+            if (result > 0) {
+                for (KnowledgeContentsVO knowledgeContents : knowledgeContentsList) {
+                    knowledgeContents.setRequestNo(knowledgeDetail.getRequestNo());
+                    knowledgeService.insertKnowledgeModificationRequestContent(knowledgeContents);
+                }
+            }
+
+            KnowledgeContentsVO knowledgeContentsVO = new KnowledgeContentsVO();
+            knowledgeContentsVO.setRequestNo(knowledgeDetail.getRequestNo());
+            knowledgeContentsVO.setSortOrdr(knowledgeVO.getSortOrdr());
+            knowledgeContentsVO.setCont(knowledgeVO.getCont());
+            knowledgeService.updateKnowledgeModificationRequestContent(knowledgeContentsVO);
+
+            redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
+        } catch (NullPointerException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
+        return "redirect:/kno/knowledgeList.do";
+    }
+
+    /**
+     * 지식백과 > 데이터 삭제
+     * @return Redirect
+     */
     @RequestMapping(value = "/deleteKnowledge.do")
     public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
 	
@@ -1191,7 +1294,11 @@ public class EgovKnowledgeController {
     	
     	return "redirect:/kno/knowledgeList.do";
     }
-    
+
+    /**
+     * 지식백과 > 등록/수정 > 미리보기
+     * @return JSON
+     */
     @RequestMapping("/insertPreview.do")
     public ModelAndView insertPreview(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
 
@@ -1291,7 +1398,11 @@ public class EgovKnowledgeController {
 
         return mav;
     }
-    
+
+    /**
+     * 지식백과 > 상세 > 오류 신고
+     * @return Redirect
+     */
     @RequestMapping(value = "/insertErrorStatement.do")
     public String insertErrorStatement(@ModelAttribute("errorStatementVO") ErrorStatementVO errorStatementVO, ModelMap model) {
         
@@ -1308,9 +1419,12 @@ public class EgovKnowledgeController {
 		}
     	
 		return "redirect:/kno/knowledgeDetail.do?title=" + title;
-
     }
-    
+
+    /**
+     * 지식백과 > 상세 > 즐겨찾기
+     * @return JSON
+     */
     @RequestMapping(value = "/insertBookmark.do")
     public ModelAndView insertBookmark(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, ModelMap model) {
     	
@@ -1326,7 +1440,11 @@ public class EgovKnowledgeController {
     	
         return mav;
     }
-    
+
+    /**
+     * 지식백과 > 상세 > 추천
+     * @return JSON
+     */
     @RequestMapping(value = "/updateRecommend.do")
     public ModelAndView updateRecommend(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, ModelMap model) {
 
@@ -1361,7 +1479,11 @@ public class EgovKnowledgeController {
         
         return mav;
     }
-    
+
+    /**
+     * 지식백과 > 목록 > 관심분야 등록
+     * @return JSON
+     */
     @RequestMapping(value = "/updateInterests.do")
     public ModelAndView updateInterests(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, ModelMap model) {
 
@@ -1385,22 +1507,11 @@ public class EgovKnowledgeController {
         
         return mav;
     }
-    
-    @RequestMapping(value = "/updateKnowledgeLink.do")
-    public void updateKnowledgeLink() {
-        try {
-        	List<String> titleList = knowledgeService.selectKnowledgeTitle();
 
-        	KnowledgeVO knowledgeVO = new KnowledgeVO();
-        	for(String title:titleList) {
-        		knowledgeVO.setTitle(title);
-        		knowledgeService.updateKnowledgeLink(knowledgeVO);
-        	}
-        } catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-    }
-
+    /**
+     * 지식백과 > 등록/수정 > 파일 변환
+     * @return JSON
+     */
     @RequestMapping(value = "/fileConvert.do")
     public ModelAndView fileConvert(MultipartHttpServletRequest multipartHttpServletRequest, ModelMap model) {
 
@@ -1993,7 +2104,6 @@ public class EgovKnowledgeController {
 
     @RequestMapping(value="/addKnowledge.do")
 	public void addKnowledge(ModelMap model) {
-
 		try {
 			RecommendVO recommendVO = new RecommendVO();
 
@@ -2091,4 +2201,221 @@ public class EgovKnowledgeController {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
 	}
+
+    // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
+    /*@RequestMapping("/deleteRelateKnowlg.do")
+    public String deleteRelateKnowlg(@ModelAttribute("relateKnowlgVO") RelateKnowlgVO relateKnowlgVO,
+    								 @RequestParam(value = "relateKnowlgNo", required = false) Long relateKnowlgNo,
+    								 @RequestParam(value = "sortOrdr", required = false) int sortOrdr)  {
+
+    	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+    	if (isAuthenticated) {
+    		relateKnowlgVO.setRelateKnowlgNo(relateKnowlgNo);
+    		relateKnowlgVO.setSortOrdr(sortOrdr);
+    		knowledgeService.deleteRelateKnowlg(relateKnowlgVO);
+    	}
+
+    	return "redirect:/kno/knowledgeDetail.do";
+    }
+
+    @RequestMapping("/deleteknowlg.do")
+    public String deleteknowlg(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO,
+                               @RequestParam(value = "knowlgNo", required = false) int knowlgNo,
+                               @RequestParam(value = "title", required = false) String title)  {
+
+        Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
+
+        //System.out.println("222222222222");
+        //System.out.println("knowledgeVO - " + knowledgeVO);
+        if (isAuthenticated) {
+            knowledgeVO.setTitle(title);
+            knowledgeVO.setKnowlgNo(knowlgNo);
+            knowledgeService.updateKnowlg(knowledgeVO);
+        }
+
+        return "redirect:/kno/knowledgeDetail.do";
+    }
+
+    @RequestMapping("/updateKnowledge.do")
+    public String updateKnowledge(final MultipartHttpServletRequest multiRequest
+            , @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
+            , RedirectAttributes redirectAttributes) {
+
+        try {
+            UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+            knowledgeVO.setRegisterId(userVO.getSid());
+            knowledgeVO.setOuCode(userVO.getOuCode());
+
+            List<FileVO> file = new ArrayList<FileVO>();
+            long atchFileNo = 0;
+            final Map<String, MultipartFile> files = multiRequest.getFileMap();
+
+            List<MultipartFile> mFiles = multiRequest.getFiles("atchFile");
+
+            files.clear();
+
+            if (!mFiles.isEmpty()) {
+                for(MultipartFile mFile : mFiles) {
+                    files.put(mFile.getOriginalFilename(), mFile);
+                }
+
+                Iterator<String> mapIter = files.keySet().iterator();
+                while(mapIter.hasNext()){
+                    String key = mapIter.next();
+                    MultipartFile value = files.get(key);
+                }
+                file = fileUtil.parseFileInf(files, "KNO_", 0, "");
+                atchFileNo = fileMngService.insertFileInfs(file);
+            }
+            knowledgeVO.setAtchFileNo(atchFileNo);
+
+            if (knowledgeVO.getCopertnWritngYn() == null) {
+                knowledgeVO.setCopertnWritngYn("N");
+            }
+
+            if (knowledgeVO.getRelateKnowledgeList() != null) {
+                long relateKnowlgNo = knowledgeService.insertRelateKnowledge(knowledgeVO);
+                knowledgeVO.setRelateKnowlgNo(relateKnowlgNo);
+            }
+
+            if (knowledgeVO.getRlsYn().equals("N")) {
+                TargetVO targetVO = new TargetVO();
+
+                targetVO.setOrgList(knowledgeVO.getOrgList());
+                targetVO.setUserList(knowledgeVO.getUserList());
+
+                GroupVO groupVO = new GroupVO();
+                groupVO.setRegisterId(userVO.getSid());
+                List<String> orgList = new ArrayList<>();
+                List<String> userList = new ArrayList<>();
+                for(String s:knowledgeVO.getGroupList()){
+                    groupVO.setGroupNo(Long.parseLong(s));
+                    List<GroupVO> group = commonService.selectGroupDetail(groupVO);
+                    for(GroupVO gv:group) {
+                        if(gv.getTargetTypeCd().equals("ORG")) {
+                            if(targetVO.getOrgList() != null) {
+                                targetVO.getOrgList().add(gv.getTargetCode());
+                            } else {
+                                orgList.add(gv.getTargetCode());
+                            }
+                        }
+
+                        if(gv.getTargetTypeCd().equals("USER")) {
+                            if(targetVO.getUserList() != null) {
+                                targetVO.getUserList().add(gv.getTargetCode());
+                            } else {
+                                userList.add(gv.getTargetCode());
+                            }
+                        }
+                    }
+                }
+
+                if(orgList.size() > 0) {
+                    targetVO.setOrgList(orgList);
+                }
+
+                if(userList.size() > 0) {
+                    targetVO.setUserList(userList);
+                }
+
+                long targetNo = commonService.insertTarget(targetVO);
+                knowledgeVO.setTargetNo(targetNo);
+            }
+
+            int result = knowledgeService.insertKnowledge(knowledgeVO);
+
+            if (result > 0) {
+                KnowledgeContentsVO knowledgeContentsVO = new KnowledgeContentsVO();
+
+                if (knowledgeVO.getCont() != null) {
+                    int start = 0;
+                    int end = 0;
+                    int next = 0;
+                    int sortOrdr = 0;
+                    long upNo = 0;
+                    String subTitle = "";
+                    String cont = "";
+
+                    while (start != -1) {
+                        start = knowledgeVO.getCont().indexOf("[==", start);
+                        if (start != -1) {
+                            end = knowledgeVO.getCont().indexOf("==]", start);
+                            subTitle = knowledgeVO.getCont().substring(start + 3, end);
+                            sortOrdr += 1;
+                        } else {
+                            end = -3;
+                            subTitle = "";
+                            sortOrdr = 1;
+                        }
+
+                        next = knowledgeVO.getCont().indexOf("[==", end);
+
+                        if (next != -1) {
+                            cont = knowledgeVO.getCont().substring(end + 3, next);
+                        } else {
+                            cont = knowledgeVO.getCont().substring(end + 3, knowledgeVO.getCont().length());
+                        }
+
+                        // 목차 아래에 빈 줄이 생기는 현상 제거
+                        if (knowledgeVO.getCont().indexOf("[==", start) != -1) {
+                            int a = cont.indexOf("</p>");
+                            int b = cont.indexOf("<br />");
+                            if (a != -1 && b != -1) {
+                                if (a > b) {
+                                    cont = cont.replaceFirst("<br />", "");
+                                }
+                            }
+                            cont = cont.replaceFirst("</p>", "");
+                        }
+
+                        knowledgeContentsVO.setKnowlgNo(knowledgeVO.getKnowlgNo());
+                        knowledgeContentsVO.setTitle(knowledgeVO.getTitle());
+                        knowledgeContentsVO.setSortOrdr(sortOrdr);
+                        knowledgeContentsVO.setSubtitle(subTitle);
+                        knowledgeContentsVO.setCont(cont);
+                        knowledgeContentsVO.setUpNo(upNo);
+                        knowledgeContentsVO.setRegisterId(knowledgeVO.getRegisterId());
+
+                        knowledgeService.insertKnowledgeContents(knowledgeContentsVO);
+
+                        start = next;
+                    }
+                }
+
+                knowledgeVO.setMileageType("UPD");
+                knowledgeVO.setMileageScore(1.0f);
+                knowledgeService.insertUserMileage(knowledgeVO);
+                knowledgeService.insertOrgMileage(knowledgeVO);
+
+                redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
+            }
+        } catch (NullPointerException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        } catch (IOException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        } catch (EgovComException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
+
+        return "redirect:/kno/knowledgeList.do";
+    }
+
+    @RequestMapping(value = "/updateKnowledgeLink.do")
+    public void updateKnowledgeLink() {
+        try {
+            List<String> titleList = knowledgeService.selectKnowledgeTitle();
+
+            KnowledgeVO knowledgeVO = new KnowledgeVO();
+            for(String title:titleList) {
+                knowledgeVO.setTitle(title);
+                knowledgeService.updateKnowledgeLink(knowledgeVO);
+            }
+        } catch (NullPointerException e) {
+            LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+        }
+    }*/
 }

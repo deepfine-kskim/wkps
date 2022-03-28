@@ -17,15 +17,21 @@ public interface EgovKnowledgeService {
 	public KnowledgeVO selectKnowledgeDetail(KnowledgeVO knowledgeVO);
 	
 	public int insertKnowledge(KnowledgeVO knowledgeVO);
-	
+
+	public int insertKnowledgeModificationRequest(KnowledgeVO knowledgeVO);
+
 	public int updateKnowledge(KnowledgeVO knowledgeVO);
 	
 	public int deleteKnowledge(KnowledgeVO knowledgeVO);
 	
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO);
+
+	public int insertKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO);
 	
 	public int updateKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO);
-	
+
+	public int updateKnowledgeModificationRequestContent(KnowledgeContentsVO knowledgeContentsVO);
+
 	public int insertPreview(KnowledgeVO knowledgeVO);
 	
 	public List<KnowledgeContentsVO> selectKnowledgeContentsList(KnowledgeVO knowledgeVO);

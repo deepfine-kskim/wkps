@@ -140,6 +140,7 @@
 		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
 		             , TB_KNOWLEDGE.TARGET_NO
 		             , TB_KNOWLEDGE.KEYWORD
+		             , TB_KNOWLEDGE.OWNER_ID
 		             , TB_USER.DISPLAY_NAME
 		             , TB_USER.OU
                      , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
@@ -151,6 +152,7 @@
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
 		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
@@ -210,6 +212,7 @@
 		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
 		             , TB_KNOWLEDGE.TARGET_NO
 		             , TB_KNOWLEDGE.KEYWORD
+					 , TB_KNOWLEDGE.OWNER_ID
 		             , TB_USER.DISPLAY_NAME
 		             , TB_USER.OU
                      , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
@@ -221,6 +224,7 @@
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
 		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
@@ -249,30 +253,62 @@
 			LIMIT 1
 			  	 		
  	</select>
-    
-    <select id="selectKnowledgeDetail" parameterType="KnowledgeVO" resultType="KnowledgeVO"> 
- 		
-			SELECT
-				tk.*,
-				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
-				(SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO) AS UP_NO,
-				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tk.KNOWLG_MAP_NO = tkm.KNOWLG_MAP_NO)) AS UP_NM,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
-				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU	
-			FROM
-				TB_KNOWLEDGE tk
-	        <where>
-	        	AND DEL_YN = 'N'
-	        	<if test="title != null and title != ''">
-	        	AND TITLE = #{title}
-	        	</if>
-	        	<if test="knowlgNo != null and knowlgNo != ''">
-	        	AND KNOWLG_NO = #{knowlgNo}
-	        	</if>
-	        </where>
-			ORDER BY KNOWLG_NO DESC
-			LIMIT 1
-			  	 		
+
+	<!-- 지식 상세 -->
+    <select id="selectKnowledgeDetail" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+		/* KnowledgeDAO.selectKnowledgeDetail */
+		SELECT TB_KNOWLEDGE.KNOWLG_NO
+		     , TB_KNOWLEDGE.TITLE
+		     , TB_KNOWLEDGE.KNOWLG_MAP_NO
+		     , TB_KNOWLEDGE.KNOWLG_MAP_TYPE
+		     , TB_KNOWLEDGE.SUMMRY
+		     , TB_KNOWLEDGE.APRV_YN
+		     , TB_KNOWLEDGE.APRV_CONT
+		     , TB_KNOWLEDGE.APPROVER_ID
+		     , TB_KNOWLEDGE.RLS_YN
+		     , TB_KNOWLEDGE.REAL_NM_YN
+		     , TB_KNOWLEDGE.COPERTN_WRITNG_YN
+		     , TB_KNOWLEDGE.OU_CODE
+		     , TB_KNOWLEDGE.INQ_CNT
+		     , TB_KNOWLEDGE.CMMNTY_NO
+		     , TB_KNOWLEDGE.DOWNLOAD_CNT
+		     , TB_KNOWLEDGE.REGISTER_ID
+		     , TB_KNOWLEDGE.REGIST_DTM
+		     , TB_KNOWLEDGE.UPDATER_ID
+		     , TB_KNOWLEDGE.UPD_DTM
+		     , TB_KNOWLEDGE.DEL_YN
+		     , TB_KNOWLEDGE.ATCH_FILE_NO
+		     , TB_KNOWLEDGE.RELATE_KNOWLG_NO
+		     , TB_KNOWLEDGE.TARGET_NO
+		     , TB_KNOWLEDGE.KEYWORD
+		     , TB_KNOWLEDGE.OWNER_ID
+			 , TB_USER.DISPLAY_NAME
+			 , TB_USER.OU
+		     , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NO AS UP_NO
+		     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM AS UP_NM
+		  FROM TB_KNOWLEDGE
+		  LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
+		  LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
+		                  , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		                  , TB_KNOWLEDGE_MAP.DEL_YN
+		                  , TB_KNOWLEDGE_MAP.SHOW_YN
+		                  , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
+		                  , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
+		               FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
+		    ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
+	     WHERE TB_KNOWLEDGE.DEL_YN = 'N'
+		   AND TB_KNOWLEDGE.KNOWLG_NO != 0
+           AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
+           AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
+		<if test="title != null and title != ''">
+		   AND TB_KNOWLEDGE.TITLE = #{title}
+		</if>
+		<if test="knowlgNo != null and knowlgNo != ''">
+		   AND TB_KNOWLEDGE.KNOWLG_NO = #{knowlgNo}
+		</if>
+		 ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC
+		 LIMIT 1
  	</select>
  	
  	<select id="selectKnowledgeContentsList" parameterType="KnowledgeVO" resultType="KnowledgeContentsVO"> 
@@ -302,14 +338,77 @@
  	</select>
  	
 	<insert id="insertKnowledge" parameterType="KnowledgeVO" useGeneratedKeys="true" keyProperty="knowlgNo">
-		
-			INSERT INTO TB_KNOWLEDGE
-			(TITLE, KNOWLG_MAP_NO, KNOWLG_MAP_TYPE, SUMMRY, APRV_YN, APPROVER_ID, RLS_YN, REAL_NM_YN, COPERTN_WRITNG_YN, OU_CODE, INQ_CNT, CMMNTY_NO, DOWNLOAD_CNT, ATCH_FILE_NO, RELATE_KNOWLG_NO, TARGET_NO, KEYWORD, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN )
-			VALUES
-			(#{title}, #{knowlgMapNo}, #{knowlgMapType}, #{summry}, #{aprvYn}, #{approverId}, #{rlsYn}, #{realNmYn}, #{copertnWritngYn}, #{ouCode}, 0, #{cmmntyNo}, 0, #{atchFileNo}, #{relateKnowlgNo}, #{targetNo}, #{keyword}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N' )	
- 		
+		/* KnowledgeDAO.insertKnowledge */
+		INSERT INTO TB_KNOWLEDGE
+		     ( TITLE
+		     , KNOWLG_MAP_NO
+		     , KNOWLG_MAP_TYPE
+		     , SUMMRY
+		     , APRV_YN
+		     , APPROVER_ID
+		     , RLS_YN
+		     , REAL_NM_YN
+		     , COPERTN_WRITNG_YN
+		     , OU_CODE
+		     , INQ_CNT
+		     , CMMNTY_NO
+		     , DOWNLOAD_CNT
+		     , ATCH_FILE_NO
+		     , RELATE_KNOWLG_NO
+		     , TARGET_NO
+		     , KEYWORD
+		     , REGISTER_ID
+		     , REGIST_DTM
+		     , UPDATER_ID
+		     , UPD_DTM
+		     , DEL_YN
+		     , OWNER_ID
+		     )
+		VALUES
+		     ( #{title}
+		     , #{knowlgMapNo}
+		     , #{knowlgMapType}
+		     , #{summry}
+		     , #{aprvYn}
+		     , #{approverId}
+		     , #{rlsYn}
+		     , #{realNmYn}
+		     , #{copertnWritngYn}
+		     , #{ouCode}
+		     , 0
+		     , #{cmmntyNo}
+		     , 0
+		     , #{atchFileNo}
+		     , #{relateKnowlgNo}
+		     , #{targetNo}
+		     , #{keyword}
+		     , #{registerId}
+		     , SYSDATE()
+		     , #{registerId}
+		     , SYSDATE()
+		     , 'N'
+		     , #{ownerId}
+		     )
  	</insert>
- 	
+
+	<insert id="insertKnowledgeModificationRequest" parameterType="KnowledgeVO" useGeneratedKeys="true" keyProperty="requestNo">
+		/* KnowledgeDAO.insertKnowledgeModificationRequest */
+		INSERT INTO TB_KNOWLEDGE_MODIFICATION_REQUEST
+		     ( KNOWLG_NO
+		     , REQUEST_CONTENT
+		     , ATCH_FILE_NO
+		     , REGISTER_ID
+		     , REGIST_DTM
+		     )
+		VALUES
+		     ( #{knowlgNo}
+		     , #{requestContent}
+		     , #{atchFileNo}
+		     , #{registerId}
+		     , SYSDATE()
+		     )
+	</insert>
+
  	<insert id="insertKnowledgeContents" parameterType="KnowledgeVO">
  		
 			INSERT INTO TB_KNOWLEDGE_CONTENTS
@@ -322,7 +421,23 @@
 				CONT = #{cont}				
  			
  	</insert>
- 	
+
+	<insert id="insertKnowledgeModificationRequestContent" parameterType="KnowledgeVO">
+		/* KnowledgeDAO.insertKnowledgeModificationRequestContent */
+		INSERT INTO TB_KNOWLEDGE_MODIFICATION_REQUEST_CONTENT
+		     ( REQUEST_NO
+		     , SORT_ORDR
+		     , SUBTITLE
+		     , CONT
+		     )
+		VALUES
+		     ( #{requestNo}
+		     , #{sortOrdr}
+		     , #{subtitle}
+		     , #{cont}
+		     )
+	</insert>
+
  	<update id="updateKnowledgeContents" parameterType="KnowledgeVO">
  	
  			UPDATE
@@ -334,7 +449,15 @@
  				AND SORT_ORDR = #{sortOrdr}
  			</where>
  	</update>
- 	
+
+	<update id="updateKnowledgeModificationRequestContent" parameterType="KnowledgeVO">
+		/* KnowledgeDAO.updateKnowledgeModificationRequestContent */
+		UPDATE TB_KNOWLEDGE_MODIFICATION_REQUEST_CONTENT
+		   SET CONT = #{cont}
+		 WHERE REQUEST_NO = #{requestNo}
+		   AND SORT_ORDR = #{sortOrdr}
+	</update>
+
 	<insert id="insertPreview" parameterType="KnowledgeVO">
 		
 			INSERT INTO TB_KNOWLEDGE

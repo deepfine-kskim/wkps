@@ -168,7 +168,14 @@
                                         <div id="wikiDoc${contents.sortOrdr}" class="wiki_box">
                                             <div class="wiki_header">
                                                 <h2 class="h2"><span class="num">${contents.sortOrdr}.</span> ${contents.subtitle}</h2>
-                                                <a href="javascript:;" class="edit_lnk text-danger mdfBtn" data-ordr="${contents.sortOrdr}">[편집]</a>
+                                                <c:choose>
+                                                    <c:when test="${isOwner}">
+                                                        <a href="javascript:;" class="edit_lnk text-danger mdfBtn" data-ordr="${contents.sortOrdr}">[편집]</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="javascript:;" class="edit_lnk text-danger flow-action-editRequest" data-ordr="${contents.sortOrdr}">[편집요청]</a>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
                                             <div class="wiki_body">
                                                 <div class="wiki_paras">
@@ -246,9 +253,16 @@
                         </div>
                         <div class="row brd_foot_btns">
                             <div class="col-sm-6">
-                            	<a href="javascript:;" id="updBtn" class="btn btn-black">수정</a>
-                            	<c:if test="${knowledgeDetail.registerId == user.sid or user.roleCd eq 'ROLE_ADMIN'}">
-                                	<a href="javascript:;" id="delBtn" class="btn btn-danger">삭제</a>
+                                <c:choose>
+                                    <c:when test="${isOwner}">
+                                        <a href="javascript:;" id="updBtn" class="btn btn-black">수정</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="javascript:;" class="btn btn-black flow-action-modifyRequest">수정요청</a>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:if test="${user.roleCd eq 'ROLE_ADMIN'}">
+                                    <a href="javascript:;" id="delBtn" class="btn btn-danger">삭제</a>
                                 </c:if>
                             </div>
                             <div class="col-sm-6 text-right">
@@ -428,7 +442,22 @@
             form.attr("action", "/kno/knowledgeList.do");
             form.submit();
        });
-		
+
+        $('.flow-action-editRequest').off('click').on('click', function (e) {
+            e.preventDefault();
+            var ordr = $(this).data('ordr');
+            var form = $("form[name=knowledgeFrm]");
+            form.find("input[name=sortOrdr]").val(ordr);
+            form.attr("action", "/kno/modifyKnowledgeRequestView.do");
+            form.submit();
+        });
+
+        $('.flow-action-modifyRequest').off('click').on('click', function (e) {
+            e.preventDefault();
+            var form = $("form[name=knowledgeFrm]");
+            form.attr("action", "/kno/updateKnowledgeRequestView.do");
+            form.submit();
+        });
 	});
 	
 	var clipboard = new ClipboardJS('.btn');

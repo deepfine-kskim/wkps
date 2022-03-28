@@ -54,13 +54,14 @@
                     </div>
                 </div>
                 <!-- //ASIDE -->
-				<form:form id="mdfFrm" class="form-horizontal" action="/kno/modifyKnowledge.do" modelAttribute="knowledgeVO">
+				<form:form id="mdfFrm" class="form-horizontal" action="${isOwner ? '/kno/modifyKnowledge.do' : '/kno/modifyKnowledgeRequest.do'}" modelAttribute="knowledgeVO">
                 <div id="contents" class="col-md-9">
                     <div class="page-body">
                         <%--<p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>--%>
                             <input type="hidden" name="title" value="${knowledgeDetail.title }">
                         	<input type="hidden" name="knowlgNo" value="${knowledgeDetail.knowlgNo }">
 							<input type="hidden" name="sortOrdr" value="${knowledgeContents.sortOrdr }">
+							<input type="hidden" name="knowlgMapType" value="${knowledgeDetail.knowlgMapType }">
 							<input type="hidden" name="aprvYn" value="Y"> <!-- 승인여부 -->
 							<fieldset>
                                 <legend class="sr-only">지식 편집</legend>
@@ -73,6 +74,14 @@
                                             </textarea>
                                         </div>
                                     </div>
+                                    <c:if test="${not isOwner}">
+                                        <div class="form-group">
+                                            <label for="requestContent" class="col-sm-2 control-label">편집 내용 요약</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" id="requestContent" name="requestContent" placeholder="편집요청 부분을 요약기재하면 담당자에게 전달됩니다."></textarea>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </div>
                                 <!-- 
                                 <div class="form-group">

@@ -38,4 +38,6 @@ public class PersonalizeVO {
 	private Date updDtm;
 	
 	private List<PersonalizeVO> personalizeList;
+
+	private long knowlgNo;
 }

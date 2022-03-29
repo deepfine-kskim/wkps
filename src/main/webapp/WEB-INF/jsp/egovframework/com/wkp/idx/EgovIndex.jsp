@@ -172,7 +172,7 @@
                                 <div class="card_item_list owl-carousel owl-theme">
                                 	<c:forEach var="report" items="${recommendReportList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${report.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${report.knowlgNo}">
                                             <span class="label label-warning">행정자료</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${report.title }</strong>
@@ -184,7 +184,7 @@
                                     </c:forEach>
                                     <c:forEach var="reference" items="${recommendReferenceList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${reference.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${reference.knowlgNo}">
                                             <span class="label label-primary">업무참고자료</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${reference.title }</strong>
@@ -196,7 +196,7 @@
                                     </c:forEach>
                                     <c:forEach var="personal" items="${recommendPersonalList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${personal.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
                                             <span class="label label-success">개인별지식</span> 
                                             <div class="caption_box">
                                                 <strong class="subject">${personal.title }</strong>
@@ -216,7 +216,7 @@
                                 <div class="card_item_list owl-carousel owl-theme">
                                 	<c:forEach var="report" items="${personalizeReportList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${report.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${report.knowlgNo}">
                                             <span class="label label-warning">행정자료</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${report.title }</strong>
@@ -228,7 +228,7 @@
                                     </c:forEach>
                                     <c:forEach var="reference" items="${personalizeReferenceList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${reference.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${reference.knowlgNo}">
                                             <span class="label label-primary">업무참고자료</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${reference.title }</strong>
@@ -240,7 +240,7 @@
                                     </c:forEach>
                                     <c:forEach var="personal" items="${personalizePersonalList }">
                                     <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?title=${personal.title }">
+                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
                                             <span class="label label-success">개인별지식</span> 
                                             <div class="caption_box">
                                                 <strong class="subject">${personal.title }</strong>

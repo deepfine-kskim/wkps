@@ -34,4 +34,6 @@ public class RecommendVO {
 	private Date updDtm;
 	
 	private List<RecommendVO> recommendList;
+
+	private long knowlgNo;
 }

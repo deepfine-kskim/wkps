@@ -15,5 +15,7 @@ public interface EgovOrgService {
     public int updateOrg(OrgVO orgVO);
 
     public int deleteOrg(OrgVO orgVO);
+
+    public OrgVO selectTopOrg(OrgVO orgVO);
 		
 }

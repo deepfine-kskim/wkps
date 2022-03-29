@@ -46,4 +46,8 @@ public class EgovOrgServiceImpl extends EgovAbstractServiceImpl implements EgovO
 		return orgDAO.deleteOrg(orgVO);
 	}
 
+	@Override
+	public OrgVO selectTopOrg(OrgVO orgVO) {
+		return orgDAO.selectTopOrg(orgVO);
+	}
 }

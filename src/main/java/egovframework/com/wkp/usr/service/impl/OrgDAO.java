@@ -32,5 +32,9 @@ public class OrgDAO extends EgovComAbstractDAO {
 	public int deleteOrg(OrgVO orgVO) {
 		return delete("OrgDAO.deleteOrg", orgVO);
 	}
+
+	public OrgVO selectTopOrg(OrgVO orgVO) {
+		return selectOne("OrgDAO.selectTopOrg", orgVO);
+	}
 	
 }

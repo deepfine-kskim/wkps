@@ -271,6 +271,19 @@ public class EgovKnowledgeController {
             return "redirect:/kno/knowledgeList.do";
         }
 
+        // 해당 지식의 공개범위가 전체(의회미포함)인 경우
+        if ("B".equals(knowledgeDetail.getRlsYn())) {
+            OrgVO orgVO = new OrgVO();
+            orgVO.setOuCode(user.getOuCode());
+            OrgVO TopOrg = orgService.selectTopOrg(orgVO);
+            // 의회사무처 부서 코드 : 6410073
+            if ("6410073".equals(TopOrg.getOuCode())) {
+                redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                return "redirect:/kno/knowledgeList.do";
+            }
+        }
+
+        // 해당 지식의 공개범위가 지정인 경우
         if (!user.getRoleCd().equals("ROLE_ADMIN") && !user.getSid().equals(knowledgeDetail.getRegisterId()) && knowledgeDetail.getRlsYn().equals("N")) {
             TargetVO targetVO = new TargetVO();
             targetVO.setTargetNo(knowledgeDetail.getTargetNo());

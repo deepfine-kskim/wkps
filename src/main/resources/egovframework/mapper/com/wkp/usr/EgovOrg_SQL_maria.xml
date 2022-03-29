@@ -69,5 +69,29 @@
 				STATUS = #{status}				
 		
 	</insert>
+
+	<!-- OU_LEVEL 2 부서 조회 -->
+	<select id="selectTopOrg" parameterType="OrgVO" resultType="OrgVO">
+		/* OrgDAO.selectTopOrg */
+		WITH RECURSIVE TB_ORG_CTE AS (
+			SELECT OU
+			     , OU_CODE
+				 , PARENT_OU_CODE
+				 , 1 AS LEVEL
+			  FROM TB_ORG
+			 WHERE OU_CODE = #{ouCode}
+			 UNION ALL
+			SELECT TB_ORG.OU
+			     , TB_ORG.OU_CODE
+			     , TB_ORG.PARENT_OU_CODE
+			     , 1 + LEVEL AS LEVEL
+			  FROM TB_ORG
+			 INNER JOIN TB_ORG_CTE ON TB_ORG_CTE.PARENT_OU_CODE = TB_ORG.OU_CODE
+		)
+		SELECT *
+		  FROM TB_ORG_CTE
+		 ORDER BY LEVEL DESC
+		 LIMIT 1
+	</select>
 	
 </mapper>

@@ -266,6 +266,11 @@ public class EgovKnowledgeController {
 
         KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
 
+        if (knowledgeDetail == null) {
+            redirect.addFlashAttribute("errMsg", "접근할 수 없는 지식입니다.");
+            return "redirect:/kno/knowledgeList.do";
+        }
+
         if (!user.getRoleCd().equals("ROLE_ADMIN") && !user.getSid().equals(knowledgeDetail.getRegisterId()) && knowledgeDetail.getRlsYn().equals("N")) {
             TargetVO targetVO = new TargetVO();
             targetVO.setTargetNo(knowledgeDetail.getTargetNo());
@@ -356,6 +361,36 @@ public class EgovKnowledgeController {
         model.addAttribute("isOwner", isOwner);
 
         return "/com/wkp/kno/EgovKnowledgeDetail";
+    }
+
+    /**
+     * 지식백과 > 상세 > 지식이력
+     * @return View Page
+     */
+    @RequestMapping("/knowledgeHistory.do")
+    public String knowledgeHistory(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
+        // 지식 상세 정보
+        KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+
+        // 지식 내용
+        List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+
+        // 첨부파일
+        FileVO fileVO = new FileVO();
+        fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
+        List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+        // 관련지식
+        List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
+        List<RelateKnowlgVO> relateKnowlgVO = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
+        
+        model.addAttribute("knowledgeDetail", knowledgeDetail);
+        model.addAttribute("knowledgeContentsList", knowledgeContentsList);
+        model.addAttribute("fileList", fileList);
+        model.addAttribute("relateKnowledgeList", relateKnowledgeList);
+        model.addAttribute("relateKnowlgVO", relateKnowlgVO);
+
+        return "/com/wkp/kno/EgovKnowledgeHistory";
     }
 
     /**

@@ -221,9 +221,8 @@
                                     <div class="panel-body">
                                         <ul class="dot_list">
                                         	<c:forEach var="history" items="${knowledgeHistoryList}">
-                                        	<c:url value="/kno/knowledgeDetail.do" var="url">
-                                        		<c:param name="title" value="${history.title}"/>
-                                        		<c:param name="knowledgeNo" value="${history.knowlgNo}"/>
+                                        	<c:url value="/kno/knowledgeHistory.do" var="url">
+                                        		<c:param name="knowlgNo" value="${history.knowlgNo}"/>
                                         	</c:url>
                                             <li><a href="${url}" target="_blank" title="새창열림">${history.displayName}(${history.ou}) <span class="date">${history.registDtm}</span></a>
                                             <%-- <a href="/kno/deleteknowlg.do?title=${history.title}&knowlgNo=${history.knowlgNo}">&nbsp;&nbsp;<i class="remove">x</i></a><span class="sr-only">삭제</span> --%>

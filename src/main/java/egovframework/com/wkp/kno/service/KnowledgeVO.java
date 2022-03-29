@@ -76,6 +76,8 @@ public class KnowledgeVO {
 	private String registerId;
 	
 	private Date registDtm;
+
+	private String registDtmStr;
 	
 	private String updaterId;
 	

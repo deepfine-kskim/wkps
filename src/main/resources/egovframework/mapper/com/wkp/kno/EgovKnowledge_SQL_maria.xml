@@ -554,7 +554,7 @@
 	</insert>
 	
 	<delete id="deleteUserMileage" parameterType="KnowledgeVO">
-	
+
 			DELETE
 			FROM
 				TB_USER_MILEAGE
@@ -576,6 +576,16 @@
 				AND KNOWLG_NO = #{knowlgNo}
 			</where>
 	
+	</delete>
+
+	<delete id="deleteUserMileageByTitle" parameterType="KnowledgeVO">
+		DELETE FROM TB_USER_MILEAGE
+		 WHERE KNOWLG_NO IN (SELECT KNOWLG_NO FROM TB_KNOWLEDGE WHERE DEL_YN = 'N' AND TITLE = #{title})
+	</delete>
+
+	<delete id="deleteOrgMileageByTitle" parameterType="KnowledgeVO">
+		DELETE FROM TB_ORG_MILEAGE
+		 WHERE KNOWLG_NO IN (SELECT KNOWLG_NO FROM TB_KNOWLEDGE WHERE DEL_YN = 'N' AND TITLE = #{title})
 	</delete>
 	
 	<select id="selectUserMileageList" parameterType="UserMileageVO" resultType="UserMileageVO">
@@ -935,18 +945,13 @@
 		 WHERE TITLE = #{title}
 		   AND REGISTER_ID = #{registerId}
 	</delete>
-	
+
+	<!-- 지식 삭제 -->
 	<delete id="deleteKnowledge" parameterType="KnowledgeVO">
-			
-			UPDATE 
-				TB_KNOWLEDGE
-			SET
-				DEL_YN = 'Y'
-			<where>
-				AND KNOWLG_NO = #{knowlgNo}
-				AND TITLE = #{title}
-			</where>
-			
+		/* KnowledgeDAO.deleteKnowledge */
+		UPDATE TB_KNOWLEDGE
+   		   SET DEL_YN = 'Y'
+ 		 WHERE KNOWLG_NO IN (SELECT KNOWLG_NO FROM TB_KNOWLEDGE WHERE DEL_YN = 'N' AND TITLE = #{title})
 	</delete>
 	
 	<update id="updateInqCnt" parameterType="KnowledgeVO"> 

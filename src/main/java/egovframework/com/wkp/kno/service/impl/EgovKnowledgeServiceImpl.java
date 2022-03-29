@@ -246,6 +246,16 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
+	public int deleteUserMileageByTitle(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.deleteUserMileageByTitle(knowledgeVO);
+	}
+
+	@Override
+	public int deleteOrgMileageByTitle(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.deleteOrgMileageByTitle(knowledgeVO);
+	}
+
+	@Override
 	public ListWithPageNavigation<UserMileageVO> selectUserMileageList(UserMileageVO userMileageVO) {
 		
         ListWithPageNavigation<UserMileageVO> result = new ListWithPageNavigation<>();

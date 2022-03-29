@@ -81,8 +81,12 @@ public interface EgovKnowledgeService {
 	public int insertOrgMileage(KnowledgeVO knowledgeVO);
 	
 	public int deleteUserMileage(KnowledgeVO knowledgeVO);
-	
+
 	public int deleteOrgMileage(KnowledgeVO knowledgeVO);
+
+	public int deleteUserMileageByTitle(KnowledgeVO knowledgeVO);
+
+	public int deleteOrgMileageByTitle(KnowledgeVO knowledgeVO);
 	
 	public ListWithPageNavigation<UserMileageVO> selectUserMileageList(UserMileageVO userMileageVO);
 	

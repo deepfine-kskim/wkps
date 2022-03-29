@@ -1280,16 +1280,11 @@ public class EgovKnowledgeController {
      * @return Redirect
      */
     @RequestMapping(value = "/deleteKnowledge.do")
-    public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
-	
-    	try {
-    		knowledgeService.deleteKnowledge(knowledgeVO);
-    		knowledgeService.deleteUserMileage(knowledgeVO);
-    		knowledgeService.deleteOrgMileage(knowledgeVO);
-    	} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-    	
+    public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO) {
+        // 지식 삭제 시, 모든 지식 이력도 함께 삭제
+        knowledgeService.deleteUserMileageByTitle(knowledgeVO);
+        knowledgeService.deleteOrgMileageByTitle(knowledgeVO);
+        knowledgeService.deleteKnowledge(knowledgeVO);
     	return "redirect:/kno/knowledgeList.do";
     }
 

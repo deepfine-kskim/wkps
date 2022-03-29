@@ -176,6 +176,14 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int deleteOrgMileage(KnowledgeVO knowledgeVO) {
 		return delete("KnowledgeDAO.deleteOrgMileage", knowledgeVO);
 	}
+
+	public int deleteUserMileageByTitle(KnowledgeVO knowledgeVO) {
+		return delete("KnowledgeDAO.deleteUserMileageByTitle", knowledgeVO);
+	}
+
+	public int deleteOrgMileageByTitle(KnowledgeVO knowledgeVO) {
+		return delete("KnowledgeDAO.deleteOrgMileageByTitle", knowledgeVO);
+	}
 	
 	public List<UserMileageVO> selectUserMileageList(UserMileageVO userMileageVO) {
 		return selectList("KnowledgeDAO.selectUserMileageList", userMileageVO);

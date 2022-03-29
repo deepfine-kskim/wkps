@@ -213,24 +213,27 @@
                                     </div>
                                 </div>
                                 </c:if>
-                                <c:if test="${not empty knowledgeHistoryList}">
-                                <div class="panel panel-primary panel-sm wiki_panel">
-                                    <div class="panel-heading">
-                                        <strong class="panel-title">지식이력</strong>
-                                    </div>
-                                    <div class="panel-body">
-                                        <ul class="dot_list">
-                                        	<c:forEach var="history" items="${knowledgeHistoryList}">
-                                        	<c:url value="/kno/knowledgeHistory.do" var="url">
-                                        		<c:param name="knowlgNo" value="${history.knowlgNo}"/>
-                                        	</c:url>
-                                            <li><a href="${url}" target="_blank" title="새창열림">${history.displayName}(${history.ou}) <span class="date">${history.registDtm}</span></a>
-                                            <%-- <a href="/kno/deleteknowlg.do?title=${history.title}&knowlgNo=${history.knowlgNo}">&nbsp;&nbsp;<i class="remove">x</i></a><span class="sr-only">삭제</span> --%>
-                                            </li>
-                                            </c:forEach>
-                                        </ul>
-                                    </div>
-                                </div>
+                                <%-- 개인별 지식탭의 지식이거나, 등록된 지식의 부서가 본인이 속한 부서와 동일한 경우에만 지식 이력 노출 --%>
+                                <c:if test="${knowledgeDetail.knowlgMapType eq 'PERSONAL' or loginVO.ouCode eq knowledgeDetail.ouCode}">
+                                    <c:if test="${not empty knowledgeHistoryList}">
+                                        <div class="panel panel-primary panel-sm wiki_panel">
+                                            <div class="panel-heading">
+                                                <strong class="panel-title">지식이력</strong>
+                                            </div>
+                                            <div class="panel-body">
+                                                <ul class="dot_list">
+                                                    <c:forEach var="history" items="${knowledgeHistoryList}">
+                                                    <c:url value="/kno/knowledgeHistory.do" var="url">
+                                                        <c:param name="knowlgNo" value="${history.knowlgNo}"/>
+                                                    </c:url>
+                                                    <li><a href="${url}" target="_blank" title="새창열림">${history.displayName}(${history.ou}) <span class="date">${history.registDtm}</span></a>
+                                                    <%-- <a href="/kno/deleteknowlg.do?title=${history.title}&knowlgNo=${history.knowlgNo}">&nbsp;&nbsp;<i class="remove">x</i></a><span class="sr-only">삭제</span> --%>
+                                                    </li>
+                                                    </c:forEach>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </c:if>
                             </div>
                         </div>

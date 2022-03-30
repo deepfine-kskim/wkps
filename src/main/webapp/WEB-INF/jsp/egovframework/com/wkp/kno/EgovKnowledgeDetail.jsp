@@ -263,7 +263,8 @@
                                         <a href="javascript:;" class="btn btn-black flow-action-modifyRequest">수정요청</a>
                                     </c:otherwise>
                                 </c:choose>
-                                <c:if test="${user.roleCd eq 'ROLE_ADMIN'}">
+                                <%-- 해당 지식의 담당자이거나, 시스템 관리자만 삭제할 수 있도록 설정 --%>
+                                <c:if test="${user.sid eq knowledgeDetail.ownerId or user.roleCd eq 'ROLE_ADMIN'}">
                                     <a href="javascript:;" id="delBtn" class="btn btn-danger">삭제</a>
                                 </c:if>
                             </div>

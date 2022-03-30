@@ -488,8 +488,8 @@ i, address {font-style:normal;}
 }
 .navbar-header {float:left;margin-top:10px;}
 .navbar-header h1 {margin:3px 0;}
-.navbar-brand > img {display:inline;}
-.navbar-brand {float:none;margin-left:0 !important;display:block;line-height:45px;height:45px;padding:0;}
+.navbar-brand > img {display:inline; height: 100%;}/* [D] 220329 - height: 100%; */
+.navbar-brand {float:none;margin-left:0 !important;display:block;line-height:50px;height:50px;padding:0;}/* [D] 220329 - line-height: 50px; height50px; */
     /* GNB */
     .navbar-default {background-color:#fff;border:none;border-radius:0;margin-bottom:0;border-bottom:1px solid #eee;}
     .navbar-default .caret {opacity:.6;filter:alpha(opacity=60);}

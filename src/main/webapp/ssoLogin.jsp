@@ -44,7 +44,7 @@
         <div class="container">
             <div class="navbar-header">
                 <h1 class="logo_top">
-                    <a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo.png" alt="로고" /></a>
+					<a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo01.png" alt="로고" /></a><!-- [D] 220329 - img 경로 변경 -->
                 </h1>
             </div>
         </div>

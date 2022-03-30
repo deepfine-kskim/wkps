@@ -16,6 +16,6 @@ public interface EgovOrgService {
 
     public int deleteOrg(OrgVO orgVO);
 
-    public OrgVO selectTopOrg(OrgVO orgVO);
+    public OrgVO selectTopOrgByOuCode(String ouCode);
 		
 }

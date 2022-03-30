@@ -71,8 +71,8 @@
 	</insert>
 
 	<!-- OU_LEVEL 2 부서 조회 -->
-	<select id="selectTopOrg" parameterType="OrgVO" resultType="OrgVO">
-		/* OrgDAO.selectTopOrg */
+	<select id="selectTopOrgByOuCode" parameterType="string" resultType="OrgVO">
+		/* OrgDAO.selectTopOrgByOuCode */
 		WITH RECURSIVE TB_ORG_CTE AS (
 			SELECT OU
 			     , OU_CODE

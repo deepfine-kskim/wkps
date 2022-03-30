@@ -47,7 +47,7 @@ public class EgovOrgServiceImpl extends EgovAbstractServiceImpl implements EgovO
 	}
 
 	@Override
-	public OrgVO selectTopOrg(OrgVO orgVO) {
-		return orgDAO.selectTopOrg(orgVO);
+	public OrgVO selectTopOrgByOuCode(String ouCode) {
+		return orgDAO.selectTopOrgByOuCode(ouCode);
 	}
 }

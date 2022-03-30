@@ -273,10 +273,8 @@ public class EgovKnowledgeController {
 
         // 해당 지식의 공개범위가 전체(의회미포함)인 경우
         if ("B".equals(knowledgeDetail.getRlsYn())) {
-            OrgVO orgVO = new OrgVO();
-            orgVO.setOuCode(user.getOuCode());
-            OrgVO TopOrg = orgService.selectTopOrg(orgVO);
-            // 의회사무처 부서 코드 : 6410073
+            // 의회사무처 부서 코드 : 6410073 (임시 하드코딩, 의회사무처 부서 코드 변경 시 해당 값도 변경 필요함)
+            OrgVO TopOrg = orgService.selectTopOrgByOuCode(user.getOuCode());
             if ("6410073".equals(TopOrg.getOuCode())) {
                 redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
                 return "redirect:/kno/knowledgeList.do";
@@ -483,13 +481,18 @@ public class EgovKnowledgeController {
             	knowlgMap.setKnowlgMapNo(0);
                 model.addAttribute("knowlgMap", knowlgMap);
             }
+
+            // 의회사무처 부서 코드 : 6410073 (임시 하드코딩, 의회사무처 부서 코드 변경 시 해당 값도 변경 필요함)
+            OrgVO TopOrg = orgService.selectTopOrgByOuCode(userVO.getOuCode());
+            boolean isIgnoreOrg = "6410073".equals(TopOrg.getOuCode());
             
 			model.addAttribute("groupList", groupList);
             model.addAttribute("excellenceUserList", excellenceUserList);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
             model.addAttribute("topList", topList);
             model.addAttribute("knowledgeVO", knowledgeVO);
-            
+            model.addAttribute("isIgnoreOrg", isIgnoreOrg);
+
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -752,7 +755,11 @@ public class EgovKnowledgeController {
                 List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
                 top.setNextDepthList(list);
             });
-            
+
+            // 의회사무처 부서 코드 : 6410073 (임시 하드코딩, 의회사무처 부서 코드 변경 시 해당 값도 변경 필요함)
+            OrgVO TopOrg = orgService.selectTopOrgByOuCode(userVO.getOuCode());
+            boolean isIgnoreOrg = "6410073".equals(TopOrg.getOuCode());
+
             model.addAttribute("knowledgeDetail", knowledgeDetail);
             model.addAttribute("relateKnowlgVo", relateKnowlgVo);
             model.addAttribute("knowledgeContentsList", knowledgeContentsList);
@@ -765,6 +772,8 @@ public class EgovKnowledgeController {
             model.addAttribute("groupList", groupList);
             model.addAttribute("targetVOList", targetVOList);
             model.addAttribute("isOwner", true);
+            model.addAttribute("isIgnoreOrg", isIgnoreOrg);
+
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}

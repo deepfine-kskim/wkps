@@ -17,6 +17,7 @@
 	
 	<!-- DataSource -->
 	<alias name="dataSource" alias="egov.dataSource" />
+	<alias name="dataSource2" alias="egov.dataSource2" />
 	
 	<!-- MySQL -->
 	<beans profile="mysql">  
@@ -71,15 +72,21 @@
 
 	<!-- MariaDB -->
 	<beans profile="maria">
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="${Globals.maria.DriverClassName}"/>
-		<property name="url" value="${Globals.maria.Url}" />
-		<property name="username" value="${Globals.maria.UserName}"/>
-		<property name="password" value="#{egovEnvCryptoService.getPassword()}"/>
-		<!-- <property name="validationQuery" value="select 1 from dual" />
-		<property name="testWhileIdle" value="true" />
-		<property name="timeBetweenEvictionRunsMillis" value="60000" /> -->
-	</bean>
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${Globals.maria.DriverClassName}"/>
+			<property name="url" value="${Globals.maria.Url}" />
+			<property name="username" value="${Globals.maria.UserName}"/>
+			<property name="password" value="#{egovEnvCryptoService.getPassword()}"/>
+			<!-- <property name="validationQuery" value="select 1 from dual" />
+			<property name="testWhileIdle" value="true" />
+			<property name="timeBetweenEvictionRunsMillis" value="60000" /> -->
+		</bean>
+		<bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${Globals.maria.DriverClassName2}"/>
+			<property name="url" value="${Globals.maria.Url2}" />
+			<property name="username" value="${Globals.maria.UserName2}"/>
+			<property name="password" value="${Globals.maria.Password2}"/>
+		</bean>
 	</beans>
 
 	<!-- PostresSQL -->

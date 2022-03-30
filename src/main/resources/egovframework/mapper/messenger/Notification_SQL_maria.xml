@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessengerDAO">
+
+	<!-- 알림 전송 -->
+	<insert id="insert" parameterType="MessengerVO">
+		/* MessengerDAO.insert */
+		INSERT INTO ULT_MSG_ALERT (SYS_NAME, SND_USER, RECV_ID, DOC_TITLE, DOC_DESC, DOC_URL, INPUT_DATE)
+		VALUES
+		     ( #{sysName}
+			 , #{sndUser}
+			 , #{recvId}
+			 , #{docTitle}
+			 , #{docDesc}
+			 , #{docUrl}
+			 , #{inputDate}
+			 )
+	</insert>
+
+	<!-- 알림 전송 (test) -->
+	<insert id="insert2" parameterType="MessengerVO">
+		/* MessengerDAO.insert2 */
+		INSERT INTO ULT_MSG_ALERT (SYS_NAME, SND_USER, RECV_ID, DOC_TITLE, DOC_DESC, DOC_URL, INPUT_DATE)
+		VALUES
+			( 'GG_DIGITAL_WKPS'
+			, '홍길동'
+			, 'ultari01'
+			, '테스트 제목'
+			, '테스트 내용'
+			, 'http://105.0.1.229'
+			, DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+			)
+	</insert>
+
+</mapper>

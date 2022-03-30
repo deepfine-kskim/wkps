@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import egovframework.com.cmm.service.MessengerService;
+import egovframework.com.cmm.service.MessengerVO;
 import egovframework.com.wkp.cmm.service.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,9 @@ public class EgovUserManageController {
 
 	@Resource(name = "scheduler")
 	private Scheduler scheduler;
+
+	@Resource(name = "messengerService")
+	private MessengerService messengerService;
 
 	/**
 	 * 사용자 관리 > 우수 사용자 > 목록 조회
@@ -313,6 +318,16 @@ public class EgovUserManageController {
 	@RequestMapping("/tempTopMileageOrg.do")
 	public String tempTopMileageOrg() {
 		scheduler.topMileageOrg();
+		return "success";
+	}
+
+	@ResponseBody
+	@RequestMapping("/tempMessenger.do")
+	public String tempMessenger() {
+		LOGGER.info("tempMessenger start");
+		MessengerVO messengerVO = new MessengerVO();
+		messengerService.insert(messengerVO);
+		LOGGER.info("tempMessenger end");
 		return "success";
 	}
 }

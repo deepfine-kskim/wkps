@@ -22,5 +22,21 @@
 	<bean id="egov.sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="egov.sqlSession"/>
 	</bean>
+
+	<!-- Mybatis setup for Mybatis Database Layer -->
+	<bean id="egov.sqlSession2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="egov.dataSource2"/>
+		<property name="configLocation" value="classpath:/egovframework/mapper/config/messenger-mapper-config.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath:/egovframework/mapper/messenger/**/*_${Globals.DbType}.xml</value>
+			</array>
+		</property>
+	</bean>
+
+	<!-- Mybatis Session Template -->
+	<bean id="egov.sqlSessionTemplate2" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="egov.sqlSession2"/>
+	</bean>
 	
 </beans>

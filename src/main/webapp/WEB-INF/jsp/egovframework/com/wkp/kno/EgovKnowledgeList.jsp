@@ -317,7 +317,7 @@
 														</p>
 													</td>
 													<td>${knowledge.registDtm }</td>
-													<td>${knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ou}</td>
+													<td>${knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
 												</tr>
 											</c:forEach>
                                     	</c:when>

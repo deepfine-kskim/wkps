@@ -136,4 +136,6 @@ public class KnowledgeVO {
 	private String requestContent;
 
 	private long requestNo;
+
+	private String ownerOu;
 }

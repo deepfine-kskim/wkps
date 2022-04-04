@@ -12,4 +12,12 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('.no-enter-submit').each(function (i, item) {
+        $(item).off('keydown').on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+            }
+        });
+    });
 });

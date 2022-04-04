@@ -14,6 +14,7 @@
 		            <ul class="nav nav-tabs" role="tablist">
 		                <li role="presentation" class="active"><a href="/qna/faqList.do">FAQ</a></li>
 		                <li role="presentation"><a href="/qna/list.do">Q&A</a></li>
+                        <li role="presentation"><a href="/qna/improvementList.do">홈페이지 개선요청</a></li>
 		            </ul>
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" <c:if test="${faqType eq 'KNOWLEDGE'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="KNOWLEDGE">지식백과</a></li>

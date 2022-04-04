@@ -8,11 +8,7 @@ import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.enums.QuestionType;
 import egovframework.com.utl.wed.enums.YnEnum;
-import egovframework.com.wkp.qna.service.FaqVO;
-import egovframework.com.wkp.qna.service.AnswerRecommendVO;
-import egovframework.com.wkp.qna.service.AnswerVO;
-import egovframework.com.wkp.qna.service.EgovQnaService;
-import egovframework.com.wkp.qna.service.QuestionVO;
+import egovframework.com.wkp.qna.service.*;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.mnu.service.EgovMenuService;
 import org.slf4j.Logger;
@@ -20,17 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +40,9 @@ public class EgovQnaController {
 
     @Resource(name = "qnaService")
     EgovQnaService qnaService;
+
+    @Resource(name = "improvementService")
+    ImprovementService improvementService;
 
     @Resource(name = "EgovFileMngService")
     private EgovFileMngService fileMngService;
@@ -400,44 +395,114 @@ public class EgovQnaController {
         mav.addObject("mine", vo.isMine());
         return mav;
     }
-    
+
 	@RequestMapping("/faqList.do")
-	public String faqList(@ModelAttribute("faqVO") FaqVO faqVO, Model model) { 
+	public String faqList(@ModelAttribute("faqVO") FaqVO faqVO, Model model) {
 
 		try {
 			if(faqVO.getPage() == null || faqVO.getPage() == 0) {
 				faqVO.setPage(1);
 			}
-			
+
 			if(faqVO.getFaqType() == null) {
 				faqVO.setFaqType("KNOWLEDGE");
 			}
-			
+
 			ListWithPageNavigation<FaqVO> faqList = qnaService.selectFaqList(faqVO);
-			
+
 			for(int i = 0; i < faqList.getList().size(); i++) {
 				FileVO fileVO = new FileVO();
 				fileVO.setAtchFileNo(faqList.getList().get(i).getAtchFileNo());
 				List<FileVO> result = fileMngService.selectFileInfs(fileVO);
 				faqList.getList().get(i).setFileList(result);
 			}
-			
+
             int seqNum = faqList.getPageNavigation().getTotalItemCount() - (faqVO.getPage() - 1) * faqList.getPageNavigation().getItemCountPerPage();
-            
+
 			model.addAttribute("faqList", faqList);
             model.addAttribute("seqNum", seqNum);
             model.addAttribute("faqType", faqVO.getFaqType());
-            
+
             if(faqVO.getSearchText() != null && !faqVO.getSearchText().equals("")){
             	model.addAttribute("searchText", faqVO.getSearchText());
             }
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
+
 		return "/com/wkp/qna/EgovFaqList";
-		
+
 	}
 
+    @RequestMapping("/improvementList.do")
+    public String improvementList(@ModelAttribute("improvementVO") ImprovementVO param, Model model) {
+        ListWithPageNavigation<ImprovementVO> listWithPageNavigation = improvementService.listWithPageNavigation(param);
+        model.addAttribute("resultList", listWithPageNavigation.getList());
+        model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+        return "/com/wkp/qna/EgovImprovementList";
+    }
+
+    @RequestMapping("/improvementDetail.do")
+    public String improvementDetail(@ModelAttribute("improvementVO") ImprovementVO param, Model model) {
+        ImprovementVO result = improvementService.detail(param);
+        List<ImprovementVO> answerList = improvementService.findAnswer(param);
+        ImprovementVO prev = improvementService.detailPrev(param);
+        ImprovementVO next = improvementService.detailNext(param);
+        model.addAttribute("result", result);
+        model.addAttribute("answerList", answerList);
+        model.addAttribute("prev", prev);
+        model.addAttribute("next", next);
+        return "/com/wkp/qna/EgovImprovementDetail";
+    }
+
+    @RequestMapping("/improvementForm.do")
+    public String improvementForm(@ModelAttribute("improvementVO") ImprovementVO param, Model model) {
+        ImprovementVO result = new ImprovementVO();
+
+        if (param.getImprovementNo() != null) {
+            result = improvementService.detail(param);
+        }
+        // TODO::파일 첨부 기능 추가 필요
+
+        model.addAttribute("result", result);
+
+        return "/com/wkp/qna/EgovImprovementForm";
+    }
+
+    @ResponseBody
+    @RequestMapping("/improvementSave.do")
+    public ImprovementVO improvementSave(@ModelAttribute ImprovementVO param, MultipartFile file) {
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+        if (param.getImprovementNo() == null) {
+            param.setRegisterId(userVO.getSid());
+            improvementService.insert(param);
+        } else {
+            param.setUpdaterId(userVO.getSid());
+            improvementService.update(param);
+        }
+        // TODO::파일 첨부 기능 추가 필요
+
+        return param;
+    }
+
+    @ResponseBody
+    @RequestMapping("/improvementRemove.do")
+    public ImprovementVO improvementRemove(@RequestBody ImprovementVO param) {
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        param.setUpdaterId(userVO.getSid());
+        improvementService.delete(param);
+        return param;
+    }
+
+    @ResponseBody
+    @RequestMapping("/improvementAnswer.do")
+    public ImprovementVO improvementAnswer(@ModelAttribute ImprovementVO param, MultipartFile file) {
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        param.setRegisterId(userVO.getSid());
+        improvementService.insertAnswer(param);
+        // TODO::파일 첨부 기능 추가 필요
+        return param;
+    }
 
 }

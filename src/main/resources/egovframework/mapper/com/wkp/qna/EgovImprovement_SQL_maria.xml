@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ImprovementDAO">
+
+    <!-- 검색 조건 -->
+    <sql id="commonWhere">
+        <if test="searchText != null and searchText != ''">
+            <choose>
+                <when test="searchType == 'TITLE'">
+                    AND TITLE LIKE '%' #{searchText} '%'
+                </when>
+                <when test="searchType == 'DISPLAY_NAME'">
+                    AND DISPLAY_NAME LIKE '%' #{searchText} '%'
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+    <!-- 개선요청 목록 조회 -->
+    <select id="selectList" parameterType="ImprovementVO" resultType="ImprovementVO">
+        /* ImprovementDAO.selectList */
+        SELECT *
+          FROM (SELECT TB_IMPROVEMENT.IMPROVEMENT_NO
+                     , TB_IMPROVEMENT.TITLE
+                     , TB_IMPROVEMENT.CONT
+                     , TB_IMPROVEMENT.REGISTER_ID
+                     , TB_IMPROVEMENT.REGIST_DTM
+                     , TB_IMPROVEMENT.UPDATER_ID
+                     , TB_IMPROVEMENT.UPD_DTM
+                     , TB_IMPROVEMENT.DEL_YN
+                     , TB_IMPROVEMENT.ATCH_FILE_NO
+                     , TB_USER.DISPLAY_NAME
+                  FROM TB_IMPROVEMENT
+                  LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT.REGISTER_ID) AS TB_IMPROVEMENT
+         WHERE DEL_YN = 'N'
+        <include refid="commonWhere"/>
+         ORDER BY REGIST_DTM DESC
+         LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+    </select>
+
+    <!-- 개선요청 건수 조회 -->
+    <select id="count" parameterType="ImprovementVO" resultType="int">
+        /* ImprovementDAO.count */
+        SELECT count(IMPROVEMENT_NO)
+          FROM (SELECT TB_IMPROVEMENT.IMPROVEMENT_NO
+                     , TB_IMPROVEMENT.TITLE
+                     , TB_IMPROVEMENT.CONT
+                     , TB_IMPROVEMENT.REGISTER_ID
+                     , TB_IMPROVEMENT.REGIST_DTM
+                     , TB_IMPROVEMENT.UPDATER_ID
+                     , TB_IMPROVEMENT.UPD_DTM
+                     , TB_IMPROVEMENT.DEL_YN
+                     , TB_IMPROVEMENT.ATCH_FILE_NO
+                     , TB_USER.DISPLAY_NAME
+                  FROM TB_IMPROVEMENT
+                  LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT.REGISTER_ID) AS TB_IMPROVEMENT
+         WHERE DEL_YN = 'N'
+        <include refid="commonWhere"/>
+    </select>
+
+    <!-- 개선요청 상세 조회 -->
+    <select id="selectOne" parameterType="ImprovementVO" resultType="ImprovementVO">
+        /* ImprovementDAO.selectOne */
+        SELECT TB_IMPROVEMENT.IMPROVEMENT_NO
+             , TB_IMPROVEMENT.TITLE
+             , TB_IMPROVEMENT.CONT
+             , TB_IMPROVEMENT.REGISTER_ID
+             , TB_IMPROVEMENT.REGIST_DTM
+             , TB_IMPROVEMENT.UPDATER_ID
+             , TB_IMPROVEMENT.UPD_DTM
+             , TB_IMPROVEMENT.DEL_YN
+             , TB_IMPROVEMENT.ATCH_FILE_NO
+             , TB_USER.DISPLAY_NAME
+          FROM TB_IMPROVEMENT
+          LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT.REGISTER_ID
+         WHERE TB_IMPROVEMENT.DEL_YN = 'N'
+           AND TB_IMPROVEMENT.IMPROVEMENT_NO = #{improvementNo}
+    </select>
+
+    <!-- 개선요청 등록 -->
+    <insert id="insert" parameterType="ImprovementVO">
+        /* ImprovementDAO.insert */
+        INSERT INTO TB_IMPROVEMENT (TITLE, CONT, REGISTER_ID, REGIST_DTM, DEL_YN, ATCH_FILE_NO)
+        VALUES
+             ( #{title}
+             , #{cont}
+             , #{registerId}
+             , now()
+             , 'N'
+             , #{atchFileNo}
+             )
+    </insert>
+
+    <!-- 개선요청 수정 -->
+    <update id="update" parameterType="ImprovementVO">
+        /* ImprovementDAO.update */
+        UPDATE TB_IMPROVEMENT
+           SET TITLE = #{title}
+             , CONT = #{cont}
+             , UPDATER_ID = #{updaterId}
+             , UPD_DTM = now()
+             , ATCH_FILE_NO = #{atchFileNo}
+         WHERE IMPROVEMENT_NO = #{improvementNo}
+    </update>
+
+    <!-- 개선요청 삭제 -->
+    <update id="delete" parameterType="ImprovementVO">
+        /* ImprovementDAO.delete */
+        UPDATE TB_IMPROVEMENT
+           SET DEL_YN = 'Y'
+             , UPDATER_ID = #{updaterId}
+             , UPD_DTM = now()
+         WHERE IMPROVEMENT_NO = #{improvementNo}
+    </update>
+
+    <!-- 개선요청 답변 조회 -->
+    <select id="selectListAnswer" parameterType="ImprovementVO" resultType="ImprovementVO">
+        /* ImprovementDAO.selectListAnswer */
+        SELECT TB_IMPROVEMENT_ANSWER.IMPROVEMENT_ANSWER_NO
+             , TB_IMPROVEMENT_ANSWER.IMPROVEMENT_NO
+             , TB_IMPROVEMENT_ANSWER.CONT
+             , TB_IMPROVEMENT_ANSWER.REGISTER_ID
+             , TB_IMPROVEMENT_ANSWER.REGIST_DTM
+             , TB_IMPROVEMENT_ANSWER.UPDATER_ID
+             , TB_IMPROVEMENT_ANSWER.UPD_DTM
+             , TB_IMPROVEMENT_ANSWER.DEL_YN
+             , TB_IMPROVEMENT_ANSWER.ATCH_FILE_NO
+             , TB_USER.DISPLAY_NAME
+          FROM TB_IMPROVEMENT_ANSWER
+          LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT_ANSWER.REGISTER_ID
+         WHERE TB_IMPROVEMENT_ANSWER.DEL_YN = 'N'
+           AND TB_IMPROVEMENT_ANSWER.IMPROVEMENT_NO = #{improvementNo}
+    </select>
+
+    <!-- 개선요청 답변 등록 -->
+    <insert id="insertAnswer" parameterType="ImprovementVO">
+        /* ImprovementDAO.insertAnswer */
+        INSERT INTO TB_IMPROVEMENT_ANSWER (IMPROVEMENT_NO, CONT, REGISTER_ID, REGIST_DTM, DEL_YN, ATCH_FILE_NO)
+        VALUES
+             ( #{improvementNo}
+             , #{cont}
+             , #{registerId}
+             , now()
+             , 'N'
+             , #{atchFileNo}
+             )
+    </insert>
+
+    <!-- 개선요청 답변 수정 -->
+    <update id="updateAnswer" parameterType="ImprovementVO">
+        /* ImprovementDAO.updateAnswer */
+        UPDATE TB_IMPROVEMENT_ANSWER
+           SET CONT = #{cont}
+             , UPDATER_ID = #{updaterId}
+             , UPD_DTM = now()
+             , ATCH_FILE_NO = #{atchFileNo}
+         WHERE IMPROVEMENT_ANSWER_NO = #{improvementAnswerNo}
+    </update>
+
+    <!-- 개선요청 답변 삭제 -->
+    <update id="deleteAnswer" parameterType="ImprovementVO">
+        /* ImprovementDAO.deleteAnswer */
+        UPDATE TB_IMPROVEMENT_ANSWER
+           SET DEL_YN = 'Y'
+         WHERE IMPROVEMENT_ANSWER_NO = #{improvementAnswerNo}
+    </update>
+
+    <!-- 이전 개선요청 조회 -->
+    <select id="selectOnePrev" parameterType="ImprovementVO" resultType="ImprovementVO">
+        /* ImprovementDAO.selectOnePrev */
+        SELECT TB_IMPROVEMENT.IMPROVEMENT_NO
+             , TB_IMPROVEMENT.TITLE
+             , TB_IMPROVEMENT.CONT
+             , TB_IMPROVEMENT.REGISTER_ID
+             , TB_IMPROVEMENT.REGIST_DTM
+             , TB_IMPROVEMENT.UPDATER_ID
+             , TB_IMPROVEMENT.UPD_DTM
+             , TB_IMPROVEMENT.DEL_YN
+             , TB_IMPROVEMENT.ATCH_FILE_NO
+             , TB_USER.DISPLAY_NAME
+          FROM TB_IMPROVEMENT
+          LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT.REGISTER_ID
+         WHERE TB_IMPROVEMENT.DEL_YN = 'N'
+           AND TB_IMPROVEMENT.IMPROVEMENT_NO > #{improvementNo}
+         ORDER BY TB_IMPROVEMENT.REGIST_DTM
+         LIMIT 1
+    </select>
+
+    <!-- 다음 개선요청 조회 -->
+    <select id="selectOneNext" parameterType="ImprovementVO" resultType="ImprovementVO">
+        /* ImprovementDAO.selectOneNext */
+        SELECT TB_IMPROVEMENT.IMPROVEMENT_NO
+             , TB_IMPROVEMENT.TITLE
+             , TB_IMPROVEMENT.CONT
+             , TB_IMPROVEMENT.REGISTER_ID
+             , TB_IMPROVEMENT.REGIST_DTM
+             , TB_IMPROVEMENT.UPDATER_ID
+             , TB_IMPROVEMENT.UPD_DTM
+             , TB_IMPROVEMENT.DEL_YN
+             , TB_IMPROVEMENT.ATCH_FILE_NO
+             , TB_USER.DISPLAY_NAME
+          FROM TB_IMPROVEMENT
+          LEFT OUTER JOIN TB_USER ON TB_USER.SID = TB_IMPROVEMENT.REGISTER_ID
+         WHERE TB_IMPROVEMENT.DEL_YN = 'N'
+           AND TB_IMPROVEMENT.IMPROVEMENT_NO <![CDATA[<]]> #{improvementNo}
+         ORDER BY TB_IMPROVEMENT.REGIST_DTM DESC
+         LIMIT 1
+    </select>
+
+</mapper>

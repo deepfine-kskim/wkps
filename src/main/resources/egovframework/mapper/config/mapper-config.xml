@@ -2,63 +2,64 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-	<!--Mybatis 설정 -->
-	<settings>
-		<!-- 전통적인 데이터베이스 컬럼명 형태인 A_COLUMN을 CamelCase형태의 자바 프로퍼티명 형태인 aColumn으로 자동으로 매핑하도록 함 -->
-		<setting name="mapUnderscoreToCamelCase" value="true"></setting>
-		<!--  파라미터에 Null 값이 있을 경우 에러 처리 -->
-		<setting name="jdbcTypeForNull" value="VARCHAR"></setting>
-	</settings>
-	
-	<!-- Type Aliases 설정-->
-	<typeAliases>
-	    <typeAlias alias="CalendarVO"			type="egovframework.com.wkp.cal.service.CalendarVO" />
-	    <typeAlias alias="CommunityVO"			type="egovframework.com.wkp.cmu.service.CommunityVO" />
-	    <typeAlias alias="CommunityEventVO"			type="egovframework.com.wkp.cmu.service.CommunityEventVO" />
-	    <typeAlias alias="CommunityNoticeVO"			type="egovframework.com.wkp.cmu.service.CommunityNoticeVO" />
-	    <typeAlias alias="CommunityFreeboardVO"			type="egovframework.com.wkp.cmu.service.CommunityFreeboardVO" />
-	    <typeAlias alias="CommunityMemberVO"			type="egovframework.com.wkp.cmu.service.CommunityMemberVO" />
-	    <typeAlias alias="CommunityNotificationsVO"			type="egovframework.com.wkp.cmu.service.CommunityNotificationsVO" />
-	    <typeAlias alias="AtchFileVO"			type="egovframework.com.wkp.cmu.service.AtchFileVO" />
-	    <typeAlias alias="CommunityCommentVO"			type="egovframework.com.wkp.cmu.service.CommunityCommentVO" />
-	    <typeAlias alias="CommunityBannerVO"			type="egovframework.mgt.wkp.cmu.service.CommunityBannerVO" />
-	    
-		<typeAlias alias="egovMap" 					type="egovframework.rte.psl.dataaccess.util.EgovMap" />
-		<typeAlias alias="FileVO"					type="egovframework.com.cmm.service.FileVO" />
-		<typeAlias alias="ComDefaultCodeVO" 		type="egovframework.com.cmm.ComDefaultCodeVO" />
-		<typeAlias alias="comDefaultVO"				type="egovframework.com.cmm.ComDefaultVO" />
-		<typeAlias alias="MenuVO"					type="egovframework.mgt.wkp.mnu.service.MenuVO" />
-		<typeAlias alias="KnowledgeMapVO"			type="egovframework.com.wkp.kno.service.KnowledgeMapVO" />
-		<typeAlias alias="KnowledgeVO"				type="egovframework.com.wkp.kno.service.KnowledgeVO" />
-		<typeAlias alias="RelateKnowlgVO"				type="egovframework.com.wkp.kno.service.RelateKnowlgVO" />
-		<typeAlias alias="KnowledgeContentsVO"		type="egovframework.com.wkp.kno.service.KnowledgeContentsVO" />
-		<typeAlias alias="UserMileageVO"			type="egovframework.com.wkp.kno.service.UserMileageVO" />
-		<typeAlias alias="OrgMileageVO"				type="egovframework.com.wkp.kno.service.OrgMileageVO" />
-		<typeAlias alias="ErrorStatementVO"			type="egovframework.com.wkp.kno.service.ErrorStatementVO" />
-		<typeAlias alias="QuestionVO"				type="egovframework.com.wkp.qna.service.QuestionVO" />
-		<typeAlias alias="AnswerVO"					type="egovframework.com.wkp.qna.service.AnswerVO" />
-		<typeAlias alias="AnswerRecommendVO"		type="egovframework.com.wkp.qna.service.AnswerRecommendVO" />
-		<typeAlias alias="SurveyVO"					type="egovframework.com.wkp.srv.service.SurveyVO" />
-		<typeAlias alias="SurveyQuestionVO"			type="egovframework.com.wkp.srv.service.SurveyQuestionVO" />
-		<typeAlias alias="SurveyExampleVO"			type="egovframework.com.wkp.srv.service.SurveyExampleVO" />
-		<typeAlias alias="SurveyAnswerVO"			type="egovframework.com.wkp.srv.service.SurveyAnswerVO" />
-		<typeAlias alias="SurveyStatisticsDTO"		type="egovframework.com.wkp.srv.service.SurveyStatisticsDTO" />
-		<typeAlias alias="SurveyExcelDTO"			type="egovframework.com.wkp.srv.service.SurveyExcelDTO" />
-		<typeAlias alias="NoticeVO"					type="egovframework.com.wkp.bbs.service.NoticeVO" />
-		<typeAlias alias="FaqVO"					type="egovframework.com.wkp.qna.service.FaqVO" />
-		<typeAlias alias="UserVO"					type="egovframework.com.wkp.usr.service.UserVO" />
-		<typeAlias alias="OrgVO"					type="egovframework.com.wkp.usr.service.OrgVO" />
-		<typeAlias alias="TargetVO"					type="egovframework.com.wkp.cmm.service.TargetVO" />
-		<typeAlias alias="ExcellenceUserVO"			type="egovframework.com.wkp.cmm.service.ExcellenceUserVO" />
-		<typeAlias alias="ExcellenceOrgVO"			type="egovframework.com.wkp.cmm.service.ExcellenceOrgVO" />
-		<typeAlias alias="RecommendVO"				type="egovframework.com.wkp.cmm.service.RecommendVO" />
-		<typeAlias alias="PersonalizeVO"			type="egovframework.com.wkp.cmm.service.PersonalizeVO" />
-		<typeAlias alias="LogVO"					type="egovframework.mgt.wkp.log.service.LogVO" />
-		<typeAlias alias="GroupVO"					type="egovframework.com.wkp.cmm.service.GroupVO" />
-		<typeAlias alias="RequestVO"				type="egovframework.com.wkp.bbs.service.RequestVO" />
-		<typeAlias alias="StaticsConnectVO"			type="egovframework.mgt.wkp.sta.service.StaticsConnectVO" />
-		<typeAlias alias="StaticsQnaVO"				type="egovframework.mgt.wkp.sta.service.StaticsQnaVO" />
-		<typeAlias alias="StaticsKnowledgeVO"		type="egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO" />				
-	</typeAliases>
-    
+    <!--Mybatis 설정 -->
+    <settings>
+        <!-- 전통적인 데이터베이스 컬럼명 형태인 A_COLUMN을 CamelCase형태의 자바 프로퍼티명 형태인 aColumn으로 자동으로 매핑하도록 함 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+        <!--  파라미터에 Null 값이 있을 경우 에러 처리 -->
+        <setting name="jdbcTypeForNull" value="VARCHAR"></setting>
+    </settings>
+
+    <!-- Type Aliases 설정-->
+    <typeAliases>
+        <typeAlias alias="CalendarVO" type="egovframework.com.wkp.cal.service.CalendarVO"/>
+        <typeAlias alias="CommunityVO" type="egovframework.com.wkp.cmu.service.CommunityVO"/>
+        <typeAlias alias="CommunityEventVO" type="egovframework.com.wkp.cmu.service.CommunityEventVO"/>
+        <typeAlias alias="CommunityNoticeVO" type="egovframework.com.wkp.cmu.service.CommunityNoticeVO"/>
+        <typeAlias alias="CommunityFreeboardVO" type="egovframework.com.wkp.cmu.service.CommunityFreeboardVO"/>
+        <typeAlias alias="CommunityMemberVO" type="egovframework.com.wkp.cmu.service.CommunityMemberVO"/>
+        <typeAlias alias="CommunityNotificationsVO" type="egovframework.com.wkp.cmu.service.CommunityNotificationsVO"/>
+        <typeAlias alias="AtchFileVO" type="egovframework.com.wkp.cmu.service.AtchFileVO"/>
+        <typeAlias alias="CommunityCommentVO" type="egovframework.com.wkp.cmu.service.CommunityCommentVO"/>
+        <typeAlias alias="CommunityBannerVO" type="egovframework.mgt.wkp.cmu.service.CommunityBannerVO"/>
+
+        <typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+        <typeAlias alias="FileVO" type="egovframework.com.cmm.service.FileVO"/>
+        <typeAlias alias="ComDefaultCodeVO" type="egovframework.com.cmm.ComDefaultCodeVO"/>
+        <typeAlias alias="comDefaultVO" type="egovframework.com.cmm.ComDefaultVO"/>
+        <typeAlias alias="MenuVO" type="egovframework.mgt.wkp.mnu.service.MenuVO"/>
+        <typeAlias alias="KnowledgeMapVO" type="egovframework.com.wkp.kno.service.KnowledgeMapVO"/>
+        <typeAlias alias="KnowledgeVO" type="egovframework.com.wkp.kno.service.KnowledgeVO"/>
+        <typeAlias alias="RelateKnowlgVO" type="egovframework.com.wkp.kno.service.RelateKnowlgVO"/>
+        <typeAlias alias="KnowledgeContentsVO" type="egovframework.com.wkp.kno.service.KnowledgeContentsVO"/>
+        <typeAlias alias="UserMileageVO" type="egovframework.com.wkp.kno.service.UserMileageVO"/>
+        <typeAlias alias="OrgMileageVO" type="egovframework.com.wkp.kno.service.OrgMileageVO"/>
+        <typeAlias alias="ErrorStatementVO" type="egovframework.com.wkp.kno.service.ErrorStatementVO"/>
+        <typeAlias alias="QuestionVO" type="egovframework.com.wkp.qna.service.QuestionVO"/>
+        <typeAlias alias="AnswerVO" type="egovframework.com.wkp.qna.service.AnswerVO"/>
+        <typeAlias alias="AnswerRecommendVO" type="egovframework.com.wkp.qna.service.AnswerRecommendVO"/>
+        <typeAlias alias="SurveyVO" type="egovframework.com.wkp.srv.service.SurveyVO"/>
+        <typeAlias alias="SurveyQuestionVO" type="egovframework.com.wkp.srv.service.SurveyQuestionVO"/>
+        <typeAlias alias="SurveyExampleVO" type="egovframework.com.wkp.srv.service.SurveyExampleVO"/>
+        <typeAlias alias="SurveyAnswerVO" type="egovframework.com.wkp.srv.service.SurveyAnswerVO"/>
+        <typeAlias alias="SurveyStatisticsDTO" type="egovframework.com.wkp.srv.service.SurveyStatisticsDTO"/>
+        <typeAlias alias="SurveyExcelDTO" type="egovframework.com.wkp.srv.service.SurveyExcelDTO"/>
+        <typeAlias alias="NoticeVO" type="egovframework.com.wkp.bbs.service.NoticeVO"/>
+        <typeAlias alias="FaqVO" type="egovframework.com.wkp.qna.service.FaqVO"/>
+        <typeAlias alias="UserVO" type="egovframework.com.wkp.usr.service.UserVO"/>
+        <typeAlias alias="OrgVO" type="egovframework.com.wkp.usr.service.OrgVO"/>
+        <typeAlias alias="TargetVO" type="egovframework.com.wkp.cmm.service.TargetVO"/>
+        <typeAlias alias="ExcellenceUserVO" type="egovframework.com.wkp.cmm.service.ExcellenceUserVO"/>
+        <typeAlias alias="ExcellenceOrgVO" type="egovframework.com.wkp.cmm.service.ExcellenceOrgVO"/>
+        <typeAlias alias="RecommendVO" type="egovframework.com.wkp.cmm.service.RecommendVO"/>
+        <typeAlias alias="PersonalizeVO" type="egovframework.com.wkp.cmm.service.PersonalizeVO"/>
+        <typeAlias alias="LogVO" type="egovframework.mgt.wkp.log.service.LogVO"/>
+        <typeAlias alias="GroupVO" type="egovframework.com.wkp.cmm.service.GroupVO"/>
+        <typeAlias alias="RequestVO" type="egovframework.com.wkp.bbs.service.RequestVO"/>
+        <typeAlias alias="StaticsConnectVO" type="egovframework.mgt.wkp.sta.service.StaticsConnectVO"/>
+        <typeAlias alias="StaticsQnaVO" type="egovframework.mgt.wkp.sta.service.StaticsQnaVO"/>
+        <typeAlias alias="StaticsKnowledgeVO" type="egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO"/>
+        <typeAlias alias="ImprovementVO" type="egovframework.com.wkp.qna.service.ImprovementVO"/>
+    </typeAliases>
+
 </configuration>

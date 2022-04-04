@@ -49,9 +49,13 @@
             </div>
             <!-- //brd_view_area -->
             <div class="text-right mb_15 dev-answer-write">
-                <c:set var="isSlctnYn" value="N" />
-                <a href="#answerBox" class="btn btn-primary collapsed" data-toggle="collapse" aria-expanded="false"
-                   aria-controls="answerBox">답변하기</a>
+                <%-- 관리자만 답변 허용, 답변은 1개만 등록 가능 --%>
+                <c:if test="${loginVO.roleCd eq 'ROLE_ADMIN'}">
+                    <c:if test="${fn:length(detail.answerList) eq 0}">
+                        <a href="#answerBox" class="btn btn-primary collapsed" data-toggle="collapse" aria-expanded="false"
+                           aria-controls="answerBox">답변하기</a>
+                    </c:if>
+                </c:if>
             </div>
             <div class="collapse" id="answerBox">
                 <div class="form-horizontal">
@@ -85,17 +89,11 @@
             </div>
             <!-- //answerBox -->
             <!-- 채택 답변에 selection 클래스 추가 -->
-            <c:set var="selection" value="N"/>
             <c:if test="${detail.answerList != null}">
                 <c:forEach var="answerItem" items="${detail.answerList}">
-                    <div class="brd_view_area a_type <c:if test="${answerItem.slctnYn == 'Y'}">selection <c:set var="selection" value="Y"/></c:if>">
+                    <div class="brd_view_area a_type">
                         <div class="view_header">
-                            <strong class="subject"><span class="qna_ico">A</span>
-                                <c:if test="${answerItem.slctnYn == 'Y'}">
-                                    <c:set var="isSlctnYn" value="${answerItem.slctnYn}"/>
-                                    <span class="label label-danger"><i
-                                        class="ti-check"></i> 채택</span></c:if>
-                            </strong>
+                            <strong class="subject"><span class="qna_ico">A</span></strong>
                             <div class="row type0 info_view">
                                 <div class="col-xs-12 col-sm-4">
                                     <span>작성일 : </span><span class="data"><fmt:formatDate
@@ -113,15 +111,7 @@
                         <div class="view_opt_area">
                             <div class="row type5">
 
-                                <div class="col-xs-6">
-                                    <c:if test="${selection == 'N' && loginVO.sid eq detail.registerId}">
-                                        <button type="button" class="btn btn-danger btn-xs dev-selection"
-                                                data-answerno="${answerItem.answerNo}"
-                                                data-questionno="${answerItem.questionNo}"><i
-                                                class="ti-check-box"></i>채택
-                                        </button>
-                                    </c:if>
-                                </div>
+                                <div class="col-xs-6"></div>
 
                                 <div class="col-xs-6 text-right">
                                     <button type="button"
@@ -366,10 +356,6 @@
         });
 
     });
-
-    if('${isSlctnYn}' == 'Y') {
-        $(".dev-answer-write").hide();
-    }
 
     function goPage() {
         var form = $("form[name=searchForm]");

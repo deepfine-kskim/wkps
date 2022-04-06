@@ -131,4 +131,18 @@ public interface EgovKnowledgeService {
     public List<LogVO> selectKnowledgeMapLogList();
 
 	public int deleteBookmark(KnowledgeVO KnowledgeVO);
+
+	public ListWithPageNavigation<KnowledgeVO> selectModificationRequestList(KnowledgeVO knowledgeVO);
+
+	public int selectModificationRequestListCount(KnowledgeVO knowledgeVO);
+
+	public KnowledgeVO selectModificationRequestDetail(KnowledgeVO knowledgeVO);
+
+	public List<KnowledgeContentsVO> selectModificationRequestContentList(KnowledgeVO knowledgeVO);
+
+	public ListWithPageNavigation<KnowledgeVO> selectSucceedList(KnowledgeVO knowledgeVO);
+
+	public int selectSucceedListCount(KnowledgeVO knowledgeVO);
+
+	public int updateOwner(KnowledgeVO knowledgeVO);
 }

@@ -39,8 +39,8 @@
 									<label for="brdSrchStr" class="sr-only">검색어 입력</label>
 									<input type="hidden" name="page" value="<c:out value="${improvementVO.page}"/>">
 									<input type="hidden" name="improvementNo">
-									<input type="text" id="brdSrchStr" name="searchText" class="form-control" placeholder="검색어" value="<c:out value="${improvementVO.searchText}"/>"/>
-									<span class="input-group-btn"><button type="submit" class="btn btn-default">검색</button></span>
+									<input type="text" id="brdSrchStr" name="searchText" class="form-control flow-enter-search" placeholder="검색어" data-search-button="srchBtn" value="<c:out value="${improvementVO.searchText}"/>"/>
+									<span class="input-group-btn"><button type="button" id="srchBtn" class="btn btn-default">검색</button></span>
 								</div>
 							</fieldset>
 	                    </form>
@@ -144,7 +144,10 @@
     $(function () {
         $('.dev-page').on('click', function () {
             const page = $(this).data('page');
-            goPage(page);
+			const form = $('form[name=searchForm]');
+			form.find('input[name=page]').val(page);
+			form.attr('action', '/qna/improvementList.do');
+			form.submit();
         });
 
         $('.dev-detail').on('click', function () {
@@ -154,11 +157,12 @@
             form.attr('action', '/qna/improvementDetail.do');
             form.submit();
         });
-    });
 
-    function goPage(page) {
-        const form = $('form[name=searchForm]');
-        form.find('input[name=page]').val(page);
-        form.submit();
-    }
+		$("#srchBtn").click(function () {
+			const form = $("form[name=searchForm]");
+			form.find("input[name=page]").val(1);
+			form.attr('action', '/qna/improvementList.do');
+			form.submit();
+		});
+    });
 </script>

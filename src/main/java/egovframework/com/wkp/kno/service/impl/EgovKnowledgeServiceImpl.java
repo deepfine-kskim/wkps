@@ -441,4 +441,51 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	public int deleteBookmark(KnowledgeVO KnowledgeVO) {
 		return knowledgeDAO.deleteBookmark(KnowledgeVO);
 	}
+
+	@Override
+	public ListWithPageNavigation<KnowledgeVO> selectModificationRequestList(KnowledgeVO knowledgeVO) {
+		ListWithPageNavigation<KnowledgeVO> result = new ListWithPageNavigation<>();
+		PageNavigation pageNavigation = new PageNavigation(selectModificationRequestListCount(knowledgeVO), knowledgeVO.getPage(), null, null);
+		knowledgeVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+		knowledgeVO.setItemOffset(pageNavigation.getItemCountPerPage() * (knowledgeVO.getPage() - 1));
+		result.setList(knowledgeDAO.selectModificationRequestList(knowledgeVO));
+		result.setPageNavigation(pageNavigation);
+		return result;
+	}
+
+	@Override
+	public int selectModificationRequestListCount(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectModificationRequestListCount(knowledgeVO);
+	}
+
+	@Override
+	public KnowledgeVO selectModificationRequestDetail(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectModificationRequestDetail(knowledgeVO);
+	}
+
+	@Override
+	public List<KnowledgeContentsVO> selectModificationRequestContentList(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectModificationRequestContentList(knowledgeVO);
+	}
+
+	@Override
+	public ListWithPageNavigation<KnowledgeVO> selectSucceedList(KnowledgeVO knowledgeVO) {
+		ListWithPageNavigation<KnowledgeVO> result = new ListWithPageNavigation<>();
+		PageNavigation pageNavigation = new PageNavigation(selectSucceedListCount(knowledgeVO), knowledgeVO.getPage(), null, null);
+		knowledgeVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+		knowledgeVO.setItemOffset(pageNavigation.getItemCountPerPage() * (knowledgeVO.getPage() - 1));
+		result.setList(knowledgeDAO.selectSucceedList(knowledgeVO));
+		result.setPageNavigation(pageNavigation);
+		return result;
+	}
+
+	@Override
+	public int selectSucceedListCount(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectSucceedListCount(knowledgeVO);
+	}
+
+	@Override
+	public int updateOwner(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.updateOwner(knowledgeVO);
+	}
 }

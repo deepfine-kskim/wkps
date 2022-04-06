@@ -139,15 +139,15 @@
             </ul>
             <!-- //이전/다음 -->
             <div class="row brd_foot_btns">
-                <c:if test="${result.registerId eq loginVO.sid}">
-                    <c:if test="${fn:length(answerList) eq 0}">
-                        <div class="col-sm-6">
+                <div class="col-sm-6">
+                    <c:if test="${result.registerId eq loginVO.sid}">
+                        <c:if test="${fn:length(answerList) eq 0}">
                             <a href="/qna/improvementForm.do?improvementNo=${result.improvementNo}"
                                class="btn btn-black dev-update">수정</a>
                             <a href="#" class="btn btn-danger dev-delete">삭제</a>
-                        </div>
+                        </c:if>
                     </c:if>
-                </c:if>
+                </div>
                 <div class="col-sm-6 text-right">
                     <a href="javascript:;" class="btn btn-black dev-page">목록</a>
                 </div>
@@ -195,7 +195,9 @@
         });
 
         $('.dev-page').on('click', function () {
-            goPage();
+            var form = $("form[name=searchForm]");
+            form.attr('action', '/qna/improvementList.do');
+            form.submit();
         });
 
         $(".dev-answer").on("click", function (e) {
@@ -225,10 +227,4 @@
             });
         });
     });
-
-    function goPage() {
-        var form = $("form[name=searchForm]");
-        form.attr('action', '/qna/improvementList.do');
-        form.submit();
-    }
 </script>

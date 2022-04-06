@@ -131,11 +131,15 @@ public class KnowledgeVO {
 	
 	private List<KnowledgeVO> knowledgeList;
 
+	private List<String> titleList;
+
 	private String ownerId;
 
 	private String requestContent;
 
-	private long requestNo;
+	private Long requestNo;
 
 	private String ownerOu;
+
+	private int needSucceed;
 }

@@ -16,16 +16,15 @@ import egovframework.com.cmm.service.FileVO;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
+import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
+import egovframework.com.wkp.qna.service.ImprovementVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -370,4 +369,48 @@ public class EgovMypageController {
 		return "redirect:/myp/mypage.do";
 	}
 
+	@RequestMapping("/modificationList.do")
+	public String modificationList(@ModelAttribute("knowledgeVO") KnowledgeVO param, Model model) {
+		UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		if (param.getPage() == null || param.getPage() == 0) {
+			param.setPage(1);
+		}
+		param.setOwnerId(userVO.getSid());
+		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectModificationRequestList(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/com/wkp/myp/EgovMyModificationList";
+	}
+
+	@RequestMapping("/modificationDetail.do")
+	public String modificationDetail(@ModelAttribute("knowledgeVO") KnowledgeVO param, Model model) {
+		UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		param.setOwnerId(userVO.getSid());
+		KnowledgeVO result = knowledgeService.selectModificationRequestDetail(param);
+		List<KnowledgeContentsVO> contentList = knowledgeService.selectModificationRequestContentList(param);
+		model.addAttribute("result", result);
+		model.addAttribute("contentList", contentList);
+		return "/com/wkp/myp/EgovMyModificationDetail";
+	}
+
+	@RequestMapping("/succeedList.do")
+	public String succeedList(@ModelAttribute("knowledgeVO") KnowledgeVO param, Model model) {
+		UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		if (param.getPage() == null || param.getPage() == 0) {
+			param.setPage(1);
+		}
+		param.setOwnerId(userVO.getSid());
+		param.setOuCode(userVO.getOuCode());
+		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectSucceedList(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/com/wkp/myp/EgovMySucceedList";
+	}
+
+	@ResponseBody
+	@RequestMapping("/succeedSave.do")
+	public KnowledgeVO succeedList(@RequestBody KnowledgeVO param) {
+		knowledgeService.updateOwner(param);
+		return param;
+	}
 }

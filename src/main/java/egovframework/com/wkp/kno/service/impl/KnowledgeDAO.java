@@ -280,4 +280,32 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int deleteBookmark(KnowledgeVO KnowledgeVO) {
 		return delete("KnowledgeDAO.deleteBookmark", KnowledgeVO);
 	}
+
+	public List<KnowledgeVO> selectModificationRequestList(KnowledgeVO knowledgeVO) {
+		return selectList("KnowledgeDAO.selectModificationRequestList", knowledgeVO);
+	}
+
+	public int selectModificationRequestListCount(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.selectModificationRequestListCount", knowledgeVO);
+	}
+
+	public KnowledgeVO selectModificationRequestDetail(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.selectModificationRequestDetail", knowledgeVO);
+	}
+
+	public List<KnowledgeContentsVO> selectModificationRequestContentList(KnowledgeVO knowledgeVO) {
+		return selectList("KnowledgeDAO.selectModificationRequestContentList", knowledgeVO);
+	}
+
+	public List<KnowledgeVO> selectSucceedList(KnowledgeVO knowledgeVO) {
+		return selectList("KnowledgeDAO.selectSucceedList", knowledgeVO);
+	}
+
+	public int selectSucceedListCount(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.selectSucceedListCount", knowledgeVO);
+	}
+
+	public int updateOwner(KnowledgeVO knowledgeVO) {
+		return update("KnowledgeDAO.updateOwner", knowledgeVO);
+	}
 }

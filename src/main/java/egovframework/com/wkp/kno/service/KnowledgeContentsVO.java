@@ -39,5 +39,5 @@ public class KnowledgeContentsVO {
 
 	private String requestContent;
 
-	private long requestNo;
+	private Long requestNo;
 }

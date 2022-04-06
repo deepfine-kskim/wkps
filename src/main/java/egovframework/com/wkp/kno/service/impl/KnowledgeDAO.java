@@ -316,4 +316,8 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int selectApprovalListCount(KnowledgeVO knowledgeVO) {
 		return selectOne("KnowledgeDAO.selectApprovalListCount", knowledgeVO);
 	}
+
+	public int checkDuplication(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.checkDuplication", knowledgeVO);
+	}
 }

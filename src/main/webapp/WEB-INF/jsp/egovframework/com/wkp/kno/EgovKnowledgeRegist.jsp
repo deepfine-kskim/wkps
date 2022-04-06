@@ -811,6 +811,30 @@
 					return false;
 				}	
             } */
+
+            // 이미 등록된 지식인지 확인
+            let isVaild = true;
+            const title = $('#inpSubject').val();
+            $.ajax({
+                url: '/kno/checkDuplication.do',
+                type: 'post',
+                data: JSON.stringify({title: title}),
+                contentType: 'application/json',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data !== 0) {
+                        alert('이미 등록된 지식입니다.')
+                        isVaild = false;
+                    }
+                },
+                error: function () {
+                    alert('처리 중 오류가 발생했습니다.');
+                    isVaild = false;
+                }
+            });
+
+            return isVaild;
 		});
 		
 		$("#previewBtn").click(function(e){

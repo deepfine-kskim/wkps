@@ -149,4 +149,6 @@ public interface EgovKnowledgeService {
 	public ListWithPageNavigation<KnowledgeVO> selectApprovalList(KnowledgeVO knowledgeVO);
 
 	public int selectApprovalListCount(KnowledgeVO knowledgeVO);
+
+	public int checkDuplication(KnowledgeVO knowledgeVO);
 }

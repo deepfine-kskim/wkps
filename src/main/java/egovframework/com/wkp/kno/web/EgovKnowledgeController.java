@@ -41,9 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -2226,6 +2224,12 @@ public class EgovKnowledgeController {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
 	}
+
+    @ResponseBody
+    @RequestMapping(value="/checkDuplication.do")
+    public int checkDuplication(@RequestBody KnowledgeVO knowledgeVO) {
+        return knowledgeService.checkDuplication(knowledgeVO);
+    }
 
     // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓

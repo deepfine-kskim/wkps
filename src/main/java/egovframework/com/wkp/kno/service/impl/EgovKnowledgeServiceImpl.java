@@ -504,4 +504,9 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	public int selectApprovalListCount(KnowledgeVO knowledgeVO) {
 		return knowledgeDAO.selectApprovalListCount(knowledgeVO);
 	}
+
+	@Override
+	public int checkDuplication(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.checkDuplication(knowledgeVO);
+	}
 }

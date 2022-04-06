@@ -1540,4 +1540,11 @@
 		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
 		   AND TB_KNOWLEDGE.OU_CODE IN (SELECT TB_ORG_CTE.OU_CODE FROM TB_ORG_CTE)
     </select>
+
+	<select id="checkDuplication" parameterType="KnowledgeVO" resultType="int">
+		SELECT count(TB_KNOWLEDGE.KNOWLG_NO)
+		  FROM TB_KNOWLEDGE
+		 WHERE TITLE = #{title}
+		   AND DEL_YN = 'N'
+	</select>
 </mapper>

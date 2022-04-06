@@ -400,7 +400,6 @@ public class EgovMypageController {
 			param.setPage(1);
 		}
 		param.setOwnerId(userVO.getSid());
-		param.setOuCode(userVO.getOuCode());
 		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectSucceedList(param);
 		model.addAttribute("resultList", listWithPageNavigation.getList());
 		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());

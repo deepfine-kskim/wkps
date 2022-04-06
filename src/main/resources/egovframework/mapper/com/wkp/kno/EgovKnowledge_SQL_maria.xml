@@ -133,6 +133,7 @@
 		             , TB_KNOWLEDGE.DOWNLOAD_CNT
 		             , TB_KNOWLEDGE.REGISTER_ID
 		             , TB_KNOWLEDGE.REGIST_DTM
+				     , DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d %T') AS REGIST_DTM_STR
 		             , TB_KNOWLEDGE.UPDATER_ID
 		             , TB_KNOWLEDGE.UPD_DTM
 		             , TB_KNOWLEDGE.DEL_YN
@@ -186,6 +187,7 @@
 		     , TB_KNOWLEDGE.DOWNLOAD_CNT
 		     , TB_KNOWLEDGE.REGISTER_ID
 		     , TB_KNOWLEDGE.REGIST_DTM
+			 , DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d %T') AS REGIST_DTM_STR
 		     , TB_KNOWLEDGE.UPDATER_ID
 		     , TB_KNOWLEDGE.UPD_DTM
 		     , TB_KNOWLEDGE.DEL_YN
@@ -226,6 +228,7 @@
 		             , TB_KNOWLEDGE.DOWNLOAD_CNT
 		             , TB_KNOWLEDGE.REGISTER_ID
 		             , TB_KNOWLEDGE.REGIST_DTM
+					 , DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d %T') AS REGIST_DTM_STR
 		             , TB_KNOWLEDGE.UPDATER_ID
 		             , TB_KNOWLEDGE.UPD_DTM
 		             , TB_KNOWLEDGE.DEL_YN
@@ -1315,9 +1318,9 @@
 		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
 		             , ROW_NUMBER() OVER(PARTITION BY TB_KNOWLEDGE.TITLE ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC) AS ROW_NUM
           			 , (SELECT OU FROM TB_ORG WHERE OU_CODE = TB_KNOWLEDGE.OU_CODE) AS OWNER_OU
-          			 , CASE WHEN TB_KNOWLEDGE.OU_CODE <![CDATA[<>]]> #{ouCode} THEN 1 ELSE 0 END AS NEED_SUCCEED
+				     , CASE WHEN TB_KNOWLEDGE.OU_CODE <![CDATA[<>]]> TB_USER.OU_CODE THEN 1 ELSE 0 END AS NEED_SUCCEED
 		          FROM TB_KNOWLEDGE
-		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
+		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.OWNER_ID
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
@@ -1331,7 +1334,9 @@
                    AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
-		   AND OWNER_ID = #{ownerId}
+		<if test="ownerId != null and ownerId != ''">
+			AND OWNER_ID = #{ownerId}
+		</if>
 		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
 		 ORDER BY NEED_SUCCEED DESC, KNOWLG_NO DESC
 		 LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
@@ -1370,7 +1375,86 @@
 		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
 		             , ROW_NUMBER() OVER(PARTITION BY TB_KNOWLEDGE.TITLE ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC) AS ROW_NUM
 					 , (SELECT OU FROM TB_ORG WHERE OU_CODE = TB_KNOWLEDGE.OU_CODE) AS OWNER_OU
-					 , CASE WHEN TB_KNOWLEDGE.OU_CODE <![CDATA[<>]]> #{ouCode} THEN 1 ELSE 0 END AS NEED_SUCCEED
+					 , CASE WHEN TB_KNOWLEDGE.OU_CODE <![CDATA[<>]]> TB_USER.OU_CODE THEN 1 ELSE 0 END AS NEED_SUCCEED
+		          FROM TB_KNOWLEDGE
+				  LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.OWNER_ID
+		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
+		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		                          , TB_KNOWLEDGE_MAP.DEL_YN
+		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
+		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
+		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
+		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
+                 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+		<include refid="selectListCondition" />
+		   AND ROW_NUM = 1
+		<if test="ownerId != null and ownerId != ''">
+			AND OWNER_ID = #{ownerId}
+		</if>
+		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
+    </select>
+
+	<update id="updateOwner" parameterType="KnowledgeVO">
+		UPDATE TB_KNOWLEDGE
+		   SET OWNER_ID = #{ownerId}
+		 WHERE DEL_YN = 'N'
+		   AND TITLE IN
+		<foreach collection="titleList" item="title" open="(" close=")" separator=",">
+			#{title}
+		</foreach>
+	</update>
+
+	<select id="selectApprovalList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
+		WITH RECURSIVE TB_ORG_CTE AS (
+			SELECT OU
+				 , OU_CODE
+				 , PARENT_OU_CODE
+				 , 1 AS LEVEL
+			  FROM TB_ORG
+			 WHERE OU_CODE = #{ouCode}
+			 UNION ALL
+			SELECT TB_ORG.OU
+				 , TB_ORG.OU_CODE
+				 , TB_ORG.PARENT_OU_CODE
+				 , 1 + LEVEL AS LEVEL
+			  FROM TB_ORG
+			 INNER JOIN TB_ORG_CTE ON TB_ORG_CTE.OU_CODE = TB_ORG.PARENT_OU_CODE
+		)
+		SELECT *
+          FROM (SELECT TB_KNOWLEDGE.KNOWLG_NO
+		             , TB_KNOWLEDGE.TITLE
+		             , TB_KNOWLEDGE.KNOWLG_MAP_NO
+		             , TB_KNOWLEDGE.KNOWLG_MAP_TYPE
+		             , TB_KNOWLEDGE.SUMMRY
+		             , TB_KNOWLEDGE.APRV_YN
+		             , TB_KNOWLEDGE.APRV_CONT
+		             , TB_KNOWLEDGE.APPROVER_ID
+		             , TB_KNOWLEDGE.RLS_YN
+		             , TB_KNOWLEDGE.REAL_NM_YN
+		             , TB_KNOWLEDGE.COPERTN_WRITNG_YN
+		             , TB_KNOWLEDGE.OU_CODE
+		             , TB_KNOWLEDGE.INQ_CNT
+		             , TB_KNOWLEDGE.CMMNTY_NO
+		             , TB_KNOWLEDGE.DOWNLOAD_CNT
+		             , TB_KNOWLEDGE.REGISTER_ID
+		             , TB_KNOWLEDGE.REGIST_DTM
+					 , DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d %T') AS REGIST_DTM_STR
+		             , TB_KNOWLEDGE.UPDATER_ID
+		             , TB_KNOWLEDGE.UPD_DTM
+		             , TB_KNOWLEDGE.DEL_YN
+		             , TB_KNOWLEDGE.ATCH_FILE_NO
+		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
+		             , TB_KNOWLEDGE.TARGET_NO
+		             , TB_KNOWLEDGE.KEYWORD
+		             , TB_KNOWLEDGE.OWNER_ID
+		             , TB_USER.DISPLAY_NAME
+		             , TB_USER.OU
+                     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
+		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+          			 , (SELECT OU FROM TB_ORG WHERE OU_CODE = TB_KNOWLEDGE.OU_CODE) AS OWNER_OU
 		          FROM TB_KNOWLEDGE
 		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
@@ -1385,18 +1469,75 @@
                    AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
                    AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
-		   AND ROW_NUM = 1
-		   AND OWNER_ID = #{ownerId}
 		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
-    </select>
+		   AND TB_KNOWLEDGE.OU_CODE IN (SELECT TB_ORG_CTE.OU_CODE FROM TB_ORG_CTE)
+		 ORDER BY KNOWLG_NO DESC
+		 LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+ 	</select>
 
-	<update id="updateOwner" parameterType="KnowledgeVO">
-		UPDATE TB_KNOWLEDGE
-		   SET OWNER_ID = #{ownerId}
-		 WHERE DEL_YN = 'N'
-		   AND TITLE IN
-		<foreach collection="titleList" item="title" open="(" close=")" separator=",">
-			#{title}
-		</foreach>
-	</update>
+	<select id="selectApprovalListCount" parameterType="KnowledgeVO" resultType="int">
+		WITH RECURSIVE TB_ORG_CTE AS (
+			SELECT OU
+				 , OU_CODE
+				 , PARENT_OU_CODE
+				 , 1 AS LEVEL
+			  FROM TB_ORG
+			 WHERE OU_CODE = #{ouCode}
+			 UNION ALL
+			SELECT TB_ORG.OU
+				 , TB_ORG.OU_CODE
+				 , TB_ORG.PARENT_OU_CODE
+				 , 1 + LEVEL AS LEVEL
+			  FROM TB_ORG
+			 INNER JOIN TB_ORG_CTE ON TB_ORG_CTE.OU_CODE = TB_ORG.PARENT_OU_CODE
+		)
+		SELECT COUNT(1)
+          FROM (SELECT TB_KNOWLEDGE.KNOWLG_NO
+		             , TB_KNOWLEDGE.TITLE
+		             , TB_KNOWLEDGE.KNOWLG_MAP_NO
+		             , TB_KNOWLEDGE.KNOWLG_MAP_TYPE
+		             , TB_KNOWLEDGE.SUMMRY
+		             , TB_KNOWLEDGE.APRV_YN
+		             , TB_KNOWLEDGE.APRV_CONT
+		             , TB_KNOWLEDGE.APPROVER_ID
+		             , TB_KNOWLEDGE.RLS_YN
+		             , TB_KNOWLEDGE.REAL_NM_YN
+		             , TB_KNOWLEDGE.COPERTN_WRITNG_YN
+		             , TB_KNOWLEDGE.OU_CODE
+		             , TB_KNOWLEDGE.INQ_CNT
+		             , TB_KNOWLEDGE.CMMNTY_NO
+		             , TB_KNOWLEDGE.DOWNLOAD_CNT
+		             , TB_KNOWLEDGE.REGISTER_ID
+		             , TB_KNOWLEDGE.REGIST_DTM
+					 , DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d %T') AS REGIST_DTM_STR
+		             , TB_KNOWLEDGE.UPDATER_ID
+		             , TB_KNOWLEDGE.UPD_DTM
+		             , TB_KNOWLEDGE.DEL_YN
+		             , TB_KNOWLEDGE.ATCH_FILE_NO
+		             , TB_KNOWLEDGE.RELATE_KNOWLG_NO
+		             , TB_KNOWLEDGE.TARGET_NO
+		             , TB_KNOWLEDGE.KEYWORD
+					 , TB_KNOWLEDGE.OWNER_ID
+		             , TB_USER.DISPLAY_NAME
+		             , TB_USER.OU
+                     , TB_KNOWLEDGE_MAP.PARENT_KNOWLG_MAP_NM
+		             , CASE WHEN DATEDIFF(TB_KNOWLEDGE.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+					 , (SELECT OU FROM TB_ORG WHERE OU_CODE = TB_KNOWLEDGE.OU_CODE) AS OWNER_OU
+		          FROM TB_KNOWLEDGE
+		          LEFT JOIN TB_USER ON TB_USER.SID = TB_KNOWLEDGE.REGISTER_ID
+		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
+		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
+		                          , TB_KNOWLEDGE_MAP.DEL_YN
+		                          , TB_KNOWLEDGE_MAP.SHOW_YN
+		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
+		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
+		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
+		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
+                 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
+                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+		<include refid="selectListCondition" />
+		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
+		   AND TB_KNOWLEDGE.OU_CODE IN (SELECT TB_ORG_CTE.OU_CODE FROM TB_ORG_CTE)
+    </select>
 </mapper>

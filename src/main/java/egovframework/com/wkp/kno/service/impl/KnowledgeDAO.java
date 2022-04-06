@@ -308,4 +308,12 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int updateOwner(KnowledgeVO knowledgeVO) {
 		return update("KnowledgeDAO.updateOwner", knowledgeVO);
 	}
+
+	public List<KnowledgeVO> selectApprovalList(KnowledgeVO knowledgeVO) {
+		return selectList("KnowledgeDAO.selectApprovalList", knowledgeVO);
+	}
+
+	public int selectApprovalListCount(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.selectApprovalListCount", knowledgeVO);
+	}
 }

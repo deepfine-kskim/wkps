@@ -61,8 +61,12 @@ var admUi = {
     treeView: function() {
         $.fn.hummingbird.defaults.hoverColorText2 = false;
         $.fn.hummingbird.defaults.hoverColorBg2 = false;
-
+        $.fn.hummingbird.defaults.collapsedSymbol = "ti-plus";
+        $.fn.hummingbird.defaults.expandedSymbol = "ti-minus";
         var chkTreeArea = $('.chk_tree_area');
+        chkTreeArea.mCustomScrollbar({
+            theme: "dark"
+        });
         if (chkTreeArea.length > 0) {
             chkTreeArea.each(function () {
                 var myTree = $(this).find('.treeview');

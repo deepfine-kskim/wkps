@@ -145,4 +145,8 @@ public interface EgovKnowledgeService {
 	public int selectSucceedListCount(KnowledgeVO knowledgeVO);
 
 	public int updateOwner(KnowledgeVO knowledgeVO);
+
+	public ListWithPageNavigation<KnowledgeVO> selectApprovalList(KnowledgeVO knowledgeVO);
+
+	public int selectApprovalListCount(KnowledgeVO knowledgeVO);
 }

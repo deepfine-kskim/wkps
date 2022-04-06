@@ -15,7 +15,7 @@ public class KnowledgeVO {
 	
 	private String sid;
 	
-	private long knowlgNo;
+	private Long knowlgNo;
 	
 	private String title;
 	

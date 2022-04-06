@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import egovframework.com.wkp.kno.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,11 +20,6 @@ import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cmm.service.EgovCommonService;
 import egovframework.com.wkp.cmm.service.PersonalizeVO;
 import egovframework.com.wkp.cmm.service.RecommendVO;
-import egovframework.com.wkp.kno.service.EgovKnowledgeService;
-import egovframework.com.wkp.kno.service.ErrorStatementVO;
-import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
-import egovframework.com.wkp.kno.service.KnowledgeMapVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
 import egovframework.com.wkp.usr.service.EgovOrgService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
@@ -48,73 +44,42 @@ public class EgovKnowledgeManageController {
 	private EgovOrgService orgService;
 	
 	@RequestMapping("/approvalList.do")
-	public String approvalList(@ModelAttribute(name="knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
-		
-		try {
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-            
-            if(!user.getRoleCd().equals("ROLE_ADMIN")) {
-            	knowledgeVO.setApproverId(user.getSid());	
-            }
-            
-			if(knowledgeVO.getPage() == null) {
-				knowledgeVO.setPage(1);
-			}
-			
-			knowledgeVO.setAprvYn("N");
-			ListWithPageNavigation<KnowledgeVO> knowledgeList = knowledgeService.selectKnowledgeList(knowledgeVO);
-			model.addAttribute("knowledgeList", knowledgeList);			
-		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+	public String approvalList(@ModelAttribute(name="knowledgeVO") KnowledgeVO param, Model model) {
+		UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		if (param.getPage() == null || param.getPage() == 0) {
+			param.setPage(1);
 		}
-		
+		param.setOuCode(user.getOuCode());
+		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectApprovalList(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
 		return "/mgt/wkp/knm/EgovApprovalList";
-		
 	}
 	
 	@RequestMapping("/approvalDetail.do")
-	public String approvalDetail(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-			, @RequestParam(value = "knowledgeNo", required = false) Long knowledgeNo
-			, @RequestParam(value = "title", required = false) String title
-			, Model model) {
-		
-		try {
-			if(title != null) {
-				knowledgeVO.setTitle(title);
-			}
-			
-			KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
-			
-			if(knowledgeVO.getPage() != null) {
-				knowledgeDetail.setPage(knowledgeVO.getPage());
-			}
-			
-			if(knowledgeVO.getSearchText() != null) {
-				knowledgeDetail.setSearchText(knowledgeVO.getSearchText());
-			}
-			
-			FileVO fileVO = new FileVO();
-			fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
-			List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
-			
-			List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
-			
-			List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
-			
-			List<KnowledgeVO> knowledgeHistoryList = knowledgeService.selectKnowledgeHistoryList(knowledgeDetail);
-			
-			model.addAttribute("knowledgeDetail", knowledgeDetail);
-			model.addAttribute("knowledgeContentsList", knowledgeContentsList);
-			model.addAttribute("relateKnowledgeList", relateKnowledgeList);
-			model.addAttribute("fileList", fileList);
-			model.addAttribute("knowledgeHistoryList", knowledgeHistoryList);
-			
-		} catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
-		
-		return "/mgt/wkp/knm/EgovApprovalDetail"; 
-		
+	public String approvalDetail(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
+		// 지식 상세 정보
+		KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+
+		// 지식 내용
+		List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+
+		// 첨부파일
+		FileVO fileVO = new FileVO();
+		fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
+		List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
+
+		// 관련지식
+		List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
+		List<RelateKnowlgVO> relateKnowlgVO = knowledgeService.selectRelateKnowledgeListDelChk(knowledgeDetail.getRelateKnowlgNo());
+
+		model.addAttribute("knowledgeDetail", knowledgeDetail);
+		model.addAttribute("knowledgeContentsList", knowledgeContentsList);
+		model.addAttribute("fileList", fileList);
+		model.addAttribute("relateKnowledgeList", relateKnowledgeList);
+		model.addAttribute("relateKnowlgVO", relateKnowlgVO);
+
+		return "/mgt/wkp/knm/EgovApprovalDetail";
 	}
 	
 	@RequestMapping("/updateApproval.do")
@@ -378,4 +343,21 @@ public class EgovKnowledgeManageController {
 		return knowledgeMapVO;
 	}
 
+	@RequestMapping("/succeedList.do")
+	public String succeedList(@ModelAttribute("knowledgeVO") KnowledgeVO param, Model model) {
+		if (param.getPage() == null || param.getPage() == 0) {
+			param.setPage(1);
+		}
+		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectSucceedList(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/knm/EgovSucceedList";
+	}
+
+	@ResponseBody
+	@RequestMapping("/succeedSave.do")
+	public KnowledgeVO succeedList(@RequestBody KnowledgeVO param) {
+		knowledgeService.updateOwner(param);
+		return param;
+	}
 }

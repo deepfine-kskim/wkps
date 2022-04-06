@@ -488,4 +488,20 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	public int updateOwner(KnowledgeVO knowledgeVO) {
 		return knowledgeDAO.updateOwner(knowledgeVO);
 	}
+
+	@Override
+	public ListWithPageNavigation<KnowledgeVO> selectApprovalList(KnowledgeVO knowledgeVO) {
+		ListWithPageNavigation<KnowledgeVO> result = new ListWithPageNavigation<>();
+		PageNavigation pageNavigation = new PageNavigation(selectApprovalListCount(knowledgeVO), knowledgeVO.getPage(), null, null);
+		knowledgeVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+		knowledgeVO.setItemOffset(pageNavigation.getItemCountPerPage() * (knowledgeVO.getPage() - 1));
+		result.setList(knowledgeDAO.selectApprovalList(knowledgeVO));
+		result.setPageNavigation(pageNavigation);
+		return result;
+	}
+
+	@Override
+	public int selectApprovalListCount(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectApprovalListCount(knowledgeVO);
+	}
 }

@@ -48,9 +48,10 @@
 							<!-- <li class="sub_menu <c:if test="${url == '/adm/requestManagerList.do' }">active</c:if>"><a href="/adm/requestManagerList.do">부서 지식관리자 관리</a></li> -->
 						</ul>
 					</li>
-					<li class="menu <c:if test="${url == '/adm/approvalList.do' || url == '/adm/approvalDetail.do' || url == '/adm/recommendList.do' || url == '/adm/personalizeList.do' || url == '/adm/knowledgeMapList.do' || url == '/adm/errorList.do' || url == '/adm/errorDetail.do' }">active</c:if>"><a href="/adm/recommendList.do">지식 관리</a>
+					<li class="menu <c:if test="${url == '/adm/approvalList.do' || url == '/adm/approvalDetail.do' || url == '/adm/recommendList.do' || url == '/adm/personalizeList.do' || url == '/adm/knowledgeMapList.do' || url == '/adm/errorList.do' || url == '/adm/errorDetail.do' || url == '/adm/succeedList.do' }">active</c:if>"><a href="/adm/approvalList.do">지식 관리</a>
 						<ul class="sub_menu_list">
-							<!-- <li class="sub_menu <c:if test="${url == '/adm/approvalList.do' || url == '/adm/approvalDetail.do'}">active</c:if>"><a href="/adm/approvalList.do">지식 승인 관리</a></li> -->
+							<li class="sub_menu <c:if test="${url == '/adm/approvalList.do' || url == '/adm/approvalDetail.do'}">active</c:if>"><a href="/adm/approvalList.do">지식 등록 현황</a></li>
+							<li class="sub_menu <c:if test="${url == '/adm/succeedList.do'}">active</c:if>"><a href="/adm/succeedList.do">지식 승계 관리</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/recommendList.do' }">active</c:if>"><a href="/adm/recommendList.do">추천 지식 관리</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/personalizeList.do' }">active</c:if>"><a href="/adm/personalizeList.do">맞춤 지식 관리</a></li>
 			                <%--<li class="sub_menu <c:if test="${url == '/adm/errorList.do' || url == '/adm/errorDetail.do' }">active</c:if>"><a href="/adm/errorList.do">오류 신고</a></li>--%>
@@ -95,6 +96,7 @@
 <script src="/js/egovframework/mgt/wkp/bootstrap.min.js"></script>
 <script src="/js/egovframework/mgt/wkp/bootstrap-datetimepicker.min.js"></script>
 <script src="/js/egovframework/mgt/wkp/hummingbird-treeview-1.3.js"></script>
+<script src="/js/egovframework/mgt/wkp/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="/js/egovframework/mgt/wkp/adm.js"></script>
 <script src="/js/deepfine.common.js"></script>
 </body>

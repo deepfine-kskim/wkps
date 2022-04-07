@@ -3,6 +3,7 @@ package egovframework.mgt.wkp.sta.service.impl;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.comm.PageNavigation;
 import egovframework.com.wkp.kno.service.KnowledgeVO;
+import egovframework.com.wkp.qna.service.ImprovementVO;
 import egovframework.mgt.wkp.sta.service.EgovStaticsService;
 import egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO;
 import egovframework.mgt.wkp.sta.service.StaticsConnectVO;
@@ -199,10 +200,90 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
 
         return result;    
 	}
-	
+
 	@Override
 	public int selectInterestsListCount() {
 		return staticsDAO.selectInterestsListCount();
 	}
-	
+
+    @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectViewStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectViewStaticsCount(param), param.getPage(), null, null);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectViewStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectViewStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectViewStaticsCount(param);
+    }
+
+    @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectRecommendStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectRecommendStaticsCount(param), param.getPage(), null, null);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectRecommendStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectRecommendStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectRecommendStaticsCount(param);
+    }
+
+    @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectUserStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectUserStaticsCount(param), param.getPage(), null, null);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectUserStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectUserStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectUserStaticsCount(param);
+    }
+
+    @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectRecommendUserStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectRecommendUserStaticsCount(param), param.getPage(), null, null);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectRecommendUserStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectRecommendUserStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectRecommendUserStaticsCount(param);
+    }
+
+    @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectOrgStaticsCount(param), param.getPage(), null, null);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectOrgStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectOrgStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectOrgStaticsCount(param);
+    }
+
 }

@@ -21,6 +21,8 @@ package egovframework.mgt.wkp.sta.service;
 
 import lombok.Data;
 
+import java.sql.Date;
+
 @Data
 public class StaticsKnowledgeVO {
 
@@ -34,4 +36,25 @@ public class StaticsKnowledgeVO {
     private Integer year;    
     private Integer month;
 
+    private Integer page = 1;
+    private Integer itemCountPerPage = 10;
+    private Integer itemOffset = 0;
+
+    private String title;
+    private Long inqCnt;
+    private Long recCnt;
+    private Long regCnt;
+    private Long reportCnt;
+    private Long referenceCnt;
+    private Long personalCnt;
+    private Date registDtm;
+    private String ou;
+    private String ownerName;
+    private String ownerOu;
+    private String displayName;
+
+    private String startDate;
+    private String endDate;
+
+    private String searchType;
 }

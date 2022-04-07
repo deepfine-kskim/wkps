@@ -6,7 +6,7 @@
     <div class="cont_header">
         <div class="row">
             <div class="col-xs-6">
-                <h2 class="page_title">지식 등록 현황</h2>
+                <h2 class="page_title">부서 지식 현황</h2>
             </div>
             <div class="col-xs-6 text-right">
                 <p class="msg"><strong class="text-primary">${loginVO.displayName }</strong>님! 반갑습니다.</p>
@@ -19,7 +19,7 @@
         <ol class="breadcrumb">
             <li><a href="#"><i class="glyphicon glyphicon-home"></i> HOME</a></li>
             <li>지식 관리</li>
-            <li class="active">지식 등록 현황</li>
+            <li class="active">부서 지식 현황</li>
         </ol>
         <div id="contents">
         <!-- 총게시물, 게시물 검색 -->

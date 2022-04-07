@@ -35,5 +35,25 @@ public interface EgovStaticsService {
     public ListWithPageNavigation<KnowledgeVO> selectInterestsList(KnowledgeVO knowledgeVO);
     
     public int selectInterestsListCount();
-    
+
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectViewStatics(StaticsKnowledgeVO param);
+
+    public int selectViewStaticsCount(StaticsKnowledgeVO param);
+
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectRecommendStatics(StaticsKnowledgeVO param);
+
+    public int selectRecommendStaticsCount(StaticsKnowledgeVO param);
+
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectUserStatics(StaticsKnowledgeVO param);
+
+    public int selectUserStaticsCount(StaticsKnowledgeVO param);
+
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectRecommendUserStatics(StaticsKnowledgeVO param);
+
+    public int selectRecommendUserStaticsCount(StaticsKnowledgeVO param);
+
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param);
+
+    public int selectOrgStaticsCount(StaticsKnowledgeVO param);
+
 }

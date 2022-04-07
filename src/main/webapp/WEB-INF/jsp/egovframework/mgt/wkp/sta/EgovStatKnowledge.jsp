@@ -2,12 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
         <div class="cont_wrap">
             <div class="cont_header">
                 <div class="row">
                     <div class="col-xs-6">
-                        <h2 class="page_title">지식 등록 통계</h2>
+                        <h2 class="page_title">지식 통계</h2>
                     </div>
                     <div class="col-xs-6 text-right">
                         <p class="msg"><strong class="text-primary">${loginVO.displayName }</strong>님! 반갑습니다.</p>
@@ -20,14 +19,23 @@
             	<ol class="breadcrumb">
                     <li><a href="#"><i class="glyphicon glyphicon-home"></i> HOME</a></li>
                     <li>통계</li>
-                    <li class="active">지식 등록 통계</li>
+                    <li class="active">지식 통계</li>
                 </ol>
                 <div id="contents">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="/adm/statKnowledge.do">지식 등록 통계</a></li>
+                        <li role="presentation"><a href="/adm/statViewKnowledge.do">최다 조회 지식</a></li>
+                        <li role="presentation"><a href="/adm/statRecommendKnowledge.do">최다 추천 지식</a></li>
+                        <li role="presentation"><a href="/adm/statUserKnowledge.do">최다 게시자</a></li>
+                        <li role="presentation"><a href="/adm/statRecommendUserKnowledge.do">최다 추천자</a></li>
+                        <li role="presentation"><a href="/adm/statOrgKnowledge.do">최다 등록부서</a></li>
+                    </ul>
                     <div class="brd_top">
                         <div class="row type0">
                              <div class="col-xs-12">
                                  <div class="well mb_0">
                                  <form class="form-inline bbs_srch_frm" name="searchForm">
+                                     <input type="hidden" name="statType" value="${statType}">
                                     <fieldset>
                                         <legend class="sr-only">게시글 검색</legend>
                                         <div class="form-group date_select radio_tab_cont active">
@@ -138,5 +146,11 @@
             form.submit();
         });
 
+        $('.dev-type').on('click', function () {
+            const statType = $(this).data('type');
+            const form = $("form[name=searchForm]");
+            form.find("input[name=statType]").val(statType);
+            form.submit();
+        });
     });
 </script>

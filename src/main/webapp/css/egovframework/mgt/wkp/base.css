@@ -176,7 +176,7 @@ a.btn-xs,.btn-group-xs > a.btn{line-height:1.2222222!important;}
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {color:#fff;border-color:#0051a3 !important;background-color:#0051a3;}
 
 .form-control {border-radius:2px;padding:6px 8px;box-shadow:none !important;outline:none !important;}
-.form-control.inp_date {background:#fff url(../img/ico_calenda.png) no-repeat 96% 50%;background-size:18px;padding-right:30px;}
+.form-control.inp_date {background:#fff url(/images/egovframework/mgt/wkp/ico_calenda.png) no-repeat 96% 50%;background-size:18px;padding-right:30px;}
 .form-control.inp_time {background:#fff url(../img/ico_time.png) no-repeat 96% 50%;background-size:18px;padding-right:30px;}
 .form-inline .input-group .form-control, .form-inline .input-group .input-group-addon, .form-inline .input-group .input-group-btn {width:auto;}
 .form-inline .form-control {display: inline-block !important;width: auto!important}

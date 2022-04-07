@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +24,8 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -169,7 +172,7 @@ public class EgovStaticsController {
 
 		return new ModelAndView("downloadView", "downloadData", downloadData);
 	}
-	
+
 	@RequestMapping("/statKnowledge.do")
 	public String statKnowledge(Model model,
 			@RequestParam(value = "year", required = false) Integer year,
@@ -270,4 +273,73 @@ public class EgovStaticsController {
 		return "/mgt/wkp/sta/EgovStatInterestsList";
 	}
 
+	@RequestMapping("/statViewKnowledge.do")
+	public String statViewKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectViewStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatViewKnowledge";
+	}
+
+	@RequestMapping("/statRecommendKnowledge.do")
+	public String statRecommendKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectRecommendStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatRecommendKnowledge";
+	}
+
+	@RequestMapping("/statUserKnowledge.do")
+	public String statUserKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectUserStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatUserKnowledge";
+	}
+
+	@RequestMapping("/statRecommendUserKnowledge.do")
+	public String statRecommendUserKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectRecommendUserStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatRecommendUserKnowledge";
+	}
+
+	@RequestMapping("/statOrgKnowledge.do")
+	public String statOrgKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectOrgStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatOrgKnowledge";
+	}
 }

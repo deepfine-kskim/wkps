@@ -52,4 +52,44 @@ public class StaticsDAO extends EgovComAbstractDAO {
 	public int selectInterestsListCount() {
 		return selectOne("StaticsDAO.selectInterestsListCount");
 	}
+
+	public List<StaticsKnowledgeVO> selectViewStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectViewStatics", param);
+	}
+
+	public int selectViewStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectViewStaticsCount", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectRecommendStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectRecommendStatics", param);
+	}
+
+	public int selectRecommendStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectRecommendStaticsCount", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectUserStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectUserStatics", param);
+	}
+
+	public int selectUserStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectUserStaticsCount", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectRecommendUserStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectRecommendUserStatics", param);
+	}
+
+	public int selectRecommendUserStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectRecommendUserStaticsCount", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectOrgStatics", param);
+	}
+
+	public int selectOrgStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectOrgStaticsCount", param);
+	}
 }

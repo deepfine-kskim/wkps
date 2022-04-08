@@ -93,8 +93,8 @@
                             <tr>
                                 <td>${pageNavigation.totalItemCount - (pageNavigation.totalItemCount - ((pageNavigation.pageIndex - 1) * pageNavigation.itemCountPerPage) - status.count)}</td>
                                 <td><c:out value="${result.title}"/></td>
-                                <td><c:out value="${result.inqCnt}"/></td>
-                                <td><c:out value="${result.recCnt}"/></td>
+                                <td><fmt:formatNumber value="${result.inqCnt}" pattern="#,###"/></td>
+                                <td><fmt:formatNumber value="${result.recCnt}" pattern="#,###"/></td>
                                 <td><c:out value="${result.ou}"/></td>
                                 <td><c:out value="${result.ownerName}"/>(<c:out value="${result.ownerOu}"/>)</td>
                                 <td><c:out value="${result.registDtm}"/></td>

@@ -80,10 +80,10 @@
                             <tr>
                                 <td>${pageNavigation.totalItemCount - (pageNavigation.totalItemCount - ((pageNavigation.pageIndex - 1) * pageNavigation.itemCountPerPage) - status.count)}</td>
                                 <td><c:out value="${result.ou}"/></td>
-                                <td><c:out value="${result.reportCnt}"/></td>
-                                <td><c:out value="${result.referenceCnt}"/></td>
-                                <td><c:out value="${result.personalCnt}"/></td>
-                                <td><c:out value="${result.recCnt}"/></td>
+                                <td><fmt:formatNumber value="${result.reportCnt}" pattern="#,###"/></td>
+                                <td><fmt:formatNumber value="${result.referenceCnt}" pattern="#,###"/></td>
+                                <td><fmt:formatNumber value="${result.personalCnt}" pattern="#,###"/></td>
+                                <td><fmt:formatNumber value="${result.recCnt}" pattern="#,###"/></td>
                             </tr>
                         </c:forEach>
                         <c:if test="${fn:length(resultList) eq 0}">

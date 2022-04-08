@@ -1,4 +1,4 @@
-package egovframework.com.wkp.bbs.service;
+package egovframework.com.wkp.req.service;
 
 import java.sql.Date;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class RequestVO {
+public class ReqVO {
 
 	/**
 	 * serialVersionUID
@@ -59,7 +59,7 @@ public class RequestVO {
 	
 	private Boolean isNew;
 	
-	private Integer page;
+	private Integer page = 1;
 	
 	private Integer itemCountPerPage = 10;
 	
@@ -69,6 +69,6 @@ public class RequestVO {
 	
 	private String searchText;
 	
-	private List<RequestVO> requestList;
+	private List<ReqVO> requestList;
 	
 }

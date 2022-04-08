@@ -1,18 +1,16 @@
 package egovframework.com.wkp.bbs.service.impl;
 
-import javax.annotation.Resource;
-
-import egovframework.com.utl.wed.enums.LogSubjectType;
-import egovframework.com.utl.wed.enums.LogType;
-import egovframework.mgt.wkp.log.service.EgovLogService;
-import org.springframework.stereotype.Service;
-
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.comm.PageNavigation;
+import egovframework.com.utl.wed.enums.LogSubjectType;
+import egovframework.com.utl.wed.enums.LogType;
 import egovframework.com.wkp.bbs.service.EgovBbsService;
 import egovframework.com.wkp.bbs.service.NoticeVO;
-import egovframework.com.wkp.bbs.service.RequestVO;
+import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 구현 클래스
@@ -122,71 +120,4 @@ public class EgovBbsServiceImpl extends EgovAbstractServiceImpl implements EgovB
 	public int updateInqCnt(NoticeVO noticeVO) {
 		return bbsDAO.updateInqCnt(noticeVO);
 	}
-
-	@Override
-	public ListWithPageNavigation<RequestVO> selectRequestList(RequestVO requestVO) {
-		
-        ListWithPageNavigation<RequestVO> result = new ListWithPageNavigation<>();
-
-        PageNavigation pageNavigation = new PageNavigation(selectRequestListCount(requestVO), requestVO.getPage(), null, null);
-        requestVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
-        requestVO.setItemOffset(pageNavigation.getItemCountPerPage() * (requestVO.getPage() - 1));
-        result.setList(bbsDAO.selectRequestList(requestVO));
-        result.setPageNavigation(pageNavigation);
-
-		egovLogService.insert(LogType.SELECT_LIST, LogSubjectType.REQUEST, null);
-
-        return result;
-	}
-
-	@Override
-	public int selectRequestListCount(RequestVO requestVO) {
-		return bbsDAO.selectRequestListCount(requestVO);
-	}
-	
-	@Override
-	public int selectRequestListCountByMine(RequestVO requestVO) {
-		return bbsDAO.selectRequestListCountByMine(requestVO);
-	}
-
-	@Override
-	public RequestVO selectRequestDetail(RequestVO requestVO) {
-		return bbsDAO.selectRequestDetail(requestVO);
-	}
-
-	@Override
-	public RequestVO selectRequestPre(RequestVO requestVO) {
-		return bbsDAO.selectRequestPre(requestVO);
-	}
-
-	@Override
-	public RequestVO selectRequestNext(RequestVO requestVO) {
-		return bbsDAO.selectRequestNext(requestVO);
-	}
-
-	@Override
-	public int insertRequest(RequestVO requestVO) {
-		return bbsDAO.insertRequest(requestVO);
-	}
-
-	@Override
-	public int updateRequest(RequestVO requestVO) {
-		return bbsDAO.updateRequest(requestVO);
-	}
-
-	@Override
-	public int deleteRequest(RequestVO requestVO) {
-		return bbsDAO.deleteRequest(requestVO);
-	}
-
-	@Override
-	public int updateRequestInqCnt(RequestVO requestVO) {
-		return bbsDAO.updateRequestInqCnt(requestVO);
-	}
-
-	@Override
-	public int updateRequestAnswer(RequestVO requestVO) {
-		return bbsDAO.updateRequestAnswer(requestVO);
-	}
-
 }

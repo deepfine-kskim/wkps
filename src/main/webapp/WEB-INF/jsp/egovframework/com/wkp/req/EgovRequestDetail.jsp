@@ -71,7 +71,7 @@
 		            </c:if>
 		            <div class="collapse" id="answerBox">
 		                <div class="form-horizontal">
-		                	<form:form id="answerForm" action="/req/updateRequestAnswer.do" modelAttribute="requestVO">
+		                	<form:form id="answerForm" action="/req/updateRequestAnswer.do" modelAttribute="reqVO">
 		                	<form:hidden path="requstNo"/>
 		                    <div class="well frm_well">
 		                    	<div class="form-group">
@@ -132,7 +132,7 @@
             </div>
             <!-- //CONTENTS -->
         </div>
-<form:form name="requestFrm" modelAttribute="requestVO">
+<form:form name="requestFrm" modelAttribute="reqVO">
 	<input type="hidden" name="page" value="${requestDetail.page }">
 	<input type="hidden" name="requstNo" value="0"> 
 	<input type="hidden" name="searchText" value="${requestDetail.searchText }"/>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import egovframework.com.wkp.req.service.ReqService;
 import org.apache.tiles.Attribute;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.preparer.PreparerException;
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.enums.SurveyStateType;
 import egovframework.com.wkp.bbs.service.EgovBbsService;
-import egovframework.com.wkp.bbs.service.RequestVO;
+import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.com.wkp.cmu.service.EgovCommunityService;
 import egovframework.com.wkp.kno.service.EgovKnowledgeService;
 import egovframework.com.wkp.kno.service.ErrorStatementVO;
@@ -41,8 +42,8 @@ public class MenuPreparer implements ViewPreparer {
     @Resource(name = "knowledgeService")
     private EgovKnowledgeService knowledgeService;
     
-	@Resource(name="bbsService")
-	EgovBbsService bbsService;
+	@Resource(name="reqService")
+	ReqService reqService;
 
 	@Override
 	public void execute(Request tilesContext, AttributeContext attributeContext) throws PreparerException {
@@ -72,10 +73,10 @@ public class MenuPreparer implements ViewPreparer {
 			errorStatementVO.setRegisterId(user.getSid());
 			int myErrorCnt = knowledgeService.selectErrorStatementListCount(errorStatementVO);
 			
-			RequestVO requestVO = new RequestVO();
-			requestVO.setAnswerYn("N");
-			requestVO.setRegisterId(user.getSid());
-			int myRequestCnt = bbsService.selectRequestListCountByMine(requestVO);
+			ReqVO reqVO = new ReqVO();
+			reqVO.setAnswerYn("N");
+			reqVO.setRegisterId(user.getSid());
+			int myRequestCnt = reqService.selectRequestListCountByMine(reqVO);
 			
 			attributeContext.putAttribute("menuList", new Attribute(menuList), true);
 			attributeContext.putAttribute("surveyCnt", new Attribute(surveyCnt), true);

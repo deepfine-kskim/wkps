@@ -18,7 +18,7 @@
                                 <p><i class="fa fa-file-text-o" aria-hidden="true"></i> 총 게시물 <span class="text-primary">${requestList.pageNavigation.totalItemCount }</span> / 페이지 <span class="text-black">${requestList.pageNavigation.pageIndex }</span></p>
                             </div>
                             <div class="col-xs-12 col-sm-6 text-right">
-                                <form:form class="form-inline bbs_srch_frm" name="requestFrm" modelAttribute="requestVO">
+                                <form:form class="form-inline bbs_srch_frm" name="requestFrm" modelAttribute="reqVO">
                                     <input type="hidden" name="page" value="${requestList.pageNavigation.pageIndex }">
                                     <input type="hidden" name="requstNo" value="0">
                                     <fieldset>

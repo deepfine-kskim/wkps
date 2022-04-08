@@ -21,26 +21,4 @@ public interface EgovBbsService {
     public int deleteNotice(NoticeVO noticeVO);
           
     public int updateInqCnt(NoticeVO noticeVO);
-    
-    public ListWithPageNavigation<RequestVO> selectRequestList(RequestVO requestVO);
-
-    public int selectRequestListCount(RequestVO requestVO);
-    
-    public int selectRequestListCountByMine(RequestVO requestVO);
-    
-    public RequestVO selectRequestDetail(RequestVO requestVO);
-    
-    public RequestVO selectRequestPre(RequestVO requestVO);
-
-    public RequestVO selectRequestNext(RequestVO requestVO);
-    
-    public int insertRequest(RequestVO requestVO);
-    
-    public int updateRequest(RequestVO requestVO);
-    
-    public int deleteRequest(RequestVO requestVO);
-    
-    public int updateRequestInqCnt(RequestVO requestVO);
-    
-    public int updateRequestAnswer(RequestVO requestVO);
 }

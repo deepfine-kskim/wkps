@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!--Converted at: Wed May 11 15:49:38 KST 2016-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="BbsDAO">
+<mapper namespace="ReqDAO">
 
     <sql id="selectListCondition">
         <where>
@@ -255,5 +255,164 @@
 			</where>
 	
 	</update>
+	
+ 	<select id="selectRequestList" parameterType="ReqVO" resultType="ReqVO">
+ 		
+			SELECT
+				trk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.REGISTER_ID) AS DISPLAY_NAME,
+				CASE WHEN DATEDIFF(REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+ 			FROM
+				TB_REQUEST_KNOWLEDGE trk
+			<include refid="selectListCondition" />
+        	ORDER BY REQUST_NO DESC
+        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+        	
+ 	</select>
+ 	
+	<select id="selectRequestListCount" parameterType="ReqVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_REQUEST_KNOWLEDGE
+	        <include refid="selectListCondition" />
+	        
+    </select>
+    
+	<select id="selectRequestListCountByMine" parameterType="ReqVO" resultType="int">
+	
+	        SELECT
+	        	COUNT(*)
+	        FROM 
+	        	TB_REQUEST_KNOWLEDGE
+	        <where>
+        		AND DEL_YN = 'N'
+	        	AND REGISTER_ID = #{registerId}
+	        	AND ANSWER_YN = #{answerYn}
+	        </where>
+	        
+    </select>
+ 	
+ 	<select id="selectRequestDetail" parameterType="ReqVO" resultType="ReqVO">
+ 		
+			SELECT 
+				trk.*,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.REGISTER_ID) AS DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tr WHERE tr.SID = trk.REGISTER_ID)) AS OU,
+				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trk.ANSWER_ID) AS ANSWER_DISPLAY_NAME,
+				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tr WHERE tr.SID = trk.ANSWER_ID)) AS ANSWER_OU,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = trk.KNOWLG_MAP_NO) AS KNOWLG_MAP_NM,
+				(SELECT KNOWLG_MAP_NM FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = (SELECT UP_NO FROM TB_KNOWLEDGE_MAP tkm WHERE tkm.KNOWLG_MAP_NO = trk.KNOWLG_MAP_NO)) AS UP_NM
+			FROM
+				TB_REQUEST_KNOWLEDGE trk
+			WHERE 
+				REQUST_NO = #{requstNo}
+ 		
+ 	</select>
+ 	
+    <select id="selectRequestPre" parameterType="ReqVO" resultType="ReqVO">
 
+        SELECT 
+        	*
+        FROM 
+        	TB_REQUEST_KNOWLEDGE
+        WHERE 
+        	REQUST_NO IN (
+            	SELECT * FROM (
+                	(
+                		SELECT REQUST_NO FROM TB_REQUEST_KNOWLEDGE
+                		<include refid="selectListCondition" />
+                		AND REQUST_NO > #{requstNo} ORDER BY REQUST_NO LIMIT 1
+                	) as REQUST_NO
+            	)
+        	)
+
+    </select>
+
+    <select id="selectRequestNext" parameterType="ReqVO" resultType="ReqVO">
+        
+        SELECT 
+        	*
+        FROM 
+        	TB_REQUEST_KNOWLEDGE
+        WHERE 
+        	REQUST_NO IN (
+            	SELECT * FROM (
+                	(
+                    	SELECT REQUST_NO FROM TB_REQUEST_KNOWLEDGE
+                    	<include refid="selectListCondition" />
+                    	AND REQUST_NO <![CDATA[<]]> #{requstNo} ORDER BY REQUST_NO DESC LIMIT 1
+                	) as REQUST_NO
+            	)
+        	)
+        	
+    </select>
+ 	
+	<insert id="insertRequest" parameterType="ReqVO">
+		
+			INSERT INTO TB_REQUEST_KNOWLEDGE
+			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NO, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			VALUES
+			(#{knowlgMapType}, #{knowlgMapNo}, #{title}, #{cont}, #{atchFileNo}, 0, 'N', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+		
+	</insert>
+	
+	<insert id="updateRequest" parameterType="ReqVO">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				KNOWLG_MAP_TYPE = #{knowlgMapType},
+				KNOWLG_MAP_NO = #{knowlgMapNo},
+				TITLE = #{title},
+				CONT = #{cont},
+				ATCH_FILE_NO = #{atchFileNo},
+				UPDATER_ID = #{registerId},
+				UPD_DTM = SYSDATE()
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>		
+		
+	</insert>
+	
+	<insert id="deleteRequest" parameterType="ReqVO">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				DEL_YN = 'Y'
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>		
+		
+	</insert>
+	
+	<update id="updateRequestInqCnt" parameterType="ReqVO">
+		
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				INQ_CNT = INQ_CNT + 1
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>
+	
+	</update>
+	
+	<update id="updateRequestAnswer" parameterType="ReqVO">
+	
+			UPDATE
+				TB_REQUEST_KNOWLEDGE
+			SET
+				ANSWER_ID = #{answerId},
+				ANSWER_CONT = #{answerCont},
+				ANSWER_YN = 'Y',
+				ANSWER_DTM = SYSDATE()
+			<where>
+				AND REQUST_NO = #{requstNo}
+			</where>
+	
+	</update>
+ 	
 </mapper>

@@ -55,7 +55,7 @@
         <typeAlias alias="PersonalizeVO" type="egovframework.com.wkp.cmm.service.PersonalizeVO"/>
         <typeAlias alias="LogVO" type="egovframework.mgt.wkp.log.service.LogVO"/>
         <typeAlias alias="GroupVO" type="egovframework.com.wkp.cmm.service.GroupVO"/>
-        <typeAlias alias="RequestVO" type="egovframework.com.wkp.bbs.service.RequestVO"/>
+        <typeAlias alias="ReqVO" type="egovframework.com.wkp.req.service.ReqVO"/>
         <typeAlias alias="StaticsConnectVO" type="egovframework.mgt.wkp.sta.service.StaticsConnectVO"/>
         <typeAlias alias="StaticsQnaVO" type="egovframework.mgt.wkp.sta.service.StaticsQnaVO"/>
         <typeAlias alias="StaticsKnowledgeVO" type="egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO"/>

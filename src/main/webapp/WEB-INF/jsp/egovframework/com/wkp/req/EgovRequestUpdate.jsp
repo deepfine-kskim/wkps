@@ -12,7 +12,7 @@
         <div class="page-body">
             <p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>
             <!-- 글작성 -->
-            <form:form id="writeFrm" class="form-horizontal" action="/req/updateRequest.do" modelAttribute="requestVO" method="post" encType="multipart/form-data">
+            <form:form id="writeFrm" class="form-horizontal" action="/req/updateRequest.do" modelAttribute="reqVO" method="post" encType="multipart/form-data">
                 <input type="hidden" value="${requestDetail.requstNo}" name="requstNo">
                 <fieldset>
                     <legend class="sr-only">게시판 글작성</legend>
@@ -85,7 +85,7 @@
     </div>
     <!-- CONTENTS -->
 </div>
-<form:form name="requestFrm" modelAttribute="requestVO">
+<form:form name="requestFrm" modelAttribute="reqVO">
 	<input type="hidden" name="page" value="${page }"> 
 	<input type="hidden" name="searchText" value="${searchText }"/>
 </form:form>

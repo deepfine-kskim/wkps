@@ -114,7 +114,7 @@
                                         <td>${item.registerFullName}</td>
                                         <td>${item.logType.value}</td>
                                         <td>${item.logSubjectType.value}</td>
-                                        <td>${fn:substringBefore(fn:substringAfter(item.cont, 'title":'),',') }</td>
+                                        <td>${item.target}</td>
                                         <td>${item.userIp}</td>
                                     </tr>
                                 </c:forEach>
@@ -177,7 +177,7 @@
                     </nav>
                     <!-- //페이지 네비 -->
                 </div>
-                <!-- //CONTENTS --> 
+                <!-- //CONTENTS -->
                 <script>
                     $(document).ready(function() {
                         $('.radio_tab_cont').not('.radio_tab_cont.active').hide();

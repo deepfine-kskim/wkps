@@ -17,6 +17,7 @@
 	<select id="selectList" parameterType="LogVO" resultType="LogVO">
 		SELECT
 		a.*
+		, JSON_UNQUOTE(JSON_EXTRACT(a.CONT, '$.title')) AS target
 		, e.DISPLAY_NAME as REGISTER_NAME
 		, e.ou
 		, e.USER_FULL_NAME as registerFullName

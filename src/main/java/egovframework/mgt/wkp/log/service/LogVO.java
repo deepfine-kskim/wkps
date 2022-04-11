@@ -46,6 +46,7 @@ public class LogVO {
     private String ou;
     private String userIp;
     private String cont;
+    private String target;
 
     private Integer page;
     private Integer itemCountPerPage = 10;

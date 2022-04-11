@@ -1,12 +1,15 @@
 package egovframework.mgt.wkp.usm.web;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import egovframework.com.cmm.service.MessengerService;
 import egovframework.com.cmm.service.MessengerVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.wkp.cmm.service.EgovCommonService;
+import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
+import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
 import egovframework.com.wkp.cmm.service.Scheduler;
+import egovframework.com.wkp.usr.service.EgovUserService;
+import egovframework.com.wkp.usr.service.UserVO;
+import egovframework.rte.fdl.access.bean.AuthorityResourceMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,13 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.usr.service.EgovUserService;
-import egovframework.com.wkp.usr.service.UserVO;
-import egovframework.rte.fdl.access.bean.AuthorityResourceMetadata;
+import javax.annotation.Resource;
+import java.util.List;
 
 @Controller
 @RequestMapping("/adm")
@@ -328,6 +326,20 @@ public class EgovUserManageController {
 		MessengerVO messengerVO = new MessengerVO();
 		messengerService.insert(messengerVO);
 		LOGGER.info("tempMessenger end");
+		return "success";
+	}
+
+	@ResponseBody
+	@RequestMapping("/tempRecommendKnowledge.do")
+	public String tempRecommendKnowledge() {
+		scheduler.topRecommendKnowledge();
+		return "success";
+	}
+
+	@ResponseBody
+	@RequestMapping("/tempPersonalizeKnowledge.do")
+	public String tempPersonalizeKnowledge() {
+		scheduler.personalizeKnowledge();
 		return "success";
 	}
 }

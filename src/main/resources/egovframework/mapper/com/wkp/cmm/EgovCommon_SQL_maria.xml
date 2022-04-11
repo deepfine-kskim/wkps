@@ -150,7 +150,7 @@
 			INSERT INTO TB_RECOMMEND_KNOWLEDGE
 			(KNOWLG_MAP_TYPE, RKI, TITLE, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
 			VALUES
-			(#{knowlgMapType}, #{rki}, #{title}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			(#{knowlgMapType}, #{rki}, #{title}, #{registerId}, #{registDtm}, #{registerId}, SYSDATE(), 'N')
 			
 	</insert>
 	
@@ -198,7 +198,7 @@
 			INSERT INTO TB_PERSONALIZE_KNOWLEDGE
 			(OU_CODE, KNOWLG_MAP_TYPE, RKI, TITLE, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
 			VALUES
-			(#{ouCode}, #{knowlgMapType}, #{rki}, #{title}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			(#{ouCode}, #{knowlgMapType}, #{rki}, #{title}, #{registerId}, #{registDtm}, #{registerId}, SYSDATE(), 'N')
 			
 	</insert>
 	
@@ -411,10 +411,12 @@
 			SELECT
 				TITLE
 				, KNOWLG_MAP_TYPE
+				, REGIST_DTM
 			FROM (
 				SELECT
 					tk.TITLE,
 					tk.KNOWLG_MAP_TYPE,
+					tk.REGIST_DTM,
 					(tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT,
 					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
 				FROM
@@ -437,11 +439,13 @@
 				OU_CODE
 				, TITLE
 				, KNOWLG_MAP_TYPE
+				, REGIST_DTM
 			FROM (
 				SELECT
 					tk.OU_CODE,
 					tk.TITLE,
 					tk.KNOWLG_MAP_TYPE,
+					tk.REGIST_DTM,
 					(tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT,
 					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
 				FROM

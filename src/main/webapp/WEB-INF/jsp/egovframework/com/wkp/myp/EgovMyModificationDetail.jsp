@@ -95,7 +95,10 @@
 
             <!-- //이전/다음 -->
             <div class="row brd_foot_btns">
-                <div class="col-sm-12 text-right">
+                <div class="col-sm-6">
+                    <a href="javascript:;" id="updBtn" class="btn btn-blue">적용</a>
+                </div>
+                <div class="col-sm-6 text-right">
                     <a href="javascript:;" class="btn btn-black dev-page">목록</a>
                 </div>
             </div>
@@ -109,11 +112,22 @@
     <input type="hidden" name="page" value="${knowledgeVO.page}">
     <input type="hidden" name="searchText" value="${knowledgeVO.searchText}"/>
 </form>
+<form name="knowledgeFrm">
+    <input type="hidden" name="title" value="${result.title}">
+    <input type="hidden" name="requestNo" value="${knowledgeVO.requestNo}">
+</form>
 <script>
     $(function () {
         $('.dev-page').on('click', function (e) {
             const form = $("form[name=searchForm]");
             form.attr('action', '/myp/modificationList.do');
+            form.submit();
+        });
+
+        $('#updBtn').click(function(e){
+            e.preventDefault();
+            const form = $("form[name=knowledgeFrm]");
+            form.attr("action", "/kno/updateKnowledgeView.do");
             form.submit();
         });
     });

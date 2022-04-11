@@ -711,7 +711,12 @@ public class EgovKnowledgeController {
             fileVO.setAtchFileNo(knowledgeDetail.getAtchFileNo());
             List<FileVO> fileList = fileMngService.selectFileInfs(fileVO);
 
-            List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+            List<KnowledgeContentsVO> knowledgeContentsList;
+            if (knowledgeVO.getRequestNo() != null) {
+                knowledgeContentsList = knowledgeService.selectModificationRequestContentList(knowledgeVO);
+            } else {
+                knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeDetail);
+            }
 
             List<String> relateKnowledgeList = knowledgeService.selectRelateKnowledgeList(knowledgeDetail.getRelateKnowlgNo());
             

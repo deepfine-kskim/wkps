@@ -6,18 +6,19 @@ import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+import egovframework.com.wkp.qna.service.AnswerVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -89,12 +90,15 @@ public class ReqController {
 			if(reqVO.getSearchText() != null) {
 				requestDetail.setSearchText(reqVO.getSearchText());
 			}
+
+			List<ReqVO> answerList = reqService.selectAnswerList(reqVO);
 			
 			model.addAttribute("requestDetail", requestDetail);
 			model.addAttribute("fileList", result);
             model.addAttribute("requestPre", reqService.selectRequestPre(reqVO));
             model.addAttribute("requestNext", reqService.selectRequestNext(reqVO));
-			
+            model.addAttribute("answerList", answerList);
+
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -211,21 +215,45 @@ public class ReqController {
 		return "redirect:/req/requestList.do";
 		
 	}
-	
+
 	@RequestMapping("/updateRequestAnswer.do")
 	public String updateRequestAnswer(@ModelAttribute("reqVO") ReqVO reqVO, Model model) {
-		
+
 		try {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			reqVO.setAnswerId(userVO.getSid());
-			
-			reqService.updateRequestAnswer(reqVO);			
+
+			reqService.updateRequestAnswer(reqVO);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
+
 		return "redirect:/req/requestDetail.do?requstNo="+reqVO.getRequstNo();
-		
+
+	}
+
+	@RequestMapping("/insertRequestAnswer.do")
+	public String insertRequestAnswer(@ModelAttribute("reqVO") ReqVO reqVO, Model model) {
+
+		try {
+			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+			reqVO.setRegisterId(userVO.getSid());
+			reqService.insertRequestAnswer(reqVO);
+		} catch (NullPointerException e) {
+			LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
+		return "redirect:/req/requestDetail.do?requstNo="+reqVO.getRequstNo();
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateAnswerSelection.do")
+	public ReqVO updateAnswerSelection(@RequestBody ReqVO reqVO) {
+		UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		reqVO.setUpdaterId(user.getSid());
+		reqService.updateAnswerSelection(reqVO);
+		return reqVO;
 	}
 
 }

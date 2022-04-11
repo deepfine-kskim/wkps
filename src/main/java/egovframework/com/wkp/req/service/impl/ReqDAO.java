@@ -54,4 +54,15 @@ public class ReqDAO extends EgovComAbstractDAO {
 		return update("ReqDAO.updateRequestAnswer", reqVO);
 	}
 
+	public int insertRequestAnswer(ReqVO reqVO) {
+		return insert("ReqDAO.insertRequestAnswer", reqVO);
+	}
+
+	public List<ReqVO> selectAnswerList(ReqVO reqVO) {
+		return selectList("ReqDAO.selectAnswerList", reqVO);
+	}
+
+	public int updateAnswerSelection(ReqVO reqVO) {
+		return update("ReqDAO.updateAnswerSelection", reqVO);
+	}
 }

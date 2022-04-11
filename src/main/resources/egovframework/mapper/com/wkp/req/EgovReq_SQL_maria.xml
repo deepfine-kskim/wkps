@@ -16,246 +16,7 @@
 	        </if>
         </where>
     </sql>
-    
- 	<select id="selectNoticeList" parameterType="NoticeVO" resultType="NoticeVO">
- 		
-			SELECT
-				tn.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tn.REGISTER_ID) AS DISPLAY_NAME,
-				CASE WHEN DATEDIFF(REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
- 			FROM
-				TB_NOTICE tn
-			<include refid="selectListCondition" />
-        	ORDER BY NOTICE_NO DESC
-        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
-        	
- 	</select>
- 	
-	<select id="selectNoticeListCount" parameterType="NoticeVO" resultType="int">
-	
-	        SELECT
-	        	COUNT(*)
-	        FROM 
-	        	TB_NOTICE
-	        <include refid="selectListCondition" />
-	        
-    </select>
- 	
- 	<select id="selectNoticeDetail" parameterType="NoticeVO" resultType="NoticeVO">
- 		
-			SELECT 
-				tn.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tn.REGISTER_ID) AS DISPLAY_NAME
-			FROM
-				TB_NOTICE tn
-			WHERE 
-				NOTICE_NO = #{noticeNo}
- 		
- 	</select>
- 	
-    <select id="selectNoticePre" parameterType="NoticeVO" resultType="NoticeVO">
 
-        SELECT 
-        	*
-        FROM 
-        	TB_NOTICE
-        WHERE 
-        	NOTICE_NO IN (
-            	SELECT * FROM (
-                	(
-                		SELECT NOTICE_NO FROM TB_NOTICE
-                		<include refid="selectListCondition" />
-                		AND NOTICE_NO > #{noticeNo}  ORDER BY NOTICE_NO LIMIT 1
-                	) as NOTICE_NO
-            	)
-        	)
-
-    </select>
-
-    <select id="selectNoticeNext" parameterType="NoticeVO" resultType="NoticeVO">
-        
-        SELECT 
-        	*
-        FROM 
-        	TB_NOTICE
-        WHERE 
-        	NOTICE_NO IN (
-            	SELECT * FROM (
-                	(
-                    	SELECT NOTICE_NO FROM TB_NOTICE
-                    	<include refid="selectListCondition" />
-                    	AND NOTICE_NO <![CDATA[<]]> #{noticeNo}  ORDER BY NOTICE_NO DESC LIMIT 1
-                	) as NOTICE_NO
-            	)
-        	)
-        	
-    </select>
- 	
-	<insert id="insertNotice" parameterType="NoticeVo">
-		
-			INSERT INTO TB_NOTICE
-			(TITLE, CONT, ATCH_FILE_NO, INQ_CNT, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
-			VALUES
-			(#{title}, #{cont}, #{atchFileNo}, 0, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
-		
-	</insert>
-	
-	<insert id="updateNotice" parameterType="NoticeVo">
-		
-			UPDATE
-				TB_NOTICE
-			SET
-				TITLE = #{title},
-				CONT = #{cont},
-				ATCH_FILE_NO = #{atchFileNo},
-				UPDATER_ID = #{registerId},
-				UPD_DTM = SYSDATE()
-			<where>
-				AND NOTICE_NO = #{noticeNo}
-			</where>		
-		
-	</insert>
-	
-	<insert id="deleteNotice" parameterType="NoticeVo">
-		
-			UPDATE
-				TB_NOTICE
-			SET
-				DEL_YN = 'Y'
-			<where>
-				AND NOTICE_NO = #{noticeNo}
-			</where>		
-		
-	</insert>
-	
- 	<select id="selectFaqList" parameterType="FaqVO" resultType="FaqVO">
- 		
-			SELECT 
-				tf.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tf.REGISTER_ID) AS DISPLAY_NAME
-			FROM
-				TB_FAQ tf
-			<include refid="selectListCondition" />
-			<if test="faqType != null and faqType !=''">
-	        	AND FAQ_TYPE = #{faqType}
-	        </if>
-        	ORDER BY FAQ_NO DESC
-        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
-				 		
- 	</select>
- 	
- 	<select id="selectFaqListCount" parameterType="FaqVO" resultType="int">
-	
-	        SELECT
-	        	COUNT(*)
-	        FROM 
-	        	TB_FAQ
-	        <include refid="selectListCondition" />
-			<if test="faqType != null and faqType !=''">
-	        	AND FAQ_TYPE = #{faqType}
-	        </if>
-	        
-    </select>
-    
- 	<select id="selectFaqDetail" parameterType="FaqVO" resultType="FaqVO">
- 		
-			SELECT 
-				tf.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tf.REGISTER_ID) AS DISPLAY_NAME
-			FROM
-				TB_FAQ tf
-			WHERE 
-				FAQ_NO = #{faqNo}
- 		
- 	</select>
- 	
- 	<select id="selectFaqPre" parameterType="FaqVO" resultType="FaqVO">
-
-	        SELECT 
-	        	*
-	        FROM 
-	        	TB_FAQ
-	        WHERE 
-	        	FAQ_NO IN (
-	            	SELECT * FROM (
-	                	(
-	               			SELECT FAQ_NO FROM TB_FAQ
-	                		<include refid="selectListCondition" />
-	                		AND FAQ_NO > #{faqNo}  ORDER BY FAQ_NO LIMIT 1
-	                	) as FAQ_NO
-	            	)
-	        	)
-
-    </select>
-
-    <select id="selectFaqNext" parameterType="FaqVO" resultType="FaqVO">
-
-	        SELECT 
-	        	*
-	        FROM 
-	        	TB_FAQ
-	        WHERE 
-	        	FAQ_NO IN (
-	           		SELECT * FROM (
-	                	(
-	                    	SELECT FAQ_NO FROM TB_FAQ
-	                    	<include refid="selectListCondition" />
-	                    	AND FAQ_NO <![CDATA[<]]> #{faqNo}  ORDER BY FAQ_NO DESC LIMIT 1
-	                	) as FAQ_NO
-	            	)
-	        	)
-        
-    </select>
- 	
- 	<insert id="insertFaq" parameterType="FaqVo">
-		
-			INSERT INTO TB_FAQ
-			(FAQ_TYPE, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
-			VALUES
-			(#{faqType}, #{title}, #{cont}, #{atchFileNo}, 0, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')			
-		
-	</insert>
-	
-	<insert id="updateFaq" parameterType="FaqVo">
-		
-			UPDATE
-				TB_FAQ
-			SET
-				TITLE = #{title},
-				CONT = #{cont},
-				ATCH_FILE_NO = #{atchFileNo},
-				UPDATER_ID = #{registerId},
-				UPD_DTM = SYSDATE()
-			<where>
-				AND FAQ_NO = #{faqNo}
-			</where>			
-		
-	</insert>
-	
-	<insert id="deleteFaq" parameterType="FaqVo">
-		
-			UPDATE
-				TB_FAQ
-			SET
-				DEL_YN = 'Y'
-			<where>
-				AND FAQ_NO = #{faqNo}
-			</where>						
-		
-	</insert>
-	
-	<update id="updateInqCnt" parameterType="NoticeVo">
-		
-			UPDATE
-				TB_NOTICE
-			SET
-				INQ_CNT = INQ_CNT + 1
-			<where>
-				AND NOTICE_NO = #{noticeNo}
-			</where>
-	
-	</update>
-	
  	<select id="selectRequestList" parameterType="ReqVO" resultType="ReqVO">
  		
 			SELECT
@@ -399,9 +160,9 @@
 			</where>
 	
 	</update>
-	
+
 	<update id="updateRequestAnswer" parameterType="ReqVO">
-	
+
 			UPDATE
 				TB_REQUEST_KNOWLEDGE
 			SET
@@ -412,7 +173,38 @@
 			<where>
 				AND REQUST_NO = #{requstNo}
 			</where>
-	
+
+	</update>
+
+	<insert id="insertRequestAnswer" parameterType="ReqVO">
+		INSERT INTO TB_REQUEST_KNOWLEDGE_ANSWER (REQUST_NO, CONT, SLCTN_YN, REGISTER_ID, REGIST_DTM, DEL_YN)
+		VALUES (#{requstNo}, #{cont}, 'N', #{registerId}, now(), 'N')
+	</insert>
+
+	<select id="selectAnswerList" parameterType="ReqVO" resultType="ReqVO">
+		SELECT TB_REQUEST_KNOWLEDGE_ANSWER.REQUST_ANSWER_NO
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.REQUST_NO
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.CONT
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.SLCTN_YN
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.REGISTER_ID
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.REGIST_DTM
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.UPDATER_ID
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.UPD_DTM
+			 , TB_REQUEST_KNOWLEDGE_ANSWER.DEL_YN
+			 , TB_USER.DISPLAY_NAME
+		  FROM TB_REQUEST_KNOWLEDGE_ANSWER
+		  LEFT JOIN TB_USER ON TB_USER.SID = TB_REQUEST_KNOWLEDGE_ANSWER.REGISTER_ID
+		 WHERE TB_REQUEST_KNOWLEDGE_ANSWER.DEL_YN = 'N'
+		   AND TB_REQUEST_KNOWLEDGE_ANSWER.REQUST_NO = #{requstNo}
+		 ORDER BY (CASE WHEN TB_REQUEST_KNOWLEDGE_ANSWER.SLCTN_YN = 'Y' THEN 1 ELSE 0 END) DESC, TB_REQUEST_KNOWLEDGE_ANSWER.REGIST_DTM ASC
+	</select>
+
+	<update id="updateAnswerSelection" parameterType="ReqVO">
+		UPDATE TB_REQUEST_KNOWLEDGE_ANSWER
+		   SET SLCTN_YN = 'Y'
+			 , UPDATER_ID = #{updaterId}
+			 , UPD_DTM = now()
+		 WHERE REQUST_ANSWER_NO = #{requstAnswerNo}
 	</update>
  	
 </mapper>

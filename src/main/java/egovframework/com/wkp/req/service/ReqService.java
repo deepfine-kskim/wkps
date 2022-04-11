@@ -2,6 +2,9 @@ package egovframework.com.wkp.req.service;
 
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.bbs.service.NoticeVO;
+import egovframework.com.wkp.qna.service.AnswerVO;
+
+import java.util.List;
 
 public interface ReqService {
 
@@ -26,4 +29,10 @@ public interface ReqService {
     public int updateRequestInqCnt(ReqVO reqVO);
     
     public int updateRequestAnswer(ReqVO reqVO);
+
+    public int insertRequestAnswer(ReqVO reqVO);
+
+    public List<ReqVO> selectAnswerList(ReqVO reqVO);
+
+    public int updateAnswerSelection(ReqVO reqVO);
 }

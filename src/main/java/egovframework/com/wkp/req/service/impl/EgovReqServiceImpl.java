@@ -4,6 +4,7 @@ import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.comm.PageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
+import egovframework.com.wkp.qna.service.AnswerVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
@@ -11,6 +12,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 구현 클래스
@@ -105,4 +107,18 @@ public class EgovReqServiceImpl extends EgovAbstractServiceImpl implements ReqSe
 		return reqDAO.updateRequestAnswer(reqVO);
 	}
 
+	@Override
+	public int insertRequestAnswer(ReqVO reqVO) {
+		return reqDAO.insertRequestAnswer(reqVO);
+	}
+
+	@Override
+	public List<ReqVO> selectAnswerList(ReqVO reqVO) {
+		return reqDAO.selectAnswerList(reqVO);
+	}
+
+	@Override
+	public int updateAnswerSelection(ReqVO reqVO) {
+		return reqDAO.updateAnswerSelection(reqVO);
+	}
 }

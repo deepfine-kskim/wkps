@@ -70,5 +70,9 @@ public class ReqVO {
 	private String searchText;
 	
 	private List<ReqVO> requestList;
-	
+
+	private Long requstAnswerNo;
+
+	private String slctnYn;
+
 }

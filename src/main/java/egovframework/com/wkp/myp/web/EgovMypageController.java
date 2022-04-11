@@ -113,6 +113,11 @@ public class EgovMypageController {
 
 			egovLogService.insert(LogType.SELECT_LIST, LogSubjectType.MYPAGE, null);
 
+			knowledgeVO = new KnowledgeVO();
+			knowledgeVO.setOwnerId(userVO.getSid());
+			int modificationCnt = knowledgeService.selectModificationRequestListCount(knowledgeVO);
+			int succeedCnt = knowledgeService.selectSucceedListCount(knowledgeVO);
+
 			model.addAttribute("groupList", groupList);
 			model.addAttribute("bookmarkList", bookmarkList);
 			model.addAttribute("interestsList", interestsList);
@@ -122,6 +127,8 @@ public class EgovMypageController {
 			model.addAttribute("myBG", myBG);
 			model.addAttribute("myCnt", myCnt);
 			model.addAttribute("errorCnt", errorCnt);
+			model.addAttribute("modificationCnt", modificationCnt);
+			model.addAttribute("succeedCnt", succeedCnt);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}

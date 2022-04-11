@@ -14,7 +14,7 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation"><a href="/qna/faqList.do">FAQ</a></li>
                 <li role="presentation"><a href="/qna/list.do">Q&A</a></li>
-				<li role="presentation" class="active"><a href="/qna/improvementList.do">홈페이지 개선요청</a></li>
+				<li role="presentation" class="active"><a href="/qna/improvementList.do">개선의견</a></li>
             </ul>
 	        <!-- 총게시물, 게시물 검색 -->
 	        <div class="brd_top">

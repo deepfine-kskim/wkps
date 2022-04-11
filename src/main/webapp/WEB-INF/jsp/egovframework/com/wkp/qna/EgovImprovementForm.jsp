@@ -6,7 +6,7 @@
 <div class="container sub_cont">
 	<div id="contents">
 	    <div class="page-header">
-	        <h2>홈페이지 개선요청</h2>
+	        <h2>개선의견</h2>
 	    </div>
 	    <!-- //page-header -->
         <div class="page-body">

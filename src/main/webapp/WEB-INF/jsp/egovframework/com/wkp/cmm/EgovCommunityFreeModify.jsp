@@ -16,6 +16,7 @@ $(function() {
 	    formData.append("pstgNo", pstgNo);
 	    formData.append("title", $('#title').val());
 	    formData.append("cont", cont);
+        formData.append("showYn", $('[name=showYn]:checked').val());
 	    //formData.append("change_file1", change_file1);
 	    //formData.append("change_file2", change_file2);
 	    var file = document.getElementById('file1').files[0]
@@ -90,6 +91,17 @@ $(function() {
 			                                    </c:if> --%>
                                                 <!-- <input type="file" class="form-control" name="file1" id="file1" multiple="multiple" /> -->
                                                 <input type="file" class="form-control" name="file1" id="file1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="showY" class="col-sm-2 control-label">공개범위</label>
+                                            <div class="col-sm-10 tree_chk_area">
+                                                <label for="showY" class="radio-inline">
+                                                    <input type="radio" id="showY" name="showYn" value="Y" ${free.showYn eq 'Y' ? 'checked' : ''} /> 전체공개
+                                                </label>
+                                                <label for="showN" class="radio-inline">
+                                                    <input type="radio" id="showN" name="showYn" value="N" ${free.showYn eq 'N' ? 'checked' : ''} /> 멤버공개
+                                                </label>
                                             </div>
                                         </div>
                                     </div>

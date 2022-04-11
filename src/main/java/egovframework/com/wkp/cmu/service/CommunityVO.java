@@ -38,7 +38,7 @@ public class CommunityVO {
 	private String updaterId;
 	private Date updDtm;
 	private String delYn;
-	
+
 	private String keyword01;
 	private String keyword02;
 	private String keyword03;

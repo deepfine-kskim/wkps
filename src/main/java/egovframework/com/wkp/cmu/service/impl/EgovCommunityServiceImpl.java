@@ -113,12 +113,25 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public CommunityVO getCommunity(Long cmmntyNo) {
 		CommunityVO community = communityDAO.loadCommunity(cmmntyNo);
-		
+
 		List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
 		community.setOwner(owner.get(0));
 		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null));
+		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
+		return community;
+	}
+
+	@Override
+	public CommunityVO getCommunity(Long cmmntyNo, String sid) {
+		CommunityVO community = communityDAO.loadCommunity(cmmntyNo);
+		
+		List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
+		community.setOwner(owner.get(0));
+		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
+		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null));
+		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null, sid));
 		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
 		return community;
 	}
@@ -203,6 +216,17 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
+	public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo,String searchType, String searchValue, int limit,
+															 int startIndex, String sid) {
+		return communityDAO.findCommunityFreeboard(cmmntyNo, searchType, searchValue, limit, startIndex, sid);
+	}
+
+	@Override
+	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType, String searchValue, String sid) {
+		return communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, searchType, searchValue, sid);
+	}
+
+	@Override
 	public CommunityFreeboardVO getCommunityFreeboard(Long pstgNo) {
 		CommunityFreeboardVO vo =communityDAO.loadCommunityFreeboard(pstgNo);
 		vo.setAttach(communityDAO.getAtchFile(vo.getAtchFileNo()));
@@ -212,13 +236,13 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	}
 	
 	@Override
-	public CommunityFreeboardVO getCommunityFreeboardPrev(Long cmmntyNo,Long pstgNo){
-		return communityDAO.loadCommunityFreeboardPrev(cmmntyNo, pstgNo);
+	public CommunityFreeboardVO getCommunityFreeboardPrev(Long cmmntyNo,Long pstgNo, String sid){
+		return communityDAO.loadCommunityFreeboardPrev(cmmntyNo, pstgNo, sid);
 	}
 	
 	@Override
-	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo){
-		return communityDAO.loadCommunityFreeboardNext(cmmntyNo, pstgNo);
+	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo, String sid){
+		return communityDAO.loadCommunityFreeboardNext(cmmntyNo, pstgNo, sid);
 	}
 	
 	@Override

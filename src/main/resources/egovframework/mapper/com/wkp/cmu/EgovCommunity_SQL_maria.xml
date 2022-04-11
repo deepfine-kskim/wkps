@@ -315,14 +315,19 @@
 			WHERE CF.DEL_YN = 'N'  AND CF.PSTG_NO = #{pstgNo}
  	</select>
  	<select id="loadCommunityFreeboardPrev" parameterType="map" resultType="CommunityFreeboardVO">
- 	
 			SELECT * FROM TB_COMMUNITY_FREEBOARD WHERE DEL_YN = 'N'  AND PSTG_NO <![CDATA[<]]> #{pstgNo} AND CMMNTY_NO = #{cmmntyNo}
+			<if test="sid != null and sid != ''">
+				AND (SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+			</if>
 			ORDER BY PSTG_NO DESC
 			LIMIT 1
  	</select>
  	
  	<select id="loadCommunityFreeboardNext" parameterType="map" resultType="CommunityFreeboardVO">
-			SELECT * FROM TB_COMMUNITY_FREEBOARD WHERE DEL_YN = 'N'  AND PSTG_NO <![CDATA[>]]> #{pstgNo} AND CMMNTY_NO = #{cmmntyNo}
+			SELECT * FROM TB_COMMUNITY_FREEBOARD WHERE DEL_YN = 'N' AND PSTG_NO <![CDATA[>]]> #{pstgNo} AND CMMNTY_NO = #{cmmntyNo}
+			<if test="sid != null and sid != ''">
+				AND (SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+			</if>
 			ORDER BY PSTG_NO ASC
 			LIMIT 1
  	</select>
@@ -335,6 +340,9 @@
        		<if test='search_value != null and search_value != "" '>
 	           AND (( CF.TITLE LIKE CONCAT('%',#{search_value},'%')))
 	        </if>
+			<if test="sid != null and sid != ''">
+				AND (CF.SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+			</if>
       </where>
       ORDER BY CF.PSTG_NO DESC
       <if test="startIndex &gt; -1 and limit &gt; -1 ">
@@ -350,6 +358,9 @@
        		<if test='search_value != null and search_value != "" '>
 	           AND (( TITLE LIKE CONCAT('%',#{search_value},'%')))
 	        </if>
+		   <if test="sid != null and sid != ''">
+			   AND (SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+		   </if>
       </where>
  	</select>
  	
@@ -370,7 +381,8 @@
 				LINK1,
 				LINK2,
 				
-				DEL_YN
+				DEL_YN,
+			 	SHOW_YN
 			)
 			VALUES
 			(
@@ -386,7 +398,8 @@
 				#{atchFileNo},
 				#{link1},
 				#{link2},
-				'N'
+				'N',
+				#{showYn}
 			)			
 		
 	</insert>
@@ -399,7 +412,8 @@
 				LINK1 = #{link1},
 				LINK2 = #{link2},
 		        UPDATER_ID = #{updaterId},
-		        UPD_DTM = now()
+		        UPD_DTM = now(),
+				SHOW_YN = #{showYn}
 	        WHERE PSTG_NO = #{pstgNo}
 	</update>
 	

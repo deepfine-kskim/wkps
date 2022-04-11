@@ -40,6 +40,7 @@ public class CommunityFreeboardVO {
 	private Date updDtm;
 	private String delYn;
 	private Long inqCnt;
+	private String showYn;
 
 	private Long atchFileNo;
 	private String link1;

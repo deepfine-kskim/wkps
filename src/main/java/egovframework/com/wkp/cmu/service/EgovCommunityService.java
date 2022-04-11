@@ -43,6 +43,7 @@ public interface EgovCommunityService {
 	public List<CalendarVO> selectCommunityToday(Long cmmntyNo,int limit,int startIndex);
 	public int selectCommunityTodayTotalCount(Long cmmntyNo);
 	public CommunityVO getCommunity(Long cmmntyNo);
+	public CommunityVO getCommunity(Long cmmntyNo, String sid);
 	public boolean joinCheckNickname(Long cmmntyNo,String nickname);
 	public void joinReqMember(CommunityMemberVO vo);
 	public void deleteMember(Long mberNo);
@@ -61,9 +62,11 @@ public interface EgovCommunityService {
 	//커뮤니티자유게시판
 	public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex);
 	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType,String searchValue);
+	public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex, String sid);
+	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType,String searchValue, String sid);
 	public CommunityFreeboardVO getCommunityFreeboard(Long pstgNo);
-	public CommunityFreeboardVO getCommunityFreeboardPrev(Long cmmntyNo,Long pstgNo);
-	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo);
+	public CommunityFreeboardVO getCommunityFreeboardPrev(Long cmmntyNo,Long pstgNo, String sid);
+	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo, String sid);
 	public void insertCommunityFreeboard(CommunityFreeboardVO vo);
 	public void updateCommunityFreeboard(CommunityFreeboardVO vo);
 	public void deleteCommunityFreeboard(CommunityFreeboardVO vo);

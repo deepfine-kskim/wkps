@@ -12,6 +12,7 @@ $(function() {
 	    
 	    formData.append("title", $('#title').val());
 	    formData.append("cont", cont);
+	    formData.append("showYn", $('[name=showYn]:checked').val());
 	    //formData.append("change_file1", change_file1);
 	    //formData.append("change_file2", change_file2);
 	    var file = document.getElementById('file1').files[0]
@@ -49,7 +50,7 @@ $(function() {
                         <div class="page-body">
                             <p class="req_msg"><span class="req">*</span> 표시는 필수입력사항입니다.</p>
                             <!-- 글작성 -->
-                            
+                            <form class="form-horizontal" onsubmit="return false;">
                                 <fieldset>
                                     <legend class="sr-only">게시판 글작성</legend>
                                     <div class="brd_write_area">
@@ -73,12 +74,23 @@ $(function() {
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="showY" class="col-sm-2 control-label">공개범위</label>
+                                        <div class="col-sm-10 tree_chk_area">
+                                            <label for="showY" class="radio-inline">
+                                                <input type="radio" id="showY" name="showYn" value="Y" checked /> 전체공개
+                                            </label>
+                                            <label for="showN" class="radio-inline">
+                                                <input type="radio" id="showN" name="showYn" value="N" /> 멤버공개
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="text-right">
                                         <button class="btn btn-blue" id="btn_save">작성완료</button>
                                         <a href="communityFreeList.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-black">취소</a>
                                     </div>
                                 </fieldset>
-                            
+                            </form>
                             <!-- //글작성 -->
                         </div>
                     </div>

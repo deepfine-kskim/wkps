@@ -82,11 +82,10 @@ public class EgovCommunityController {
     private EgovCommonService commonService;
 
     void includeCommon(Model model, Long cmmntyNo) {
-        
-        
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
-        model.addAttribute("community", community);
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        model.addAttribute("community", community);
         community.setMe(communityService.getCommunityMemberUser(cmmntyNo, user.getSid()));
         model.addAttribute("user", user);
         
@@ -278,7 +277,7 @@ public class EgovCommunityController {
 
             model.addAttribute("notice", communityService.findCommunityNotice(cmmntyNo, null, null, 3, 0));
 
-            model.addAttribute("free", communityService.findCommunityFreeboard(cmmntyNo, null, null, 10, 0));
+            model.addAttribute("free", communityService.findCommunityFreeboard(cmmntyNo, null, null, 10, 0, user.getSid()));
             //지식게시판
             
 
@@ -328,7 +327,7 @@ public class EgovCommunityController {
              return mav; 
         }
         
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -389,7 +388,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -621,7 +620,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -741,7 +740,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
         CommunityNoticeVO notice = communityService.getCommunityNotice(noticeNo);
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null || notice == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -847,7 +846,7 @@ public class EgovCommunityController {
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -899,7 +898,7 @@ public class EgovCommunityController {
                                     @RequestParam(value = "search_value", required = false) String searchValue) {
 
         try {
-        	
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
             includeCommon(model, cmmntyNo);
 
             model.addAttribute("page", page);
@@ -907,7 +906,7 @@ public class EgovCommunityController {
             model.addAttribute("search_type", searchType);
             model.addAttribute("search_value", searchValue);
 
-            int total = communityService.findCommunityFreeboardTotalCount(cmmntyNo, searchType, searchValue);
+            int total = communityService.findCommunityFreeboardTotalCount(cmmntyNo, searchType, searchValue, user.getSid());
             int limit = rows;
             int startIndex = (page - 1) * rows;
             int	currentPage = 1;
@@ -922,7 +921,7 @@ public class EgovCommunityController {
             // 쿼리에 limit #{firstIndex}, #{lastIndex} 형태로 조회
             //페이징 영역
 
-            List<CommunityFreeboardVO> list = communityService.findCommunityFreeboard(cmmntyNo, searchType, searchValue, limit, startIndex);
+            List<CommunityFreeboardVO> list = communityService.findCommunityFreeboard(cmmntyNo, searchType, searchValue, limit, startIndex, user.getSid());
                         
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("pageMaker", pageMaker);
@@ -931,7 +930,6 @@ public class EgovCommunityController {
             model.addAttribute("list", list);
 
             
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
@@ -976,8 +974,8 @@ public class EgovCommunityController {
             }
             
             model.addAttribute("free", free);
-            model.addAttribute("prev", communityService.getCommunityFreeboardPrev(cmmntyNo, pstgNo));
-            model.addAttribute("next", communityService.getCommunityFreeboardNext(cmmntyNo, pstgNo));
+            model.addAttribute("prev", communityService.getCommunityFreeboardPrev(cmmntyNo, pstgNo, user.getSid()));
+            model.addAttribute("next", communityService.getCommunityFreeboardNext(cmmntyNo, pstgNo, user.getSid()));
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -999,7 +997,7 @@ public class EgovCommunityController {
         System.out.println("pstgNo - " + pstgNo);
         System.out.println("comment - " + comment);
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1049,7 +1047,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
         CommunityCommentVO comment = communityService.getCommunityComment(commentNo);
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null || comment == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1095,7 +1093,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
         CommunityCommentVO comment = communityService.getCommunityComment(commentNo);
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null || comment == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1149,6 +1147,7 @@ public class EgovCommunityController {
             @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = true) String cont,
+            @RequestParam(value = "showYn", required = true) String showYn,
             final MultipartHttpServletRequest multiRequest
 
     ) throws IOException, EgovComException {
@@ -1156,7 +1155,7 @@ public class EgovCommunityController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1204,6 +1203,7 @@ public class EgovCommunityController {
         vo.setCmmntyNo(cmmntyNo);
         vo.setTitle(title);
         vo.setCont(decode(cont));
+        vo.setShowYn(showYn);
         vo.setMberNo(mem.getMberNo());
 
         communityService.insertCommunityFreeboard(vo);
@@ -1259,13 +1259,14 @@ public class EgovCommunityController {
             @RequestParam(value = "pstgNo", required = true) Long pstgNo,
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = true) String cont,
+            @RequestParam(value = "showYn", required = true) String showYn,
             @RequestParam(value = "file1", required = false) MultipartFile file1,
             final MultipartHttpServletRequest multiRequest
     ) throws IOException, EgovComException {
     	
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
         CommunityFreeboardVO free = communityService.getCommunityFreeboard(pstgNo);
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null || free == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1347,6 +1348,7 @@ public class EgovCommunityController {
 	        
         free.setTitle(title);
         free.setCont(decode(cont));
+        free.setShowYn(showYn);
 
         communityService.updateCommunityFreeboard(free);
 
@@ -1365,7 +1367,7 @@ public class EgovCommunityController {
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
 
-        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
         if (community == null) {
             ModelAndView mav = new ModelAndView("jsonView");
 
@@ -1418,10 +1420,10 @@ public class EgovCommunityController {
     		, Model model) {
 
         try {
-            CommunityVO community = communityService.getCommunity(cmmntyNo);
-            model.addAttribute("community", community);
-            
             UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+            CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+            model.addAttribute("community", community);
+
             community.setMe(communityService.getCommunityMemberUser(cmmntyNo, user.getSid()));
             model.addAttribute("user", user);
             

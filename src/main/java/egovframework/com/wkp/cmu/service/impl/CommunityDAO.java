@@ -168,18 +168,19 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectOne("CommunityDAO.loadCommunityFreeboard", param);
     }
 
-    public CommunityFreeboardVO loadCommunityFreeboardPrev(Long cmmntyNo, Long pstgNo) {
+    public CommunityFreeboardVO loadCommunityFreeboardPrev(Long cmmntyNo, Long pstgNo, String sid) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
         param.put("pstgNo", pstgNo);
+        param.put("sid", sid);
         return selectOne("CommunityDAO.loadCommunityFreeboardPrev", param);
     }
 
-    public CommunityFreeboardVO loadCommunityFreeboardNext(Long cmmntyNo, Long pstgNo) {
+    public CommunityFreeboardVO loadCommunityFreeboardNext(Long cmmntyNo, Long pstgNo, String sid) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
         param.put("pstgNo", pstgNo);
-
+        param.put("sid", sid);
         return selectOne("CommunityDAO.loadCommunityFreeboardNext", param);
     }
 
@@ -198,6 +199,25 @@ public class CommunityDAO extends EgovComAbstractDAO {
         param.put("cmmntyNo", cmmntyNo);
         param.put("search_type", searchType);
         param.put("search_value", searchValue);
+        return selectOne("CommunityDAO.findCommunityFreeboardTotalCount", param);
+    }
+
+    public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("search_value", searchValue);
+        param.put("limit", limit);
+        param.put("startIndex", startIndex);
+        param.put("sid", sid);
+        return selectList("CommunityDAO.findCommunityFreeboard", param);
+    }
+
+    public int findCommunityFreeboardTotalCount(Long cmmntyNo, String searchType, String searchValue, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("sid", sid);
         return selectOne("CommunityDAO.findCommunityFreeboardTotalCount", param);
     }
 

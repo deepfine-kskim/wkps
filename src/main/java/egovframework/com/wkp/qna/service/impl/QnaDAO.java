@@ -310,4 +310,7 @@ public class QnaDAO extends EgovComAbstractDAO {
 		return delete("BbsDAO.deleteFaq", faqVO);
 	}
 
+    public int updateQuestionSlctnYn(AnswerVO answerVO) {
+        return update("QnaDAO.updateQuestionSlctnYn", answerVO);
+    }
 }

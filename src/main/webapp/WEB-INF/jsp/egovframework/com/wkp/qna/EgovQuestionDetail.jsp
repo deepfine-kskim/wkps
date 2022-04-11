@@ -241,42 +241,43 @@
                 return false;
             }
 
-            var formData = new FormData();
-            var form = $("#answerForm");
-            formData.append("questionNo", form.find("input[name=questionNo]").val());
-	        formData.append("cont", $("#inpMemo").val());
-            formData.append("file", form.find("input[name=file]")[0].files[0]);
+            if (confirm('답변을 등록하시겠습니까?')) {
+                var formData = new FormData();
+                var form = $("#answerForm");
+                formData.append("questionNo", form.find("input[name=questionNo]").val());
+                formData.append("cont", $("#inpMemo").val());
+                formData.append("file", form.find("input[name=file]")[0].files[0]);
 
-            if (isSubmit) {
-                isSubmit = false;
-                $.ajax({
-                    url: "/qna/answerWriteProc.do",
-                    data: formData,
-                    enctype: 'multipart/form-data',
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    type: "POST",
-                    timeout: 600000,
-                    success: function (data) {
-                        if (data.result) {
-                            location.reload();
-                        } else {
-                            alert("답변 등록을 실패하였습니다.");
+                if (isSubmit) {
+                    isSubmit = false;
+                    $.ajax({
+                        url: "/qna/answerWriteProc.do",
+                        data: formData,
+                        enctype: 'multipart/form-data',
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        type: "POST",
+                        timeout: 600000,
+                        success: function (data) {
+                            if (data.result) {
+                                location.reload();
+                            } else {
+                                alert("답변 등록을 실패하였습니다.");
+                                isSubmit = true;
+                            }
+                        },
+                        error: function (error) {
+                            alert("답변을 다는 중에 에러가 발생하였습니다.");
+                            isSubmit = true;
+                        },
+                        complete: function () {
                             isSubmit = true;
                         }
-                    },
-                    error: function (error) {
-                        alert("답변을 다는 중에 에러가 발생하였습니다.");
-                        isSubmit = true;
-                    },
-                    complete: function () {
-                        isSubmit = true;
-                    }
-                });
+                    });
+                }
             }
-
         });
 
         $(".dev-selection").on("click", function (e) {

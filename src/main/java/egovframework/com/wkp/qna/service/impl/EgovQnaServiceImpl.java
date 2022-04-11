@@ -209,6 +209,7 @@ public class EgovQnaServiceImpl extends EgovAbstractServiceImpl implements EgovQ
     @Override
     public int insertAnswer(AnswerVO answerVO) {
         egovLogService.insert(LogType.INSERT_ANSWER, LogSubjectType.QNA, answerVO);
+        qnaDAO.updateQuestionSlctnYn(answerVO);
         return qnaDAO.insertAnswer(answerVO);
     }
 

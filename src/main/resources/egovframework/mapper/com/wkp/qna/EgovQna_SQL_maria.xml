@@ -345,6 +345,14 @@
         )
     </insert>
 
+    <update id="updateQuestionSlctnYn" parameterType="AnswerVO">
+        UPDATE TB_QUESTION
+           SET SLCTN_YN = 'Y'
+             , UPDATER_ID = #{updaterId}
+             , UPD_DTM = now()
+         WHERE QUESTION_NO = #{questionNo}
+    </update>
+
     <select id="selectAnswerRecommendCount" parameterType="AnswerRecommendVO" resultType="int">
         SELECT COUNT(*) FROM TB_ANSWER_RECOMMEND
         WHERE ANSWER_NO = #{answerNo}

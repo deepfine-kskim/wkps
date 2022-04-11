@@ -42,6 +42,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -263,9 +265,13 @@ public class EgovKnowledgeController {
         knowledgeService.updateInqCnt(knowledgeVO);
 
         KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+        String referer = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("referer");
 
         if (knowledgeDetail == null) {
             redirect.addFlashAttribute("errMsg", "접근할 수 없는 지식입니다.");
+            if (referer != null) {
+                return "redirect:" + referer;
+            }
             return "redirect:/kno/knowledgeList.do";
         }
 
@@ -275,6 +281,9 @@ public class EgovKnowledgeController {
             OrgVO TopOrg = orgService.selectTopOrgByOuCode(user.getOuCode());
             if ("6410073".equals(TopOrg.getOuCode())) {
                 redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                if (referer != null) {
+                    return "redirect:" + referer;
+                }
                 return "redirect:/kno/knowledgeList.do";
             }
         }
@@ -307,6 +316,9 @@ public class EgovKnowledgeController {
 
             if (!result) {
                 redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                if (referer != null) {
+                    return "redirect:" + referer;
+                }
                 return "redirect:/kno/knowledgeList.do";
             }
         }

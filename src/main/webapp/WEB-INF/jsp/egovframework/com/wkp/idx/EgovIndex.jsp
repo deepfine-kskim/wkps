@@ -263,6 +263,11 @@
 <!-- //CONTNETS -->
 <script>
 	$(function(){
+        let errMsg = '${errMsg}';
+        if (errMsg != '') {
+            alert(errMsg);
+        }
+
 	    $('.srch_select .dropdown-menu li a').click(function(){
 	        var selText = $(this).text();
 	        $('.srch_select .dropdown-menu li').removeClass('active');

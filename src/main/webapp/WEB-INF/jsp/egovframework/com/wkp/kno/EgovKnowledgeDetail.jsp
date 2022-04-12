@@ -13,7 +13,7 @@
 					<ul class="nav nav-tabs nav-justified side_tabs">
                         <li <c:if test="${knowledgeDetail.knowlgMapType eq 'REPORT'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REPORT">행정자료</a></li>
                         <li <c:if test="${knowledgeDetail.knowlgMapType eq 'REFERENCE'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REFERENCE">업무참고자료</a></li>
-                        <li <c:if test="${knowledgeDetail.knowlgMapType eq 'PERSONAL'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="PERSONAL">개인별지식</a></li>
+                        <li <c:if test="${knowledgeDetail.knowlgMapType eq 'PERSONAL'}">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="PERSONAL">개인행정지식</a></li>
                     </ul>
                     <div class="side_card_box mside_tog">
                         <div class="side_top hidden-sm hidden-lg hidden-md">
@@ -107,7 +107,7 @@
 										<c:choose>
 											<c:when test="${knowledgeDetail.knowlgMapType eq 'REPORT'}">[행정자료]</c:when>
 											<c:when test="${knowledgeDetail.knowlgMapType eq 'REFERENCE'}">[업무참고자료]</c:when>
-											<c:otherwise>[개인별지식]</c:otherwise>
+											<c:otherwise>[개인행정지식]</c:otherwise>
 										</c:choose>
 										</span>
                                             <div class="wiki_breadcrumb">

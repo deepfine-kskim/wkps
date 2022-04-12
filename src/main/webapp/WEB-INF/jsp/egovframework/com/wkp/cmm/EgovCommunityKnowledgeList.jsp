@@ -101,7 +101,7 @@ $(function() {
                                         <tr>
                                             <td>${knowledgeList.pageNavigation.totalItemCount - ((knowledgeList.pageNavigation.pageIndex - 1) * knowledgeList.pageNavigation.itemCountPerPage + status.index) }</td>
                                             <td class="text-primary">
-                                            	개인별지식
+                                            	개인행정지식
                                             </td>
                                             <td class="text-left">
                                                 <p class="subject">

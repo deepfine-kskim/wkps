@@ -71,7 +71,7 @@
                                                 <option value="">선택해주세요.</option>
                                                 <option value="REPORT" <c:if test="${knowledgeVO.knowlgMapType eq 'REPORT'}">selected="selected"</c:if>>행정자료</option>
                                                 <option value="REFERENCE" <c:if test="${knowledgeVO.knowlgMapType eq 'REFERENCE'}">selected="selected"</c:if>>업무참고자료</option>
-                                                <option value="PERSONAL" <c:if test="${knowledgeVO.knowlgMapType eq  'PERSONAL'}">selected="selected"</c:if>>개인별지식</option>
+                                                <option value="PERSONAL" <c:if test="${knowledgeVO.knowlgMapType eq  'PERSONAL'}">selected="selected"</c:if>>개인행정지식</option>
                                             </form:select>
                                         </div>
                                     </div>

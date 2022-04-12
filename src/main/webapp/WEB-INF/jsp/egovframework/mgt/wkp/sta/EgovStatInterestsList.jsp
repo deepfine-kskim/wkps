@@ -76,7 +76,7 @@
                             	<c:choose>
                             	<c:when test="${interests.knowlgMapType eq 'REPORT' }">행정자료</c:when>
                             	<c:when test="${interests.knowlgMapType eq 'REFERENCE' }">업무참고자료</c:when>
-                            	<c:otherwise>개인별지식</c:otherwise>
+                            	<c:otherwise>개인행정지식</c:otherwise>
                             	</c:choose>
                             	</td>
                             	<td>${interests.upNm }</td>

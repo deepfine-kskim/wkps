@@ -81,7 +81,7 @@
                             	<c:choose>
                             	<c:when test="${interests.knowlgMapType eq 'REPORT' }">행정자료</c:when>
                             	<c:when test="${interests.knowlgMapType eq 'REFERENCE' }">업무참고자료</c:when>
-                            	<c:otherwise>개인별지식</c:otherwise>
+                            	<c:otherwise>개인행정지식</c:otherwise>
                             	</c:choose>
                                 </td>
                                 <td class="text-left"><a href="#">${knowledge.title } 현황</a> <span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></td>

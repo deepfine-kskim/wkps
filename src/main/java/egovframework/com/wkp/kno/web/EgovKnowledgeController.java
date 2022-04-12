@@ -362,7 +362,7 @@ public class EgovKnowledgeController {
         List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
         List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
 
-        // 담당자가 본인이고, 본인이 속한 부서의 지식 or 개인별지식 탭의 지식
+        // 담당자가 본인이고, 본인이 속한 부서의 지식 or 개인행정지식 탭의 지식
         boolean isOwner = (user.getSid().equals(knowledgeDetail.getOwnerId()) && user.getOuCode().equals(knowledgeDetail.getOuCode())) || "PERSONAL".equals(knowledgeDetail.getKnowlgMapType());
 
         model.addAttribute("relateKnowlgVO", relateKnowlgVO);

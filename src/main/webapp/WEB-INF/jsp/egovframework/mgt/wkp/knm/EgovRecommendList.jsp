@@ -24,7 +24,7 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#bbsTab1" aria-controls="bbsTab1" role="tab" data-toggle="tab">행정자료</a></li>
                         <li role="presentation"><a href="#bbsTab2" aria-controls="bbsTab2" role="tab" data-toggle="tab">업무참고자료</a></li>
-                        <li role="presentation"><a href="#bbsTab3" aria-controls="bbsTab3" role="tab" data-toggle="tab">개인별지식</a></li>
+                        <li role="presentation"><a href="#bbsTab3" aria-controls="bbsTab3" role="tab" data-toggle="tab">개인행정지식</a></li>
                     </ul>
                     <div class="tab-content">
                     	<div role="tabpanel" class="tab-pane active" id="bbsTab1">
@@ -209,7 +209,7 @@
                                         <form:select path="knowlgMapType" class="form-control">
                                             <option value="REPORT">행정자료</option>
                                             <option value="REFERENCE">업무참고자료</option>
-                                            <option value="PERSONAL">개인별지식</option>
+                                            <option value="PERSONAL">개인행정지식</option>
                                         </form:select>
                                     </div>
                                 </div>

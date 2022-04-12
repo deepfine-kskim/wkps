@@ -154,7 +154,7 @@
                                     <c:forEach var="personal" items="${newPersonalList }">
                                     <div class="card_item">
                                         <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo }">
-                                            <span class="label label-success">개인별지식</span> 
+                                            <span class="label label-success">개인행정지식</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${personal.title }</strong>
                                                 <p class="txt">${personal.summry }</p>
@@ -197,7 +197,7 @@
                                     <c:forEach var="personal" items="${recommendPersonalList }">
                                     <div class="card_item">
                                         <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
-                                            <span class="label label-success">개인별지식</span> 
+                                            <span class="label label-success">개인행정지식</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${personal.title }</strong>
                                                 <p class="txt">${personal.summry }</p>
@@ -241,7 +241,7 @@
                                     <c:forEach var="personal" items="${personalizePersonalList }">
                                     <div class="card_item">
                                         <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
-                                            <span class="label label-success">개인별지식</span> 
+                                            <span class="label label-success">개인행정지식</span>
                                             <div class="caption_box">
                                                 <strong class="subject">${personal.title }</strong>
                                                 <p class="txt">${personal.summry }</p>

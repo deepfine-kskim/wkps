@@ -30,7 +30,7 @@
 	                    <ul class="nav nav-tabs" role="tablist">
 	                        <li role="presentation"<c:if test="${knowlgMapType eq 'REPORT'}"> class="active"</c:if>><a href="#bbsTab1" class="dev-tab" aria-controls="bbsTab1" role="tab" data-toggle="tab" data-type="REPORT">행정자료</a></li>
 	                        <li role="presentation"<c:if test="${knowlgMapType eq 'REFERENCE'}"> class="active"</c:if>><a href="#bbsTab2" class="dev-tab" aria-controls="bbsTab2" role="tab" data-toggle="tab" data-type="REFERENCE">업무참고자료</a></li>
-	                        <li role="presentation"<c:if test="${knowlgMapType eq 'PERSONAL'}"> class="active"</c:if>><a href="#bbsTab3" class="dev-tab" aria-controls="bbsTab3" role="tab" data-toggle="tab" data-type="PERSONAL">개인별지식</a></li>
+	                        <li role="presentation"<c:if test="${knowlgMapType eq 'PERSONAL'}"> class="active"</c:if>><a href="#bbsTab3" class="dev-tab" aria-controls="bbsTab3" role="tab" data-toggle="tab" data-type="PERSONAL">개인행정지식</a></li>
 	                    </ul>
 	                    <form:form name="updFrm" action="/adm/updateKnowledgeMap.do" modelAttribute="knowledgeMapVO">
                         <div class="row type20">

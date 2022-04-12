@@ -54,7 +54,7 @@
                                                             <option value="">전체</option>
                                                             <option value="REPORT" ${staticsKnowledgeVO.searchType eq 'REPORT' ? 'selected' : ''}>행정자료</option>
                                                             <option value="REFERENCE" ${staticsKnowledgeVO.searchType eq 'REFERENCE' ? 'selected' : ''}>업무참고자료</option>
-                                                            <option value="PERSONAL" ${staticsKnowledgeVO.searchType eq 'PERSONAL' ? 'selected' : ''}>개인별지식</option>
+                                                            <option value="PERSONAL" ${staticsKnowledgeVO.searchType eq 'PERSONAL' ? 'selected' : ''}>개인행정지식</option>
                                                         </select>
                                                         <span class="input-group-btn"><button type="button" class="btn btn-default dev-search">검색</button></span>
                                                     </div>

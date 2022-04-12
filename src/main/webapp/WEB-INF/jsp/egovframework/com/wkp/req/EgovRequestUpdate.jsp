@@ -24,7 +24,7 @@
                                     <option value="">선택해주세요.</option>
                                     <option value="REPORT">행정자료</option>
                                     <option value="REFERENCE">업무참고자료</option>
-                                    <option value="PERSONAL" <c:if test="${not empty cmmntyNo}">selected="selected"</c:if>>개인별지식</option>
+                                    <option value="PERSONAL" <c:if test="${not empty cmmntyNo}">selected="selected"</c:if>>개인행정지식</option>
                                 </form:select>
                             </div>
                         </div>

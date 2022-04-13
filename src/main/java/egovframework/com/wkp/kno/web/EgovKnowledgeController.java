@@ -2,10 +2,7 @@ package egovframework.com.wkp.kno.web;
 
 import egovframework.com.cmm.EgovComException;
 import egovframework.com.cmm.EgovWebUtil;
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.service.*;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cmm.service.*;
@@ -92,6 +89,9 @@ public class EgovKnowledgeController {
     
 	@Resource(name = "orgService")
 	private EgovOrgService orgService;
+
+    @Resource(name = "messengerService")
+    private MessengerService messengerService;
 
     /**
      * 지식백과 > 목록
@@ -1098,7 +1098,7 @@ public class EgovKnowledgeController {
     }
 
     /**
-     * 지식백과 > 데이터 수정
+     * 지식백과 > 데이터 수정 TODO
      * @return Redirect
      */
     @RequestMapping("/insertUpdateKnowledgeRequest.do")
@@ -1200,6 +1200,15 @@ public class EgovKnowledgeController {
                         start = next;
                     }
                 }
+
+                /* 메신저 알림 전송 */
+                MessengerVO messengerVO = new MessengerVO();
+                messengerVO.setSndUser(userVO.getDisplayName());
+                messengerVO.setRecvId(knowledgeDetail.getOwnerId());
+                messengerVO.setDocTitle("[도정지식포털 알림]");
+                messengerVO.setDocDesc(knowledgeVO.getRequestContent());
+                messengerVO.setDocUrl("http://105.0.1.229/myp/modificationList.do");
+                messengerService.insert(messengerVO);
 
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
@@ -1346,6 +1355,15 @@ public class EgovKnowledgeController {
             knowledgeContentsVO.setSortOrdr(knowledgeVO.getSortOrdr());
             knowledgeContentsVO.setCont(knowledgeVO.getCont());
             knowledgeService.updateKnowledgeModificationRequestContent(knowledgeContentsVO);
+
+            /* 메신저 알림 전송 */
+            MessengerVO messengerVO = new MessengerVO();
+            messengerVO.setSndUser(userVO.getDisplayName());
+            messengerVO.setRecvId(knowledgeDetail.getOwnerId());
+            messengerVO.setDocTitle("[도정지식포털 알림]");
+            messengerVO.setDocDesc(knowledgeVO.getRequestContent());
+            messengerVO.setDocUrl("http://105.0.1.229/myp/modificationList.do");
+            messengerService.insert(messengerVO);
 
             redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
         } catch (NullPointerException e) {

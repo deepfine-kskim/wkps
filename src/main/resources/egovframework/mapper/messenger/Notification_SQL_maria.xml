@@ -8,13 +8,13 @@
 		/* MessengerDAO.insert */
 		INSERT INTO ULT_MSG_ALERT (SYS_NAME, SND_USER, RECV_ID, DOC_TITLE, DOC_DESC, DOC_URL, INPUT_DATE)
 		VALUES
-		     ( #{sysName}
+		     ( 'GG_DIGITAL_WKPS'
 			 , #{sndUser}
 			 , #{recvId}
 			 , #{docTitle}
 			 , #{docDesc}
 			 , #{docUrl}
-			 , #{inputDate}
+			 , DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
 			 )
 	</insert>
 

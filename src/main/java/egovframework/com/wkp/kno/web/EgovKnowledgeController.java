@@ -262,8 +262,6 @@ public class EgovKnowledgeController {
             knowledgeVO.setCmmntyNo(cmmntyNo);
         }
 
-        knowledgeService.updateInqCnt(knowledgeVO);
-
         KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
         String referer = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("referer");
 
@@ -321,6 +319,15 @@ public class EgovKnowledgeController {
                 }
                 return "redirect:/kno/knowledgeList.do";
             }
+        }
+
+        /* 조회수 카운트 */
+        KnowledgeVO knowledgeViewVO = new KnowledgeVO();
+        knowledgeViewVO.setKnowlgNo(knowledgeDetail.getKnowlgNo());
+        knowledgeViewVO.setTitle(knowledgeDetail.getTitle());
+        knowledgeViewVO.setRegisterId(user.getSid());
+        if (knowledgeService.countKnowledgeView(knowledgeViewVO) == 0) {
+            knowledgeService.insertKnowledgeView(knowledgeViewVO);
         }
 
         if (knowledgeVO.getPage() != null) {

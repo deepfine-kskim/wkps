@@ -1547,4 +1547,29 @@
 		 WHERE TITLE = #{title}
 		   AND DEL_YN = 'N'
 	</select>
+
+	<!-- 지식 조회 여부 확인 -->
+	<select id="countKnowledgeView" parameterType="KnowledgeVO" resultType="int">
+		SELECT COUNT(1)
+		  FROM TB_KNOWLEDGE_VIEW
+		 WHERE TITLE = #{title}
+		   AND REGISTER_ID = #{registerId}
+		   AND DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+	</select>
+
+	<!-- 지식 조회 여부 등록 -->
+	<insert id="insertKnowledgeView" parameterType="KnowledgeVO">
+		INSERT INTO TB_KNOWLEDGE_VIEW
+		     ( KNOWLG_NO
+		     , TITLE
+		     , REGISTER_ID
+		     , REGIST_DTM
+		     )
+		VALUES
+			 ( #{knowlgNo}
+			 , #{title}
+			 , #{registerId}
+			 , now()
+			)
+	</insert>
 </mapper>

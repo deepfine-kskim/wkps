@@ -1,9 +1,9 @@
 package egovframework.com.wkp.kno.service;
 
+import lombok.Data;
+
 import java.sql.Date;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class KnowledgeVO {
@@ -142,4 +142,6 @@ public class KnowledgeVO {
 	private String ownerOu;
 
 	private int needSucceed;
+
+	private Long knowledgeViewNo;
 }

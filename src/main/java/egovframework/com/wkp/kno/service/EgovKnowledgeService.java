@@ -1,10 +1,10 @@
 package egovframework.com.wkp.kno.service;
 
-import java.sql.Date;
-import java.util.List;
-
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.mgt.wkp.log.service.LogVO;
+
+import java.sql.Date;
+import java.util.List;
 
 public interface EgovKnowledgeService {
 	
@@ -151,4 +151,8 @@ public interface EgovKnowledgeService {
 	public int selectApprovalListCount(KnowledgeVO knowledgeVO);
 
 	public int checkDuplication(KnowledgeVO knowledgeVO);
+
+	public int countKnowledgeView(KnowledgeVO knowledgeVO);
+
+	public void insertKnowledgeView(KnowledgeVO knowledgeVO);
 }

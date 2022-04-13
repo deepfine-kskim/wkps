@@ -1,19 +1,12 @@
 package egovframework.com.wkp.kno.service.impl;
 
-import java.sql.Date;
-import java.util.List;
-
+import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
+import egovframework.com.wkp.kno.service.*;
+import egovframework.mgt.wkp.log.service.LogVO;
 import org.springframework.stereotype.Repository;
 
-import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
-import egovframework.com.wkp.kno.service.ErrorStatementVO;
-import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
-import egovframework.com.wkp.kno.service.KnowledgeMapVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.com.wkp.kno.service.OrgMileageVO;
-import egovframework.com.wkp.kno.service.RelateKnowlgVO;
-import egovframework.com.wkp.kno.service.UserMileageVO;
-import egovframework.mgt.wkp.log.service.LogVO;
+import java.sql.Date;
+import java.util.List;
 
 @Repository("knowledgeDAO")
 public class KnowledgeDAO extends EgovComAbstractDAO {
@@ -319,5 +312,19 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 
 	public int checkDuplication(KnowledgeVO knowledgeVO) {
 		return selectOne("KnowledgeDAO.checkDuplication", knowledgeVO);
+	}
+
+	/**
+	 * 지식 조회 여부 확인
+	 */
+	public int countKnowledgeView(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.countKnowledgeView", knowledgeVO);
+	}
+
+	/**
+	 * 지식 조회 여부 등록
+	 */
+	public int insertKnowledgeView(KnowledgeVO knowledgeVO) {
+		return insert("KnowledgeDAO.insertKnowledgeView", knowledgeVO);
 	}
 }

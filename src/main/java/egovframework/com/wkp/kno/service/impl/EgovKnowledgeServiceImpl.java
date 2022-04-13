@@ -1,27 +1,18 @@
 package egovframework.com.wkp.kno.service.impl;
 
-import java.sql.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.comm.PageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
-import egovframework.com.wkp.kno.service.EgovKnowledgeService;
-import egovframework.com.wkp.kno.service.ErrorStatementVO;
-import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
-import egovframework.com.wkp.kno.service.KnowledgeMapVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.com.wkp.kno.service.OrgMileageVO;
-import egovframework.com.wkp.kno.service.RelateKnowlgVO;
-import egovframework.com.wkp.kno.service.UserMileageVO;
+import egovframework.com.wkp.kno.service.*;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.mgt.wkp.log.service.LogVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.sql.Date;
+import java.util.List;
 
 @Service("knowledgeService")
 public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements EgovKnowledgeService {
@@ -508,5 +499,22 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public int checkDuplication(KnowledgeVO knowledgeVO) {
 		return knowledgeDAO.checkDuplication(knowledgeVO);
+	}
+
+	/**
+	 * 지식 조회 여부 확인
+	 */
+	@Override
+	public int countKnowledgeView(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.countKnowledgeView(knowledgeVO);
+	}
+
+	/**
+	 * 지식 조회 여부 등록
+	 */
+	@Override
+	public void insertKnowledgeView(KnowledgeVO knowledgeVO) {
+		knowledgeDAO.insertKnowledgeView(knowledgeVO);
+		knowledgeDAO.updateInqCnt(knowledgeVO);
 	}
 }

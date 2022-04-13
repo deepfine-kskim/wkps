@@ -43,6 +43,10 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 		return delete("KnowledgeDAO.deleteKnowledge", knowledgeVO);
 	}
 
+	public int deleteKnowledgeByTitle(KnowledgeVO knowledgeVO) {
+		return delete("KnowledgeDAO.deleteKnowledgeByTitle", knowledgeVO);
+	}
+
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return insert("KnowledgeDAO.insertKnowledgeContents", knowledgeContentsVO);
 	}

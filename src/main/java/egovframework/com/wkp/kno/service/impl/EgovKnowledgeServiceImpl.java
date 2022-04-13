@@ -80,6 +80,12 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
+	public int deleteKnowledgeByTitle(KnowledgeVO knowledgeVO) {
+		egovLogService.insert(LogType.DELETE, LogSubjectType.KNOWLEDGE, knowledgeVO);
+		return knowledgeDAO.deleteKnowledgeByTitle(knowledgeVO);
+	}
+
+	@Override
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO) {
 		return knowledgeDAO.insertKnowledgeContents(knowledgeContentsVO);
 	}

@@ -23,6 +23,8 @@ public interface EgovKnowledgeService {
 	public int updateKnowledge(KnowledgeVO knowledgeVO);
 	
 	public int deleteKnowledge(KnowledgeVO knowledgeVO);
+
+	public int deleteKnowledgeByTitle(KnowledgeVO knowledgeVO);
 	
 	public int insertKnowledgeContents(KnowledgeContentsVO knowledgeContentsVO);
 

@@ -974,9 +974,20 @@
 		   AND REGISTER_ID = #{registerId}
 	</delete>
 
-	<!-- 지식 삭제 -->
 	<delete id="deleteKnowledge" parameterType="KnowledgeVO">
-		/* KnowledgeDAO.deleteKnowledge */
+		UPDATE
+		TB_KNOWLEDGE
+		SET
+		DEL_YN = 'Y'
+		<where>
+			AND KNOWLG_NO = #{knowlgNo}
+			AND TITLE = #{title}
+		</where>
+	</delete>
+
+	<!-- 지식 삭제 -->
+	<delete id="deleteKnowledgeByTitle" parameterType="KnowledgeVO">
+		/* KnowledgeDAO.deleteKnowledgeByTitle */
 		UPDATE TB_KNOWLEDGE
    		   SET DEL_YN = 'Y'
  		 WHERE KNOWLG_NO IN (SELECT KNOWLG_NO FROM TB_KNOWLEDGE WHERE DEL_YN = 'N' AND TITLE = #{title})

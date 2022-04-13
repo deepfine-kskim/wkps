@@ -695,7 +695,7 @@ public class EgovKnowledgeController {
                 knowledgeService.insertOrgMileage(knowledgeVO);
 
                 /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
-                if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+                if (!"PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
                     List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
                     orgKnowledgeManagerList.forEach(item -> {
                         MessengerVO messengerVO = new MessengerVO();
@@ -1103,7 +1103,7 @@ public class EgovKnowledgeController {
                 knowledgeService.insertOrgMileage(knowledgeVO);
 
                 /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
-                if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+                if (!"PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
                     List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
                     orgKnowledgeManagerList.forEach(item -> {
                         MessengerVO messengerVO = new MessengerVO();
@@ -1351,7 +1351,7 @@ public class EgovKnowledgeController {
 	        knowledgeService.insertOrgMileage(knowledgeDetail);
 
             /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
-            if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+            if (!"PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
                 List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
                 orgKnowledgeManagerList.forEach(item -> {
                     MessengerVO messengerVO = new MessengerVO();
@@ -1424,10 +1424,17 @@ public class EgovKnowledgeController {
      */
     @RequestMapping(value = "/deleteKnowledge.do")
     public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO) {
-        // 지식 삭제 시, 모든 지식 이력도 함께 삭제
-        knowledgeService.deleteUserMileageByTitle(knowledgeVO);
-        knowledgeService.deleteOrgMileageByTitle(knowledgeVO);
-        knowledgeService.deleteKnowledge(knowledgeVO);
+        if ("PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
+            // 개인별 지식인 경우 개별 삭제
+            knowledgeService.deleteUserMileage(knowledgeVO);
+            knowledgeService.deleteOrgMileage(knowledgeVO);
+            knowledgeService.deleteKnowledge(knowledgeVO);
+        } else {
+            // 개인별 지식이 아닌 경우 일괄 삭제
+            knowledgeService.deleteUserMileageByTitle(knowledgeVO);
+            knowledgeService.deleteOrgMileageByTitle(knowledgeVO);
+            knowledgeService.deleteKnowledgeByTitle(knowledgeVO);
+        }
     	return "redirect:/kno/knowledgeList.do";
     }
 

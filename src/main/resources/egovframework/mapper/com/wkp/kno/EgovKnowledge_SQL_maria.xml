@@ -394,7 +394,7 @@
 		     , #{knowlgMapNo}
 		     , #{knowlgMapType}
 		     , #{summry}
-		     , #{aprvYn}
+		     , 'Y'
 		     , #{approverId}
 		     , #{rlsYn}
 		     , #{realNmYn}

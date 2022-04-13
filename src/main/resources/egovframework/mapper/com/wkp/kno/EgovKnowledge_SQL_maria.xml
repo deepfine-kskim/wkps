@@ -163,7 +163,7 @@
                    AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
-		 ORDER BY KNOWLG_NO DESC
+		 ORDER BY REGIST_DTM DESC
 		 LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
  	</select>
 

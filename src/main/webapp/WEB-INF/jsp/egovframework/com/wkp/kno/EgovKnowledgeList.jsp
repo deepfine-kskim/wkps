@@ -380,8 +380,8 @@
 	                    		<div class="btn_area text-right">
 	                            	<!-- <a href="/kno/insertKnowledgeView.do?knowlgMapType=REPORT&upNo=1&knowlgMapNo=19" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a> -->
                                     <c:choose>
-                                        <%-- (하드코딩) 도지사 메시지 메뉴인 경우 특정 사용자만 등록 가능 --%>
-                                        <c:when test="${fn:indexOf(knowlgMap.knowlgMapNm, '도지사 메시지') ne -1}">
+                                        <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
+                                        <c:when test="${fn:indexOf(knowlgMap.knowlgMapNm, '연설문, 축사, 기념사, 브리핑') ne -1}">
                                             <c:if test="${fn:indexOf('user,test', loginVO.sid) ne -1}">
                                                 <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
                                             </c:if>

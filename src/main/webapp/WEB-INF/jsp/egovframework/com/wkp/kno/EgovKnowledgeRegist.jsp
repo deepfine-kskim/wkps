@@ -434,8 +434,8 @@
      			success : function(data) {
                    	$("#mainSel").find("option").remove().end().append("<option value='0'>대주제 선택</option> ");
                    	for(var i=0; i < data.knowledgeMapList.length; i++){
-                        <%-- (하드코딩) 도지사 메시지 메뉴인 경우 특정 사용자만 등록 가능 --%>
-                        if (data.knowledgeMapList[i].knowlgMapNm.indexOf('도지사 메시지') !== -1) {
+                        <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
+                        if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
                             if ('user,test'.indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }
@@ -463,8 +463,8 @@
 	 			success : function(data) {
 	               	$("#mainSel").find("option").remove().end().append("<option value='0'>대주제 선택</option> ");
 	               	for(var i=0; i < data.knowledgeMapList.length; i++){
-                        <%-- (하드코딩) 도지사 메시지 메뉴인 경우 특정 사용자만 등록 가능 --%>
-                        if (data.knowledgeMapList[i].knowlgMapNm.indexOf('도지사 메시지') !== -1) {
+                        <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
+                        if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
                             if ('user,test'.indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }

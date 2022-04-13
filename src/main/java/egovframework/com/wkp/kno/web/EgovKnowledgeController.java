@@ -1079,8 +1079,8 @@ public class EgovKnowledgeController {
                     }
                 }
 
-                knowledgeVO.setMileageType("NEW");
-                knowledgeVO.setMileageScore(2.0f);
+                knowledgeVO.setMileageType("UPD");
+                knowledgeVO.setMileageScore(1.0f);
                 knowledgeService.insertUserMileage(knowledgeVO);
                 knowledgeService.insertOrgMileage(knowledgeVO);
                 
@@ -1508,7 +1508,7 @@ public class EgovKnowledgeController {
             if(knowledgeService.selectRecommend(knowledgeVO) != null) {
             	isRecommend = true;
     	        knowledgeVO.setMileageType("REC");
-    	        knowledgeVO.setMileageScore(0.3f);
+    	        knowledgeVO.setMileageScore(3.0f);
     	        knowledgeService.insertUserMileage(knowledgeVO);
     	        knowledgeService.insertOrgMileage(knowledgeVO);
             } else {

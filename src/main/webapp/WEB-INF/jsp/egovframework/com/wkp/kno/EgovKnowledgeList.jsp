@@ -293,6 +293,7 @@
                                         <col>
                                         <col style="width:12%;">
                                         <col style="width:12%;">
+                                        <col style="width:8%;">
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -301,6 +302,7 @@
                                             <th scope="col">제목</th>
                                             <th scope="col">등록일</th>
                                             <th scope="col">${knowlgMapType eq 'PERSONAL' ? '게시자' : '부서'}</th>
+                                            <th scope="col">조회</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -318,13 +320,14 @@
 													</td>
 													<td>${knowledge.registDtm }</td>
 													<td>${knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
+                                                    <td><fmt:formatNumber value="${knowledge.inqCnt}" pattern="#,###"/></td>
 												</tr>
 											</c:forEach>
                                     	</c:when>
                                         <c:otherwise>
 											<!-- 데이터 없을시 -->
 											<tr>
-												<td colspan="5" class="empty">등록된 게시글이 없습니다.</td>
+												<td colspan="6" class="empty">등록된 게시글이 없습니다.</td>
 											</tr>
 											<!-- //데이터 없을시 -->
                                         </c:otherwise>

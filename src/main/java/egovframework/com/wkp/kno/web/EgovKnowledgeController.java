@@ -9,6 +9,7 @@ import egovframework.com.wkp.cmm.service.*;
 import egovframework.com.wkp.kno.service.*;
 import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
 import egovframework.com.wkp.usr.service.EgovOrgService;
+import egovframework.com.wkp.usr.service.EgovUserService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import kr.dogfoot.hwplib.object.HWPFile;
@@ -92,6 +93,9 @@ public class EgovKnowledgeController {
 
     @Resource(name = "messengerService")
     private MessengerService messengerService;
+
+    @Resource(name = "userService")
+    private EgovUserService userService;
 
     /**
      * 지식백과 > 목록
@@ -689,7 +693,21 @@ public class EgovKnowledgeController {
                 knowledgeVO.setMileageScore(2.0f);
                 knowledgeService.insertUserMileage(knowledgeVO);
                 knowledgeService.insertOrgMileage(knowledgeVO);
-                
+
+                /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
+                if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+                    List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
+                    orgKnowledgeManagerList.forEach(item -> {
+                        MessengerVO messengerVO = new MessengerVO();
+                        messengerVO.setSndUser(userVO.getDisplayName());
+                        messengerVO.setRecvId(item.getSid());
+                        messengerVO.setDocTitle("[도정지식포털 알림]");
+                        messengerVO.setDocDesc("[도정지식포털] 부서 지식이 등록 되었습니다.");
+                        messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                        messengerService.insert(messengerVO);
+                    });
+                }
+
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
@@ -1083,7 +1101,21 @@ public class EgovKnowledgeController {
                 knowledgeVO.setMileageScore(1.0f);
                 knowledgeService.insertUserMileage(knowledgeVO);
                 knowledgeService.insertOrgMileage(knowledgeVO);
-                
+
+                /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
+                if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+                    List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
+                    orgKnowledgeManagerList.forEach(item -> {
+                        MessengerVO messengerVO = new MessengerVO();
+                        messengerVO.setSndUser(userVO.getDisplayName());
+                        messengerVO.setRecvId(item.getSid());
+                        messengerVO.setDocTitle("[도정지식포털 알림]");
+                        messengerVO.setDocDesc("[도정지식포털] 부서 지식이 수정 되었습니다.");
+                        messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                        messengerService.insert(messengerVO);
+                    });
+                }
+
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
@@ -1098,7 +1130,7 @@ public class EgovKnowledgeController {
     }
 
     /**
-     * 지식백과 > 데이터 수정 TODO
+     * 지식백과 > 데이터 수정
      * @return Redirect
      */
     @RequestMapping("/insertUpdateKnowledgeRequest.do")
@@ -1206,8 +1238,8 @@ public class EgovKnowledgeController {
                 messengerVO.setSndUser(userVO.getDisplayName());
                 messengerVO.setRecvId(knowledgeDetail.getOwnerId());
                 messengerVO.setDocTitle("[도정지식포털 알림]");
-                messengerVO.setDocDesc(knowledgeVO.getRequestContent());
-                messengerVO.setDocUrl("http://105.0.1.229/myp/modificationList.do");
+                messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
+                messengerVO.setDocUrl("http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
                 messengerService.insert(messengerVO);
 
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
@@ -1317,7 +1349,21 @@ public class EgovKnowledgeController {
 	        knowledgeDetail.setMileageScore(1.0f);
 	        knowledgeService.insertUserMileage(knowledgeDetail);
 	        knowledgeService.insertOrgMileage(knowledgeDetail);
-	        
+
+            /* 부서 지식 관리자 조회 후 존재하는 경우에 알림 전송 */
+            if (!knowledgeVO.getKnowlgMapType().equals("PERSONAL")) {
+                List<UserVO> orgKnowledgeManagerList = userService.selectOrgKnowledgeManager(userVO);
+                orgKnowledgeManagerList.forEach(item -> {
+                    MessengerVO messengerVO = new MessengerVO();
+                    messengerVO.setSndUser(userVO.getDisplayName());
+                    messengerVO.setRecvId(item.getSid());
+                    messengerVO.setDocTitle("[도정지식포털 알림]");
+                    messengerVO.setDocDesc("[도정지식포털] 부서 지식이 수정 되었습니다.");
+                    messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                    messengerService.insert(messengerVO);
+                });
+            }
+
 	        redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
 	    } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -1361,8 +1407,8 @@ public class EgovKnowledgeController {
             messengerVO.setSndUser(userVO.getDisplayName());
             messengerVO.setRecvId(knowledgeDetail.getOwnerId());
             messengerVO.setDocTitle("[도정지식포털 알림]");
-            messengerVO.setDocDesc(knowledgeVO.getRequestContent());
-            messengerVO.setDocUrl("http://105.0.1.229/myp/modificationList.do");
+            messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
+            messengerVO.setDocUrl("http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
             messengerService.insert(messengerVO);
 
             redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());

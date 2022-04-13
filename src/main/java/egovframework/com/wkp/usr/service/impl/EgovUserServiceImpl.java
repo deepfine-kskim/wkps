@@ -1,14 +1,12 @@
 package egovframework.com.wkp.usr.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.com.wkp.usr.service.EgovUserService;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service("userService")
 public class EgovUserServiceImpl extends EgovAbstractServiceImpl implements EgovUserService {
@@ -104,5 +102,13 @@ public class EgovUserServiceImpl extends EgovAbstractServiceImpl implements Egov
 	@Override
 	public void deleteUser() {
 		userDAO.deleteUser();
+	}
+
+	/**
+	 * 부서 지식 관리자 조회
+	 */
+	@Override
+	public List<UserVO> selectOrgKnowledgeManager(UserVO userVO) {
+		return userDAO.selectOrgKnowledgeManager(userVO);
 	}
 }

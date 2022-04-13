@@ -1,10 +1,10 @@
 package egovframework.com.wkp.usr.service.impl;
 
-import java.util.List;
-import org.springframework.stereotype.Repository;
-
 import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 import egovframework.com.wkp.usr.service.UserVO;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("userDAO")
 public class UserDAO extends EgovComAbstractDAO {
@@ -80,5 +80,11 @@ public class UserDAO extends EgovComAbstractDAO {
 	public void deleteUser() {
 		update("UserDAO.deleteUser");
 	}
-	
+
+	/**
+	 * 부서 지식 관리자 조회
+	 */
+	public List<UserVO> selectOrgKnowledgeManager(UserVO userVO) {
+		return selectList("UserDAO.selectOrgKnowledgeManager", userVO);
+	}
 }

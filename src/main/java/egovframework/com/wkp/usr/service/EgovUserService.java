@@ -39,5 +39,6 @@ public interface EgovUserService {
     public int insertOrgManager(UserVO userVO);
 
     public void deleteUser();
-    
+
+    public List<UserVO> selectOrgKnowledgeManager(UserVO userVO);
 }

@@ -382,9 +382,11 @@
                                     <c:choose>
                                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                                         <c:when test="${fn:indexOf(knowlgMap.knowlgMapNm, '연설문, 축사, 기념사, 브리핑') ne -1}">
-                                            <c:if test="${fn:indexOf('user,test', loginVO.sid) ne -1}">
-                                                <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
-                                            </c:if>
+                                            <c:forEach var="item" items="${'finee0122,sinflyoh3,eunn0628'}">
+                                                <c:if test="${item eq loginVO.sid}">
+                                                    <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
+                                                </c:if>
+                                            </c:forEach>
                                         </c:when>
                                         <c:otherwise>
                                             <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>

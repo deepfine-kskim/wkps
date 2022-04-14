@@ -388,7 +388,7 @@
 <script type="text/javascript" src="<c:url value='/html/egovframework/com/cmm/utl/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
 <script type="text/javascript">
 	CKEDITOR.replace('inpText');
-	
+
 	$(function() {
         /*$('#convFile').off('change').on('change', function (e) {
             const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -436,7 +436,7 @@
                    	for(var i=0; i < data.knowledgeMapList.length; i++){
                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                         if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
-                            if ('user,test'.indexOf('${loginVO.sid}') !== -1) {
+                            if (['finee0122', 'sinflyoh3', 'eunn0628'].indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }
                             continue;
@@ -465,7 +465,7 @@
 	               	for(var i=0; i < data.knowledgeMapList.length; i++){
                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                         if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
-                            if ('user,test'.indexOf('${loginVO.sid}') !== -1) {
+                            if (['finee0122', 'sinflyoh3', 'eunn0628'].indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }
                             continue;

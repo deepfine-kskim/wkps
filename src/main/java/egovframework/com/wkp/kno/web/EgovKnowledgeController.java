@@ -2326,6 +2326,45 @@ public class EgovKnowledgeController {
         return knowledgeService.checkDuplication(knowledgeVO);
     }
 
+    @ResponseBody
+    @RequestMapping("/ckeditorImageUpload.do")
+    public Map<String, Object> ckeditorImageUpload(MultipartHttpServletRequest multipartHttpServletRequest) {
+        MultipartFile file = multipartHttpServletRequest.getFile("upload");
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+
+        int uploaded = 0;
+        String filePath = "";
+        String fileName = "";
+
+        if (file.getContentType().startsWith("image/")) {
+            try {
+                fileMap.put(file.getOriginalFilename(), file);
+                List<FileVO> fileVOList = fileUtil.parseFileInf(fileMap, "CKEDITOR_", 0, "");
+
+                if (!fileVOList.isEmpty()) {
+                    fileMngService.insertFileInfs(fileVOList);
+                    FileVO fileVO = fileVOList.get(0);
+                    uploaded = 1;
+                    fileName = fileVO.getStreFileNm();
+                    filePath = fileVO.getFileStreCours() + fileVO.getStreFileNm();
+                }
+            } catch (IOException e) {
+                LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+            } catch (EgovComException e) {
+                LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+            } catch (Exception e) {
+                LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+            }
+        }
+
+        result.put("uploaded", uploaded);
+        result.put("fileName", fileName);
+        result.put("url", filePath);
+
+        return result;
+    }
+
     // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓ 미사용 코드 주석 처리 ↓↓↓↓↓↓↓

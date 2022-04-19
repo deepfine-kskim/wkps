@@ -1,8 +1,8 @@
 package egovframework.com.wkp.cmm.service;
 
-import java.util.List;
-
 import egovframework.com.wkp.usr.service.UserVO;
+
+import java.util.List;
 
 public interface EgovCommonService {
 	
@@ -24,7 +24,7 @@ public interface EgovCommonService {
 	
 	public int deleteExcellenceOrg(ExcellenceOrgVO excellenceOrgVO);
 	
-	public List<RecommendVO> selectRecommendList(RecommendVO recommendVO);
+	public List<RecommendVO> selectRecommendList();
 
 	public int insertRecommend(RecommendVO recommendVO);
 

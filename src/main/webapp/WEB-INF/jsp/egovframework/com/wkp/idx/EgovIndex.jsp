@@ -127,131 +127,85 @@
                         <div id="mainTab1" class="tab-pane active" role="tabpanel">
                             <div class="card_slider_area">
                                 <div class="card_item_list owl-carousel owl-theme refresh">
-                                	<c:forEach var="report" items="${newReportList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${report.knowlgNo }">
-                                            <span class="label label-warning">행정자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${report.title }</strong>
-                                                <p class="txt">${report.summry }</p>
-                                            </div>
-                                            <span class="date">${report.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="reference" items="${newReferenceList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${reference.knowlgNo }">
-                                            <span class="label label-primary">업무참고자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${reference.title }</strong>
-                                                <p class="txt">${reference.summry }</p>
-                                            </div>
-                                            <span class="date">${reference.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="personal" items="${newPersonalList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo }">
-                                            <span class="label label-success">개인행정지식</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${personal.title }</strong>
-                                                <p class="txt">${personal.summry }</p>
-                                            </div>
-                                            <span class="date">${personal.registDtm }</span>
-                                        </a>
-                                    </div>
+                                    <c:forEach var="newKnowledge" items="${newKnowledgeList}">
+                                        <div class="card_item">
+                                            <a href="/kno/knowledgeDetail.do?knowlgNo=<c:out value="${newKnowledge.knowlgNo}"/>">
+                                                <c:choose>
+                                                    <c:when test="${newKnowledge.knowlgMapType eq 'REPORT'}">
+                                                        <span class="label label-warning">행정자료</span>
+                                                    </c:when>
+                                                    <c:when test="${newKnowledge.knowlgMapType eq 'REFERENCE'}">
+                                                        <span class="label label-primary">업무참고자료</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="label label-success">개인행정지식</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <div class="caption_box">
+                                                    <strong class="subject"><c:out value="${newKnowledge.title}"/></strong>
+                                                    <p class="txt"><c:out value="${newKnowledge.summry}"/></p>
+                                                </div>
+                                                <span class="date"><c:out value="${newKnowledge.registDtm}"/></span>
+                                            </a>
+                                        </div>
                                     </c:forEach>
                                 </div>
                             </div>
                         </div>
                         <div id="mainTab2" class="tab-pane" role="tabpanel">
                             <div class="card_slider_area">
-                            	<c:if test="${not empty recommendReportList or not empty recommendReferenceList or not empty recommendPersonalList }">
                                 <div class="card_item_list owl-carousel owl-theme">
-                                	<c:forEach var="report" items="${recommendReportList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${report.knowlgNo}">
-                                            <span class="label label-warning">행정자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${report.title }</strong>
-                                                <p class="txt">${report.summry }</p>
-                                            </div>
-                                            <span class="date">${report.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="reference" items="${recommendReferenceList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${reference.knowlgNo}">
-                                            <span class="label label-primary">업무참고자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${reference.title }</strong>
-                                                <p class="txt">${reference.summry }</p>
-                                            </div>
-                                            <span class="date">${reference.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="personal" items="${recommendPersonalList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
-                                            <span class="label label-success">개인행정지식</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${personal.title }</strong>
-                                                <p class="txt">${personal.summry }</p>
-                                            </div>
-                                            <span class="date">${personal.registDtm }</span>
-                                        </a>
-                                    </div>
+                                	<c:forEach var="recommendKnowledge" items="${recommendKnowledgeList}">
+                                        <div class="card_item">
+                                            <a href="/kno/knowledgeDetail.do?knowlgNo=<c:out value="${recommendKnowledge.knowlgNo}"/>">
+                                                <c:choose>
+                                                    <c:when test="${recommendKnowledge.knowlgMapType eq 'REPORT'}">
+                                                        <span class="label label-warning">행정자료</span>
+                                                    </c:when>
+                                                    <c:when test="${recommendKnowledge.knowlgMapType eq 'REFERENCE'}">
+                                                        <span class="label label-primary">업무참고자료</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="label label-success">개인행정지식</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <div class="caption_box">
+                                                    <strong class="subject"><c:out value="${recommendKnowledge.title}"/></strong>
+                                                    <p class="txt"><c:out value="${recommendKnowledge.summry}"/></p>
+                                                </div>
+                                                <span class="date"><c:out value="${recommendKnowledge.registDtm}"/></span>
+                                            </a>
+                                        </div>
                                     </c:forEach>
                                 </div>
-                                </c:if>
                             </div>
                         </div>
                         <div id="mainTab3" class="tab-pane" role="tabpanel">
                             <div class="card_slider_area">
-                            	<c:if test="${not empty personalizeReportList or not empty personalizeReferenceList or not empty recommendPersonalList }">
                                 <div class="card_item_list owl-carousel owl-theme">
-                                	<c:forEach var="report" items="${personalizeReportList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${report.knowlgNo}">
-                                            <span class="label label-warning">행정자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${report.title }</strong>
-                                                <p class="txt">${report.summry }</p>
-                                            </div>
-                                            <span class="date">${report.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="reference" items="${personalizeReferenceList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${reference.knowlgNo}">
-                                            <span class="label label-primary">업무참고자료</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${reference.title }</strong>
-                                                <p class="txt">${reference.summry }</p>
-                                            </div>
-                                            <span class="date">${reference.registDtm }</span>
-                                        </a>
-                                    </div>
-                                    </c:forEach>
-                                    <c:forEach var="personal" items="${personalizePersonalList }">
-                                    <div class="card_item">
-                                        <a href="/kno/knowledgeDetail.do?knowlgNo=${personal.knowlgNo}">
-                                            <span class="label label-success">개인행정지식</span>
-                                            <div class="caption_box">
-                                                <strong class="subject">${personal.title }</strong>
-                                                <p class="txt">${personal.summry }</p>
-                                            </div>
-                                            <span class="date">${personal.registDtm }</span>
-                                        </a>
-                                    </div>
+                                	<c:forEach var="personalizeKnowledge" items="${personalizeKnowledgeList}">
+                                        <div class="card_item">
+                                            <a href="/kno/knowledgeDetail.do?knowlgNo=<c:out value="${personalizeKnowledge.knowlgNo}"/>">
+                                                <c:choose>
+                                                    <c:when test="${personalizeKnowledge.knowlgMapType eq 'REPORT'}">
+                                                        <span class="label label-warning">행정자료</span>
+                                                    </c:when>
+                                                    <c:when test="${personalizeKnowledge.knowlgMapType eq 'REFERENCE'}">
+                                                        <span class="label label-primary">업무참고자료</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="label label-success">개인행정지식</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <div class="caption_box">
+                                                    <strong class="subject"><c:out value="${personalizeKnowledge.title}"/></strong>
+                                                    <p class="txt"><c:out value="${personalizeKnowledge.summry}"/></p>
+                                                </div>
+                                                <span class="date"><c:out value="${personalizeKnowledge.registDtm}"/></span>
+                                            </a>
+                                        </div>
                                     </c:forEach>
                                 </div>
-                                </c:if>
                             </div>
                         </div>
                     </div>

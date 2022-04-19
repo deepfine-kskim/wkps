@@ -1,20 +1,12 @@
 package egovframework.com.wkp.cmm.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.cmm.service.GroupVO;
-import egovframework.com.wkp.cmm.service.PersonalizeVO;
-import egovframework.com.wkp.cmm.service.RecommendVO;
-import egovframework.com.wkp.cmm.service.TargetVO;
+import egovframework.com.wkp.cmm.service.*;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service("commonService")
 public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements EgovCommonService {
@@ -110,8 +102,8 @@ public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements Eg
 	}
 
 	@Override
-	public List<RecommendVO> selectRecommendList(RecommendVO recommendVO) {
-        return commonDAO.selectRecommendList(recommendVO);
+	public List<RecommendVO> selectRecommendList() {
+        return commonDAO.selectRecommendList();
 	}
 	
 	@Override

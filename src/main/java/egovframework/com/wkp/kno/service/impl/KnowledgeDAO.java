@@ -331,4 +331,11 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public int insertKnowledgeView(KnowledgeVO knowledgeVO) {
 		return insert("KnowledgeDAO.insertKnowledgeView", knowledgeVO);
 	}
+
+	/**
+	 * 최신 지식 조회 (행정자료, 업무참고자료, 개인행정지식별 2건)
+	 */
+	public List<KnowledgeVO> selectNewKnowledgeList() {
+		return selectList("KnowledgeDAO.selectNewKnowledgeList");
+	}
 }

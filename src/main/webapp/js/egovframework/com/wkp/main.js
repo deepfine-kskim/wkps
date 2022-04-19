@@ -13,6 +13,7 @@ $(document).ready(function() {
                 var tNum = e.item.count;
                 var page = Math.round(e.item.count/2);
                 if (page > 1 && tNum > 3) {
+                    page = e.item.count - 2;
                     count.html('<span class="num">' + cNum + '</span> / ' + page);
                 }
             }).owlCarousel({

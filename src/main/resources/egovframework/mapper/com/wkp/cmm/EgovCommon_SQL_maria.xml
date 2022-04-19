@@ -126,23 +126,18 @@
 		</where>
 	</delete>
 
-	<select id="selectRecommendList" parameterType="RecommendVO" resultType="RecommendVO">
-	
-			SELECT
-				trk.*,
-				(SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY,
-				(SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT,
-				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT,
-				(SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE AND tk.DEL_YN = 'N' ORDER BY KNOWLG_NO DESC LIMIT 1) AS KNOWLG_NO
-			FROM
-				TB_RECOMMEND_KNOWLEDGE trk
-			<where>
-	        	<if test="knowlgMapType != null and knowlgMapType != ''">
-	        	AND trk.KNOWLG_MAP_TYPE = #{knowlgMapType}
-	        	</if>
-			</where>
-			ORDER BY KNOWLG_MAP_TYPE, RKI
-	
+	<!-- 추천 지식 조회 -->
+	<select id="selectRecommendList" resultType="RecommendVO">
+		SELECT trk.*
+			 , (SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY
+			 , (SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT
+			 , (SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT
+			 , (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE AND tk.DEL_YN = 'N' ORDER BY KNOWLG_NO DESC LIMIT 1) AS KNOWLG_NO
+		  FROM TB_RECOMMEND_KNOWLEDGE trk
+		 ORDER BY RKI ASC,
+		  CASE WHEN KNOWLG_MAP_TYPE = 'REPORT' THEN 1
+			   WHEN KNOWLG_MAP_TYPE = 'REFERENCE' THEN 2
+			   WHEN KNOWLG_MAP_TYPE = 'PERSONAL' THEN 3 END
 	</select>
 	
 	<insert id="insertRecommend" parameterType="RecommendVO">
@@ -169,28 +164,27 @@
 			</where>				
 		
 	</delete>
-	
+
+	<!-- 맞춤 지식 조회 -->
 	<select id="selectPersonalizeList" parameterType="PersonalizeVO" resultType="PersonalizeVO">
-	
-			SELECT
-				trk.*,
-				(SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY,
-				(SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT,
-				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT,
-				(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = trk.OU_CODE) AS OU,
-				(SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE AND tk.DEL_YN = 'N' ORDER BY KNOWLG_NO DESC LIMIT 1) AS KNOWLG_NO
-			FROM
-				TB_PERSONALIZE_KNOWLEDGE trk
-			<where>
-	        	<if test="knowlgMapType != null and knowlgMapType != ''">
-	        	AND trk.KNOWLG_MAP_TYPE = #{knowlgMapType}
-	        	</if>
-	        	<if test="ouCode != null and ouCode !=''">
-	        	AND trk.OU_CODE = #{ouCode}
-	        	</if>
-			</where>
-			ORDER BY KNOWLG_MAP_TYPE, RKI
-	
+		SELECT
+			trk.*,
+			(SELECT SUMMRY FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS SUMMRY,
+			(SELECT INQ_CNT FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1) AS INQ_CNT,
+			(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = (SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE ORDER BY KNOWLG_NO DESC LIMIT 1)) AS RECOMEND_CNT,
+			(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = trk.OU_CODE) AS OU,
+			(SELECT KNOWLG_NO FROM TB_KNOWLEDGE tk WHERE tk.TITLE = trk.TITLE AND tk.DEL_YN = 'N' ORDER BY KNOWLG_NO DESC LIMIT 1) AS KNOWLG_NO
+		FROM
+			TB_PERSONALIZE_KNOWLEDGE trk
+		<where>
+			<if test="ouCode != null and ouCode !=''">
+				AND trk.OU_CODE = #{ouCode}
+			</if>
+		</where>
+		ORDER BY RKI ASC,
+		  CASE WHEN KNOWLG_MAP_TYPE = 'REPORT' THEN 1
+			   WHEN KNOWLG_MAP_TYPE = 'REFERENCE' THEN 2
+			   WHEN KNOWLG_MAP_TYPE = 'PERSONAL' THEN 3 END
 	</select>
 	
 	<insert id="insertPersonalize" parameterType="PersonalizeVO">

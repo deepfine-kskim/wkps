@@ -523,4 +523,12 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 		knowledgeDAO.insertKnowledgeView(knowledgeVO);
 		knowledgeDAO.updateInqCnt(knowledgeVO);
 	}
+
+	/**
+	 * 최신 지식 조회 (행정자료, 업무참고자료, 개인행정지식별 2건)
+	 */
+	@Override
+	public List<KnowledgeVO> selectNewKnowledgeList() {
+		return knowledgeDAO.selectNewKnowledgeList();
+	}
 }

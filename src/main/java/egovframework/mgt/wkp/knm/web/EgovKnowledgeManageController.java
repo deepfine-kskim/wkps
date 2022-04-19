@@ -1,18 +1,5 @@
 package egovframework.mgt.wkp.knm.web;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import egovframework.com.wkp.kno.service.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -20,10 +7,24 @@ import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cmm.service.EgovCommonService;
 import egovframework.com.wkp.cmm.service.PersonalizeVO;
 import egovframework.com.wkp.cmm.service.RecommendVO;
+import egovframework.com.wkp.kno.service.*;
 import egovframework.com.wkp.usr.service.EgovOrgService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.LogVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Controller
 @RequestMapping("/adm")
@@ -101,7 +102,7 @@ public class EgovKnowledgeManageController {
 	public String recommendList(@ModelAttribute(name="recommendVO") RecommendVO recommendVO, Model model) {
 
 		try {
-			List<RecommendVO> recommendList = commonService.selectRecommendList(recommendVO);
+			List<RecommendVO> recommendList = commonService.selectRecommendList();
 			model.addAttribute("recommendList", recommendList);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

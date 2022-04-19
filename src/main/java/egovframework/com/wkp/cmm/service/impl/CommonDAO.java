@@ -1,18 +1,12 @@
 package egovframework.com.wkp.cmm.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-
+import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
+import egovframework.com.wkp.cmm.service.*;
+import egovframework.com.wkp.usr.service.UserVO;
 import org.springframework.stereotype.Repository;
 
-import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.cmm.service.GroupVO;
-import egovframework.com.wkp.cmm.service.PersonalizeVO;
-import egovframework.com.wkp.cmm.service.RecommendVO;
-import egovframework.com.wkp.cmm.service.TargetVO;
-import egovframework.com.wkp.usr.service.UserVO;
+import java.util.HashMap;
+import java.util.List;
 
 @Repository("commonDAO")
 public class CommonDAO extends EgovComAbstractDAO {
@@ -113,8 +107,8 @@ public class CommonDAO extends EgovComAbstractDAO {
 		return delete("CommonDAO.deleteExcellenceOrg", excellenceOrgVO);
 	}
 
-	public List<RecommendVO> selectRecommendList(RecommendVO recommendVO) {
-		return selectList("CommonDAO.selectRecommendList", recommendVO);
+	public List<RecommendVO> selectRecommendList() {
+		return selectList("CommonDAO.selectRecommendList");
 	}
 
 	public int insertRecommend(RecommendVO recommendVO) {

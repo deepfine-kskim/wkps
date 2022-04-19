@@ -9,12 +9,11 @@
 	try{
 		returnUrl = URLDecoder.decode(returnUrl, "UTF-8");
 	}catch(Exception e){}
-	
+
 	System.out.println(" ### returnUrl : "+returnUrl);
-	
-	//post 방식일때 
+
+	//post 방식일때
 	boolean isPost = ("POST".equals(request.getMethod().toUpperCase()))?true:false;
-	
 %>
 <%!
 public String getNextUrl(String fullPath,String urlName){
@@ -25,7 +24,7 @@ public String getNextUrl(String fullPath,String urlName){
 		nextURL =  fullPath.substring(idx+urlName.length());
 	return nextURL;
 }
-%>  
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 <head>
@@ -41,7 +40,7 @@ public String getNextUrl(String fullPath,String urlName){
 	</script>
 	<script type="text/javascript" defer="defer">
 		isPost = <%=isPost%>;
-		<% 
+		<%
 		if(isPost){
 			int cnt = 0;
 			Enumeration pNames = request.getParameterNames();
@@ -52,8 +51,8 @@ public String getNextUrl(String fullPath,String urlName){
 						returnUrl = XSSCheck(request.getParameter((String)key));
 					else{
 		%>
-		valueBasket[<%=cnt%>] = new Array("<%=(String)key%>","<%=XSSCheck(request.getParameter((String)key))%>");		
-		<%		
+		valueBasket[<%=cnt%>] = new Array("<%=(String)key%>","<%=XSSCheck(request.getParameter((String)key))%>");
+		<%
 						cnt ++;
 					}
 				}

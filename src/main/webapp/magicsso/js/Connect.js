@@ -70,7 +70,7 @@ Connect.prototype =
 						var result = new String(MagicPass.getResult());
 						if(!result.isNull())
 						{
-							MagicPass.request("INIT_KEY", this.response, this, {"initialSessionKey" : result});
+							MagicPass.request("INIT_KEY", this.response, this, {"initialSessionKey" : result, "returnUrl" : this.returns});
 							return;
 						}else{
 							return;

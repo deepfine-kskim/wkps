@@ -1,23 +1,5 @@
 package egovframework.com.wkp.usr.web;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
@@ -25,6 +7,19 @@ import egovframework.com.wkp.usr.service.EgovUserService;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.rte.fdl.access.bean.AuthorityResourceMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/usr")
@@ -103,10 +98,19 @@ public class EgovUserController {
 
 			egovLogService.insert(LogType.LOGIN, LogSubjectType.LOGIN, userVO);
 
+			String returnUrl = (String) request.getSession().getAttribute("returnUrl");
+			request.getSession().removeAttribute("returnUrl");
+			if (!StringUtils.isEmpty(returnUrl) && !"http://105.0.1.229/index.do".equals(returnUrl)) {
+				if (returnUrl.contains("http://105.0.1.229")) {
+					returnUrl = returnUrl.replace("&amp;", "&");
+					return "redirect:" + returnUrl;
+				}
+			}
+
 			return "redirect:/idx/index.do";
 
 		} else {
-			return "redirect:http://105.0.1.136"; //운영
+			return "redirect:http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/index.do"; //운영
 			//return "redirect:/ssoLogin.jsp"; //개발
 		}
 	}

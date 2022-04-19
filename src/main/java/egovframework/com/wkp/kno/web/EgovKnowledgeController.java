@@ -703,7 +703,7 @@ public class EgovKnowledgeController {
                         messengerVO.setRecvId(item.getSid());
                         messengerVO.setDocTitle("[도정지식포털 알림]");
                         messengerVO.setDocDesc("[도정지식포털] 부서 지식이 등록 되었습니다.");
-                        messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                        messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
                         messengerService.insert(messengerVO);
                     });
                 }
@@ -1111,7 +1111,7 @@ public class EgovKnowledgeController {
                         messengerVO.setRecvId(item.getSid());
                         messengerVO.setDocTitle("[도정지식포털 알림]");
                         messengerVO.setDocDesc("[도정지식포털] 부서 지식이 수정 되었습니다.");
-                        messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                        messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
                         messengerService.insert(messengerVO);
                     });
                 }
@@ -1239,7 +1239,7 @@ public class EgovKnowledgeController {
                 messengerVO.setRecvId(knowledgeDetail.getOwnerId());
                 messengerVO.setDocTitle("[도정지식포털 알림]");
                 messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
-                messengerVO.setDocUrl("http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
+                messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
                 messengerService.insert(messengerVO);
 
                 redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
@@ -1359,7 +1359,7 @@ public class EgovKnowledgeController {
                     messengerVO.setRecvId(item.getSid());
                     messengerVO.setDocTitle("[도정지식포털 알림]");
                     messengerVO.setDocDesc("[도정지식포털] 부서 지식이 수정 되었습니다.");
-                    messengerVO.setDocUrl("http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
+                    messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/adm/approvalDetail.do?knowlgNo=" + knowledgeVO.getKnowlgNo());
                     messengerService.insert(messengerVO);
                 });
             }
@@ -1408,7 +1408,7 @@ public class EgovKnowledgeController {
             messengerVO.setRecvId(knowledgeDetail.getOwnerId());
             messengerVO.setDocTitle("[도정지식포털 알림]");
             messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
-            messengerVO.setDocUrl("http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
+            messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
             messengerService.insert(messengerVO);
 
             redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());

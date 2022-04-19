@@ -52,7 +52,11 @@
 	response.setContentType("text/xml; charset=utf-8");
 	
 	String actionName = XSSCheck(request.getParameter("actionName"));
-	
+	String returnUrl = XSSCheck(request.getParameter("returnUrl"));
+	if (returnUrl != null) {
+		request.getSession().setAttribute("returnUrl", returnUrl);
+	}
+
 	boolean success = false;
 	int code = -1;
 	String message = "";

@@ -1,23 +1,17 @@
 package egovframework.com.wkp.cmm.service;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import egovframework.com.wkp.usr.service.EgovOrgService;
 import egovframework.com.wkp.usr.service.EgovUserService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.io.*;
+import java.util.List;
 
 @Component
 public class Scheduler {
@@ -121,7 +115,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron="0 0 5 * * MON")
+	@Scheduled(cron="0 0 5 * * *")
 	public void topMileageUser() {
 		
 		try {
@@ -139,7 +133,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron="0 0 5 * * MON")
+	@Scheduled(cron="0 0 5 * * *")
 	public void topMileageOrg() {
 		
 		try {

@@ -347,7 +347,7 @@
 <input type="hidden" name="sortOrdr" value="0">
 <input type="hidden" name="cmmntyNo" value="${empty cmmntyNo?0:cmmntyNo}">
 </form:form>
-<script type="text/javascript" src="<c:url value='/html/egovframework/com/cmm/utl/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
+<script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
 <script src="/js/egovframework/com/wkp/clipboard.min.js"></script>
 <script>
 	CKEDITOR.replace('inpText');

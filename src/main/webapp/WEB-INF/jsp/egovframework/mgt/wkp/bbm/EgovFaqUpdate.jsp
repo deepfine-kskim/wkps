@@ -74,7 +74,7 @@
             <!-- //cont_body -->
         </div>
         <!-- //cont_wrap-->
-<script type="text/javascript" src="<c:url value='/html/egovframework/com/cmm/utl/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
+<script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
 <script type="text/javascript">
 	CKEDITOR.replace('inpText');
 </script>

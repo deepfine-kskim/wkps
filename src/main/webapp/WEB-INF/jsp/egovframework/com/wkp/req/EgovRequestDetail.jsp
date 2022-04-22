@@ -168,7 +168,7 @@
 	<input type="hidden" name="requstNo" value="0">
 	<input type="hidden" name="searchText" value="${requestDetail.searchText }"/>
 </form:form>
-<script type="text/javascript" src="<c:url value='/html/egovframework/com/cmm/utl/ckeditor/ckeditor.js?t=B37D54V'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>"></script>
 <script>
 	CKEDITOR.replace('inpMemo');
     $(function () {

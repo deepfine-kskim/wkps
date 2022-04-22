@@ -129,7 +129,7 @@
     <!-- //row -->
 </div>
 <!-- CONTENTS -->
-<script type="text/javascript" src="<c:url value='/html/egovframework/com/cmm/utl/ckeditor/ckeditor.js?t=B37D54V'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>"></script>
 <script src="/js/egovframework/com/wkp/clipboard.min.js"></script>
 <script>
 	CKEDITOR.replace('inpText');

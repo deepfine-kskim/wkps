@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" 	uri="http://java.sun.com/jsp/jstl/core"%>
-<link href='/fullcalendar/lib/main.css' rel='stylesheet' />
+<link href='/js/fullcalendar/lib/main.css' rel='stylesheet' />
 
-<script src='/fullcalendar/lib/main.js'></script>
+<script src='/js/fullcalendar/lib/main.js'></script>
 <script>
 
 var user_sid = '${user.sid}'

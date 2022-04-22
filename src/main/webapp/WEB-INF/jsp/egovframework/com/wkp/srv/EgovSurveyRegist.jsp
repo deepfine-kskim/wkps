@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="cutil" uri="/WEB-INF/tlds/CommonUtil.tld" %>
+<%@ taglib prefix="cutil" uri="/WEB-INF/jsp/tld/CommonUtil.tld" %>
 
 <div class="container sub_cont">
     <div id="contents">

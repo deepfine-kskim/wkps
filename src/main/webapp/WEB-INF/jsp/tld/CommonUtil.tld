@@ -7,7 +7,7 @@
     <description>Custom Tag</description>
     <tlib-version>1.0</tlib-version>
     <short-name>cutil</short-name>
-    <uri>/WEB-INF/tlds/CommonUtil.tld</uri>
+    <uri>/WEB-INF/jsp/tld/CommonUtil.tld</uri>
 
     <function>
         <name>out</name>

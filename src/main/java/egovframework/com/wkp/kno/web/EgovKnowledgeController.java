@@ -282,7 +282,7 @@ public class EgovKnowledgeController {
             // 의회사무처 부서 코드 : 6410073 (임시 하드코딩, 의회사무처 부서 코드 변경 시 해당 값도 변경 필요함)
             OrgVO TopOrg = orgService.selectTopOrgByOuCode(user.getOuCode());
             if ("6410073".equals(TopOrg.getOuCode())) {
-                redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                redirect.addFlashAttribute("errMsg", "별도 지정된 그룹(해당실국 등)만 열람이 가능한 자료입니다.");
                 if (referer != null) {
                     return "redirect:" + referer;
                 }
@@ -317,7 +317,7 @@ public class EgovKnowledgeController {
             }
 
             if (!result) {
-                redirect.addFlashAttribute("errMsg", "열람 권한이 없습니다.");
+                redirect.addFlashAttribute("errMsg", "별도 지정된 그룹(해당실국 등)만 열람이 가능한 자료입니다.");
                 if (referer != null) {
                     return "redirect:" + referer;
                 }

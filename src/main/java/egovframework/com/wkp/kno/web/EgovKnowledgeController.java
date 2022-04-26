@@ -753,15 +753,6 @@ public class EgovKnowledgeController {
             
             KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
 
-            if (knowledgeVO.getKnowlgMapType() != null) {
-                knowledgeMapVO.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
-                model.addAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
-            } else {
-                knowledgeVO.setKnowlgMapType("REPORT");
-                knowledgeMapVO.setKnowlgMapType("REPORT");
-                model.addAttribute("knowlgMapType", "REPORT");
-            }
-            
             UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			
 			GroupVO groupVO = new GroupVO();
@@ -813,7 +804,7 @@ public class EgovKnowledgeController {
             model.addAttribute("targetVOList", targetVOList);
             model.addAttribute("isOwner", true);
             model.addAttribute("isIgnoreOrg", isIgnoreOrg);
-
+            model.addAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}

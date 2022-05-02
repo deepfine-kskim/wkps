@@ -588,8 +588,11 @@
 				TB_USER_MILEAGE
 			<where>
 				AND KNOWLG_NO = #{knowlgNo}
-				<if test="mileageType != null and  mileageType !=''">
-				AND MILEAGE_TYPE = #{mileageType}
+				<if test="mileageType != null and mileageType !=''">
+					AND MILEAGE_TYPE = #{mileageType}
+				</if>
+				<if test="registerId != null and registerId != ''">
+					AND SID = #{registerId}
 				</if>
 			</where>
 	
@@ -602,6 +605,12 @@
 				TB_ORG_MILEAGE
 			<where>
 				AND KNOWLG_NO = #{knowlgNo}
+				<if test="mileageType != null and mileageType !=''">
+					AND MILEAGE_TYPE = #{mileageType}
+				</if>
+				<if test="ouCode != null and ouCode != ''">
+					AND OU_CODE = #{ouCode}
+				</if>
 			</where>
 	
 	</delete>

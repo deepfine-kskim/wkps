@@ -106,7 +106,7 @@
 											<h3 class="panel-title">답변</h3>
 										</div>
 										<div class="panel-body">
-											${fn:replace(answer.cont, replaceChar, "<br/>")}
+											${fn:replace(fn:replace(fn:replace(answer.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'")}
 										</div>
 									</div>
 								</div>

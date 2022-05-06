@@ -102,12 +102,8 @@ public class EgovKnowledgeController {
      * @return View Page
      */
     @RequestMapping("/knowledgeList.do")
-    public String knowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-            , @RequestParam(value = "errMsg", required = false) String errMsg
-    		, Model model
-    		, HttpServletRequest request) {
+    public String knowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model, HttpServletRequest request) {
         try {
-        	
         	Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
              
             if(flashMap != null) {                 
@@ -137,17 +133,9 @@ public class EgovKnowledgeController {
             if (knowledgeVO.getPage() == null || knowledgeVO.getPage() == 0) {
                 knowledgeVO.setPage(1);
             }
-            
-			if(errMsg != null) {
-				model.addAttribute("errMsg", errMsg);
-			}
 
-			//System.out.println("knowledgeVO - " + knowledgeVO);
-			
             List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
             ListWithPageNavigation<KnowledgeVO> knowledgeList = knowledgeService.selectKnowledgeList(knowledgeVO);
-            
-            model.addAttribute("knowledgeVO", knowledgeVO);
             
             model.addAttribute("searchInfo", knowledgeVO.getSearchText());
             if(knowledgeVO.getSearchType() != null) {
@@ -177,12 +165,7 @@ public class EgovKnowledgeController {
             if(knowledgeService.selectInterests(knowledgeVO) != null) {
             	isInterests = true;
             }
-            
-			/*
-			 * GroupVO groupVO = new GroupVO(); groupVO.setRegisterId(userVO.getSid());
-			 * List<GroupVO> groupList; groupList = commonService.selectGroupList(groupVO);
-			 */
-            
+
 			List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
             List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
             
@@ -1251,9 +1234,7 @@ public class EgovKnowledgeController {
      * @return View Page
      */
     @RequestMapping("/modifyKnowledgeView.do")
-    public String modifyKnowledgeView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-    		, Model model) {
-    	
+    public String modifyKnowledgeView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
         try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
             KnowledgeContentsVO knowledgeContents = knowledgeService.selectKnowledgeContentsDetail(knowledgeVO);
@@ -1278,9 +1259,7 @@ public class EgovKnowledgeController {
      * @return View Page
      */
     @RequestMapping("/modifyKnowledgeRequestView.do")
-    public String modifyKnowledgeRequestView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-            , Model model) {
-
+    public String modifyKnowledgeRequestView(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model) {
         try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
             KnowledgeContentsVO knowledgeContents = knowledgeService.selectKnowledgeContentsDetail(knowledgeVO);
@@ -1305,9 +1284,7 @@ public class EgovKnowledgeController {
      * @return Redirect
      */
     @RequestMapping("/modifyKnowledge.do")
-    public String modifyKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
-    		, RedirectAttributes redirectAttributes) {
-    	
+    public String modifyKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
 		try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
         	List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeVO);

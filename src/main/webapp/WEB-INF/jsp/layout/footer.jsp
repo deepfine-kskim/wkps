@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-md-10">
                         <div class="foot_info">
-                            <em>경기도 수원시 팔달구 효원로 1 (매산로3가)</em><span class="bar">/</span>
+                            <em>경기도 수원시 영통구 도청로 30</em><span class="bar">/</span>
                             <em>북부청사 11780 의정부시 청사로 1</em><span class="bar">/</span>
                             <em>정보기획담당관(031-8008-3852)</em>
                             <p class="copy"><span class="hidden-xs">COPYRIGHT</span>&copy; GYEONGGI PROVINCE All Rights Reserved.</p>

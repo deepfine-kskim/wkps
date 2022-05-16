@@ -163,7 +163,6 @@ public class Scheduler {
 			
 			for(int i = 0; i < reportRecommendKnowledgeList.size(); i++) {
 				reportRecommendKnowledgeList.get(i).setRki(i+1);
-				reportRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(reportRecommendKnowledgeList.get(i));
 			}
 			
@@ -173,7 +172,6 @@ public class Scheduler {
 			
 			for(int i = 0; i < referenceRecommendKnowledgeList.size(); i++) {
 				referenceRecommendKnowledgeList.get(i).setRki(i+1);
-				referenceRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(referenceRecommendKnowledgeList.get(i));
 			}
 			
@@ -183,7 +181,6 @@ public class Scheduler {
 			
 			for(int i = 0; i < pesonalRecommendKnowledgeList.size(); i++) {
 				pesonalRecommendKnowledgeList.get(i).setRki(i+1);
-				pesonalRecommendKnowledgeList.get(i).setRegisterId("admin");
 				commonService.insertRecommend(pesonalRecommendKnowledgeList.get(i));
 			}
 			

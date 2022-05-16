@@ -315,6 +315,13 @@ public class EgovKnowledgeController {
         knowledgeViewVO.setRegisterId(user.getSid());
         if (knowledgeService.countKnowledgeView(knowledgeViewVO) == 0) {
             knowledgeService.insertKnowledgeView(knowledgeViewVO);
+            
+            // 지식 조회 시 마일리지 5점 적립
+            knowledgeViewVO.setMileageType("VIEW");
+            knowledgeViewVO.setMileageScore(5.0f);
+            knowledgeViewVO.setOuCode(user.getOuCode());
+            knowledgeService.insertUserMileage(knowledgeViewVO);
+            knowledgeService.insertOrgMileage(knowledgeViewVO);
         }
 
         if (knowledgeVO.getPage() != null) {

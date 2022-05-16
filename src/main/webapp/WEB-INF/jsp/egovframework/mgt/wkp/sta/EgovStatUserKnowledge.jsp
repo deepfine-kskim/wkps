@@ -81,7 +81,7 @@
                             <th scope="col">순위</th>
                             <th scope="col">성명</th>
                             <th scope="col">부서</th>
-                            <th scope="col">게시건수</th>
+                            <th scope="col">게시건수(수정포함)</th>
                             <th scope="col">조회누계</th>
                             <th scope="col">추천누계</th>
                         </tr>

@@ -152,29 +152,64 @@
  	</select>
  	
  	<select id="selectKnowledgeList" parameterType="KnowledgeVO" resultType="KnowledgeVO">
-
-			SELECT
-				tk.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME,
-				(SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU,
-				(SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO) AS RECOMMEND_CNT
-			FROM
-				TB_KNOWLEDGE tk
-			<where>
-				AND KNOWLG_NO != 1
-			</where>
-			ORDER BY KNOWLG_NO DESC
-        	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
-        	
+		SELECT *
+		  FROM (SELECT tk.*
+					 , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME
+					 , (SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU
+					 , (SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO) AS RECOMMEND_CNT
+				     , CASE WHEN DATEDIFF(tk.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+				  FROM TB_KNOWLEDGE tk) TB_KNOWLEDGE
+		<where>
+			AND KNOWLG_NO != 1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 'TITLE'">
+					AND TITLE LIKE '%' #{searchKeyword} '%'
+				</if>
+				<if test="searchCondition == 'DISPLAY_NAME'">
+					AND DISPLAY_NAME LIKE '%' #{searchKeyword} '%'
+				</if>
+				<if test="searchCondition == 'OU'">
+					AND OU LIKE '%' #{searchKeyword} '%'
+				</if>
+			</if>
+			<if test="searchStartDate != null and searchStartDate != ''">
+				AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{searchStartDate}
+			</if>
+			<if test="searchEndDate != null and searchEndDate != ''">
+				AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{searchEndDate}
+			</if>
+		</where>
+		ORDER BY KNOWLG_NO DESC
+       	LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
  	</select>
  	
  	<select id="selectKnowledgeListCount" resultType="int">
- 	
-			SELECT
-				COUNT(*)
-			FROM
-				TB_KNOWLEDGE
-				
+ 		SELECT COUNT(KNOWLG_NO)
+		  FROM (SELECT tk.*
+					 , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tk.REGISTER_ID) AS DISPLAY_NAME
+					 , (SELECT OU FROM TB_ORG tg WHERE tg.OU_CODE = tk.OU_CODE) AS OU
+					 , (SELECT COUNT(*) FROM TB_KNOWLEDGE_RECOMMEND tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO) AS RECOMMEND_CNT
+				  FROM TB_KNOWLEDGE tk) TB_KNOWLEDGE
+		<where>
+			AND KNOWLG_NO != 1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 'TITLE'">
+					AND TITLE LIKE '%' #{searchKeyword} '%'
+				</if>
+				<if test="searchCondition == 'DISPLAY_NAME'">
+					AND DISPLAY_NAME LIKE '%' #{searchKeyword} '%'
+				</if>
+				<if test="searchCondition == 'OU'">
+					AND OU LIKE '%' #{searchKeyword} '%'
+				</if>
+			</if>
+			<if test="searchStartDate != null and searchStartDate != ''">
+				AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{searchStartDate}
+			</if>
+			<if test="searchEndDate != null and searchEndDate != ''">
+				AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{searchEndDate}
+			</if>
+		</where>
  	</select>
  	
  	<select id="selectInterestsList" parameterType="KnowledgeVO" resultType="KnowledgeVO">

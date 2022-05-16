@@ -144,4 +144,12 @@ public class KnowledgeVO {
 	private int needSucceed;
 
 	private Long knowledgeViewNo;
+
+	private String searchCondition;
+
+	private String searchKeyword;
+
+	private String searchStartDate;
+
+	private String searchEndDate;
 }

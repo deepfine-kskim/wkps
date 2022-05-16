@@ -23,25 +23,31 @@
                 <div id="contents">
                     <div class="brd_top">
                         <div class="row">
-                            <div class="col-xs-5 brd_total">
+                            <div class="col-xs-3 brd_total">
                                 <p><i class="fa fa-file-text-o" aria-hidden="true"></i> 총 게시물 <span class="text-primary">${knowledgeList.pageNavigation.totalItemCount }</span>  / 페이지 <span class="text-black">${knowledgeList.pageNavigation.pageIndex }</span></p>
                             </div>
-                             <div class="col-xs-7 text-right">
+                             <div class="col-xs-9 text-right">
                                 <form:form class="form-inline bbs_srch_frm" name="srchFrm" modelAttribute="knowledgeVO">
                                     <input type="hidden" name="page" value="${knowledgeList.pageNavigation.pageIndex }">
                                     <fieldset>
                                         <legend class="sr-only">게시글 검색</legend>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control inp_date datetime text-center" id="inpStartDate" name="searchStartDate" placeholder="시작날짜" value="${knowledgeVO.searchStartDate}"/>
+                                            <span class="input-group-addon">~</span>
+                                            <input type="text" class="form-control inp_date datetime text-center" id="inpEndDate" name="searchEndDate" placeholder="종료날짜" value="${knowledgeVO.searchEndDate}"/>
+                                        </div>
                                         <div class="form-group">
                                             <label for="brdSrchSel" class="sr-only">검색대상</label>
-                                            <select id="brdSrchSel"  name="brdSrchSel" class="form-control">
-                                                <option>제목 + 내용</option>
-                                                <option>제목</option>
-                                                <option>내용</option>
+                                            <select id="brdSrchSel" name="searchCondition" class="form-control">
+                                                <option value="">선택해주세요.</option>
+                                                <option value="TITLE" <c:if test="${knowledgeVO.searchCondition eq 'TITLE'}">selected="selected"</c:if>>제목</option>
+                                                <option value="DISPLAY_NAME" <c:if test="${knowledgeVO.searchCondition eq 'DISPLAY_NAME'}">selected="selected"</c:if>>작성자</option>
+                                                <option value="OU" <c:if test="${knowledgeVO.searchCondition eq 'OU'}">selected="selected"</c:if>>부서</option>
                                             </select>
                                         </div>
                                         <div class="input-group">
                                             <label for="brdSrchStr" class="sr-only">검색어 입력</label>
-                                            <input type="text" id="brdSrchStr" name="searchText" class="form-control" placeholder="검색어" value="${searchText }"/>
+                                            <input type="text" id="brdSrchStr" name="searchKeyword" class="form-control" placeholder="검색어" value="${knowledgeVO.searchKeyword}"/>
                                             <span class="input-group-btn"><button type="submit" class="btn btn-default">검색</button></span>
                                         </div>
                                     </fieldset>
@@ -68,8 +74,9 @@
                                 <th scope="col">유형</th>
                                 <th scope="col">제목</th>
                                 <th scope="col">작성자</th>
-                                <th scope="col">추천수 </th>
-                                <th scope="col">조회수 </th>
+                                <th scope="col">부서</th>
+                                <th scope="col">추천수</th>
+                                <th scope="col">조회수</th>
                                 <th scope="col">등록일</th>
                             </tr>
                         </thead>
@@ -84,8 +91,12 @@
                             	<c:otherwise>개인행정지식</c:otherwise>
                             	</c:choose>
                                 </td>
-                                <td class="text-left"><a href="#">${knowledge.title } 현황</a> <span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></td>
+                                <td class="text-left">
+                                    <a href="#">${knowledge.title}</a>
+                                    <c:if test="${knowledge.isNew}"><span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></c:if>
+                                </td>
                                 <td>${knowledge.displayName }</td>
+                                <td>${knowledge.ou }</td>
                                 <td>${knowledge.recommendCnt }</td>
                                 <td>${knowledge.inqCnt }</td>
                                 <td>${knowledge.registDtm }</td>

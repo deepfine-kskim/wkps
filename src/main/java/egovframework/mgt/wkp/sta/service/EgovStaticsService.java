@@ -30,7 +30,7 @@ public interface EgovStaticsService {
     
     public ListWithPageNavigation<KnowledgeVO> selectKnowledgeList(KnowledgeVO knowledgeVO);
     
-    public int selectKnowledgeListCount();
+    public int selectKnowledgeListCount(KnowledgeVO knowledgeVO);
     
     public ListWithPageNavigation<KnowledgeVO> selectInterestsList(KnowledgeVO knowledgeVO);
     

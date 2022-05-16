@@ -2,8 +2,8 @@ package egovframework.mgt.wkp.sta.service.impl;
 
 import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO;
 import egovframework.mgt.wkp.sta.service.StaticsConnectVO;
+import egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO;
 import egovframework.mgt.wkp.sta.service.StaticsQnaVO;
 import org.springframework.stereotype.Repository;
 
@@ -41,8 +41,8 @@ public class StaticsDAO extends EgovComAbstractDAO {
 		return selectList("StaticsDAO.selectKnowledgeList", knowledgeVO);
 	}
 	
-	public int selectKnowledgeListCount() {
-		return selectOne("StaticsDAO.selectKnowledgeListCount");
+	public int selectKnowledgeListCount(KnowledgeVO knowledgeVO) {
+		return selectOne("StaticsDAO.selectKnowledgeListCount", knowledgeVO);
 	}
 
 	public List<KnowledgeVO> selectInterestsList(KnowledgeVO knowledgeVO) {

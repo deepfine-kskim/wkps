@@ -168,7 +168,7 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
 
         ListWithPageNavigation<KnowledgeVO> result = new ListWithPageNavigation<>();
 
-        PageNavigation pageNavigation = new PageNavigation(selectKnowledgeListCount(), knowledgeVO.getPage(), null, 10);
+        PageNavigation pageNavigation = new PageNavigation(selectKnowledgeListCount(knowledgeVO), knowledgeVO.getPage(), null, 10);
         knowledgeVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
         knowledgeVO.setItemOffset(pageNavigation.getItemCountPerPage() * (knowledgeVO.getPage() - 1));
         result.setList(staticsDAO.selectKnowledgeList(knowledgeVO));
@@ -178,8 +178,8 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
 	}
 	
 	@Override
-	public int selectKnowledgeListCount() {
-		return staticsDAO.selectKnowledgeListCount();
+	public int selectKnowledgeListCount(KnowledgeVO knowledgeVO) {
+		return staticsDAO.selectKnowledgeListCount(knowledgeVO);
 	}
 
 	@Override

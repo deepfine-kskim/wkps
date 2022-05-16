@@ -121,14 +121,11 @@
                                 </div>
                                 <div class="row type0 info_view">
                                     <div class="col-xs-12 col-sm-4">
-                                        <span>최근 수정일 : </span><span class="data">${lastUpdated}</span>
+                                        <span>최종 게시자 : </span><span class="data">${knowledgeDetail.displayName}(${knowledgeDetail.ou})</span>
                                     </div>
                                     <div class="col-xs-12 col-sm-8 info_txts">
-                                        <span class="info_txt name">등록일 : <span class="data">${knowledgeDetail.registDtm}</span></span>
+                                        <span class="info_txt name">등록일 : <span class="data">${knowledgeDetail.registDtmStr}</span></span>
                                     </div>
-                                    <!-- <div class="col-xs-12 col-sm-8 info_txts">
-                                        <span class="info_txt name">작성자 : <span class="data">${knowledgeDetail.displayName}(${knowledgeDetail.ou})</span></span>
-                                    </div> -->
                                 </div>
                             </div>
                             <c:if test="${not empty fileList}">
@@ -226,7 +223,7 @@
                                                     <c:url value="/kno/knowledgeHistory.do" var="url">
                                                         <c:param name="knowlgNo" value="${history.knowlgNo}"/>
                                                     </c:url>
-                                                    <li><a href="${url}" target="_blank" title="새창열림">${history.displayName}(${history.ou}) <span class="date">${history.registDtm}</span></a>
+                                                    <li><a href="${url}" target="_blank" title="새창열림">${history.displayName}(${history.ou}) <span class="date">${history.registDtmStr}</span></a>
                                                     <%-- <a href="/kno/deleteknowlg.do?title=${history.title}&knowlgNo=${history.knowlgNo}">&nbsp;&nbsp;<i class="remove">x</i></a><span class="sr-only">삭제</span> --%>
                                                     </li>
                                                     </c:forEach>

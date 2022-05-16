@@ -371,7 +371,6 @@ public class EgovKnowledgeController {
         model.addAttribute("excellenceUserList", excellenceUserList);
         model.addAttribute("excellenceOrgList", excellenceOrgList);
         model.addAttribute("user", user);
-        model.addAttribute("lastUpdated", knowledgeService.selectKnowledgeLastUpdated(knowledgeDetail));
         model.addAttribute("knowlgMapNo", knowledgeVO.getKnowlgMapNo());
         model.addAttribute("isOwner", isOwner);
 

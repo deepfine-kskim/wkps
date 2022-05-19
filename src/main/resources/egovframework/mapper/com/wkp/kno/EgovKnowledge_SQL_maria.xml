@@ -153,14 +153,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
 		 ORDER BY REGIST_DTM DESC
@@ -248,14 +246,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
     </select>
@@ -318,14 +314,12 @@
 		  LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                  , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                  , TB_KNOWLEDGE_MAP.DEL_YN
-		                  , TB_KNOWLEDGE_MAP.SHOW_YN
 		                  , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                  , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		               FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		    ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
 	     WHERE TB_KNOWLEDGE.DEL_YN = 'N'
            AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-           AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 		<if test="title != null and title != ''">
 		   AND TB_KNOWLEDGE.TITLE = #{title}
 		</if>
@@ -1205,15 +1199,13 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.OWNER_ID = #{ownerId}
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE_MODIFICATION_REQUEST
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE_MODIFICATION_REQUEST
 		<where>
 			<if test="searchText != null and searchText != ''">
 				AND TITLE LIKE '%' #{searchText} '%'
@@ -1245,15 +1237,13 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.OWNER_ID = #{ownerId}
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE_MODIFICATION_REQUEST
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE_MODIFICATION_REQUEST
 		<where>
 			<if test="searchText != null and searchText != ''">
 				AND TITLE LIKE '%' #{searchText} '%'
@@ -1283,7 +1273,6 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
@@ -1291,8 +1280,7 @@
                  WHERE TB_KNOWLEDGE_MODIFICATION_REQUEST.REQUEST_NO = #{requestNo}
                    AND TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.OWNER_ID = #{ownerId}
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE_MODIFICATION_REQUEST
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE_MODIFICATION_REQUEST
  	</select>
 
 	<select id="selectModificationRequestContentList" parameterType="KnowledgeVO" resultType="KnowledgeContentsVO">
@@ -1344,14 +1332,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
 		<if test="ownerId != null and ownerId != ''">
@@ -1401,14 +1387,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND ROW_NUM = 1
 		<if test="ownerId != null and ownerId != ''">
@@ -1480,14 +1464,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
 		   AND TB_KNOWLEDGE.OU_CODE IN (SELECT TB_ORG_CTE.OU_CODE FROM TB_ORG_CTE)
@@ -1548,14 +1530,12 @@
 		          LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 		                          , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 		                          , TB_KNOWLEDGE_MAP.DEL_YN
-		                          , TB_KNOWLEDGE_MAP.SHOW_YN
 		                          , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 		                          , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 		          			   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 		            ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
                  WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-                   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+                   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		<include refid="selectListCondition" />
 		   AND KNOWLG_MAP_TYPE <![CDATA[<>]]> 'PERSONAL'
 		   AND TB_KNOWLEDGE.OU_CODE IN (SELECT TB_ORG_CTE.OU_CODE FROM TB_ORG_CTE)
@@ -1636,14 +1616,12 @@
 				  LEFT JOIN (SELECT TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO
 								  , TB_KNOWLEDGE_MAP.KNOWLG_MAP_NM
 								  , TB_KNOWLEDGE_MAP.DEL_YN
-								  , TB_KNOWLEDGE_MAP.SHOW_YN
 								  , PARENT.KNOWLG_MAP_NO AS PARENT_KNOWLG_MAP_NO
 								  , PARENT.KNOWLG_MAP_NM AS PARENT_KNOWLG_MAP_NM
 							   FROM TB_KNOWLEDGE_MAP LEFT JOIN TB_KNOWLEDGE_MAP AS PARENT ON TB_KNOWLEDGE_MAP.UP_NO = PARENT.KNOWLG_MAP_NO) TB_KNOWLEDGE_MAP
 					ON TB_KNOWLEDGE_MAP.KNOWLG_MAP_NO = TB_KNOWLEDGE.KNOWLG_MAP_NO
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y') TB_KNOWLEDGE
+				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N') TB_KNOWLEDGE
 		 WHERE CMMNTY_NO IS NULL OR CMMNTY_NO = 0
 		   AND APRV_YN = 'Y'
 		   AND ROW_NUM = 1

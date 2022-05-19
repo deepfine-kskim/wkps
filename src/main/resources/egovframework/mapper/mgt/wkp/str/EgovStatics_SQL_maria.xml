@@ -255,7 +255,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 		  		<if test="searchType != null and searchType != ''">
@@ -281,7 +280,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -311,7 +309,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -337,7 +334,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -364,7 +360,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -389,7 +384,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -416,7 +410,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -441,7 +434,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				<if test="searchType != null and searchType != ''">
@@ -470,7 +462,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				 GROUP BY TB_KNOWLEDGE.OU_CODE) TB_KNOWLEDGE
@@ -492,7 +483,6 @@
 				 WHERE TB_KNOWLEDGE.DEL_YN = 'N'
 				   AND TB_KNOWLEDGE.APRV_YN = 'Y'
 				   AND TB_KNOWLEDGE_MAP.DEL_YN = 'N'
-				   AND TB_KNOWLEDGE_MAP.SHOW_YN = 'Y'
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{startDate}
 				   AND DATE_FORMAT(TB_KNOWLEDGE.REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
 				 GROUP BY TB_KNOWLEDGE.OU_CODE) TB_KNOWLEDGE

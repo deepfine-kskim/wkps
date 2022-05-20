@@ -28,7 +28,7 @@
 		<div id="adm-sidebar">
 			<c:set var="url" value="${requestScope['javax.servlet.forward.request_uri'] }"></c:set>
 			<div class="side_header">
-				<h1><a href="/adm/index.do"><img src="/images/egovframework/mgt/wkp/logo_adm.png" alt="관리자" /></a></h1>
+				<%--<h1><a href="/adm/index.do"><img src="/images/egovframework/mgt/wkp/logo_adm.png" alt="관리자" /></a></h1>--%>
 			</div>
 			<div class="side_body">
 				<ul class="side_menu_list">

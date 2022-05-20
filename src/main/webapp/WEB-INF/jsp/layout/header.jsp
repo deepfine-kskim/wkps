@@ -47,7 +47,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <h1 class="logo_top">
-                    <a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo01.png" alt="로고" /></a><!-- [D] 220329 - img 경로 변경 -->
+                    <a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo02.png" alt="로고" /></a><!-- [D] 220329 - img 경로 변경 -->
                 </h1>
             </div>
             <div class="gnb_wrap hidden-xs hidden-sm">

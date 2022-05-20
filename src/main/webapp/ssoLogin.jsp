@@ -44,7 +44,7 @@
         <div class="container">
             <div class="navbar-header">
                 <h1 class="logo_top">
-					<a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo01.png" alt="로고" /></a><!-- [D] 220329 - img 경로 변경 -->
+					<a href="/" class="navbar-brand"><img src="/images/egovframework/com/wkp/logo02.png" alt="로고" /></a><!-- [D] 220329 - img 경로 변경 -->
                 </h1>
             </div>
         </div>
@@ -80,9 +80,9 @@
 	<footer id="footer">
 	    <div class="container">
 	        <div class="row type5">
-	            <div class="col-md-3 foot_brand">
+	            <%--<div class="col-md-3 foot_brand">
 	                <strong class="logo"><img src="/images/egovframework/com/wkp/logo_foot.png" alt="지식포털" /></strong>
-	            </div>
+	            </div>--%>
 	            <div class="col-md-9 foot_cont">
 	                <div class="row">
 	                    <div class="col-md-9">

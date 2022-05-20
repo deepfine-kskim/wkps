@@ -4,9 +4,9 @@
 <footer id="footer">
     <div class="container">
         <div class="row type5">
-            <div class="col-md-2 foot_brand">
+            <%--<div class="col-md-2 foot_brand">
                 <strong class="logo"><img src="/images/egovframework/com/wkp/logo_foot.png" alt="지식포털" /></strong>
-            </div>
+            </div>--%>
             <div class="col-md-10 foot_cont">
                 <div class="row">
                     <div class="col-md-10">

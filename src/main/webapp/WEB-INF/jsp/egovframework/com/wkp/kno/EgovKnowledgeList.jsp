@@ -12,9 +12,9 @@
 		   <div class="row layout_side_row">
                 <div id="aside" class="col-md-3">
 					<ul class="nav nav-tabs nav-justified side_tabs">
-                        <li <c:if test="${knowlgMapType eq 'REPORT' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REPORT">행정자료</a></li>
-                        <li <c:if test="${knowlgMapType eq 'REFERENCE' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REFERENCE">업무참고자료</a></li>
-                        <li <c:if test="${knowlgMapType eq 'PERSONAL' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="PERSONAL">개인행정지식</a></li>
+                        <li <c:if test="${knowledgeVO.knowlgMapType eq 'REPORT' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REPORT">행정자료</a></li>
+                        <li <c:if test="${knowledgeVO.knowlgMapType eq 'REFERENCE' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="REFERENCE">업무참고자료</a></li>
+                        <li <c:if test="${knowledgeVO.knowlgMapType eq 'PERSONAL' }">class="active"</c:if>><a href="javascript:;" class="dev-type" data-type="PERSONAL">개인행정지식</a></li>
                     </ul>
                     <div class="side_card_box mside_tog">
                         <div class="side_top hidden-sm hidden-lg hidden-md">
@@ -103,11 +103,11 @@
                                     <div class="col-sm-6">
                                         <ol class="breadcrumb">
                                             <li>
-                                            	<a href="javascript:;" class="dev-type" data-type="${knowlgMapType }">
+                                            	<a href="javascript:;" class="dev-type" data-type="${knowledgeVO.knowlgMapType }">
                                             	<i class="fa fa-file-text-o ico"></i>
                                             	<c:choose>
-													<c:when test="${knowlgMapType eq 'REPORT' }">행정자료</c:when>
-													<c:when test="${knowlgMapType eq 'REFERENCE' }">업무참고자료</c:when>
+													<c:when test="${knowledgeVO.knowlgMapType eq 'REPORT' }">행정자료</c:when>
+													<c:when test="${knowledgeVO.knowlgMapType eq 'REFERENCE' }">업무참고자료</c:when>
 													<c:otherwise>개인행정지식</c:otherwise>
 												</c:choose>
 												</a>
@@ -136,21 +136,21 @@
                                    	<input type="hidden" name="knowlgNo" value="0">
                                    	<input type="hidden" name="title" value="">
 									<input type="hidden" name="knowlgMapNo" value="${knowlgMap.knowlgMapNo }">
-									<input type="hidden" name="knowlgMapType" value="${knowlgMapType }">
+									<input type="hidden" name="knowlgMapType" value="${knowledgeVO.knowlgMapType }">
                                     <div class="form-inline bbs_srch_frm">
                                         <fieldset>
                                             <legend class="sr-only">게시글 검색</legend>
                                             <div class="form-group">
                                                 <label for="wikiSrchSel" class="sr-only">검색대상</label>
-	                                            <form:select id="brdSrchSel" path="searchType" class="form-control">
-	                                                <option value="TITLE" <c:if test="${searchType eq 'TITLE' }">selected="selected"</c:if>>제목</option>
-	                                                <option value="REGISTER_ID" <c:if test="${searchType eq 'REGISTER_ID' }">selected="selected"</c:if>>작성자</option>
-	                                                <option value="OU" <c:if test="${searchType eq 'OU' }">selected="selected"</c:if>>부서</option>
-	                                            </form:select>
+                                                <select id="brdSrchSel" name="searchType" class="form-control">
+	                                                <option value="TITLE" <c:if test="${knowledgeVO.searchType eq 'TITLE' }">selected="selected"</c:if>>제목</option>
+	                                                <option value="REGISTER_ID" <c:if test="${knowledgeVO.searchType eq 'REGISTER_ID' }">selected="selected"</c:if>>작성자</option>
+	                                                <option value="OU" <c:if test="${knowledgeVO.searchType eq 'OU' }">selected="selected"</c:if>>부서</option>
+                                                </select>
                                             </div>
                                             <div class="input-group">
                                                 <label for="wikiSrchStr" class="sr-only">검색어 입력</label>
-                                                <input type="text" id="wikiSrchStr" name="searchText" value="${searchText }" class="form-control" placeholder="검색어" />
+                                                <input type="text" id="wikiSrchStr" name="searchText" value="${knowledgeVO.searchText }" class="form-control" placeholder="검색어" />
                                                 <span class="input-group-btn"><button type="submit" class="btn btn-default">검색</button></span>
                                             </div>
                                             <a href="#wikiSearch" class="btn btn-black opt_btn" data-toggle="collapse" aria-expanded="false" aria-controls="wikiSearch"><i class="ti-zoom-in"></i>상세검색</a>
@@ -165,27 +165,27 @@
                                                     <strong class="col-sm-2 control-label">기간</strong>
                                                     <div class="col-sm-10">
                                                         <label for="schDate1" class="radio-inline">
-                                                            <input type="radio" id="schDate1" name="searchDate" value="WEEK" <c:if test="${searchDate eq 'WEEK' }">checked="checked"</c:if>> 1주일
+                                                            <input type="radio" id="schDate1" name="searchDate" value="WEEK" <c:if test="${knowledgeVO.searchDate eq 'WEEK' }">checked="checked"</c:if>> 1주일
                                                         </label>
                                                         <label for="schDate2" class="radio-inline">
-                                                            <input type="radio" id="schDate2" name="searchDate" value="MONTH" <c:if test="${searchDate eq 'MONTH' }">checked="checked"</c:if>> 1개월
+                                                            <input type="radio" id="schDate2" name="searchDate" value="MONTH" <c:if test="${knowledgeVO.searchDate eq 'MONTH' }">checked="checked"</c:if>> 1개월
                                                         </label>
                                                         <label for="schDate3" class="radio-inline">
-                                                            <input type="radio" id="schDate3" name="searchDate" value="YEAR" <c:if test="${searchDate eq 'YEAR' }">checked="checked"</c:if>> 1년
+                                                            <input type="radio" id="schDate3" name="searchDate" value="YEAR" <c:if test="${knowledgeVO.searchDate eq 'YEAR' }">checked="checked"</c:if>> 1년
                                                         </label>
                                                         <label for="schDate4" class="radio-inline">
-                                                            <input type="radio" id="schDate4" name="searchDate" class="inp_tog" value="SELECT" <c:if test="${searchDate eq 'SELECT' }">checked="checked"</c:if>> 기간선택
+                                                            <input type="radio" id="schDate4" name="searchDate" class="inp_tog" value="SELECT" <c:if test="${knowledgeVO.searchDate eq 'SELECT' }">checked="checked"</c:if>> 기간선택
                                                         </label>
                                                     </div>
                                                     <div class="col-sm-8 col-sm-push-2 col-lg-7 mt_5 inp_tog_cont">
                                                         <div class="row type1">
                                                             <div class="col-xs-6">
                                                                 <lable for="inpStartDate" class="sr-only">시작날짜</lable>
-                                                                <input type="text" class="form-control inp_date datetime" id="inpStartDate" name="startDate" placeholder="시작날짜" value="${startDate }"/>
+                                                                <input type="text" class="form-control inp_date datetime" id="inpStartDate" name="startDate" placeholder="시작날짜" value="${knowledgeVO.startDate }"/>
                                                             </div>
                                                             <div class="col-xs-6">
                                                                 <lable for="inpEndDate" class="sr-only">종료날짜</lable>
-                                                                <input type="text" class="form-control inp_date datetime" id="inpEndDate" name="endDate" placeholder="종료날짜" value="${endDate }"/>
+                                                                <input type="text" class="form-control inp_date datetime" id="inpEndDate" name="endDate" placeholder="종료날짜" value="${knowledgeVO.endDate }"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -194,13 +194,13 @@
                                                     <strong class="col-sm-4 control-label"><span class="req">*</span> 작성자</strong>
                                                     <div class="col-sm-8 tree_chk_area">
                                                         <label for="selWriter1" class="radio-inline">
-                                                            <input type="radio" id="selWriter1" name="searchWriter" value="ALL" <c:if test="${searchWriter eq 'ALL' }">checked="checked"</c:if>/> 전체
+                                                            <input type="radio" id="selWriter1" name="searchWriter" value="ALL" <c:if test="${knowledgeVO.searchWriter eq 'ALL' }">checked="checked"</c:if>/> 전체
                                                         </label>
                                                         <label for="selWriter2" class="radio-inline">
-                                                            <input type="radio" id="selWriter2" name="searchWriter" value="MINE" <c:if test="${searchWriter eq 'MINE' }">checked="checked"</c:if>/> 본인
+                                                            <input type="radio" id="selWriter2" name="searchWriter" value="MINE" <c:if test="${knowledgeVO.searchWriter eq 'MINE' }">checked="checked"</c:if>/> 본인
                                                         </label>
                                                         <label for="selWriter3" class="radio-inline">
-                                                            <input type="radio" id="selWriter3" name="searchWriter" class="inp_tog" value="SELECT" <c:if test="${searchWriter eq 'SELECT' }">checked="checked"</c:if>/> 지정
+                                                            <input type="radio" id="selWriter3" name="searchWriter" class="inp_tog" value="SELECT" <c:if test="${knowledgeVO.searchWriter eq 'SELECT' }">checked="checked"</c:if>/> 지정
                                                         </label>
                                                         <a href="#selectGrpPopup" class="btn btn-xs btn-primary inp_tog_cont" data-toggle="modal" data-target="#selectGrpPopup">개인 선택</a>
                                                         <div id="rlsList" class="tag_grp_area">
@@ -299,7 +299,7 @@
                                             <th scope="col">유형</th>
                                             <th scope="col">제목</th>
                                             <th scope="col">등록일</th>
-                                            <th scope="col">${knowlgMapType eq 'PERSONAL' ? '게시자' : '부서'}</th>
+                                            <th scope="col">${knowledgeVO.knowlgMapType eq 'PERSONAL' ? '게시자' : '부서'}</th>
                                             <th scope="col">조회</th>
                                         </tr>
                                     </thead>
@@ -317,7 +317,7 @@
 														</p>
 													</td>
 													<td>${knowledge.registDtm }</td>
-													<td>${knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
+													<td>${knowledgeVO.knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
                                                     <td><fmt:formatNumber value="${knowledge.inqCnt}" pattern="#,###"/></td>
 												</tr>
 											</c:forEach>
@@ -372,9 +372,10 @@
 		                    </nav>
                     		<!-- //페이지 네비 -->
                     		<form name="insertData">
-	                    		<input type="hidden" name="knowlgMapType" value="${knowlgMapType}" />
+	                    		<input type="hidden" name="knowlgMapType" value="${knowledgeVO.knowlgMapType}" />
 	                    		<input type="hidden" name="upNo" value="${knowlgMap.upNo}"/>
 	                    		<input type="hidden" name="knowlgMapNo" value="${knowlgMap.knowlgMapNo}"/>
+                                <input type="hidden" name="page" value="${knowledgeList.pageNavigation.pageIndex }">
 	                    		<div class="btn_area text-right">
 	                            	<!-- <a href="/kno/insertKnowledgeView.do?knowlgMapType=REPORT&upNo=1&knowlgMapNo=19" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a> -->
                                     <c:choose>
@@ -382,12 +383,12 @@
                                         <c:when test="${fn:indexOf(knowlgMap.knowlgMapNm, '연설문, 축사, 기념사, 브리핑') ne -1}">
                                             <c:forEach var="item" items="${'finee0122,sinflyoh3,eunn0628'}">
                                                 <c:if test="${item eq loginVO.sid}">
-                                                    <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
+                                                    <a href="javascript:postData('${knowledgeVO.knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
                                                 </c:if>
                                             </c:forEach>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="javascript:postData('${knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
+                                            <a href="javascript:postData('${knowledgeVO.knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
                                         </c:otherwise>
                                     </c:choose>
 	                        	</div>
@@ -406,12 +407,12 @@
 			alert(errMsg);
 		}
 
-    	var searchDate = "${searchDate}";
+    	var searchDate = "${knowledgeVO.searchDate}";
     	if(searchDate == 'SELECT'){
     		$('#schDate4').trigger('change');
     	}
 
-    	var searchWriter = "${searchWriter}";
+    	var searchWriter = "${knowledgeVO.searchWriter}";
     	if(searchWriter =='SELECT'){
     		$('#selWriter3').trigger('change');
     	}
@@ -437,9 +438,6 @@
     			}
     		});
 	    </c:forEach>
-
-    	var searchInfo = "${searchInfo}";
-    	document.getElementById('wikiSrchStr').value = searchInfo;
 
         $('.dev-page').on('click', function (e) {
         	e.preventDefault();
@@ -467,6 +465,7 @@
             var form = $("form[name=knowledgeFrm]");
             form.find("input[name=knowlgMapType]").val(type);
             form.find("input[name=knowlgMapNo]").val(0);
+            form.find("input[name=page]").val(1);
             form.attr("action", "/kno/knowledgeList.do");
             form.submit();
      	});
@@ -477,7 +476,6 @@
             var form = $("form[name=knowledgeFrm]");
             form.find("input[name=knowlgMapNo]").val(no);
             form.find("input[name=page]").val(1);
-            document.getElementById('wikiSrchStr').value = '';
             form.submit();
      	});
 

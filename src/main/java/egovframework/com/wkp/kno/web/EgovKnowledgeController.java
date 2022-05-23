@@ -103,103 +103,82 @@ public class EgovKnowledgeController {
      */
     @RequestMapping("/knowledgeList.do")
     public String knowledgeList(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, Model model, HttpServletRequest request) {
-        try {
-        	Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
-             
-            if(flashMap != null) {                 
-            	knowledgeVO.setKnowlgMapType((String) flashMap.get("knowlgMapType"));
-            }
-             
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
-            KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
+        Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+        if(flashMap != null) {
+            KnowledgeVO condition = (KnowledgeVO) flashMap.get("condition");
+            knowledgeVO.setKnowlgMapType(condition.getKnowlgMapType());
+            knowledgeVO.setKnowlgMapNo(condition.getKnowlgMapNo());
+            knowledgeVO.setPage(condition.getPage());
+            knowledgeVO.setSearchType(condition.getSearchType());
+            knowledgeVO.setSearchText(condition.getSearchText());
+            knowledgeVO.setSearchDate(condition.getSearchDate());
+            knowledgeVO.setSearchWriter(condition.getSearchWriter());
+            knowledgeVO.setStartDate(condition.getStartDate());
+            knowledgeVO.setEndDate(condition.getEndDate());
+        }
 
-            if (knowledgeVO.getKnowlgMapType() != null) {
-                knowledgeMapVO.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
-                model.addAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
-            } else {
-                knowledgeVO.setKnowlgMapType("REPORT");
-                knowledgeMapVO.setKnowlgMapType("REPORT");
-                model.addAttribute("knowlgMapType", "REPORT");
-            }
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        KnowledgeMapVO knowledgeMapVO = new KnowledgeMapVO();
 
-            if (knowledgeVO.getKnowlgMapNo() != 0) {
-                model.addAttribute("knowlgMap", knowledgeService.selectKnowledgeMap(knowledgeVO.getKnowlgMapNo()));
-            } else {
-            	KnowledgeMapVO knowlgMap = new KnowledgeMapVO();
-            	knowlgMap.setKnowlgMapNo(0);
-                model.addAttribute("knowlgMap", knowlgMap);
-            }
+        if (knowledgeVO.getKnowlgMapType() == null) {
+            knowledgeVO.setKnowlgMapType("REPORT");
+        }
 
-            if (knowledgeVO.getPage() == null || knowledgeVO.getPage() == 0) {
-                knowledgeVO.setPage(1);
-            }
+        knowledgeMapVO.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
 
-            List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
-            ListWithPageNavigation<KnowledgeVO> knowledgeList = knowledgeService.selectKnowledgeList(knowledgeVO);
-            
-            model.addAttribute("searchInfo", knowledgeVO.getSearchText());
-            if(knowledgeVO.getSearchType() != null) {
-            	model.addAttribute("searchType", knowledgeVO.getSearchType());
-            }
-            if(knowledgeVO.getSearchText() != null) {
-            	model.addAttribute("searchText", knowledgeVO.getSearchText());
-            }
-            if(knowledgeVO.getSearchDate() != null) {
-            	model.addAttribute("searchDate", knowledgeVO.getSearchDate());
-            }
-            if(knowledgeVO.getSearchWriter() != null) {
-            	model.addAttribute("searchWriter", knowledgeVO.getSearchWriter());
-            }
-            if(knowledgeVO.getStartDate() != null) {
-            	model.addAttribute("startDate", knowledgeVO.getStartDate());
-            }
-            if(knowledgeVO.getEndDate() != null) {
-            	model.addAttribute("endDate", knowledgeVO.getEndDate());
-            }
-            if(knowledgeVO.getUserList() != null) {
-            	model.addAttribute("userList", knowledgeVO.getUserList());
-            }
-            
-            Boolean isInterests = false;
-            knowledgeVO.setRegisterId(user.getSid());
-            if(knowledgeService.selectInterests(knowledgeVO) != null) {
-            	isInterests = true;
-            }
+        if (knowledgeVO.getKnowlgMapNo() != 0) {
+            model.addAttribute("knowlgMap", knowledgeService.selectKnowledgeMap(knowledgeVO.getKnowlgMapNo()));
+        } else {
+            KnowledgeMapVO knowlgMap = new KnowledgeMapVO();
+            knowlgMap.setKnowlgMapNo(0);
+            model.addAttribute("knowlgMap", knowlgMap);
+        }
 
-			List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
-            List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
-            
-            OrgVO orgVO = new OrgVO();
-            orgVO.setOuLevel(2);
-            List<OrgVO> topList = orgService.selectOrgList(orgVO);
-            
-            orgVO.setOuLevel(3);
-            List<OrgVO> parentList = orgService.selectOrgList(orgVO);
-            
-            orgVO.setOuLevel(4);
-            List<OrgVO> childList = orgService.selectOrgList(orgVO);
+        List<KnowledgeMapVO> knowledgeMapList = knowledgeService.selectKnowledgeMapList(knowledgeMapVO);
+        ListWithPageNavigation<KnowledgeVO> knowledgeList = knowledgeService.selectKnowledgeList(knowledgeVO);
 
-            parentList.forEach(parent -> {
-                String ouCode = parent.getOuCode();
-                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
-                parent.setNextDepthList(list);
-            });
+        if(knowledgeVO.getUserList() != null) {
+            model.addAttribute("userList", knowledgeVO.getUserList());
+        }
 
-            topList.forEach(top -> {
-                String ouCode = top.getOuCode();
-                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
-                top.setNextDepthList(list);
-            });
+        Boolean isInterests = false;
+        knowledgeVO.setRegisterId(user.getSid());
+        if(knowledgeService.selectInterests(knowledgeVO) != null) {
+            isInterests = true;
+        }
 
-            model.addAttribute("knowledgeMapList", knowledgeMapList);
-            model.addAttribute("knowledgeList", knowledgeList);
-            model.addAttribute("isInterests", isInterests);
-            model.addAttribute("excellenceUserList", excellenceUserList);
-            model.addAttribute("excellenceOrgList", excellenceOrgList);
-            model.addAttribute("topList", topList);
-        } catch (NullPointerException e) {
-        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
-		}
+        List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
+        List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
+
+        OrgVO orgVO = new OrgVO();
+        orgVO.setOuLevel(2);
+        List<OrgVO> topList = orgService.selectOrgList(orgVO);
+
+        orgVO.setOuLevel(3);
+        List<OrgVO> parentList = orgService.selectOrgList(orgVO);
+
+        orgVO.setOuLevel(4);
+        List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+        parentList.forEach(parent -> {
+            String ouCode = parent.getOuCode();
+            List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+            parent.setNextDepthList(list);
+        });
+
+        topList.forEach(top -> {
+            String ouCode = top.getOuCode();
+            List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+            top.setNextDepthList(list);
+        });
+
+        model.addAttribute("knowledgeMapList", knowledgeMapList);
+        model.addAttribute("knowledgeList", knowledgeList);
+        model.addAttribute("isInterests", isInterests);
+        model.addAttribute("excellenceUserList", excellenceUserList);
+        model.addAttribute("excellenceOrgList", excellenceOrgList);
+        model.addAttribute("topList", topList);
+
         return "/com/wkp/kno/EgovKnowledgeList";
     }
 
@@ -234,6 +213,8 @@ public class EgovKnowledgeController {
             , @RequestParam(value = "title", required = false) String title
             , Model model
             , RedirectAttributes redirect) {
+
+        redirect.addFlashAttribute("condition", knowledgeVO);
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
@@ -521,6 +502,10 @@ public class EgovKnowledgeController {
     		, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
     		, RedirectAttributes redirectAttributes) {
 
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
+
         try {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			knowledgeVO.setRegisterId(userVO.getSid());
@@ -696,8 +681,6 @@ public class EgovKnowledgeController {
                         messengerService.insert(messengerVO);
                     });
                 }
-
-                redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -899,6 +882,10 @@ public class EgovKnowledgeController {
     		, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO
     		, RedirectAttributes redirectAttributes) {
 
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
+
         try {
         	KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
         	
@@ -1095,8 +1082,6 @@ public class EgovKnowledgeController {
                         messengerService.insert(messengerVO);
                     });
                 }
-
-                redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -1115,6 +1100,11 @@ public class EgovKnowledgeController {
      */
     @RequestMapping("/insertUpdateKnowledgeRequest.do")
     public String insertUpdateKnowledgeRequest(final MultipartHttpServletRequest multiRequest, @ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
+
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
+
         try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
             UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
@@ -1221,8 +1211,6 @@ public class EgovKnowledgeController {
                 messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
                 messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
                 messengerService.insert(messengerVO);
-
-                redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeVO.getKnowlgMapType());
             }
         } catch (NullPointerException e) {
             LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -1291,6 +1279,11 @@ public class EgovKnowledgeController {
      */
     @RequestMapping("/modifyKnowledge.do")
     public String modifyKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
+
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
+
 		try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
         	List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeVO);
@@ -1337,12 +1330,10 @@ public class EgovKnowledgeController {
                     messengerService.insert(messengerVO);
                 });
             }
-
-	        redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
 	    } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-		
+
 	    return "redirect:/kno/knowledgeList.do";
     }
 
@@ -1352,6 +1343,11 @@ public class EgovKnowledgeController {
      */
     @RequestMapping("/modifyKnowledgeRequest.do")
     public String modifyKnowledgeRequest(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
+
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
+
         try {
             KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
             List<KnowledgeContentsVO> knowledgeContentsList = knowledgeService.selectKnowledgeContentsList(knowledgeVO);
@@ -1384,11 +1380,10 @@ public class EgovKnowledgeController {
             messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
             messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
             messengerService.insert(messengerVO);
-
-            redirectAttributes.addFlashAttribute("knowlgMapType", knowledgeDetail.getKnowlgMapType());
         } catch (NullPointerException e) {
             LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
         }
+
         return "redirect:/kno/knowledgeList.do";
     }
 
@@ -1397,7 +1392,10 @@ public class EgovKnowledgeController {
      * @return Redirect
      */
     @RequestMapping(value = "/deleteKnowledge.do")
-    public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO) {
+    public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
+        KnowledgeVO condition = new KnowledgeVO();
+        condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        redirectAttributes.addFlashAttribute("condition", condition);
         if ("PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
             // 개인별 지식인 경우 개별 삭제
             knowledgeService.deleteUserMileage(knowledgeVO);

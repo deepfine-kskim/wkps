@@ -234,7 +234,7 @@
                                 <div class="row type0">
                                     <div class="col-sm-12 text-right">
                                         <button id="submit" type="submit" class="btn btn-blue">작성완료</button>
-                                        <a href="/kno/knowledgeDetail.do?title=${knowledgeDetail.title }&knowledgeNo=${knowledgeDetail.knowlgNo}" class="btn btn-black">취소</a>
+                                        <a href="javascript:;" class="btn btn-black dev-cancel">취소</a>
                                     </div>
                                 </div>
                             </fieldset>
@@ -370,6 +370,13 @@
             </div>
             <!-- //row -->
         </div>
+<form:form name="knowledgeFrm" modelAttribute="knowledgeVO">
+    <input type="hidden" name="title" value="${knowledgeDetail.title}">
+    <input type="hidden" name="knowlgNo" value="${knowledgeDetail.knowlgNo}">
+    <input type="hidden" name="knowlgMapType" value="${knowledgeVO.knowlgMapType}">
+    <input type="hidden" name="knowlgMapNo" value="${knowledgeVO.knowlgMapNo}">
+    <input type="hidden" name="page" value="${knowledgeVO.page}">
+</form:form>
 <script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>"></script>
 <script type="text/javascript">
 	CKEDITOR.replace('inpText');
@@ -660,6 +667,12 @@
 				event.preventDefault();
 			};
 		});
-		
+
+        $('.dev-cancel').on('click', function (e) {
+            e.preventDefault();
+            var form = $("form[name=knowledgeFrm]");
+            form.attr("action", "/kno/knowledgeDetail.do");
+            form.submit();
+        });
 	});
 </script>

@@ -341,6 +341,7 @@
 <input type="hidden" name="knowlgMapNo" value="${knowlgMapNo}">
 <input type="hidden" name="sortOrdr" value="0">
 <input type="hidden" name="cmmntyNo" value="${empty cmmntyNo?0:cmmntyNo}">
+<input type="hidden" name="page" value="${knowledgeVO.page}">
 </form:form>
 <script type="text/javascript" src="<c:url value='/js/ckeditor/ckeditor.js?t=B37D54V'/>" ></script>
 <script src="/js/egovframework/com/wkp/clipboard.min.js"></script>

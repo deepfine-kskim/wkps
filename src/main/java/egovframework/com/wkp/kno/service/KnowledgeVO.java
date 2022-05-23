@@ -87,7 +87,7 @@ public class KnowledgeVO {
 	
 	private Boolean isNew;
 	
-	private Integer page;
+	private Integer page = 1;
 	
 	private Integer itemCountPerPage = 10;
 	

@@ -220,6 +220,56 @@
                                             </div>
                                         </div>
                                     </c:if>
+                                    <c:if test="${not isOwner and loginVO.roleCd eq 'ROLE_ADMIN'}">
+                                        <div class="form-group">
+                                            <label for="inpMemo" class="col-sm-2 control-label">지식요약</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" disabled>${knowledgeDetail.summry }</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <strong class="col-sm-2 control-label">관련지식</strong>
+                                            <div class="col-sm-10">
+                                                <div class="tag_grp_area">
+                                                    <c:if test="${not empty knowledgeDetail.relateKnowlgNo }">
+                                                        <c:forEach var="relateList" items="${relateKnowledgeList}">
+                                                            <span class="tag_btn label label-default">${relateList}<input type="hidden" name="relateKnowledgeList" value="${relateList}"></span>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="keyword" class="col-md-2 control-label">검색 키워드</label>
+                                            <div class="col-md-10">
+                                                <input type="text" data-role="tagsinput" class="form-control inp_keyword" value="${knowledgeDetail.keyword }" <%--required="required"--%> disabled/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group inp_set_area">
+                                            <label for="svTarget1" class="col-sm-2 control-label">공개범위</label>
+                                            <div class="col-sm-10 tree_chk_area">
+                                                <label for="svTarget1" class="radio-inline">
+                                                    <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" disabled="true"/> 전체
+                                                </label>
+                                                <c:if test="${not isIgnoreOrg}">
+                                                    <label for="svTarget3" class="radio-inline">
+                                                        <form:radiobutton path="rlsYn" id="svTarget3" value="B" checked="${knowledgeDetail.rlsYn eq 'B' ? 'checked' : ''}" disabled="true"/> 전체(의회미포함)
+                                                    </label>
+                                                </c:if>
+                                                <label for="svTarget2" class="radio-inline">
+                                                    <form:radiobutton path="rlsYn" id="svTarget2" value="N" checked="${knowledgeDetail.rlsYn eq 'N' ? 'checked' : ''}" class="inp_tog" disabled="true"/> 지정
+                                                </label>
+                                                <div id="rlsList" class="tag_grp_area">
+                                                    <c:forEach var="targetVO" items="${targetVOList}">
+                                                        <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
+                                                        <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
+                                                        <c:set var="target" value="${targetVO.dispName}"/>
+                                                        <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><input type="hidden" name="${type2}" value="${targetVO.targetCode}"/></span>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                     <!--
                                      <div class="form-group">
                                         <strong class="col-md-2 control-label"><span class="req">*</span> 승인자 선택</strong>

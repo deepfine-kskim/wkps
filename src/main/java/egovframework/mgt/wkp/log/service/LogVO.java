@@ -42,16 +42,21 @@ public class LogVO {
     private Date registDtm;
     private String registerId;
     private String registerName;
+    private String displayName;
     private String registerFullName;
     private String ou;
     private String userIp;
     private String cont;
     private String target;
 
-    private Integer page;
+    private Integer page = 1;
     private Integer itemCountPerPage = 10;
     private Integer itemOffset = 0;
     private String searchText;
     private String searchKey;
 
+    private String searchCondition;
+    private String searchKeyword;
+    private String searchStartDate;
+    private String searchEndDate;
 }

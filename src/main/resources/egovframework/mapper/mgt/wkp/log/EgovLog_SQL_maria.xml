@@ -3,42 +3,54 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LogDAO">
 
-	<sql id="selectListCondition">
-		WHERE DEL_YN = 'N'
-
-		<if test="searchText != null and searchText != '' and searchKey != null">
-			<if test="searchKey == 'REGISTER_ID'">
-				AND REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText} '%')
+	<sql id="commonWhere">
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<if test="searchCondition == 'OU'">
+				AND OU LIKE '%' #{searchKeyword} '%'
+			</if>
+			<if test="searchCondition == 'DISPLAY_NAME'">
+				AND DISPLAY_NAME LIKE '%' #{searchKeyword} '%'
+			</if>
+			<if test="searchCondition == 'TARGET'">
+				AND TARGET LIKE '%' #{searchKeyword} '%'
 			</if>
 		</if>
-
+		<if test="searchStartDate != null and searchStartDate != ''">
+			AND DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') <![CDATA[>=]]> #{searchStartDate}
+		</if>
+		<if test="searchEndDate != null and searchEndDate != ''">
+			AND DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') <![CDATA[<=]]> #{searchEndDate}
+		</if>
 	</sql>
 
 	<select id="selectList" parameterType="LogVO" resultType="LogVO">
-		SELECT
-		a.*
-		, JSON_UNQUOTE(JSON_EXTRACT(a.CONT, '$.title')) AS target
-		, e.DISPLAY_NAME as REGISTER_NAME
-		, e.ou
-		, e.USER_FULL_NAME as registerFullName
-		FROM TB_USER_LOG a
-		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
-
-		WHERE a.DEL_YN = 'N'
-		<if test="searchText != null and searchText != '' and searchKey != null">
-			<if test="searchKey == 'REGISTER_ID'">
-				AND a.REGISTER_ID  in (SELECT SID FROM TB_USER WHERE DISPLAY_NAME LIKE '%' #{searchText} '%')
-			</if>
-		</if>
-
-		ORDER BY a.LOG_NO DESC
+		SELECT *
+		  FROM (SELECT a.*
+				  	 , JSON_UNQUOTE(JSON_EXTRACT(a.CONT, '$.title')) AS TARGET
+				  	 , e.DISPLAY_NAME AS DISPLAY_NAME
+				  	 , e.USER_FULL_NAME as registerFullName
+		  			 , LEFT(USER_FULL_NAME, CHAR_LENGTH(USER_FULL_NAME) - CHAR_LENGTH(DISPLAY_NAME)) AS OU
+				  FROM TB_USER_LOG a
+				  LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID) TB_USER_LOG
+		<where>
+			<include refid="commonWhere"/>
+		</where>
+		ORDER BY LOG_NO DESC
 		LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
 	</select>
 
 	<select id="selectListCount" parameterType="LogVO" resultType="int">
-		SELECT count(*)
-		FROM TB_USER_LOG
-		<include refid="selectListCondition"/>
+		SELECT COUNT(1)
+		  FROM (SELECT a.*
+				  	 , JSON_UNQUOTE(JSON_EXTRACT(a.CONT, '$.title')) AS TARGET
+				  	 , e.DISPLAY_NAME AS DISPLAY_NAME
+				  	 , e.USER_FULL_NAME as registerFullName
+		  			 , LEFT(USER_FULL_NAME, CHAR_LENGTH(USER_FULL_NAME) - CHAR_LENGTH(DISPLAY_NAME)) AS OU
+				  FROM TB_USER_LOG a
+				  LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID) TB_USER_LOG
+		<where>
+			<include refid="commonWhere"/>
+		</where>
 	</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="logNo" parameterType="LogVO">

@@ -69,22 +69,30 @@
                             <div class="col-xs-5 brd_total">
                                 <p><i class="fa fa-file-text-o" aria-hidden="true"></i> 총 게시물 <span
                                         class="text-primary">${logList.pageNavigation.totalItemCount}</span> / 페이지 <span
-                                        class="text-black">${page}</span></p>
+                                        class="text-black">${logVO.page}</span></p>
                             </div>
                              <div class="col-xs-7 text-right">
                                 <form class="form-inline bbs_srch_frm" name="searchForm" action="#">
-                                    <input type="hidden" name="page">
+                                    <input type="hidden" name="page" value="${logVO.page}">
                                     <fieldset>
                                         <legend class="sr-only">게시글 검색</legend>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control inp_date datetime text-center" id="inpStartDate" name="searchStartDate" placeholder="시작날짜" value="${logVO.searchStartDate}"/>
+                                            <span class="input-group-addon">~</span>
+                                            <input type="text" class="form-control inp_date datetime text-center" id="inpEndDate" name="searchEndDate" placeholder="종료날짜" value="${logVO.searchEndDate}"/>
+                                        </div>
                                         <div class="form-group">
-                                            <label for="searchKey" class="sr-only">검색대상</label>
-                                            <select id="searchKey" name="searchKey" class="form-control">
-                                                <option value="REGISTER_ID">이름</option>
+                                            <label for="searchCondition" class="sr-only">검색대상</label>
+                                            <select id="searchCondition" name="searchCondition" class="form-control">
+                                                <option value="">선택해주세요.</option>
+                                                <option value="OU" <c:if test="${logVO.searchCondition eq 'OU'}">selected="selected"</c:if>>부서</option>
+                                                <option value="DISPLAY_NAME" <c:if test="${logVO.searchCondition eq 'DISPLAY_NAME'}">selected="selected"</c:if>>이름</option>
+                                                <option value="TARGET" <c:if test="${logVO.searchCondition eq 'TARGET'}">selected="selected"</c:if>>대상</option>
                                             </select>
                                         </div>
                                         <div class="input-group">
-                                            <label for="brdSrchStr" class="sr-only">검색어 입력</label>
-                                            <input type="text" id="brdSrchStr" name="searchText" class="form-control" value="${searchText}" placeholder="검색어" />
+                                            <label for="searchKeyword" class="sr-only">검색어 입력</label>
+                                            <input type="text" id="searchKeyword" name="searchKeyword" class="form-control" value="${logVO.searchKeyword}" placeholder="검색어" />
                                             <span class="input-group-btn"><button type="submit" class="btn btn-default">검색</button></span>
                                         </div>
                                     </fieldset>
@@ -97,6 +105,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" >일자</th>
+                                <th scope="col" >부서</th>
                                 <th scope="col" >이름</th>
                                 <th scope="col" >접근</th>
                                 <th scope="col" >상태</th>
@@ -109,9 +118,9 @@
                             <c:when test="${!empty logList.list && fn:length(logList.list) > 0}">
                                 <c:forEach var="item" items="${logList.list }" varStatus="status">
                                     <tr>
-                                        <td><fmt:formatDate value="${item.registDtm}"
-                                                            pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                                        <td>${item.registerFullName}</td>
+                                        <td><fmt:formatDate value="${item.registDtm}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                                        <td>${item.ou}</td>
+                                        <td>${item.displayName}</td>
                                         <td>${item.logType.value}</td>
                                         <td>${item.logSubjectType.value}</td>
                                         <td>${item.target}</td>
@@ -122,7 +131,7 @@
                             <c:otherwise>
                                 <!-- 데이터 없을시 -->
                                 <tr>
-                                    <td colspan="6" class="empty">등록된 게시물이 없습니다.</td>
+                                    <td colspan="7" class="empty">등록된 게시물이 없습니다.</td>
                                 </tr>
                             </c:otherwise>
                         </c:choose>
@@ -151,7 +160,7 @@
                                 </c:if>
                                 <c:forEach var="i" begin="${paging.numberStart}" end="${paging.numberEnd}" step="1">
 
-                                    <li <c:if test="${i == page}">class="active"</c:if>><a href="#" onclick="return false;"
+                                    <li <c:if test="${i == logVO.page}">class="active"</c:if>><a href="#" onclick="return false;"
                                                                                            class="dev-page"
                                                                                            data-page="${i}">${i}</a></li>
                                 </c:forEach>

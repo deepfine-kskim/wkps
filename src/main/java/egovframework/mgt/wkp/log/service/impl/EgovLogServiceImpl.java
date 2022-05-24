@@ -12,7 +12,6 @@ import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.mgt.wkp.log.service.LogVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,9 +29,7 @@ public class EgovLogServiceImpl extends EgovAbstractServiceImpl implements EgovL
     @Override
     public ListWithPageNavigation<LogVO> selectLogList(LogVO logVO) {
         ListWithPageNavigation<LogVO> result = new ListWithPageNavigation<>();
-
-        PageNavigation pageNavigation =
-                new PageNavigation(selectListCount(logVO), logVO.getPage(), null, null);
+        PageNavigation pageNavigation = new PageNavigation(selectListCount(logVO), logVO.getPage(), null, null);
         logVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
         logVO.setItemOffset(pageNavigation.getItemCountPerPage() * (logVO.getPage() - 1));
         result.setList(logDAO.selectList(logVO));

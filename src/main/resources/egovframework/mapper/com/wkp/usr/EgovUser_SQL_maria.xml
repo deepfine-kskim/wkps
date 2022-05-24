@@ -120,21 +120,26 @@
 	</insert>
 	
  	 <select id="selectManagerList" parameterType="UserVO" resultType="UserVO">
- 		
-			SELECT 
-				tr.*,
-				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tr.SID) AS DISPLAY_NAME,
-				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = tr.SID)) AS OU,
-				CASE WHEN tr.ROLE_CD = 'ROLE_ADMIN' THEN '시스템 관리자'
-				     WHEN tr.ROLE_CD = 'ROLE_KNOWLEDGE' THEN '지식 관리자'
-				     WHEN tr.ROLE_CD = 'ROLE_SURVEY' THEN '설문 관리자'
-				     WHEN tr.ROLE_CD = 'ROLE_COMMUNITY' THEN '커뮤니티 관리자'
-				     WHEN tr.ROLE_CD = 'ROLE_ORG' THEN '부서 지식 관리자'
-				END AS ROLE_NM
-			FROM
-				TB_ROLE tr
-			<include refid="selectListCondition" />
-
+ 			SELECT *
+ 			  FROM (SELECT tr.*
+ 			             , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tr.SID) AS DISPLAY_NAME
+ 			             , (SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = tr.SID)) AS OU
+ 			             , CASE WHEN tr.ROLE_CD = 'ROLE_ADMIN' THEN '시스템 관리자'
+							    WHEN tr.ROLE_CD = 'ROLE_KNOWLEDGE' THEN '지식 관리자'
+							    WHEN tr.ROLE_CD = 'ROLE_SURVEY' THEN '설문 관리자'
+							    WHEN tr.ROLE_CD = 'ROLE_COMMUNITY' THEN '커뮤니티 관리자'
+							    WHEN tr.ROLE_CD = 'ROLE_ORG' THEN '부서 지식 관리자' END AS ROLE_NM
+				      FROM TB_ROLE tr) TB_ROLE
+			<where>
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 'DISPLAY_NAME'">
+						AND DISPLAY_NAME LIKE '%' #{searchKeyword} '%'
+					</if>
+					<if test="searchCondition == 'OU'">
+						AND OU LIKE '%' #{searchKeyword} '%'
+					</if>
+				</if>
+			</where>
  	</select>
  	
  	<insert id="insertManager" parameterType="UserVO">

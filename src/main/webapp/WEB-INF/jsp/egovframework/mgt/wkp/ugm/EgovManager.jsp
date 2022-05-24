@@ -21,11 +21,39 @@
                     <li class="active">관리자 관리</li>
                 </ol>
                 <div id="contents">
-                <div style="font-weight: bold; font-size: 12pt;">※하나의 사용자는 하나의 권한만 가능합니다.</div>
+                    <div class="brd_top">
+                        <div class="row">
+                            <div class="col-xs-5 brd_total">
+                                <div style="font-weight: bold; font-size: 12pt;">※하나의 사용자는 하나의 권한만 가능합니다.</div>
+                            </div>
+                            <div class="col-xs-7 text-right">
+                                <form class="form-inline bbs_srch_frm" name="searchForm" action="#">
+                                    <input type="hidden" name="page">
+                                    <fieldset>
+                                        <legend class="sr-only">게시글 검색</legend>
+                                        <div class="form-group">
+                                            <label for="searchCondition" class="sr-only">검색대상</label>
+                                            <select id="searchCondition" name="searchCondition" class="form-control">
+                                                <option value="">선택해주세요.</option>
+                                                <option value="OU" <c:if test="${userVO.searchCondition eq 'OU'}">selected="selected"</c:if>>부서</option>
+                                                <option value="DISPLAY_NAME" <c:if test="${userVO.searchCondition eq 'DISPLAY_NAME'}">selected="selected"</c:if>>이름</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="searchKeyword" class="sr-only">검색어 입력</label>
+                                            <input type="text" id="searchKeyword" name="searchKeyword" class="form-control" value="${userVO.searchKeyword}" placeholder="검색어" />
+                                            <span class="input-group-btn"><button type="submit" class="btn btn-default">검색</button></span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-bordered text-center table-hover">
                         <caption class="sr-only">게시판 리스트</caption>
                         <colgroup>
                             <col style="width:10%;" />
+                            <col />
                             <col />
                             <col />
                             <col />
@@ -37,6 +65,7 @@
                                 <th scope="col">이름</th>
                                 <th scope="col">부서</th>
                                 <th scope="col">권한</th>
+                                <th scope="col">지정일자</th>
                                 <th scope="col">삭제</th>
                             </tr>
                         </thead>
@@ -47,6 +76,7 @@
                                 <td>${manager.displayName }</td>
                                 <td>${manager.ou }</td>
                                 <td>${manager.roleNm }</td>
+                                <td>${manager.registDtm }</td>
                                 <td><a href="/adm/deleteManager.do?sid=${manager.sid }" class="btn btn-default" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
                             </tr>
                             </c:forEach>

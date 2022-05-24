@@ -1,9 +1,9 @@
 package egovframework.com.wkp.usr.service;
 
+import lombok.Data;
+
 import java.sql.Date;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class UserVO {
@@ -89,4 +89,7 @@ public class UserVO {
 
 	private List<String> ouCodeList;
 
+	private String searchCondition;
+
+	private String searchKeyword;
 }

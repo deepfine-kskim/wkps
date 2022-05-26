@@ -208,8 +208,8 @@
                                     </div>
                                 </div>
                                 </c:if>
-                                <%-- 개인별 지식탭의 지식이거나, 등록된 지식의 부서가 본인이 속한 부서와 동일한 경우에만 지식 이력 노출 --%>
-                                <c:if test="${knowledgeDetail.knowlgMapType eq 'PERSONAL' or loginVO.ouCode eq knowledgeDetail.ouCode}">
+                                <%-- 개인별 지식탭의 지식이거나, 등록된 지식의 부서가 본인이 속한 부서와 동일하거나, 시스템 관리자인 경우에만 지식 이력 노출 --%>
+                                <c:if test="${knowledgeDetail.knowlgMapType eq 'PERSONAL' or loginVO.ouCode eq knowledgeDetail.ouCode or loginVO.roleCd eq 'ROLE_ADMIN'}">
                                     <c:if test="${not empty knowledgeHistoryList}">
                                         <div class="panel panel-primary panel-sm wiki_panel">
                                             <div class="panel-heading">

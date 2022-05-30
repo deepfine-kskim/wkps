@@ -194,60 +194,39 @@ public class Scheduler {
 		
 		try {
 			PersonalizeVO personalizeVO = new PersonalizeVO();
+			List<OrgVO> topOrgList = orgService.selectTopOrgList();
 			
-			List<OrgVO> orgList = orgService.selectOrgList(new OrgVO());
-			
-			for(int i = 0; i < orgList.size(); i++) {
-	            OrgVO orgVO = new OrgVO();
-	            orgVO.setOuCode(orgList.get(i).getOuCode());
-	            String parentOuCode = orgService.selectParentOrg(orgVO).getParentOuCode();
-	            
-	            if(parentOuCode.equals("6410000")){
-	            	parentOuCode = orgList.get(i).getOuCode();
-	            } else {
-	            	String tmpCode = parentOuCode;
-	            	while (!tmpCode.equals("6410000")) {
-	            		orgVO.setOuCode(tmpCode);
-	            		tmpCode = orgService.selectParentOrg(orgVO).getParentOuCode();
-	            		if(!tmpCode.equals("6410000")) {
-	            			parentOuCode = tmpCode;
-	            		}
-	            	}
-	            }
-	            
-				personalizeVO.setOuCode(orgList.get(i).getOuCode());
+			for(int i = 0; i < topOrgList.size(); i++) {
+				personalizeVO.setOuCode(topOrgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("REPORT");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> reportPersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
 								
 				for(int j = 0; j < reportPersonalizeKnowledgeList.size(); j++) {
 					reportPersonalizeKnowledgeList.get(j).setRki(j+1);
-					reportPersonalizeKnowledgeList.get(j).setRegisterId("admin");
-					reportPersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
+					reportPersonalizeKnowledgeList.get(j).setOuCode(topOrgList.get(i).getOuCode());
 					commonService.insertPersonalize(reportPersonalizeKnowledgeList.get(j));
 				}
 				
-				personalizeVO.setOuCode(orgList.get(i).getOuCode());
+				personalizeVO.setOuCode(topOrgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("REFERENCE");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> referencePersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
 				
 				for(int j = 0; j < referencePersonalizeKnowledgeList.size(); j++) {
 					referencePersonalizeKnowledgeList.get(j).setRki(j+1);
-					referencePersonalizeKnowledgeList.get(j).setRegisterId("admin");
-					referencePersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
+					referencePersonalizeKnowledgeList.get(j).setOuCode(topOrgList.get(i).getOuCode());
 					commonService.insertPersonalize(referencePersonalizeKnowledgeList.get(j));
 				}
 				
-				personalizeVO.setOuCode(orgList.get(i).getOuCode());
+				personalizeVO.setOuCode(topOrgList.get(i).getOuCode());
 				personalizeVO.setKnowlgMapType("PERSONAL");
 				commonService.deletePersonalize(personalizeVO);
 				List<PersonalizeVO> pesonalPersonalizeKnowledgeList = commonService.selectTopPersonalizeKnowledgeList(personalizeVO);
 				
 				for(int j = 0; j < pesonalPersonalizeKnowledgeList.size(); j++) {
 					pesonalPersonalizeKnowledgeList.get(j).setRki(j+1); 
-					pesonalPersonalizeKnowledgeList.get(j).setRegisterId("admin");
-					pesonalPersonalizeKnowledgeList.get(j).setOuCode(parentOuCode);
+					pesonalPersonalizeKnowledgeList.get(j).setOuCode(topOrgList.get(i).getOuCode());
 					commonService.insertPersonalize(pesonalPersonalizeKnowledgeList.get(j));
 				}
 				

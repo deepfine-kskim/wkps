@@ -1,16 +1,20 @@
 package egovframework.com.wkp.usr.service.impl;
 
-import java.util.List;
-import org.springframework.stereotype.Repository;
-
 import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 import egovframework.com.wkp.usr.service.OrgVO;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("orgDAO")
 public class OrgDAO extends EgovComAbstractDAO {
 
 	public List<OrgVO> selectOrgList(OrgVO orgVO) {
 		return selectList("OrgDAO.selectOrgList", orgVO);
+	}
+
+	public List<OrgVO> selectTopOrgList() {
+		return selectList("OrgDAO.selectTopOrgList");
 	}
 
 	public OrgVO selectOrgDetail(OrgVO orgVO) {

@@ -6,6 +6,8 @@ public interface EgovOrgService {
 
     public List<OrgVO> selectOrgList(OrgVO orgVO);
 
+    public List<OrgVO> selectTopOrgList();
+
     public OrgVO selectOrgDetail(OrgVO orgVO);
     
     public OrgVO selectParentOrg(OrgVO orgVO);

@@ -1,14 +1,12 @@
 package egovframework.com.wkp.usr.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.com.wkp.usr.service.EgovOrgService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service("orgService")
 public class EgovOrgServiceImpl extends EgovAbstractServiceImpl implements EgovOrgService {
@@ -19,6 +17,11 @@ public class EgovOrgServiceImpl extends EgovAbstractServiceImpl implements EgovO
 	@Override
 	public List<OrgVO> selectOrgList(OrgVO orgVO) {
 		return orgDAO.selectOrgList(orgVO);
+	}
+
+	@Override
+	public List<OrgVO> selectTopOrgList() {
+		return orgDAO.selectTopOrgList();
 	}
 
 	@Override

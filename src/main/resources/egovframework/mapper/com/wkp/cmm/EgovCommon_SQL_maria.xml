@@ -432,33 +432,48 @@
 	</select>
 	
  	<select id="selectTopPersonalizeKnowledgeList" parameterType="PersonalizeVO" resultType="PersonalizeVO">
-	
-			SELECT
-				OU_CODE
-				, TITLE
-				, KNOWLG_MAP_TYPE
-				, REGIST_DTM
-			FROM (
-				SELECT
-					tk.OU_CODE,
-					tk.TITLE,
-					tk.KNOWLG_MAP_TYPE,
-					tk.REGIST_DTM,
-					(tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT,
-					ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
-				FROM
-					TB_KNOWLEDGE tk					
-	       		WHERE DEL_YN = 'N'
-	        	AND KNOWLG_NO != 0
-	  	  		AND KNOWLG_MAP_TYPE = #{knowlgMapType}
-	  	  		AND OU_CODE = #{ouCode}
-	    		AND APRV_YN = 'Y'
-	    		AND REGISTER_ID != 'admin'
-	    		ORDER BY POINT DESC
-	   		) AS T
-			WHERE ROW_NUM = 1
-			LIMIT 2
-			
+		WITH RECURSIVE TB_ORG_CTE AS (
+			SELECT OU
+				 , OU_CODE
+				 , PARENT_OU_CODE
+				 , 2 AS LEVEL
+				 , OU_CODE AS TOP_OU_CODE
+			  FROM TB_ORG
+			 WHERE OU_LEVEL = 2
+			 UNION ALL
+			SELECT TB_ORG.OU
+				 , TB_ORG.OU_CODE
+				 , TB_ORG.PARENT_OU_CODE
+				 , 1 + LEVEL AS LEVEL
+				 , TB_ORG_CTE.TOP_OU_CODE
+			  FROM TB_ORG
+			 INNER JOIN TB_ORG_CTE ON TB_ORG_CTE.OU_CODE = TB_ORG.PARENT_OU_CODE
+		)
+		SELECT T.OU_CODE
+			 , T.TITLE
+			 , T.KNOWLG_MAP_TYPE
+			 , T.REGIST_DTM
+			 , T.REGISTER_ID
+			 , T.POINT
+		  FROM (SELECT tk.OU_CODE
+					 , tk.TITLE
+					 , tk.KNOWLG_MAP_TYPE
+					 , tk.REGIST_DTM
+					 , tk.REGISTER_ID
+					 , (tk.INQ_CNT * 1 + IFNULL((SELECT REC_CNT * 10 FROM (SELECT KNOWLG_NO, COUNT(*) AS REC_CNT FROM TB_KNOWLEDGE_RECOMMEND GROUP BY KNOWLG_NO) tkr WHERE tkr.KNOWLG_NO = tk.KNOWLG_NO),0)) AS POINT
+					 ,  ROW_NUMBER() OVER(PARTITION BY tk.TITLE ORDER BY tk.KNOWLG_NO DESC ) AS ROW_NUM
+				  FROM TB_KNOWLEDGE tk
+				 WHERE DEL_YN = 'N'
+				   AND KNOWLG_NO != 0
+				   AND KNOWLG_MAP_TYPE = #{knowlgMapType}
+				   AND APRV_YN = 'Y'
+				   AND REGISTER_ID != 'admin'
+			 ) AS T
+		 LEFT JOIN TB_ORG_CTE ON TB_ORG_CTE.OU_CODE = T.OU_CODE
+		WHERE T.ROW_NUM = 1
+		  AND TB_ORG_CTE.TOP_OU_CODE = #{ouCode}
+		ORDER BY T.POINT DESC
+		LIMIT 2
 	</select>
 	
 </mapper>

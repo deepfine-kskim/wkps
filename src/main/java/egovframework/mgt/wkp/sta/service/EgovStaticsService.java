@@ -52,6 +52,10 @@ public interface EgovStaticsService {
 
     public int selectRecommendUserStaticsCount(StaticsKnowledgeVO param);
 
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectActiveUserStatics(StaticsKnowledgeVO param);
+
+    public int selectActiveUserStaticsCount(StaticsKnowledgeVO param);
+
     public ListWithPageNavigation<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param);
 
     public int selectOrgStaticsCount(StaticsKnowledgeVO param);

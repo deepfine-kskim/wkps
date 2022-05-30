@@ -266,6 +266,22 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
     }
 
     @Override
+    public ListWithPageNavigation<StaticsKnowledgeVO> selectActiveUserStatics(StaticsKnowledgeVO param) {
+        ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
+        PageNavigation pageNavigation = new PageNavigation(selectActiveUserStaticsCount(param), param.getPage(), null, 10);
+        param.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        param.setItemOffset(pageNavigation.getItemCountPerPage() * (param.getPage() - 1));
+        listWithPageNavigation.setList(staticsDAO.selectActiveUserStatics(param));
+        listWithPageNavigation.setPageNavigation(pageNavigation);
+        return listWithPageNavigation;
+    }
+
+    @Override
+    public int selectActiveUserStaticsCount(StaticsKnowledgeVO param) {
+        return staticsDAO.selectActiveUserStaticsCount(param);
+    }
+
+    @Override
     public ListWithPageNavigation<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param) {
         ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = new ListWithPageNavigation<>();
         PageNavigation pageNavigation = new PageNavigation(selectOrgStaticsCount(param), param.getPage(), null, 10);

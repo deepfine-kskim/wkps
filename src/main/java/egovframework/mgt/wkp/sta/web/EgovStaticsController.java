@@ -4,11 +4,7 @@ import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.utl.fcc.service.EgovFileUploadUtil;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.mgt.wkp.sta.service.EgovStaticsService;
-import egovframework.mgt.wkp.sta.service.StaticsConnectVO;
-import egovframework.mgt.wkp.sta.service.StaticsKnowledgeVO;
-import egovframework.mgt.wkp.sta.service.StaticsQnaVO;
-import egovframework.mgt.wkp.sta.service.StaticsVO;
+import egovframework.mgt.wkp.sta.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -327,6 +323,20 @@ public class EgovStaticsController {
 		model.addAttribute("resultList", listWithPageNavigation.getList());
 		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
 		return "/mgt/wkp/sta/EgovStatRecommendUserKnowledge";
+	}
+
+	@RequestMapping("/statActiveUserKnowledge.do")
+	public String statActiveUserKnowledge(@ModelAttribute StaticsKnowledgeVO param, Model model) {
+		if (StringUtils.isEmpty(param.getStartDate())) {
+			param.setStartDate(LocalDate.now().minusDays(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		if (StringUtils.isEmpty(param.getEndDate())) {
+			param.setEndDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		}
+		ListWithPageNavigation<StaticsKnowledgeVO> listWithPageNavigation = egovStaticsService.selectActiveUserStatics(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/sta/EgovStatActiveUserKnowledge";
 	}
 
 	@RequestMapping("/statOrgKnowledge.do")

@@ -52,6 +52,14 @@ public class StaticsKnowledgeVO {
     private String ownerName;
     private String ownerOu;
     private String displayName;
+    private Long newCnt;
+    private Long updCnt;
+    private Long viewCnt;
+    private Long newMileage;
+    private Long updMileage;
+    private Long recMileage;
+    private Long viewMileage;
+    private Long totalMileage;
 
     private String startDate;
     private String endDate;

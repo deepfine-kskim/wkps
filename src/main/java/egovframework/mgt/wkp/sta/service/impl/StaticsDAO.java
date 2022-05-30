@@ -85,6 +85,14 @@ public class StaticsDAO extends EgovComAbstractDAO {
 		return selectOne("StaticsDAO.selectRecommendUserStaticsCount", param);
 	}
 
+	public List<StaticsKnowledgeVO> selectActiveUserStatics(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectActiveUserStatics", param);
+	}
+
+	public int selectActiveUserStaticsCount(StaticsKnowledgeVO param) {
+		return selectOne("StaticsDAO.selectActiveUserStaticsCount", param);
+	}
+
 	public List<StaticsKnowledgeVO> selectOrgStatics(StaticsKnowledgeVO param) {
 		return selectList("StaticsDAO.selectOrgStatics", param);
 	}

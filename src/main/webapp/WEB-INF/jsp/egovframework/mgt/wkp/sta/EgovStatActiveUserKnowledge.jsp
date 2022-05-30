@@ -24,86 +24,106 @@
                 <div id="contents">
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation"><a href="/adm/statKnowledge.do">지식 등록 통계</a></li>
-                        <li role="presentation" class="active"><a href="/adm/statViewKnowledge.do">최다 조회 지식</a></li>
+                        <li role="presentation"><a href="/adm/statViewKnowledge.do">최다 조회 지식</a></li>
                         <li role="presentation"><a href="/adm/statRecommendKnowledge.do">최다 추천 지식</a></li>
                         <li role="presentation"><a href="/adm/statUserKnowledge.do">최다 게시자</a></li>
                         <li role="presentation"><a href="/adm/statRecommendUserKnowledge.do">최다 추천자</a></li>
-                        <li role="presentation"><a href="/adm/statActiveUserKnowledge.do">최다 활동자</a></li>
+                        <li role="presentation" class="active"><a href="/adm/statActiveUserKnowledge.do">최다 활동자</a></li>
                         <li role="presentation"><a href="/adm/statOrgKnowledge.do">최다 등록부서</a></li>
                     </ul>
                     <div class="brd_top">
                         <div class="row type0">
-                             <div class="col-xs-12">
-                                 <div class="well mb_0">
-                                 <form name="searchForm">
-                                     <input type="hidden" name="page" value="${staticsKnowledgeVO.page}">
-                                     <fieldset>
-                                         <legend class="sr-only">게시글 검색</legend>
-                                         <div class="form-row">
-                                             <div class="form-group col-xs-4">
-                                                 <label for="inpStartDate">조회기간</label>
-                                                 <div class="input-group">
-                                                     <input type="text" class="form-control inp_date datetime text-center" id="inpStartDate" name="startDate" placeholder="시작날짜" value="${staticsKnowledgeVO.startDate}"/>
-                                                     <span class="input-group-addon">~</span>
-                                                     <input type="text" class="form-control inp_date datetime text-center" id="inpEndDate" name="endDate" placeholder="종료날짜" value="${staticsKnowledgeVO.endDate}"/>
-                                                 </div>
-                                             </div>
-                                             <div class="form-group col-xs-2">
-                                                 <label for="brdSort">구분</label>
-                                                 <div class="input-group">
-                                                     <select id="brdSort" name="searchType" class="form-control">
-                                                         <option value="">전체</option>
-                                                         <option value="REPORT" ${staticsKnowledgeVO.searchType eq 'REPORT' ? 'selected' : ''}>행정자료</option>
-                                                         <option value="REFERENCE" ${staticsKnowledgeVO.searchType eq 'REFERENCE' ? 'selected' : ''}>업무참고자료</option>
-                                                         <option value="PERSONAL" ${staticsKnowledgeVO.searchType eq 'PERSONAL' ? 'selected' : ''}>개인행정지식</option>
-                                                     </select>
-                                                     <span class="input-group-btn"><button type="button" class="btn btn-default dev-search">검색</button></span>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </fieldset>
-                                </form>
+                            <div class="col-xs-12">
+                                <div class="well mb_0">
+                                    <form name="searchForm">
+                                        <input type="hidden" name="page" value="${staticsKnowledgeVO.page}">
+                                        <fieldset>
+                                            <legend class="sr-only">게시글 검색</legend>
+                                            <div class="form-row">
+                                                <div class="form-group col-xs-4">
+                                                    <label for="inpStartDate">조회기간</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control inp_date datetime text-center" id="inpStartDate" name="startDate" placeholder="시작날짜" value="${staticsKnowledgeVO.startDate}"/>
+                                                        <span class="input-group-addon">~</span>
+                                                        <input type="text" class="form-control inp_date datetime text-center" id="inpEndDate" name="endDate" placeholder="종료날짜" value="${staticsKnowledgeVO.endDate}"/>
+                                                        <span class="input-group-btn"><button type="button" class="btn btn-default dev-search">검색</button></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <table class="table table-bordered text-center table-hover">
-                        <caption class="sr-only">최다 조회 지식 리스트</caption>
+                        <caption class="sr-only">최다 활동자 리스트</caption>
                         <colgroup>
                             <col style="width:6%;">
                             <col>
-                            <col style="width:7%;">
-                            <col style="width:7%;">
-                            <col style="width:15%;">
-                            <col style="width:15%;">
-                            <col style="width:10%;">
+                            <col>
+                            <col style="width:9%;">
+                            <col style="width:9%;">
+                            <col style="width:9%;">
+                            <col style="width:9%;">
+                            <col style="width:9%;">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">순위</th>
-                            <th scope="col">제목</th>
-                            <th scope="col">조회수</th>
-                            <th scope="col">추천수</th>
+                            <th scope="col">성명</th>
                             <th scope="col">부서</th>
-                            <th scope="col">담당자</th>
-                            <th scope="col">최근등록일</th>
+                            <th scope="col">마일리지 합계</th>
+                            <th scope="col">조회</th>
+                            <th scope="col">추천</th>
+                            <th scope="col">등록</th>
+                            <th scope="col">수정</th>
                         </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="result" items="${resultList}" varStatus="status">
                             <tr>
                                 <td>${pageNavigation.totalItemCount - (pageNavigation.totalItemCount - ((pageNavigation.pageIndex - 1) * pageNavigation.itemCountPerPage) - status.count)}</td>
-                                <td><c:out value="${result.title}"/></td>
-                                <td><fmt:formatNumber value="${result.inqCnt}" pattern="#,###"/></td>
-                                <td><fmt:formatNumber value="${result.recCnt}" pattern="#,###"/></td>
+                                <td><c:out value="${result.displayName}"/></td>
                                 <td><c:out value="${result.ou}"/></td>
-                                <td><c:out value="${result.ownerName}"/>(<c:out value="${result.ownerOu}"/>)</td>
-                                <td><c:out value="${result.registDtm}"/></td>
+                                <td><fmt:formatNumber value="${result.totalMileage}" pattern="#,###"/></td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${result.viewCnt ne 0}">
+                                            <fmt:formatNumber value="${result.viewCnt}" pattern="#,###"/>건 (<fmt:formatNumber value="${result.viewMileage}" pattern="#,###"/>점)
+                                        </c:when>
+                                        <c:otherwise>-</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${result.recCnt ne 0}">
+                                            <fmt:formatNumber value="${result.recCnt}" pattern="#,###"/>건 (<fmt:formatNumber value="${result.recMileage}" pattern="#,###"/>점)
+                                        </c:when>
+                                        <c:otherwise>-</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${result.newCnt ne 0}">
+                                            <fmt:formatNumber value="${result.newCnt}" pattern="#,###"/>건 (<fmt:formatNumber value="${result.newMileage}" pattern="#,###"/>점)
+                                        </c:when>
+                                        <c:otherwise>-</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${result.updCnt ne 0}">
+                                            <fmt:formatNumber value="${result.updCnt}" pattern="#,###"/>건 (<fmt:formatNumber value="${result.updMileage}" pattern="#,###"/>점)
+                                        </c:when>
+                                        <c:otherwise>-</c:otherwise>
+                                    </c:choose>
+                                </td>
                             </tr>
                         </c:forEach>
                         <c:if test="${fn:length(resultList) eq 0}">
                             <tr>
-                                <td colspan="7">등록된 데이터가 없습니다.</td>
+                                <td colspan="8">등록된 데이터가 없습니다.</td>
                             </tr>
                         </c:if>
                         </tbody>
@@ -150,6 +170,7 @@
                     <!-- //페이지 네비 -->
                 </div>
                 <!-- //CONTENTS -->
+
                 <div id="footer">
                     <p id="copy">&copy; GYEONGGI PROVINCE. All Rights Reserved.</p>
                 </div>
@@ -173,13 +194,13 @@
             const page = $(this).data('page');
             const form = $("form[name=searchForm]");
             form.find("input[name=page]").val(page);
-            form.attr("action", "/adm/statViewKnowledge.do");
+            form.attr("action", "/adm/statActiveUserKnowledge.do");
             form.submit();
         });
 
         $(".dev-search").on("click", function() {
             const form = $("form[name=searchForm]");
-            form.attr("action", "/adm/statViewKnowledge.do");
+            form.attr("action", "/adm/statActiveUserKnowledge.do");
             form.attr("method", "get");
             form.submit();
         });

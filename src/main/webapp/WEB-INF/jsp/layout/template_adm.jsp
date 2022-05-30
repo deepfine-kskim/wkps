@@ -72,12 +72,12 @@
 		                </ul>
 		            </li>
 			        <li class="menu <c:if test="${url == '/adm/menuList.do' }">active</c:if>"><a href="/adm/menuList.do">메뉴 관리</a></li>
-			        <li class="menu <c:if test="${url == '/adm/statConnect.do' || url == '/adm/statKnowledgeList.do' || url == '/adm/statKnowledge.do' || url == '/adm/statInterestsList.do' || url == '/adm/statSearch.do' || url == '/adm/statQna.do' || url == '/adm/statViewKnowledge.do' || url == '/adm/statRecommendKnowledge.do' || url == '/adm/statUserKnowledge.do' || url == '/adm/statRecommendUserKnowledge.do' || url == '/adm/statOrgKnowledge.do'}">active</c:if>"><a href="/adm/statConnect.do">통계</a>
+			        <li class="menu <c:if test="${url == '/adm/statConnect.do' || url == '/adm/statKnowledgeList.do' || url == '/adm/statKnowledge.do' || url == '/adm/statInterestsList.do' || url == '/adm/statSearch.do' || url == '/adm/statQna.do' || url == '/adm/statViewKnowledge.do' || url == '/adm/statRecommendKnowledge.do' || url == '/adm/statUserKnowledge.do' || url == '/adm/statRecommendUserKnowledge.do' || url == '/adm/statActiveUserKnowledge.do' || url == '/adm/statOrgKnowledge.do'}">active</c:if>"><a href="/adm/statConnect.do">통계</a>
 			            <ul class="sub_menu_list">
 			            	<li class="sub_menu <c:if test="${url == '/adm/statConnect.do' }">active</c:if>"><a href="/adm/statConnect.do">접속 통계</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/statKnowledgeList.do' }">active</c:if>"><a href="/adm/statKnowledgeList.do">지식 등록 현황</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/statInterestsList.do' }">active</c:if>"><a href="/adm/statInterestsList.do">관심분야 통계</a></li>
-			            	<li class="sub_menu <c:if test="${url == '/adm/statKnowledge.do' || url == '/adm/statViewKnowledge.do' || url == '/adm/statRecommendKnowledge.do' || url == '/adm/statUserKnowledge.do' || url == '/adm/statRecommendUserKnowledge.do' || url == '/adm/statOrgKnowledge.do'}">active</c:if>"><a href="/adm/statKnowledge.do">지식 통계</a></li>
+			            	<li class="sub_menu <c:if test="${url == '/adm/statKnowledge.do' || url == '/adm/statViewKnowledge.do' || url == '/adm/statRecommendKnowledge.do' || url == '/adm/statUserKnowledge.do' || url == '/adm/statRecommendUserKnowledge.do' || url == '/adm/statActiveUserKnowledge.do' || url == '/adm/statOrgKnowledge.do'}">active</c:if>"><a href="/adm/statKnowledge.do">지식 통계</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/statQna.do' }">active</c:if>"><a href="/adm/statQna.do">Q&A 통계</a></li>
 			                <li class="sub_menu <c:if test="${url == '/adm/statSearch.do' }">active</c:if>"><a href="http://105.0.1.229:7581/files/admin/index.html" target="_blank">검색 통계</a></li>
 			            </ul>

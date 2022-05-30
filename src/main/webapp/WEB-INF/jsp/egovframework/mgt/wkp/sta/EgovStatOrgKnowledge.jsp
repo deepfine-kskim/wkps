@@ -28,6 +28,7 @@
                         <li role="presentation"><a href="/adm/statRecommendKnowledge.do">최다 추천 지식</a></li>
                         <li role="presentation"><a href="/adm/statUserKnowledge.do">최다 게시자</a></li>
                         <li role="presentation"><a href="/adm/statRecommendUserKnowledge.do">최다 추천자</a></li>
+                        <li role="presentation"><a href="/adm/statActiveUserKnowledge.do">최다 활동자</a></li>
                         <li role="presentation" class="active"><a href="/adm/statOrgKnowledge.do">최다 등록부서</a></li>
                     </ul>
                     <div class="brd_top">

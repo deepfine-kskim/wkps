@@ -65,6 +65,7 @@
 							<input type="hidden" name="sortOrdr" value="${knowledgeContents.sortOrdr }">
 							<input type="hidden" name="knowlgMapType" value="${knowledgeDetail.knowlgMapType }">
 							<input type="hidden" name="aprvYn" value="Y"> <!-- 승인여부 -->
+                            <input type="hidden" name="tempKnowlgMapNo" value="${knowledgeVO.knowlgMapNo}">
 							<fieldset>
                                 <legend class="sr-only">지식 편집</legend>
                                 <div class="brd_write_area wiki_frms">

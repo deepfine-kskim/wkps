@@ -63,6 +63,7 @@
                         	<input type="hidden" name="realNmYn" value="Y">
                         	<input type="hidden" name="cmmntyNo" value="${empty cmmntyNo?0:cmmntyNo}">
                         	<input type="hidden" name="aprvYn" value="Y"> <!-- 승인여부 -->
+                            <input type="hidden" name="tempKnowlgMapNo" value="${knowledgeVO.knowlgMapNo}">
                             <fieldset>
                                 <legend class="sr-only">게시판 글작성</legend>
                                 <div class="brd_write_area wiki_frms">

@@ -152,4 +152,6 @@ public class KnowledgeVO {
 	private String searchStartDate;
 
 	private String searchEndDate;
+
+	private Long tempKnowlgMapNo;
 }

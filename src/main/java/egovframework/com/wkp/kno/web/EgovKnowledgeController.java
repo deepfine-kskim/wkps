@@ -504,6 +504,7 @@ public class EgovKnowledgeController {
 
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getTempKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
 
         try {
@@ -884,6 +885,7 @@ public class EgovKnowledgeController {
 
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getTempKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
 
         try {
@@ -1103,6 +1105,7 @@ public class EgovKnowledgeController {
 
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getTempKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
 
         try {
@@ -1282,6 +1285,7 @@ public class EgovKnowledgeController {
 
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getTempKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
 
 		try {
@@ -1346,6 +1350,7 @@ public class EgovKnowledgeController {
 
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getTempKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
 
         try {
@@ -1395,6 +1400,7 @@ public class EgovKnowledgeController {
     public String deleteKnowledge(@ModelAttribute("knowledgeVO") KnowledgeVO knowledgeVO, RedirectAttributes redirectAttributes) {
         KnowledgeVO condition = new KnowledgeVO();
         condition.setKnowlgMapType(knowledgeVO.getKnowlgMapType());
+        condition.setKnowlgMapNo(knowledgeVO.getKnowlgMapNo());
         redirectAttributes.addFlashAttribute("condition", condition);
         if ("PERSONAL".equals(knowledgeVO.getKnowlgMapType())) {
             // 개인별 지식인 경우 개별 삭제

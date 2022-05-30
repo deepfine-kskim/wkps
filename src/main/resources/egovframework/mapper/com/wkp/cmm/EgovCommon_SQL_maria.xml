@@ -65,8 +65,7 @@
 		SELECT
 			teu.*,
 			(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = teu.SID) AS DISPLAY_NAME,
-			(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = teu.SID)) AS OU,
-			(SELECT SUM(MILEAGE_SCORE) FROM TB_USER_MILEAGE tum WHERE tum.SID = teu.SID) AS MILEAGE_SCORE
+			(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = teu.SID)) AS OU
 		FROM
 			TB_EXCELLENCE_USER teu
 		ORDER BY RKI
@@ -75,8 +74,8 @@
 	<!-- 우수 사용자 등록 -->
 	<insert id="insertExcellenceUser" parameterType="ExcellenceUserVO">
 		/* CommonDAO.insertExcellenceUser */
-		INSERT INTO TB_EXCELLENCE_USER (SID, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM)
-		VALUES (#{sid}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE())
+		INSERT INTO TB_EXCELLENCE_USER (SID, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, MILEAGE_SCORE)
+		VALUES (#{sid}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), #{mileageScore})
 	</insert>
 
 	<!-- 우수 사용자 삭제 -->
@@ -98,8 +97,7 @@
 	/* CommonDAO.selectExcellenceOrgList */
 		SELECT
 			teo.*,
-			(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = teo.OU_CODE) AS OU,
-			(SELECT SUM(MILEAGE_SCORE) FROM TB_ORG_MILEAGE tom WHERE tom.OU_CODE = teo.OU_CODE) AS MILEAGE_SCORE
+			(SELECT OU FROM TB_ORG tr WHERE tr.OU_CODE = teo.OU_CODE) AS OU
 		FROM
 			TB_EXCELLENCE_ORG teo
 		ORDER BY RKI
@@ -108,8 +106,8 @@
 	<!-- 우수 부서 등록 -->
 	<insert id="insertExcellenceOrg" parameterType="ExcellenceOrgVO">
 		/* CommonDAO.insertExcellenceOrg */
-		INSERT INTO TB_EXCELLENCE_ORG (OU_CODE, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM)
-		VALUES (#{ouCode}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE())
+		INSERT INTO TB_EXCELLENCE_ORG (OU_CODE, RKI, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, MILEAGE_SCORE)
+		VALUES (#{ouCode}, #{rki}, #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), #{mileageScore})
 	</insert>
 
 	<!-- 우수 부서 삭제 -->

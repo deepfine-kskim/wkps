@@ -67,8 +67,10 @@
                     <h2>지식 챔피언 (1주일)</h2>
                     <div class="ranking__wrap">
                         <ol class="ranking_list">
-                        	<c:forEach var="user" items="${excellenceUserList }">
-                            <li><em class="num">${user.rki }</em>${user.displayName }<span class="small">(${user.ou })</span></li>
+                        	<c:forEach var="user" items="${excellenceUserList }" varStatus="status">
+                                <c:if test="${status.index < 5}">
+                                    <li><em class="num">${user.rki }</em>${user.displayName }<span class="small">(${user.ou })</span></li>
+                                </c:if>
                             </c:forEach>
                         </ol>
                     </div>

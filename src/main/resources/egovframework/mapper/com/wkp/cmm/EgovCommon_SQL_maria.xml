@@ -384,7 +384,7 @@
 		 WHERE (TB_ROLE.ROLE_CD IS NULL OR TB_ROLE.ROLE_CD <![CDATA[<>]]> 'ROLE_ADMIN')
 		   AND TB_ORG.OU_LEVEL <![CDATA[<>]]> 2
 		 ORDER BY MILEAGE_SCORE DESC, SID ASC
-		 LIMIT 5
+		 LIMIT 30
  	</select>
 
 	<!-- 부서별 마일리지 점수 조회 -->
@@ -399,7 +399,7 @@
 		  LEFT JOIN TB_ORG ON TB_ORG.OU_CODE = TB_ORG_MILEAGE.OU_CODE
 		 WHERE TB_ORG.OU_LEVEL <![CDATA[<>]]> 2
 		 ORDER BY MILEAGE_SCORE DESC, OU_CODE ASC
-		 LIMIT 5;
+		 LIMIT 30
  	</select>
  	
  	<select id="selectTopRecommendKnowledgeList" parameterType="RecommendVO" resultType="RecommendVO">

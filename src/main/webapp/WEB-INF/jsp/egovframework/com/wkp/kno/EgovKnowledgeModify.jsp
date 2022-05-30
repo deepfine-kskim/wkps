@@ -20,10 +20,12 @@
                                 <div class="mside_tog_cont">
                                     <div class="side_cont_wrap">
                                         <ol class="ranking_list">
-                                        	<c:forEach var="excellenceUser" items="${excellenceUserList }">
-                                            <li>
-                                                <strong class="text-primary">${excellenceUser.rki }위</strong> ${excellenceUser.displayName }
-                                            </li>
+                                        	<c:forEach var="excellenceUser" items="${excellenceUserList }" varStatus="status">
+                                                <c:if test="${status.index < 5}">
+                                                    <li>
+                                                        <strong class="text-primary">${excellenceUser.rki }위</strong> ${excellenceUser.displayName }
+                                                    </li>
+                                                </c:if>
                                             </c:forEach>
                                         </ol>
                                     </div>

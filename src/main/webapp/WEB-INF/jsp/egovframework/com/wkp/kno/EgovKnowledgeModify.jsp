@@ -42,10 +42,12 @@
                                 <div class="mside_tog_cont">
                                     <div class="side_cont_wrap">
                                         <ol class="ranking_list">
-                                        	<c:forEach var="excellenceOrg" items="${excellenceOrgList }">
-                                            <li>
-                                                <strong class="text-primary">${excellenceOrg.rki }위</strong> ${excellenceOrg.ou }
-                                            </li>
+                                        	<c:forEach var="excellenceOrg" items="${excellenceOrgList }" varStatus="status">
+                                                <c:if test="${status.index < 5}">
+                                                    <li>
+                                                        <strong class="text-primary">${excellenceOrg.rki }위</strong> ${excellenceOrg.ou }
+                                                    </li>
+                                                </c:if>
                                             </c:forEach>
                                         </ol>
                                     </div>

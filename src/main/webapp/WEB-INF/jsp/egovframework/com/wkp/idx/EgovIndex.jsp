@@ -81,8 +81,10 @@
                     <h2>지식 부서 (1주일)</h2>
                     <div class="ranking__wrap">
                         <ol class="ranking_list">
-                        	<c:forEach var="org" items="${excellenceOrgList }" >
-                            <li><em class="num">${org.rki }</em> ${org.ou }</li>
+                        	<c:forEach var="org" items="${excellenceOrgList }" varStatus="status">
+                                <c:if test="${status.index < 5}">
+                                    <li><em class="num">${org.rki }</em> ${org.ou }</li>
+                                </c:if>
                             </c:forEach>
                         </ol>
                     </div>

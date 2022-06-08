@@ -1,10 +1,7 @@
 package egovframework.com.cmm.config;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-
+import egovframework.com.cmm.service.EgovProperties;
+import egovframework.com.utl.wed.filter.CkFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.WebApplicationInitializer;
@@ -15,9 +12,10 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import egovframework.com.cmm.filter.HTMLTagFilter;
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.com.utl.wed.filter.CkFilter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 
 /**
@@ -151,12 +149,10 @@ public class EgovWebApplicationInitializer implements WebApplicationInitializer 
 		multipartFilter.addMappingForUrlPatterns(null, false, "*.do");
 		
 		//-------------------------------------------------------------
-	    // HTMLTagFilter의 경우는 파라미터에 대하여 XSS 오류 방지를 위한 변환을 처리합니다.
-		//-------------------------------------------------------------	
-	    // HTMLTagFIlter의 경우는 JSP의 <c:out /> 등을 사용하지 못하는 특수한 상황에서 사용하시면 됩니다.
-	    // (<c:out />의 경우 뷰단에서 데이터 출력시 XSS 방지 처리가 됨)
-		FilterRegistration.Dynamic htmlTagFilter = servletContext.addFilter("htmlTagFilter", new HTMLTagFilter());
-		htmlTagFilter.addMappingForUrlPatterns(null, false, "*.do");
+	    // XSS 방지를 위한 Lucy Filter 적용
+		//-------------------------------------------------------------
+		FilterRegistration.Dynamic xssEscapeServletFilter = servletContext.addFilter("xssEscapeServletFilter", new com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter());
+		xssEscapeServletFilter.addMappingForUrlPatterns(null, false, "*.do");
 		
 		//-------------------------------------------------------------
 		// Spring RequestContextListener 설정

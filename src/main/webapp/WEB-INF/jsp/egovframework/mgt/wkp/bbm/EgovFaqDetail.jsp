@@ -37,7 +37,7 @@
                             <div>
                                 <span class="faq_txt text-danger">A</span>
                             </div>
-							${fn:replace(fn:replace(fn:replace(faq.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'") }
+							${faq.cont}
                         </div>
                         <c:if test="${not empty fileList }">
                         <div class="info_grp files">

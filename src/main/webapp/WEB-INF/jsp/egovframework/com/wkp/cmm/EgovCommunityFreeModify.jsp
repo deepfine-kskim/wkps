@@ -70,7 +70,7 @@ $(function() {
                                             <label for="cont" class="col-sm-2 control-label"><span class="req">*</span> 내용</label>
                                             <div class="col-sm-10">
                                                 <textarea class="form-control" name="cont" rows="10" id="cont" required multiple>
-                                                	<c:out value="${free.cont}" escapeXml="false"/>
+                                                	<c:out value="${free.cont}"/>
                                                 </textarea>
                                             </div>
                                         </div>

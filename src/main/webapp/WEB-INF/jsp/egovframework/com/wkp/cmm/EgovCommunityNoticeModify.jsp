@@ -64,7 +64,7 @@ $(function() {
                                             <div class="col-sm-10">
                                                <textarea class="form-control" name="cont" rows="10" id="cont"
                                               required multiple>
-                                              <c:out value="${notice.cont }" escapeXml="false"/>
+                                              <c:out value="${notice.cont }"/>
                                               </textarea>
                                               
                                             </div>

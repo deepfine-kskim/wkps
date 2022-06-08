@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label for="inpText" class="col-xs-2 control-label"><span class="req">*</span> 내용</label>
                                     <div class="col-xs-10">
-                                        <textarea class="form-control" rows="10" id="inpText" name="cont" required>${faqDetail.cont }</textarea>
+                                        <textarea class="form-control" rows="10" id="inpText" name="cont" required><c:out value="${faqDetail.cont }"/></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">

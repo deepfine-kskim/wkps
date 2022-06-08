@@ -107,9 +107,6 @@ public class EgovSurveyManageController {
 
             if (detail != null) {
                 String str = detail.getSurveyDesc();
-                str = str.replaceAll("&lt;", "<");
-                str = str.replaceAll("&gt;", ">");
-                str = str.replaceAll("&quot;", "\"");
                 detail.setSurveyDesc(str);
                 model.addAttribute("detail", detail);
                 model.addAttribute("joinCount", surveyService.selectSurveyJoinCount(param));

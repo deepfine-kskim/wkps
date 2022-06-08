@@ -72,7 +72,7 @@
                             <div id="collapse${status.index }" class="panel-collapse collapse">    <!--- / 아이디값 1씩 증가할것 -->
                                 <div class="panel-body">
                                     <div class="faq_a text-justify">
-										${fn:replace(fn:replace(fn:replace(faq.cont, "&lt;", "<"), "&gt;", ">"), "&quot;","\'") }
+										${faq.cont}
                                     </div>
                                     <c:if test="${not empty faq.fileList }">
 			                        <div class="info_grp files">

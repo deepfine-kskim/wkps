@@ -1,30 +1,5 @@
 package egovframework.com.wkp.srv.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.fcc.service.EgovFileUploadUtil;
@@ -33,20 +8,25 @@ import egovframework.com.utl.wed.enums.SurveySearchKey;
 import egovframework.com.utl.wed.enums.SurveyStateType;
 import egovframework.com.utl.wed.enums.SurveyType;
 import egovframework.com.utl.wed.enums.YnEnum;
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.cmm.service.GroupVO;
-import egovframework.com.wkp.cmm.service.TargetVO;
-import egovframework.com.wkp.srv.service.EgovSurveyService;
-import egovframework.com.wkp.srv.service.SurveyAnswerVO;
-import egovframework.com.wkp.srv.service.SurveyDTO;
-import egovframework.com.wkp.srv.service.SurveyQuestionVO;
-import egovframework.com.wkp.srv.service.SurveyStatisticsDTO;
-import egovframework.com.wkp.srv.service.SurveyVO;
+import egovframework.com.wkp.cmm.service.*;
+import egovframework.com.wkp.srv.service.*;
 import egovframework.com.wkp.usr.service.EgovOrgService;
 import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/srv")
@@ -188,9 +168,6 @@ public class EgovSurveyController {
                 model.addAttribute("isAnswer", surveyService.selectAnswerJoinCount(surveyNo, user.getSid()));
 
                 String str = detail.getSurveyDesc();
-                str = str.replaceAll("&lt;", "<");
-                str = str.replaceAll("&gt;", ">");
-                str = str.replaceAll("&quot;", "\"");
                 detail.setSurveyDesc(str);
                 model.addAttribute("detail", detail);
                 model.addAttribute("joinCount", surveyService.selectSurveyJoinCount(param));
@@ -220,9 +197,6 @@ public class EgovSurveyController {
             SurveyVO detail = surveyService.selectDetail(param);
 
             String str = detail.getSurveyDesc();
-            str = str.replaceAll("&lt;", "<");
-            str = str.replaceAll("&gt;", ">");
-            str = str.replaceAll("&quot;", "\"");
             detail.setSurveyDesc(str);
             model.addAttribute("detail", detail);
         } catch (NullPointerException e) {

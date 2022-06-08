@@ -75,7 +75,7 @@
                                         <label for="inpText" class="col-sm-2 control-label"><%--<span class="req">*</span> --%>내용</label>
                                         <div class="col-sm-10">
                                             <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" <%--required--%>>
-                                            ${knowledgeContents.cont}
+                                            <c:out value="${knowledgeContents.cont}"/>
                                             </textarea>
                                         </div>
                                     </div>

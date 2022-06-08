@@ -139,9 +139,9 @@
                                             <textarea class="form-control" id="inpText" name="cont" placeholder="내용을 입력하세요" <%--required--%> >
                                             <c:forEach var="contents" items="${knowledgeContentsList }">
                                                 <c:if test="${not empty contents.subtitle}">
-                                                    <p>[==${contents.subtitle}==]</p>
+                                                    <p>[==<c:out value="${contents.subtitle}"/>==]</p>
                                                 </c:if>
-                                                ${contents.cont}
+                                                <c:out value="${contents.cont}"/>
                                             </c:forEach>
                                             </textarea>
                                         </div>
@@ -458,11 +458,11 @@
                 }
             }
         });
-		
+
 		$("#convert").click(function(e){
 			var formData = new FormData();
 			formData.append('file',$('#convFile')[0].files[0]);
-			
+
 			CKEDITOR.instances.inpText.setData("");
         	$.ajax({
         		url : '/kno/fileConvert.do',

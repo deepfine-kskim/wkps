@@ -38,7 +38,7 @@
                                 <div class="form-group">
                                     <label for="inpText" class="col-xs-2 control-label"><span class="req">*</span> 내용</label>
                                     <div class="col-xs-10">
-                                        <textarea id="inpText" name="cont" class="form-control" rows="10" required multiple>${noticeDetail.cont }</textarea>
+                                        <textarea id="inpText" name="cont" class="form-control" rows="10" required multiple><c:out value="${noticeDetail.cont }"/></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">

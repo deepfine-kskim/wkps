@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="wiki_body">
                                         <div class="wiki_paras">
-                                            ${fn:replace(fn:replace(fn:replace(contents.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'")}
+                                            ${contents.cont}
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                 <div id="wikiDoc${contents.sortOrdr}" class="wiki_box">
                                     <div class="wiki_body">
                                         <div class="wiki_paras">
-                                            ${fn:replace(fn:replace(fn:replace(contents.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'")}
+                                            ${contents.cont}
                                         </div>
                                     </div>
                                 </div>

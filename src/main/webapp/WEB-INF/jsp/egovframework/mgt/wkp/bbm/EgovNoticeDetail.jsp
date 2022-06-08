@@ -37,7 +37,7 @@
 	                            </div>
 	                        </div>
 	                        <div class="view_body">
-	                            ${fn:replace(fn:replace(fn:replace(noticeDetail.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'") }
+	                            ${noticeDetail.cont}
 	                        </div>
 	                        <c:if test="${not empty fileList }">
 	                        <div class="info_grp files">

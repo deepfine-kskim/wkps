@@ -132,7 +132,7 @@
                             <label for="inpText" class="col-sm-2 control-label"><span class="req">*</span> 설문내용</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" rows="8" id="inpText" name="surveyDesc"
-                                          placeholder="내용을 입력하세요" required multiple>${detail.surveyDesc}</textarea>
+                                          placeholder="내용을 입력하세요" required multiple><c:out value="${detail.surveyDesc}"/></textarea>
                             </div>
                         </div>
                         <div class="form-group">

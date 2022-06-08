@@ -1479,12 +1479,6 @@ public class EgovKnowledgeController {
                 }
             }
 
-            for (int i = 0; i < knowledgeContentsList.size(); i++) {
-                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&lt;", "<"));
-                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&gt;", ">"));
-                knowledgeContentsList.get(i).setCont(knowledgeContentsList.get(i).getCont().replace("&quot;", "\'"));
-            }
-
             model.addAttribute("dateTime", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             model.addAttribute("userName", userVO.getDisplayName());
             model.addAttribute("knowledgeContentsList", knowledgeContentsList);

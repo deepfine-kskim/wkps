@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -136,9 +135,6 @@ public class EgovQnaController {
             QuestionVO detail = qnaService.selectQuestionDetail(param);
             if (detail != null) {
                 String str = detail.getCont();
-                str = str.replaceAll("&lt;", "<");
-                str = str.replaceAll("&gt;", ">");
-                str = str.replaceAll("&quot;", "\"");
                 detail.setCont(str);
                 model.addAttribute("detail", detail);
                 model.addAttribute("detailPre", qnaService.selectQuestionPre(param));

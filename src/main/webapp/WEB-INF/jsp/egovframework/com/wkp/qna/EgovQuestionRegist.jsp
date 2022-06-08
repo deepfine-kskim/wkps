@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="inpText" class="col-sm-1 control-label"><span class="req">*</span>내용</label>
                             <div class="col-sm-11">
-                                <textarea class="form-control" name="cont" rows="10" id="inpText" required multiple>${detail.cont}</textarea>
+                                <textarea class="form-control" name="cont" rows="10" id="inpText" required multiple><c:out value="${detail.cont}"/></textarea>
                             </div>
                         </div>
                         <div class="form-group">

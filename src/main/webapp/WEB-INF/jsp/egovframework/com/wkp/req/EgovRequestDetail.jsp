@@ -43,7 +43,7 @@
 	                                <h3 class="panel-title">내용</h3>
 	                            </div>
 	                            <div class="panel-body">
-	                            	${fn:replace(fn:replace(fn:replace(requestDetail.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'") }
+	                            	${requestDetail.cont}
 	                            </div>
 	                            <c:if test="${not empty fileList }">
 		                        <div class="info_grp files">
@@ -106,7 +106,7 @@
 											<h3 class="panel-title">답변</h3>
 										</div>
 										<div class="panel-body">
-											${fn:replace(fn:replace(fn:replace(answer.cont, "&lt;", "<"), "&gt;", ">"),"&quot;","\'")}
+											${answer.cont}
 										</div>
 									</div>
 								</div>

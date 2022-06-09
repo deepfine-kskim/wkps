@@ -61,58 +61,36 @@
                 </div>
             </div>
             <c:choose>
-            <c:when test="${not empty excellenceUserList || not empty excellenceOrgList}">
-            <div class="col-sm-6 col-md-3">
-                <div class="frame main_ranking1">
-                    <h2>지식 챔피언 (1주일)</h2>
-                    <div class="ranking__wrap">
-                        <ol class="ranking_list">
-                        	<c:forEach var="user" items="${excellenceUserList }" varStatus="status">
-                                <c:if test="${status.index < 5}">
-                                    <li><em class="num">${user.rki }</em>${user.displayName }<span class="small">(${user.ou })</span></li>
-                                </c:if>
-                            </c:forEach>
-                        </ol>
+                <c:when test="${not empty excellenceUserList || not empty excellenceOrgList}">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="frame main_ranking1">
+                            <h2>지식 챔피언 (1주일)</h2>
+                            <div class="ranking__wrap">
+                                <ol class="ranking_list">
+                                    <c:forEach var="user" items="${excellenceUserList }" varStatus="status">
+                                        <c:if test="${status.index < 5}">
+                                            <li><em class="num">${user.rki }</em>${user.displayName }<span class="small">(${user.ou })</span></li>
+                                        </c:if>
+                                    </c:forEach>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="frame main_ranking2">
-                    <h2>지식 부서 (1주일)</h2>
-                    <div class="ranking__wrap">
-                        <ol class="ranking_list">
-                        	<c:forEach var="org" items="${excellenceOrgList }" varStatus="status">
-                                <c:if test="${status.index < 5}">
-                                    <li><em class="num">${org.rki }</em> ${org.ou }</li>
-                                </c:if>
-                            </c:forEach>
-                        </ol>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="frame main_ranking2">
+                            <h2>지식 부서 (1주일)</h2>
+                            <div class="ranking__wrap">
+                                <ol class="ranking_list">
+                                    <c:forEach var="org" items="${excellenceOrgList }" varStatus="status">
+                                        <c:if test="${status.index < 5}">
+                                            <li><em class="num">${org.rki }</em> ${org.ou }</li>
+                                        </c:if>
+                                    </c:forEach>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            </c:when>
-            <c:otherwise>
-            <div class="col-sm-6 col-md-3">
-                <div class="frame">
-                    <h2>매뉴얼</h2>
-                    <ul class="latest_list">
-                        <li>
-                            <p class="subject"><a href="/manual/user.pptx">사용자 매뉴얼</a></p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="frame">
-                    <h2>동영상</h2>
-                    <ul class="latest_list">
-                        <li>
-                            <p class="subject"><a href="/bbs/noticeList.do">사용자 매뉴얼</a></p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            </c:otherwise>
+                </c:when>
             </c:choose>
         </div>
     </div>

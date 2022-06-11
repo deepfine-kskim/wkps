@@ -154,4 +154,6 @@ public class KnowledgeVO {
 	private String searchEndDate;
 
 	private Long tempKnowlgMapNo;
+
+	private String ownerOuCode;
 }

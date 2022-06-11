@@ -1,14 +1,5 @@
 package egovframework.com.wkp.myp.web;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import egovframework.com.cmm.EgovComException;
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
@@ -16,9 +7,23 @@ import egovframework.com.cmm.service.FileVO;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
+import egovframework.com.wkp.cmm.service.EgovCommonService;
+import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
+import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
+import egovframework.com.wkp.cmm.service.GroupVO;
+import egovframework.com.wkp.kno.service.EgovKnowledgeService;
+import egovframework.com.wkp.kno.service.ErrorStatementVO;
 import egovframework.com.wkp.kno.service.KnowledgeContentsVO;
-import egovframework.com.wkp.qna.service.ImprovementVO;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
+import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
+import egovframework.com.wkp.qna.service.AnswerVO;
+import egovframework.com.wkp.qna.service.EgovQnaService;
+import egovframework.com.wkp.usr.service.EgovOrgService;
+import egovframework.com.wkp.usr.service.EgovUserService;
+import egovframework.com.wkp.usr.service.OrgVO;
+import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
+import egovframework.rte.fdl.access.service.EgovUserDetailsHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,21 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmm.service.ExcellenceOrgVO;
-import egovframework.com.wkp.cmm.service.ExcellenceUserVO;
-import egovframework.com.wkp.cmm.service.GroupVO;
-import egovframework.com.wkp.kno.service.EgovKnowledgeService;
-import egovframework.com.wkp.kno.service.ErrorStatementVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.com.wkp.kno.service.impl.KnowledgeDAO;
-import egovframework.com.wkp.qna.service.AnswerVO;
-import egovframework.com.wkp.qna.service.EgovQnaService;
-import egovframework.com.wkp.usr.service.EgovOrgService;
-import egovframework.com.wkp.usr.service.EgovUserService;
-import egovframework.com.wkp.usr.service.OrgVO;
-import egovframework.com.wkp.usr.service.UserVO;
-import egovframework.rte.fdl.access.service.EgovUserDetailsHelper;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/myp")
@@ -115,6 +112,7 @@ public class EgovMypageController {
 
 			knowledgeVO = new KnowledgeVO();
 			knowledgeVO.setOwnerId(userVO.getSid());
+			knowledgeVO.setOuCode(userVO.getOuCode());
 			int modificationCnt = knowledgeService.selectModificationRequestListCount(knowledgeVO);
 			int succeedCnt = knowledgeService.selectSucceedListCount(knowledgeVO);
 
@@ -383,6 +381,7 @@ public class EgovMypageController {
 			param.setPage(1);
 		}
 		param.setOwnerId(userVO.getSid());
+		param.setOuCode(userVO.getOuCode());
 		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectModificationRequestList(param);
 		model.addAttribute("resultList", listWithPageNavigation.getList());
 		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());

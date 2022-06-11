@@ -1211,8 +1211,13 @@ public class EgovKnowledgeController {
                 messengerVO.setSndUser(userVO.getDisplayName());
                 messengerVO.setRecvId(knowledgeDetail.getOwnerId());
                 messengerVO.setDocTitle("[도정지식포털 알림]");
-                messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
-                messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
+                if (knowledgeDetail.getOuCode().equals(knowledgeDetail.getOwnerOuCode())) {
+                    messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
+                    messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeVO.getRequestNo());
+                } else {
+                    messengerVO.setDocDesc("[도정지식포털] 지식 승계 처리가 필요한 지식이 존재합니다");
+                    messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/succeedList.do");
+                }
                 messengerService.insert(messengerVO);
             }
         } catch (NullPointerException e) {
@@ -1382,8 +1387,13 @@ public class EgovKnowledgeController {
             messengerVO.setSndUser(userVO.getDisplayName());
             messengerVO.setRecvId(knowledgeDetail.getOwnerId());
             messengerVO.setDocTitle("[도정지식포털 알림]");
-            messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
-            messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
+            if (knowledgeDetail.getOuCode().equals(knowledgeDetail.getOwnerOuCode())) {
+                messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
+                messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + knowledgeDetail.getRequestNo());
+            } else {
+                messengerVO.setDocDesc("[도정지식포털] 지식 승계 처리가 필요한 지식이 존재합니다");
+                messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/succeedList.do");
+            }
             messengerService.insert(messengerVO);
         } catch (NullPointerException e) {
             LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

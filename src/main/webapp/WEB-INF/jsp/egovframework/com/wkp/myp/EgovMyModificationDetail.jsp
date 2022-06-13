@@ -96,7 +96,10 @@
             <!-- //이전/다음 -->
             <div class="row brd_foot_btns">
                 <div class="col-sm-6">
-                    <a href="javascript:;" id="updBtn" class="btn btn-blue">적용</a>
+                    <c:if test="${result.state eq 'HOLD'}">
+                        <a href="javascript:;" id="approvalBtn" class="btn btn-blue">승인</a>
+                        <a href="javascript:;" id="disapprovalBtn" class="btn btn-danger">반려</a>
+                    </c:if>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="javascript:;" class="btn btn-black dev-page">목록</a>
@@ -114,7 +117,7 @@
 </form>
 <form name="knowledgeFrm">
     <input type="hidden" name="title" value="${result.title}">
-    <input type="hidden" name="requestNo" value="${knowledgeVO.requestNo}">
+    <input type="hidden" name="requestNo" id="requestNo" value="${knowledgeVO.requestNo}">
 </form>
 <script>
     $(function () {
@@ -124,11 +127,37 @@
             form.submit();
         });
 
-        $('#updBtn').click(function(e){
+        $('#approvalBtn').click(function(e){
             e.preventDefault();
             const form = $("form[name=knowledgeFrm]");
             form.attr("action", "/kno/updateKnowledgeView.do");
             form.submit();
+        });
+
+        $('#disapprovalBtn').click(function(e){
+            e.preventDefault();
+
+            if (confirm('해당 지식 수정요청을 반려하시겠습니까?')) {
+                const requestNo = $('#requestNo').val();
+                const data = {
+                    requestNo: requestNo
+                };
+
+                $.ajax({
+                    url : '/myp/modificationDisapproval.do',
+                    method : 'post',
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success : function(data) {
+                        alert('해당 요청이 반려되었습니다.');
+                        $('.dev-page').click();
+                    },
+                    error: function(){
+                        alert("에러가 발생하였습니다.");
+                    }
+                });
+            }
         });
     });
 </script>

@@ -338,4 +338,8 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
 	public List<KnowledgeVO> selectNewKnowledgeList() {
 		return selectList("KnowledgeDAO.selectNewKnowledgeList");
 	}
+
+	public int updateKnowledgeModificationRequestState(KnowledgeVO knowledgeVO) {
+		return update("KnowledgeDAO.updateKnowledgeModificationRequestState", knowledgeVO);
+	}
 }

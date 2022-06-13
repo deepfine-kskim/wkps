@@ -159,4 +159,6 @@ public interface EgovKnowledgeService {
 	public void insertKnowledgeView(KnowledgeVO knowledgeVO);
 
 	public List<KnowledgeVO> selectNewKnowledgeList();
+
+	public int updateKnowledgeModificationRequestState(KnowledgeVO knowledgeVO);
 }

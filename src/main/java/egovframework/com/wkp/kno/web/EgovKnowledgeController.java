@@ -1084,6 +1084,11 @@ public class EgovKnowledgeController {
                         messengerService.insert(messengerVO);
                     });
                 }
+
+                if (knowledgeVO.getRequestNo() != null) {
+                    knowledgeVO.setState("APPROVAL");
+                    knowledgeService.updateKnowledgeModificationRequestState(knowledgeVO);
+                }
             }
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

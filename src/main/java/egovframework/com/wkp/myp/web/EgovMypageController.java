@@ -418,4 +418,12 @@ public class EgovMypageController {
 		knowledgeService.updateOwner(param);
 		return param;
 	}
+
+	@ResponseBody
+	@RequestMapping("/modificationDisapproval.do")
+	public KnowledgeVO disapproval(@RequestBody KnowledgeVO param) {
+		param.setState("DISAPPROVAL");
+		knowledgeService.updateKnowledgeModificationRequestState(param);
+		return param;
+	}
 }

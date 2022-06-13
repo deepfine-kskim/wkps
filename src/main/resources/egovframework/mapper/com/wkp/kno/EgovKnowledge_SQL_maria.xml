@@ -419,6 +419,7 @@
 		     , ATCH_FILE_NO
 		     , REGISTER_ID
 		     , REGIST_DTM
+		     , STATE
 		     )
 		VALUES
 		     ( #{knowlgNo}
@@ -426,6 +427,7 @@
 		     , #{atchFileNo}
 		     , #{registerId}
 		     , SYSDATE()
+		     , 'HOLD'
 		     )
 	</insert>
 
@@ -1186,6 +1188,7 @@
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.ATCH_FILE_NO
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGISTER_ID
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGIST_DTM
+					 , TB_KNOWLEDGE_MODIFICATION_REQUEST.STATE
                      , TB_USER.DISPLAY_NAME
                      , TB_USER.OU
                      , TB_KNOWLEDGE.TITLE
@@ -1225,6 +1228,7 @@
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.ATCH_FILE_NO
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGISTER_ID
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGIST_DTM
+                     , TB_KNOWLEDGE_MODIFICATION_REQUEST.STATE
                      , TB_USER.DISPLAY_NAME
 					 , TB_USER.OU
                      , TB_KNOWLEDGE.TITLE
@@ -1262,6 +1266,7 @@
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.ATCH_FILE_NO
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGISTER_ID
 		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.REGIST_DTM
+		             , TB_KNOWLEDGE_MODIFICATION_REQUEST.STATE
                      , TB_USER.DISPLAY_NAME
                      , TB_USER.OU
                      , TB_KNOWLEDGE.TITLE
@@ -1638,4 +1643,10 @@
 			   ELSE 4 END
 		 LIMIT 6
 	</select>
+
+	<update id="updateKnowledgeModificationRequestState" parameterType="KnowledgeVO">
+		UPDATE TB_KNOWLEDGE_MODIFICATION_REQUEST
+  		   SET STATE = #{state}
+		 WHERE REQUEST_NO = #{requestNo}
+	</update>
 </mapper>

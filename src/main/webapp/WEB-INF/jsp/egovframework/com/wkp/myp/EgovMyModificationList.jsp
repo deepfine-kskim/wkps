@@ -49,6 +49,7 @@
                         <col>
                         <col style="width:15%;">
                         <col style="width:10%;">
+                        <col style="width:10%;">
                     </colgroup>
                     <thead>
                     <tr>
@@ -57,6 +58,7 @@
                         <th scope="col">제목</th>
                         <th scope="col">요청자</th>
                         <th scope="col">요청일</th>
+                        <th scope="col">상태</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,12 +74,19 @@
                                 </td>
                                 <td><c:out value="${result.displayName}"/>(<c:out value="${result.ou}"/>)</td>
                                 <td><c:out value="${result.registDtm}"/></td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${result.state eq 'HOLD'}"><span>보류</span></c:when>
+                                        <c:when test="${result.state eq 'APPROVAL'}"><span class="text-blue">승인</span></c:when>
+                                        <c:when test="${result.state eq 'DISAPPROVAL'}"><span class="text-danger">반려</span></c:when>
+                                    </c:choose>
+                                </td>
                             </tr>
                         </c:forEach>
                         <c:if test="${fn:length(resultList) eq 0}">
                             <!-- 데이터 없을시 -->
                             <tr>
-                                <td colspan="5" class="empty">등록된 게시글이 없습니다.</td>
+                                <td colspan="6" class="empty">등록된 게시글이 없습니다.</td>
                             </tr>
                             <!-- //데이터 없을시 -->
                         </c:if>

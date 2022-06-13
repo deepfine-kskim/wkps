@@ -531,4 +531,9 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	public List<KnowledgeVO> selectNewKnowledgeList() {
 		return knowledgeDAO.selectNewKnowledgeList();
 	}
+
+	@Override
+	public int updateKnowledgeModificationRequestState(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.updateKnowledgeModificationRequestState(knowledgeVO);
+	}
 }

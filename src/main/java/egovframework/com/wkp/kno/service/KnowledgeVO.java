@@ -156,4 +156,6 @@ public class KnowledgeVO {
 	private Long tempKnowlgMapNo;
 
 	private String ownerOuCode;
+	
+	private String state;
 }

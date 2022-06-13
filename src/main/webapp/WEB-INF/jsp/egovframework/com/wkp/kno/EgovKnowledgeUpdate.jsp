@@ -69,6 +69,7 @@
                                 <input type="hidden" name="knowlgNo" value="${knowledgeVO.knowlgNo}">
                             </c:if>
                             <input type="hidden" name="tempKnowlgMapNo" value="${knowledgeVO.knowlgMapNo}">
+                            <input type="hidden" name="requestNo" value="${knowledgeVO.requestNo}">
                             <fieldset>
                                 <legend class="sr-only">게시판 글작성</legend>
                                 <div class="brd_write_area wiki_frms">

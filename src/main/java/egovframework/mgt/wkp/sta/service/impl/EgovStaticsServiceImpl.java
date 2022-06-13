@@ -297,4 +297,33 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
         return staticsDAO.selectOrgStaticsCount(param);
     }
 
+    @Override
+    public List<StaticsKnowledgeVO> selectViewStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectViewStaticsExcelList(param);
+    }
+
+    @Override
+    public List<StaticsKnowledgeVO> selectRecommendStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectRecommendStaticsExcelList(param);
+    }
+
+    @Override
+    public List<StaticsKnowledgeVO> selectUserStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectUserStaticsExcelList(param);
+    }
+
+    @Override
+    public List<StaticsKnowledgeVO> selectRecommendUserStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectRecommendUserStaticsExcelList(param);
+    }
+
+    @Override
+    public List<StaticsKnowledgeVO> selectActiveUserStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectActiveUserStaticsExcelList(param);
+    }
+
+    @Override
+    public List<StaticsKnowledgeVO> selectOrgStaticsExcelList(StaticsKnowledgeVO param) {
+        return staticsDAO.selectOrgStaticsExcelList(param);
+    }
 }

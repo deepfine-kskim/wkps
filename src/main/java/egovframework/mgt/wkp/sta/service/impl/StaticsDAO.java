@@ -100,4 +100,28 @@ public class StaticsDAO extends EgovComAbstractDAO {
 	public int selectOrgStaticsCount(StaticsKnowledgeVO param) {
 		return selectOne("StaticsDAO.selectOrgStaticsCount", param);
 	}
+
+	public List<StaticsKnowledgeVO> selectViewStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectViewStaticsExcelList", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectRecommendStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectRecommendStaticsExcelList", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectUserStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectUserStaticsExcelList", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectRecommendUserStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectRecommendUserStaticsExcelList", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectActiveUserStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectActiveUserStaticsExcelList", param);
+	}
+
+	public List<StaticsKnowledgeVO> selectOrgStaticsExcelList(StaticsKnowledgeVO param) {
+		return selectList("StaticsDAO.selectOrgStaticsExcelList", param);
+	}
 }

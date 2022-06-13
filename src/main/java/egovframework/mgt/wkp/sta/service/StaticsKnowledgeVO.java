@@ -65,4 +65,6 @@ public class StaticsKnowledgeVO {
     private String endDate;
 
     private String searchType;
+
+    private String type;
 }

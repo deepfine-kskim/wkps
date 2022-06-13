@@ -37,6 +37,7 @@
                                 <div class="well mb_0">
                                     <form name="searchForm">
                                         <input type="hidden" name="page" value="${staticsKnowledgeVO.page}">
+                                        <input type="hidden" name="type" value="statOrgKnowledge">
                                         <fieldset>
                                             <legend class="sr-only">게시글 검색</legend>
                                             <div class="form-row">
@@ -72,7 +73,7 @@
                             <th scope="col">부서명</th>
                             <th scope="col">행정자료</th>
                             <th scope="col">업무참고자료</th>
-                            <th scope="col">개인별자료</th>
+                            <th scope="col">개인행정지식</th>
                             <th scope="col">추천누계</th>
                         </tr>
                         </thead>
@@ -134,6 +135,9 @@
                         </ul>
                     </nav>
                     <!-- //페이지 네비 -->
+                    <div>
+                        <button type="button" class="btn btn-danger dev-download-excel">다운로드</button>
+                    </div>
                 </div>
                 <!-- //CONTENTS -->
 
@@ -147,13 +151,12 @@
         <!-- //cont_wrap-->
 <script>
     $(document).ready(function() {
-        // TODO::엑셀 다운로드
-        /*$(".dev-download-excel").on("click", function() {
+        $(".dev-download-excel").on("click", function() {
             var form = $("form[name=searchForm]");
-            form.attr("action", "/adm/statKnowledgeExcelDownload.do");
+            form.attr("action", "/adm/knowledgeStatisticsExcelDownload.do");
             form.attr("method", "post");
             form.submit();
-        });*/
+        });
 
         $('.dev-page').on('click', function (e) {
             e.preventDefault();

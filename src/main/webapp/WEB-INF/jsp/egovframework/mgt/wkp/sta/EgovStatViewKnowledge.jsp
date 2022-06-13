@@ -37,6 +37,7 @@
                                  <div class="well mb_0">
                                  <form name="searchForm">
                                      <input type="hidden" name="page" value="${staticsKnowledgeVO.page}">
+                                     <input type="hidden" name="type" value="statViewKnowledge">
                                      <fieldset>
                                          <legend class="sr-only">게시글 검색</legend>
                                          <div class="form-row">
@@ -148,6 +149,9 @@
                         </ul>
                     </nav>
                     <!-- //페이지 네비 -->
+                    <div>
+                        <button type="button" class="btn btn-danger dev-download-excel">다운로드</button>
+                    </div>
                 </div>
                 <!-- //CONTENTS -->
                 <div id="footer">
@@ -160,13 +164,12 @@
         <!-- //cont_wrap-->
 <script>
     $(document).ready(function() {
-        // TODO::엑셀 다운로드
-        /*$(".dev-download-excel").on("click", function() {
+        $(".dev-download-excel").on("click", function() {
             var form = $("form[name=searchForm]");
-            form.attr("action", "/adm/statKnowledgeExcelDownload.do");
+            form.attr("action", "/adm/knowledgeStatisticsExcelDownload.do");
             form.attr("method", "post");
             form.submit();
-        });*/
+        });
 
         $('.dev-page').on('click', function (e) {
             e.preventDefault();

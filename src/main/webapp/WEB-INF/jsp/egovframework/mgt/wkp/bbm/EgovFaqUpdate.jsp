@@ -47,10 +47,10 @@
                                     <div class="col-xs-7">
                                         <input type="file" class="form-control" id="file" name="file" />
 	                                    <c:if test="${not empty faqDetail.atchFileNo }">
-											<input type="hidden" name="atchFileNo" value="${faqDetail.atchFileNo}"> 
-											<c:forEach var="file" items="${fileList }">
-	                                    		<a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }" class="text-danger">${file.orignlFileNm }</a>
-	                                    		<a href="/cmm/fms/deleteFileInfs.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }"><i class="remove">x</i></a><span class="sr-only">삭제</span>
+											<input type="hidden" name="atchFileNo" value="${faqDetail.atchFileNo}">
+											<c:forEach var="file" items="${fileList }" varStatus="status">
+	                                    		<a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn }" class="text-danger flow-remove-group${status.index}">${file.orignlFileNm }</a>
+	                                    		<a href="javascript:;" class="flow-remove-attachment flow-remove-group${status.index}" data-atch-file-no="${file.atchFileNo}" data-file-sn="${file.fileSn}" data-remove-num="${status.index}"><i class="remove">x</i></a><span class="sr-only flow-remove-group${status.index}">삭제</span>
 	                                    	</c:forEach>
 	                                   	</c:if>
                                     </div>
@@ -59,11 +59,11 @@
                         </fieldset>
                     </div>
                     <div class="text-right">
-                        <button type="submit" btn btn-blue btn-lg">작성완료</button>
+                        <button type="submit" class="btn btn-blue btn-lg">작성완료</button>
                         <a href="/adm/faqList.do" class="btn btn-black btn-lg">취소</a>
                     </div>
                     </form:form>
-                    <!-- //글작성 -->                
+                    <!-- //글작성 -->
                 </div>
                 <!-- //CONTENTS -->
                 <div id="footer">

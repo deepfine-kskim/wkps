@@ -74,9 +74,9 @@ $(function() {
                                             <label for="file1" class="col-sm-2 control-label">첨부파일1</label>
                                             <div class="col-sm-10">
                                                 <c:if test="${fn:length(notice.attach)>0}">
-						                        	<c:forEach var="file" items="${notice.attach}">								             
-														<a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo}&fileSn=${file.fileSn}" class="text-danger">${file.orignlFileNm }</a>
-		                                    			<a href="/cmm/fms/deleteFileInfs.do?atchFileNo=${file.atchFileNo }&fileSn=${file.fileSn}"><i class="remove">x</i></a><span class="sr-only">삭제</span>
+						                        	<c:forEach var="file" items="${notice.attach}" varStatus="status">
+														<a href="/cmm/fms/FileDown.do?atchFileNo=${file.atchFileNo}&fileSn=${file.fileSn}" class="text-danger flow-remove-group${status.index}">${file.orignlFileNm }</a>
+		                                    			<a href="javascript:;" class="flow-remove-attachment flow-remove-group${status.index}" data-atch-file-no="${file.atchFileNo}" data-file-sn="${file.fileSn}" data-remove-num="${status.index}"><i class="remove">x</i></a><span class="sr-only flow-remove-group${status.index}">삭제</span>
 							                        </c:forEach>
 				                                </c:if>
 				                                <input type="file" class="form-control" id="file1" />

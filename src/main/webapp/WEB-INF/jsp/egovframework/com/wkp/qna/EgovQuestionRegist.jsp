@@ -34,9 +34,9 @@
                             <label for="inpFile1" class="col-sm-1 control-label">첨부파일</label>
                             <div class="col-sm-11">
                                 <input type="file" class="form-control" id="inpFile1" name="file" />
-                                <c:if test="${not empty detail.atchFileNo}">
-                                    <a href="/cmm/fms/FileDown.do?atchFileNo=${detail.atchFileNo }&fileSn=${detail.fileSn }" class="text-danger">${detail.orignlFileNm}</a> (${cutil:out(detail.fileSize)})
-                                    <a href="/cmm/fms/deleteFileInfs.do?atchFileNo=${detail.atchFileNo }&fileSn=${detail.fileSn }"><i class="remove">x</i></a>
+                                <c:if test="${detail.atchFileNo ne 0}">
+                                    <a href="/cmm/fms/FileDown.do?atchFileNo=${detail.atchFileNo }&fileSn=${detail.fileSn }" class="text-danger flow-remove-group0">${detail.orignlFileNm}</a>
+                                    <a href="javascript:;" class="flow-remove-attachment flow-remove-group0" data-atch-file-no="${detail.atchFileNo}" data-file-sn="${detail.fileSn}" data-remove-num="0"><i class="remove">x</i></a>
                                     <input type="hidden" name="atchFileNo" value="${detail.atchFileNo}">
                                 </c:if>
                             </div>

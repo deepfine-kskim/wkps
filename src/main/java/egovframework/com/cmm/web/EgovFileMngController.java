@@ -1,20 +1,15 @@
 package egovframework.com.cmm.web;
 
-import java.util.List;
-import java.util.Map;
-
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 파일 조회, 삭제, 다운로드 처리를 위한 컨트롤러 클래스
@@ -103,11 +98,9 @@ public class EgovFileMngController {
      * @return
      * @
      */
+	@ResponseBody
     @RequestMapping("/cmm/fms/deleteFileInfs.do")
-    public String deleteFileInf(@ModelAttribute("searchVO") FileVO fileVO,
-	    //SessionVO sessionVO,
-	    HttpServletRequest request,
-	    ModelMap model)  {
+    public FileVO deleteFileInf(@RequestBody FileVO fileVO) {
 
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 
@@ -115,28 +108,7 @@ public class EgovFileMngController {
 		    fileService.deleteFileInf(fileVO);
 		}
 		
-	    String referer = request.getHeader("Referer");
-	    return "redirect:"+ referer;
-		 
-		//--------------------------------------------
-		// contextRoot가 있는 경우 제외 시켜야 함
-		//--------------------------------------------
-		////return "forward:/cmm/fms/selectFileInfs.do";
-		//return "forward:" + returnUrl;
-		/* *******************************************************
-		 *  modify by jdh
-		 *******************************************************
-		if ("".equals(request.getContextPath()) || "/".equals(request.getContextPath())) {
-		    return "forward:" + returnUrl;
-		}
-
-		if (returnUrl.startsWith(request.getContextPath())) {
-		    return "forward:" + returnUrl.substring(returnUrl.indexOf("/", 1));
-		} else {
-		    return "forward:" + returnUrl;
-		}
-		*/
-		////------------------------------------------
+	    return fileVO;
     }
 
     /**

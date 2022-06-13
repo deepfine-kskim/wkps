@@ -390,11 +390,18 @@
 
 		$('#delBtn').click(function(e){
 			e.preventDefault();
-			if(confirm('삭제하시겠습니까?\n삭제 시 지식이력도 모두 삭제되며 복구는 불가능합니다.')){
-				var form = $("form[name=knowledgeFrm]");
-            	form.attr("action", "/kno/deleteKnowledge.do");
-				form.submit();
-			}
+            const knowlgMapType = $('[name=knowlgMapType]').val();
+            let msg = '';
+            if (knowlgMapType === 'PERSONAL') {
+                msg = '삭제하시겠습니까?';
+            } else {
+                msg = '삭제하시겠습니까?\n삭제 시 지식이력도 모두 삭제되며 복구는 불가능합니다.';
+            }
+            if (confirm(msg)) {
+                var form = $("form[name=knowledgeFrm]");
+                form.attr("action", "/kno/deleteKnowledge.do");
+                form.submit();
+            }
 		});
 
         $("#recommendBtn").click(function(e) {

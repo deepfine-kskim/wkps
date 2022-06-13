@@ -536,4 +536,20 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 	public int updateKnowledgeModificationRequestState(KnowledgeVO knowledgeVO) {
 		return knowledgeDAO.updateKnowledgeModificationRequestState(knowledgeVO);
 	}
+
+	@Override
+	public ListWithPageNavigation<KnowledgeVO> selectModificationRequestHoldList(KnowledgeVO knowledgeVO) {
+		ListWithPageNavigation<KnowledgeVO> result = new ListWithPageNavigation<>();
+		PageNavigation pageNavigation = new PageNavigation(selectModificationRequestHoldListCount(knowledgeVO), knowledgeVO.getPage(), null, null);
+		knowledgeVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+		knowledgeVO.setItemOffset(pageNavigation.getItemCountPerPage() * (knowledgeVO.getPage() - 1));
+		result.setList(knowledgeDAO.selectModificationRequestHoldList(knowledgeVO));
+		result.setPageNavigation(pageNavigation);
+		return result;
+	}
+
+	@Override
+	public int selectModificationRequestHoldListCount(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectModificationRequestHoldListCount(knowledgeVO);
+	}
 }

@@ -2,6 +2,8 @@ package egovframework.mgt.wkp.knm.web;
 
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.service.MessengerService;
+import egovframework.com.cmm.service.MessengerVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cmm.service.EgovCommonService;
@@ -43,6 +45,9 @@ public class EgovKnowledgeManageController {
     
 	@Resource(name = "orgService")
 	private EgovOrgService orgService;
+
+	@Resource(name = "messengerService")
+	private MessengerService messengerService;
 	
 	@RequestMapping("/approvalList.do")
 	public String approvalList(@ModelAttribute(name="knowledgeVO") KnowledgeVO param, Model model) {
@@ -359,6 +364,38 @@ public class EgovKnowledgeManageController {
 	@RequestMapping("/succeedSave.do")
 	public KnowledgeVO succeedList(@RequestBody KnowledgeVO param) {
 		knowledgeService.updateOwner(param);
+		return param;
+	}
+
+	@RequestMapping("/modificationList.do")
+	public String modificationList(@ModelAttribute("knowledgeVO") KnowledgeVO param, Model model) {
+		ListWithPageNavigation<KnowledgeVO> listWithPageNavigation = knowledgeService.selectModificationRequestHoldList(param);
+		model.addAttribute("resultList", listWithPageNavigation.getList());
+		model.addAttribute("pageNavigation", listWithPageNavigation.getPageNavigation());
+		return "/mgt/wkp/knm/EgovModificationList";
+	}
+
+	@ResponseBody
+	@RequestMapping("/resendNotification.do")
+	public List<KnowledgeVO> resendNotification(@RequestBody List<KnowledgeVO> param) {
+		UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
+		param.forEach(item -> {
+			MessengerVO messengerVO = new MessengerVO();
+			messengerVO.setSndUser(userVO.getDisplayName());
+			messengerVO.setRecvId(item.getOwnerId());
+			messengerVO.setDocTitle("[도정지식포털 알림]");
+			KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(item);
+			if (knowledgeDetail.getOuCode().equals(knowledgeDetail.getOwnerOuCode())) {
+				messengerVO.setDocDesc("[도정지식포털] 지식 수정요청이 접수되었습니다");
+				messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/modificationDetail.do?requestNo=" + item.getRequestNo());
+			} else {
+				messengerVO.setDocDesc("[도정지식포털] 지식 승계 처리가 필요한 지식이 존재합니다");
+				messengerVO.setDocUrl("http://105.0.1.229/magicsso/connect.jsp?returnUrl=http://105.0.1.229/myp/succeedList.do");
+			}
+			messengerService.insert(messengerVO);
+		});
+
 		return param;
 	}
 }

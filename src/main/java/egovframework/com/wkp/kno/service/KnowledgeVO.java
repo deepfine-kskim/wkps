@@ -158,4 +158,6 @@ public class KnowledgeVO {
 	private String ownerOuCode;
 	
 	private String state;
+
+	private String ownerName;
 }

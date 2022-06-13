@@ -161,4 +161,8 @@ public interface EgovKnowledgeService {
 	public List<KnowledgeVO> selectNewKnowledgeList();
 
 	public int updateKnowledgeModificationRequestState(KnowledgeVO knowledgeVO);
+
+	public ListWithPageNavigation<KnowledgeVO> selectModificationRequestHoldList(KnowledgeVO knowledgeVO);
+
+	public int selectModificationRequestHoldListCount(KnowledgeVO knowledgeVO);
 }

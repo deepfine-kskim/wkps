@@ -926,6 +926,144 @@ i, address {font-style:normal;}
 	.result_nav .nav-pills>li>a {border:1px solid #ddd;background-color:#fff;}
 	.result_nav .nav-pills>li.active>a, .result_nav .nav-pills>li.active>a:focus, .result_nav.nav-pills>li.active>a:hover {background-color:#0051a3;border-color:#0051a3;}
 	.result_nav .badge {font-weight:500;}
-}
 /* 2020-11-20 추가 종료 */
 
+.board-list {
+  border-top: 2px solid #555555;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #565b5b;
+  letter-spacing: -0.8px;
+}
+
+.board-list-item {
+  padding-bottom: 5px;
+}
+
+.board-list-item._active {
+  background-color: #f3f7fa;
+}
+
+.board-list-item._active .board-list-controls {
+  display: block;
+}
+
+.board-list-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.board-list-content > * {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  margin: 15px 0;
+  padding: 0 15px;
+}
+
+.board-list-content > * + * {
+  border-left: 1px solid #dddddd;
+}
+
+.board-list-number {
+  color: #0050a3;
+  font-weight: 700;
+}
+
+.board-list-answer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.board-list-answer .btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  min-width: 70px;
+  border-radius: 15px !important;
+}
+
+.board-list-answer .btn::after {
+  content: '';
+  width: 8px;
+  height: 4px;
+  margin-left: 4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid white;
+  font-size: 8px;
+  line-height: 1;
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+.board-list-item._active .board-list-answer .btn {
+  background-color: #666666;
+}
+
+.board-list-item._active .board-list-answer .btn::after {
+  -webkit-transform: rotate(0);
+  transform: rotate(0);
+}
+
+.board-list-text {
+  overflow: hidden;
+  width: 100%;
+  height: 18px;
+  padding-right: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-list-details {
+  margin: 15px 15px 15px 85px;
+  padding: 15px;
+  border: 1px solid #e7e7e7;
+  background-color: white;
+  color: black;
+}
+
+.board-list-controls {
+  display: none;
+}
+
+.board-list .button {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .board-list-content {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .board-list-content > * {
+    margin: 10px 0;
+    padding: 0 10px;
+    border-left: 0;
+  }
+  .board-list-answer {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+    max-width: calc(100% - 75px);
+  }
+  .board-list-details {
+    margin: 10px;
+  }
+}

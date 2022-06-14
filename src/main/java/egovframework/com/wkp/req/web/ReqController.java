@@ -6,19 +6,16 @@ import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
-import egovframework.com.wkp.qna.service.AnswerVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -92,12 +89,15 @@ public class ReqController {
 			}
 
 			List<ReqVO> answerList = reqService.selectAnswerList(reqVO);
-			
+
+			boolean isSelection = answerList.stream().anyMatch(answer -> "Y".equals(answer.getSlctnYn()));
+
 			model.addAttribute("requestDetail", requestDetail);
 			model.addAttribute("fileList", result);
             model.addAttribute("requestPre", reqService.selectRequestPre(reqVO));
             model.addAttribute("requestNext", reqService.selectRequestNext(reqVO));
             model.addAttribute("answerList", answerList);
+            model.addAttribute("isSelection", isSelection);
 
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

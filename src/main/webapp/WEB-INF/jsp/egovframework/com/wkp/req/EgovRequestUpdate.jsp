@@ -22,29 +22,10 @@
                             <div class="col-sm-3">
                                 <form:select id="typeSel" path="knowlgMapType" class="form-control">
                                     <option value="">선택해주세요.</option>
-                                    <option value="REPORT">행정자료</option>
-                                    <option value="REFERENCE">업무참고자료</option>
-                                    <option value="PERSONAL" <c:if test="${not empty cmmntyNo}">selected="selected"</c:if>>개인행정지식</option>
+                                    <option value="REPORT" <c:if test="${requestDetail.knowlgMapType eq 'REPORT'}">selected</c:if>>행정자료</option>
+                                    <option value="REFERENCE" <c:if test="${requestDetail.knowlgMapType eq 'REFERENCE'}">selected</c:if>>업무참고자료</option>
+                                    <option value="PERSONAL" <c:if test="${requestDetail.knowlgMapType eq 'PERSONAL'}">selected</c:if>>개인행정지식</option>
                                 </form:select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <strong class="col-sm-1 control-label"><span class="req">*</span> 지식맵</strong>
-                            <div class="col-sm-10 col-md-10 col-lg-7">
-                                <div class="row type1">
-                                    <div class="col-xs-6">
-                                        <label for="mainSel" class="sr-only">대주제 선택</label>
-                                        <select id="mainSel" class="form-control">
-                                            <option value="0">대주제 선택</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <label for="subSel" class="sr-only">소주제 선택</label>
-                                        <form:select id="subSel" path="knowlgMapNo" class="form-control">
-                                            <option value="0">소주제 선택</option>
-                                        </form:select>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -96,53 +77,13 @@
     CKEDITOR.replace('inpText');
     
 	$(function() {
-		$("#typeSel").change(function(e){
-			var type = $(this).val();
-			if(type == 'PERSONAL'){
-				$("input[name=aprvYn]").val('Y');
-			}
-     		$.ajax({
-     			url : '/kno/knowledgeMap.do',
-     			data : {
-     				knowlgMapType : type
-     			},
-     			dataType: "json",
-     			global: false,
-     			success : function(data) {
-                   	$("#mainSel").find("option").remove().end().append("<option value='0'>대주제 선택</option> ");
-                   	for(var i=0; i < data.knowledgeMapList.length; i++){
-                   		$("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> "); 
-                   	}
-     			},
-     			error : function(){
-     				alert("에러가 발생하였습니다.");
-     			}
-     		});
-		});
-		
-		$("#mainSel").change(function(e){
-			var no = $(this).val();
-     		$.ajax({
-     			url : '/kno/knowledgeMap.do',
-     			data : {
-     				upNo : no
-     			},
-     			dataType: "json",
-     			global: false,
-     			success : function(data) {
-                   	$("#subSel").find("option").remove().end().append("<option value='0'>소주제 선택</option> ");
-                   	for(var i=0; i < data.knowledgeMapList.length; i++){
-                   		$("#subSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> "); 
-                   	}
-     			},
-     			error : function(){
-     				alert("에러가 발생하였습니다.");
-     			}
-     		});
-		});
-		
         var form = $("#writeFrm");
         form.submit(function() {
+            if($('#typeSel').val() === ''){
+                alert("유형을 선택해주세요.");
+                return false;
+            }
+
             var content = CKEDITOR.instances.inpText.getData();
             if(content == "" || content == "<br>" || content == "<br />" || content == "&nbsp;" ) {
                 alert("질문의 내용을 입력해주세요.");

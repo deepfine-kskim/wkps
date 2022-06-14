@@ -1,9 +1,9 @@
 package egovframework.com.wkp.req.service;
 
+import lombok.Data;
+
 import java.sql.Date;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class ReqVO {
@@ -74,5 +74,7 @@ public class ReqVO {
 	private Long requstAnswerNo;
 
 	private String slctnYn;
+
+	private String selectionYn;
 
 }

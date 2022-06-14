@@ -50,6 +50,7 @@
                             <col>
                             <col style="width:10%;">
                             <col style="width:12%;">
+                            <col style="width:10%;">
                             <col style="width:8%;" class="hidden-xs hidden-sm">
                         </colgroup>
                         <thead>
@@ -58,6 +59,7 @@
                                 <th scope="col">제목</th>
                                 <th scope="col">작성자</th>
                                 <th scope="col">등록일</th>
+                                <th scope="col">상태</th>
                                 <th scope="col" class="hidden-xs hidden-sm">조회</th>
                             </tr>
                         </thead>
@@ -75,6 +77,12 @@
                                 </td>
                                 <td>${request.displayName }</td>
                                 <td>${request.registDtm }</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${request.selectionYn eq 'Y'}"><span>완료</span></c:when>
+                                        <c:when test="${request.selectionYn eq 'N'}"><span class="text-blue">진행중</span></c:when>
+                                    </c:choose>
+                                </td>
                                 <td class="hidden-xs hidden-sm">${request.inqCnt }</td>
                             </tr>
                             </c:forEach>

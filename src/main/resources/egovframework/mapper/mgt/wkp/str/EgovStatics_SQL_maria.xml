@@ -108,46 +108,56 @@
  	
  	<select id="selectKnowledgeStatics" parameterType="StaticsKnowledgeVO" resultType="StaticsKnowledgeVO">
 		<![CDATA[
-			SELECT
-				e.DT, COALESCE(f.KNOWLEDGE_COUNT, 0) AS KNOWLEDGE_COUNT
-			FROM (
-				SELECT 
-					CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY DT
-				FROM (SELECT 0 a
-                        UNION ALL SELECT 1
-                        UNION ALL SELECT 2
-                        UNION ALL SELECT 3
-                     ) a
-                     , (SELECT 0 b
-                        UNION ALL SELECT 1
-                        UNION ALL SELECT 2
-                        UNION ALL SELECT 3
-                        UNION ALL SELECT 4
-                        UNION ALL SELECT 5
-                        UNION ALL SELECT 6
-                        UNION ALL SELECT 7
-                        UNION ALL SELECT 8
-                        UNION ALL SELECT 9
-                     ) b
-                     , (SELECT 0 c
-                        UNION ALL SELECT 1
-                        UNION ALL SELECT 2
-                        UNION ALL SELECT 3
-                        UNION ALL SELECT 4
-                        UNION ALL SELECT 5
-                        UNION ALL SELECT 6
-                        UNION ALL SELECT 7
-                        UNION ALL SELECT 8
-                        UNION ALL SELECT 9
-                     ) c
-                     , (SELECT #{year} y) d
-                 WHERE a*100 + b*10 + c < DayOfYear(CONCAT(y, '1231'))
-                 AND CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY BETWEEN CONVERT('${year}-${month}-1 00:00:00', DATETIME) AND  DATE_ADD(DATE_ADD(CONVERT('${year}-${month}-1 00:00:00', DATETIME), INTERVAL 1 MONTH),INTERVAL -1 DAY)
-                 ) e
-                 LEFT OUTER JOIN
-                 ( SELECT DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS DATE_DAY, COUNT(*) AS KNOWLEDGE_COUNT FROM TB_KNOWLEDGE GROUP BY DATE_DAY ) f
-                 ON e.dt = f.DATE_DAY
-                 ORDER BY e.dt
+		SELECT e.DT
+			 , COALESCE(f.KNOWLEDGE_COUNT, 0) AS KNOWLEDGE_COUNT
+		  FROM (
+				   SELECT CONCAT(y, '0101') + INTERVAL a*100 + b*10 + c DAY DT
+					 FROM (SELECT 0 a
+						 UNION ALL SELECT 1
+						 UNION ALL SELECT 2
+						 UNION ALL SELECT 3
+						 ) a
+						, (SELECT 0 b
+						 UNION ALL SELECT 1
+						 UNION ALL SELECT 2
+						 UNION ALL SELECT 3
+						 UNION ALL SELECT 4
+						 UNION ALL SELECT 5
+						 UNION ALL SELECT 6
+						 UNION ALL SELECT 7
+						 UNION ALL SELECT 8
+						 UNION ALL SELECT 9
+						 ) b
+						, (SELECT 0 c
+						 UNION ALL SELECT 1
+						 UNION ALL SELECT 2
+						 UNION ALL SELECT 3
+						 UNION ALL SELECT 4
+						 UNION ALL SELECT 5
+						 UNION ALL SELECT 6
+						 UNION ALL SELECT 7
+						 UNION ALL SELECT 8
+						 UNION ALL SELECT 9
+						 ) c
+						, (SELECT #{year} y) d
+					WHERE a*100 + b*10 + c
+						< DayOfYear(CONCAT(y
+						, '1231'))
+					  AND CONCAT(y
+						, '0101') + INTERVAL a*100 + b*10 + c DAY BETWEEN CONVERT ('${year}-${month}-1 00:00:00'
+						, DATETIME)
+					  AND DATE_ADD(DATE_ADD(CONVERT ('${year}-${month}-1 00:00:00'
+						, DATETIME)
+						, INTERVAL 1 MONTH)
+						, INTERVAL -1 DAY)
+			   ) e
+				   LEFT OUTER JOIN
+			   ( SELECT DATE_FORMAT(REGIST_DTM, '%Y-%m-%d') AS DATE_DAY, COUNT(*) AS KNOWLEDGE_COUNT
+				   FROM TB_KNOWLEDGE
+			   	  WHERE DEL_YN = 'N'
+				  GROUP BY DATE_DAY ) f
+			   ON e.dt = f.DATE_DAY
+		 ORDER BY e.dt
 		]]>
  	</select>
  	
@@ -161,6 +171,7 @@
 				  FROM TB_KNOWLEDGE tk) TB_KNOWLEDGE
 		<where>
 			AND KNOWLG_NO != 1
+			AND DEL_YN = 'N'
 			<if test="searchKeyword != null and searchKeyword != ''">
 				<if test="searchCondition == 'TITLE'">
 					AND TITLE LIKE '%' #{searchKeyword} '%'
@@ -192,6 +203,7 @@
 				  FROM TB_KNOWLEDGE tk) TB_KNOWLEDGE
 		<where>
 			AND KNOWLG_NO != 1
+			AND DEL_YN = 'N'
 			<if test="searchKeyword != null and searchKeyword != ''">
 				<if test="searchCondition == 'TITLE'">
 					AND TITLE LIKE '%' #{searchKeyword} '%'

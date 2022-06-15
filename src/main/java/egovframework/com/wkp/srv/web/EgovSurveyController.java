@@ -589,10 +589,9 @@ public class EgovSurveyController {
 	        	question.add("아이디");
 		        question.add("성명");
 	        }*/
-	        question.add("부서");
-	        /*if(user.getRoleCd().equals("ROLE_ADMIN") || user.getRoleCd().equals("ROLE_SURVEY")) {
-	        	question.add("직급");
-	        }*/
+	        if(user.getRoleCd().equals("ROLE_ADMIN")) {
+                question.add("부서");
+	        }
 	        question.add("참여일");
 	        
 	        SurveyQuestionVO surveyQuestionVO = new SurveyQuestionVO();
@@ -622,12 +621,9 @@ public class EgovSurveyController {
 	        		answer.add(answerUserList.get(i).getDisplayName());
 		        }
 		        */
-	        	answer.add(answerUserList.get(i).getOu());
-		        /*
-	        	if(user.getRoleCd().equals("ROLE_ADMIN") || user.getRoleCd().equals("ROLE_SURVEY")) {
-		        	answer.add(answerUserList.get(i).getPosition());
-		        }
-		        */
+                if(user.getRoleCd().equals("ROLE_ADMIN")) {
+	        	    answer.add(answerUserList.get(i).getOu());
+                }
 	        	answer.add(transFormat.format(answerUserList.get(i).getRegistDtm()));
         		surveyAnswerVO.setRegisterId(answerUserList.get(i).getRegisterId());
 	        	for(int j = 0; j < questionNumberList.size(); j++) {

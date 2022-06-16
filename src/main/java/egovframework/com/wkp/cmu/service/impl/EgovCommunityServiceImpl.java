@@ -1,25 +1,15 @@
 package egovframework.com.wkp.cmu.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.ibm.icu.util.Calendar;
-
 import egovframework.com.wkp.cal.service.CalendarVO;
 import egovframework.com.wkp.cal.service.impl.CalendarDAO;
-import egovframework.com.wkp.cmu.service.CommunityCommentVO;
-import egovframework.com.wkp.cmu.service.CommunityEventVO;
-import egovframework.com.wkp.cmu.service.CommunityFreeboardVO;
-import egovframework.com.wkp.cmu.service.CommunityMemberVO;
-import egovframework.com.wkp.cmu.service.CommunityNoticeVO;
-import egovframework.com.wkp.cmu.service.CommunityRoleTypes;
-import egovframework.com.wkp.cmu.service.CommunityVO;
-import egovframework.com.wkp.cmu.service.EgovCommunityService;
+import egovframework.com.wkp.cmu.service.*;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 구현 클래스
@@ -130,7 +120,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
 		community.setOwner(owner.get(0));
 		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
-		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null));
+		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null, sid));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null, sid));
 		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
 		return community;
@@ -163,10 +153,20 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 			int startIndex) {
 		return communityDAO.findCommunityNotice(cmmntyNo, searchType,searchValue, limit, startIndex);
 	}
+	@Override
+	public List<CommunityNoticeVO> findCommunityNotice(Long cmmntyNo,String searchType, String searchValue, int limit,
+			int startIndex, String sid) {
+		return communityDAO.findCommunityNotice(cmmntyNo, searchType,searchValue, limit, startIndex, sid);
+	}
 
 	@Override
 	public int findCommunityNoticeTotalCount(Long cmmntyNo,String searchType, String searchValue) {
 		return communityDAO.findCommunityNoticeTotalCount(cmmntyNo, searchType, searchValue);
+	}
+
+	@Override
+	public int findCommunityNoticeTotalCount(Long cmmntyNo,String searchType, String searchValue, String sid) {
+		return communityDAO.findCommunityNoticeTotalCount(cmmntyNo, searchType, searchValue, sid);
 	}
 
 	@Override

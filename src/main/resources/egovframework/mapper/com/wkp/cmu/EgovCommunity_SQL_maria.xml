@@ -229,6 +229,9 @@
        		<if test='search_value != null and search_value != "" '>
 	           AND (( CN.TITLE LIKE CONCAT('%',#{search_value},'%')))
 	        </if>
+		   <if test="sid != null and sid != ''">
+			   AND (CN.SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+		   </if>
       </where>
       ORDER BY CN.NOTICE_NO DESC
       <if test="startIndex &gt; -1 and limit &gt; -1 ">
@@ -244,6 +247,9 @@
        		<if test='search_value != null and search_value != "" '>
 	           AND (( TITLE LIKE CONCAT('%',#{search_value},'%')))
 	        </if>
+		    <if test="sid != null and sid != ''">
+		 	   AND (SHOW_YN = 'Y' OR (SELECT COUNT(1) FROM TB_COMMUNITY_MEMBER WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{sid}) > 0)
+		    </if>
       </where>
  	</select>
  	
@@ -262,6 +268,7 @@
 				ATCH_FILE_NO,
 				LINK1,
 				LINK2,
+			 	SHOW_YN,
 				DEL_YN
 			)
 			VALUES
@@ -278,6 +285,7 @@
 				#{atchFileNo},
 				#{link1},
 				#{link2},
+			 	#{showYn},
 				'N'
 			)		
 	</insert>
@@ -291,7 +299,8 @@
 				LINK1 = #{link1},
 				LINK2 = #{link2},
 		        UPDATER_ID = #{updaterId},
-		        UPD_DTM = now()
+		        UPD_DTM = now(),
+				SHOW_YN = #{showYn}
 	        WHERE NOTICE_NO = #{noticeNo}
 	</update>
 	

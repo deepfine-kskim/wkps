@@ -7,11 +7,13 @@ $(function() {
     $('#btn_save').click(function(){
     	var gd = CKEDITOR.instances.cont.getData();
 		var cont = btoa(unescape(encodeURIComponent(gd)));
-	    var formData = new FormData();
+        var showYn = $('input[name=showYn]:checked').val();
+        var formData = new FormData();
 	    formData.append("cmmntyNo", cmmntyNo);
-	    
+
 	    formData.append("title", $('#title').val());
 	    formData.append("cont", cont);
+	    formData.append("showYn", showYn);
 	    //formData.append("change_file1", change_file1);
 	    //formData.append("change_file2", change_file2);
 	    formData.append("file1", $('#file1')[0].files[0]);
@@ -71,6 +73,17 @@ $(function() {
                                             <label for="file1" class="col-sm-2 control-label">첨부파일</label>
                                             <div class="col-sm-10">
                                                 <input type="file" class="form-control" id="file1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="showY" class="col-sm-2 control-label">공개범위</label>
+                                            <div class="col-sm-10 tree_chk_area">
+                                                <label for="showY" class="radio-inline">
+                                                    <input type="radio" id="showY" name="showYn" value="Y" checked=""> 전체공개
+                                                </label>
+                                                <label for="showN" class="radio-inline">
+                                                    <input type="radio" id="showN" name="showYn" value="N"> 멤버공개
+                                                </label>
                                             </div>
                                         </div>
                                     </div>

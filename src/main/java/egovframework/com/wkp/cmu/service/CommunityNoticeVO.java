@@ -18,12 +18,12 @@
 
 package egovframework.com.wkp.cmu.service;
 
+import lombok.Data;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import lombok.Data;
 
 @Data
 public class CommunityNoticeVO {
@@ -32,6 +32,7 @@ public class CommunityNoticeVO {
 	private Long cmmntyNo;
 	private String title;
 	private String cont;
+	private String showYn;
 	private Long inqCnt;
 	private Long mberNo;
 	private Date registDtm;

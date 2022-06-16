@@ -114,11 +114,31 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectList("CommunityDAO.findCommunityNotice", param);
     }
 
+    public List<CommunityNoticeVO> findCommunityNotice(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("search_value", searchValue);
+        param.put("limit", limit);
+        param.put("startIndex", startIndex);
+        param.put("sid", sid);
+        return selectList("CommunityDAO.findCommunityNotice", param);
+    }
+
     public int findCommunityNoticeTotalCount(Long cmmntyNo, String searchType, String searchValue) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
         param.put("search_type", searchType);
         param.put("search_value", searchValue);
+        return selectOne("CommunityDAO.findCommunityNoticeTotalCount", param);
+    }
+
+    public int findCommunityNoticeTotalCount(Long cmmntyNo, String searchType, String searchValue, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("search_value", searchValue);
+        param.put("sid", sid);
         return selectOne("CommunityDAO.findCommunityNoticeTotalCount", param);
     }
 

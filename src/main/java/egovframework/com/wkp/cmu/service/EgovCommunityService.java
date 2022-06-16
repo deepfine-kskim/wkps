@@ -1,9 +1,9 @@
 package egovframework.com.wkp.cmu.service;
 
+import egovframework.com.wkp.cal.service.CalendarVO;
+
 import java.util.HashMap;
 import java.util.List;
-
-import egovframework.com.wkp.cal.service.CalendarVO;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 인터페이스 클래스
@@ -50,6 +50,8 @@ public interface EgovCommunityService {
 	
 	//커뮤니티공지사항
 	public List<CommunityNoticeVO> findCommunityNotice(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex);
+	public List<CommunityNoticeVO> findCommunityNotice(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex, String sid);
+	public int findCommunityNoticeTotalCount(Long cmmntyNo,String searchType,String searchValue, String sid);
 	public int findCommunityNoticeTotalCount(Long cmmntyNo,String searchType,String searchValue);
 	public CommunityNoticeVO getCommunityNotice(Long noticeNo);
 	public CommunityNoticeVO getCommunityNoticePrev(Long cmmntyNo,Long noticeNo);

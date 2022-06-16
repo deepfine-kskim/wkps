@@ -1,18 +1,24 @@
 package egovframework.com.wkp.cmu.web;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-
+import com.ibm.icu.util.Calendar;
+import egovframework.com.cmm.EgovComException;
+import egovframework.com.cmm.PageInfo;
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.kf.common.PageMaker;
+import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+import egovframework.com.wkp.cal.service.EgovCalendarService;
+import egovframework.com.wkp.cmm.service.EgovCommonService;
+import egovframework.com.wkp.cmu.service.*;
+import egovframework.com.wkp.kno.service.EgovKnowledgeService;
+import egovframework.com.wkp.kno.service.KnowledgeMapVO;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
+import egovframework.com.wkp.usr.service.UserVO;
+import egovframework.mgt.wkp.cmu.service.CommunityBannerVO;
+import egovframework.mgt.wkp.cmu.service.EgovCommunityManageService;
+import egovframework.mgt.wkp.mnu.service.MenuVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -26,33 +32,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ibm.icu.util.Calendar;
-
-import egovframework.com.cmm.EgovComException;
-import egovframework.com.cmm.PageInfo;
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.com.cmm.service.FileVO;
-import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.kf.common.PageMaker;
-import egovframework.com.utl.wed.comm.ListWithPageNavigation;
-import egovframework.com.wkp.cal.service.EgovCalendarService;
-import egovframework.com.wkp.cmm.service.EgovCommonService;
-import egovframework.com.wkp.cmu.service.CommunityCommentVO;
-import egovframework.com.wkp.cmu.service.CommunityEventVO;
-import egovframework.com.wkp.cmu.service.CommunityFreeboardVO;
-import egovframework.com.wkp.cmu.service.CommunityMemberVO;
-import egovframework.com.wkp.cmu.service.CommunityNoticeVO;
-import egovframework.com.wkp.cmu.service.CommunityRoleTypes;
-import egovframework.com.wkp.cmu.service.CommunityVO;
-import egovframework.com.wkp.cmu.service.EgovCommunityService;
-import egovframework.com.wkp.kno.service.EgovKnowledgeService;
-import egovframework.com.wkp.kno.service.KnowledgeMapVO;
-import egovframework.com.wkp.kno.service.KnowledgeVO;
-import egovframework.com.wkp.usr.service.UserVO;
-import egovframework.mgt.wkp.cmu.service.CommunityBannerVO;
-import egovframework.mgt.wkp.cmu.service.EgovCommunityManageService;
-import egovframework.mgt.wkp.mnu.service.MenuVO;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+import java.util.Base64.Decoder;
 
 @Controller
 @RequestMapping("/cmu")
@@ -275,7 +260,7 @@ public class EgovCommunityController {
         try {
             includeCommon(model, cmmntyNo);
 
-            model.addAttribute("notice", communityService.findCommunityNotice(cmmntyNo, null, null, 3, 0));
+            model.addAttribute("notice", communityService.findCommunityNotice(cmmntyNo, null, null, 3, 0, user.getSid()));
 
             model.addAttribute("free", communityService.findCommunityFreeboard(cmmntyNo, null, null, 10, 0, user.getSid()));
             //지식게시판
@@ -468,12 +453,14 @@ public class EgovCommunityController {
             model.addAttribute("search_type", searchType);
             model.addAttribute("search_value", searchValue);
 
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
 
-            int total = communityService.findCommunityNoticeTotalCount(cmmntyNo, searchType, searchValue);
+            int total = communityService.findCommunityNoticeTotalCount(cmmntyNo, searchType, searchValue, user.getSid());
             int limit = rows;
             int startIndex = (page - 1) * rows;
 
-            List<CommunityNoticeVO> list = communityService.findCommunityNotice(cmmntyNo, searchType, searchValue, limit, startIndex);
+//            List<CommunityNoticeVO> list = communityService.findCommunityNotice(cmmntyNo, searchType, searchValue, limit, startIndex);
+            List<CommunityNoticeVO> list = communityService.findCommunityNotice(cmmntyNo, searchType, searchValue, limit, startIndex, user.getSid());
 
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("total_count", total);
@@ -488,7 +475,6 @@ public class EgovCommunityController {
     		pageMaker.setTotalCount(total);
     		model.addAttribute("pageMaker", pageMaker);
 
-            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
@@ -611,6 +597,7 @@ public class EgovCommunityController {
             @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = false) String cont,
+            @RequestParam(value = "showYn", required = false) String showYn,
             @RequestParam(value = "link1", required = false) String link1,
             @RequestParam(value = "link2", required = false) String link2,
             @RequestParam(value = "file1", required = false) MultipartFile file1,
@@ -677,6 +664,7 @@ public class EgovCommunityController {
         vo.setCmmntyNo(cmmntyNo);
         vo.setTitle(title);
         vo.setCont(decode(cont));
+        vo.setShowYn(showYn);
         vo.setMberNo(mem.getMberNo());
         vo.setLink1(link1);
         vo.setLink2(link2);
@@ -731,6 +719,7 @@ public class EgovCommunityController {
             @RequestParam(value = "noticeNo", required = true) Long noticeNo,
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = true) String cont,
+            @RequestParam(value = "showYn", required = true) String showYn,
             @RequestParam(value = "link1", required = false) String link1,
             @RequestParam(value = "link2", required = false) String link2,
             @RequestParam(value = "file1", required = false) MultipartFile file1,
@@ -825,6 +814,7 @@ public class EgovCommunityController {
 
         notice.setTitle(title);
         notice.setCont(decode(cont));
+        notice.setShowYn(showYn);
         notice.setLink1(link1);
         notice.setLink2(link2);
 

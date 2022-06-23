@@ -8,7 +8,7 @@
                     <!-- //ASIDE -->
                     <div id="contents" class="col-md-9">
                         <div class="row type10">
-                            <div class="col-sm-7">
+                            <div class="col-sm-12">
                                 <div class="panel panel-primary widget_panel">
                                     <div class="panel-heading">
                                         <div class="h6"><i class="fa fa-bullhorn" aria-hidden="true"></i> <strong>공지사항</strong></div>
@@ -37,6 +37,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <%-- Today 주석 처리 및 공지사항 class 명 변경 col-sm-7 -> col-sm-12로 2022-06-23 --%>
+                            <%--
                             <div class="col-sm-5">
                                 <div class="panel panel-warning widget_panel">
                                     <div class="panel-heading">
@@ -50,7 +52,7 @@
                                             	 ${cal.title }
                                             </li>
                                         </c:forEach>
-                                            
+
                                             <!-- 데이터 없을시 -->
                                             <c:if test="${ fn:length(calendar)==0}">
                                             <li class="empty">
@@ -64,6 +66,7 @@
                                     </div>
                                 </div>
                             </div>
+                            --%>
                         </div>
                         <div class="row type10 widget_set">
                             <div class="col-sm-6">

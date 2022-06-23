@@ -218,6 +218,7 @@ public class EgovKnowledgeController {
 
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 
+
         if (title != null) {
             knowledgeVO.setTitle(title);
         }
@@ -231,6 +232,10 @@ public class EgovKnowledgeController {
         }
 
         KnowledgeVO knowledgeDetail = knowledgeService.selectKnowledgeDetail(knowledgeVO);
+
+        // 지식의 ou_code를 저장할 UserVO
+        UserVO userVO = knowledgeService.selectOrgKnowledgeManager(knowledgeDetail);
+
         String referer = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("referer");
 
         if (knowledgeDetail == null) {
@@ -349,6 +354,7 @@ public class EgovKnowledgeController {
 
         model.addAttribute("relateKnowlgVO", relateKnowlgVO);
         model.addAttribute("knowledgeDetail", knowledgeDetail);
+        model.addAttribute("orgUser", userVO);
         model.addAttribute("knowledgeContentsList", knowledgeContentsList);
         model.addAttribute("relateKnowledgeList", relateKnowledgeList);
         model.addAttribute("fileList", fileList);

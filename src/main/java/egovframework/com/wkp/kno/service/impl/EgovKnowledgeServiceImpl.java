@@ -5,6 +5,7 @@ import egovframework.com.utl.wed.comm.PageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
 import egovframework.com.wkp.kno.service.*;
+import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.mgt.wkp.log.service.LogVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -54,6 +55,11 @@ public class EgovKnowledgeServiceImpl extends EgovAbstractServiceImpl implements
 		KnowledgeVO vo = knowledgeDAO.selectKnowledgeDetail(knowledgeVO);
 		egovLogService.insert(LogType.SELECT_DETAIL, LogSubjectType.KNOWLEDGE, vo);
 		return vo;
+	}
+
+	@Override
+	public UserVO selectOrgKnowledgeManager(KnowledgeVO knowledgeVO) {
+		return knowledgeDAO.selectOrgKnowledgeManager(knowledgeVO);
 	}
 	
 	@Override

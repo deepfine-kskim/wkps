@@ -330,6 +330,17 @@
 		 ORDER BY TB_KNOWLEDGE.KNOWLG_NO DESC
 		 LIMIT 1
  	</select>
+
+	<!-- 부서 지식 관리자 조회 -->
+	<select id="selectOrgKnowledgeManager" parameterType="UserVO" resultType="UserVO">
+		SELECT TB_USER.DISPLAY_NAME
+			, TB_USER.OU
+		  FROM TB_USER
+				   LEFT JOIN TB_ROLE ON TB_ROLE.SID = TB_USER.SID
+		 WHERE TB_USER.DEL_YN = 'N'
+		   AND TB_USER.OU_CODE = #{ouCode}
+		   AND TB_ROLE.ROLE_CD = 'ROLE_ORG'
+	</select>
  	
  	<select id="selectKnowledgeContentsList" parameterType="KnowledgeVO" resultType="KnowledgeContentsVO"> 
  		

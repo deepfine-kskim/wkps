@@ -1,6 +1,7 @@
 package egovframework.com.wkp.kno.service;
 
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.LogVO;
 
 import java.sql.Date;
@@ -15,7 +16,9 @@ public interface EgovKnowledgeService {
 	public Date selectKnowledgeLastUpdated(KnowledgeVO knowledgeVO);
 	
 	public KnowledgeVO selectKnowledgeDetail(KnowledgeVO knowledgeVO);
-	
+
+	public UserVO selectOrgKnowledgeManager(KnowledgeVO knowledgeVO);
+
 	public int insertKnowledge(KnowledgeVO knowledgeVO);
 
 	public int insertKnowledgeModificationRequest(KnowledgeVO knowledgeVO);

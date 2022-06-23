@@ -2,6 +2,7 @@ package egovframework.com.wkp.kno.service.impl;
 
 import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 import egovframework.com.wkp.kno.service.*;
+import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.log.service.LogVO;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,10 @@ public class KnowledgeDAO extends EgovComAbstractDAO {
     
 	public KnowledgeVO selectKnowledgeDetail(KnowledgeVO knowledgeVO) {
 		return selectOne("KnowledgeDAO.selectKnowledgeDetail", knowledgeVO);
+	}
+
+	public UserVO selectOrgKnowledgeManager(KnowledgeVO knowledgeVO) {
+		return selectOne("KnowledgeDAO.selectOrgKnowledgeManager", knowledgeVO);
 	}
 	
 	public int insertKnowledge(KnowledgeVO knowledgeVO) {

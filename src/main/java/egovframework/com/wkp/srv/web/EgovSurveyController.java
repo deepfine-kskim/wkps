@@ -591,7 +591,8 @@ public class EgovSurveyController {
 	        }*/
 	        if(user.getRoleCd().equals("ROLE_ADMIN")) {
                 question.add("부서");
-	        }
+                question.add("성명");
+            }
 	        question.add("참여일");
 	        
 	        SurveyQuestionVO surveyQuestionVO = new SurveyQuestionVO();
@@ -623,6 +624,7 @@ public class EgovSurveyController {
 		        */
                 if(user.getRoleCd().equals("ROLE_ADMIN")) {
 	        	    answer.add(answerUserList.get(i).getOu());
+	        	    answer.add(answerUserList.get(i).getDisplayName());
                 }
 	        	answer.add(transFormat.format(answerUserList.get(i).getRegistDtm()));
         		surveyAnswerVO.setRegisterId(answerUserList.get(i).getRegisterId());

@@ -9,7 +9,6 @@ import egovframework.com.wkp.qna.service.impl.EgovQnaServiceImpl;
 import egovframework.com.wkp.srv.service.*;
 import egovframework.mgt.wkp.log.service.EgovLogService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -70,6 +69,23 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
         return result;
     }
 
+    @Override
+    public ListWithPageNavigation<SurveyVO> selectSurveyManageList(SurveyVO surveyVO) {
+
+        ListWithPageNavigation<SurveyVO> result = new ListWithPageNavigation<>();
+
+        PageNavigation pageNavigation =
+                new PageNavigation(selectSurveyManageListCount(surveyVO), surveyVO.getPage(), null, null);
+        surveyVO.setItemCountPerPage(pageNavigation.getItemCountPerPage());
+        surveyVO.setItemOffset(pageNavigation.getItemCountPerPage() * (surveyVO.getPage() - 1));
+        result.setList(surveyDAO.selectSurveyManageList(surveyVO));
+        result.setPageNavigation(pageNavigation);
+
+        egovLogService.insert(LogType.SELECT_LIST, LogSubjectType.SURVEY, null);
+
+        return result;
+    }
+
     /**
      * 내가 만든 설문조사 리스트를 가져온다.
      * 2020.10.10
@@ -107,6 +123,10 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
     @Override
     public int selectSurveyListCount(SurveyVO surveyVO) {
         return surveyDAO.selectSurveyListCount(surveyVO);
+    }
+
+    public int selectSurveyManageListCount(SurveyVO surveyVO) {
+        return surveyDAO.selectSurveyManageListCount(surveyVO);
     }
 
     @Override

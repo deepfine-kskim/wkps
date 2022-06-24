@@ -1,12 +1,12 @@
 package egovframework.com.wkp.srv.service;
 
 
-import java.util.Date;
-import java.util.List;
-
 import egovframework.com.utl.wed.enums.SurveySearchKey;
 import egovframework.com.utl.wed.enums.SurveyStateType;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 @Data
 public class SurveyVO {
@@ -36,6 +36,7 @@ public class SurveyVO {
 	private String rlsYn;
 	private String targetRlsYn;
 	private String isFront;
+	private String sid;
 
 	private boolean mine;
 

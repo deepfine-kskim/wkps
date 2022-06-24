@@ -75,11 +75,31 @@
         FROM TB_SURVEY a
 		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
         <include refid="selectListCondition"/>
+		AND (a.BNGN_DTM <![CDATA[<]]> now() OR (a.APRV_STATE <![CDATA[<>]]> 'DOING' OR a.REGISTER_ID = #{sid}))
+        ORDER BY a.SURVEY_NO DESC
+        LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
+    </select>
+
+	<select id="selectSurveyManageList" parameterType="SurveyVO" resultType="SurveyVO">
+        SELECT
+        	a.*
+        	, e.DISPLAY_NAME as REGISTER_NAME
+        FROM TB_SURVEY a
+		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+        <include refid="selectListCondition"/>
         ORDER BY a.SURVEY_NO DESC
         LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
     </select>
     
     <select id="selectSurveyListCount" parameterType="SurveyVO" resultType="int">
+        SELECT count(*)
+        FROM TB_SURVEY a
+		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+        <include refid="selectListCondition"/>
+		AND (a.BNGN_DTM <![CDATA[<]]> now() OR (a.APRV_STATE <![CDATA[<>]]> 'DOING' OR a.REGISTER_ID = #{sid}))
+    </select>
+
+	<select id="selectSurveyManageListCount" parameterType="SurveyVO" resultType="int">
         SELECT count(*)
         FROM TB_SURVEY a
 		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID

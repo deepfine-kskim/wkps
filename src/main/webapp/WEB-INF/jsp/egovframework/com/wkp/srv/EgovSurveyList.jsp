@@ -121,7 +121,16 @@
                                     <td>
                                     <c:choose>
                                     	<c:when test="${item.aprvState.name() == 'DOING'}">
-                                    		<span class="status_txt text-blue">${item.aprvState.value}</span>
+                                            <fmt:formatDate var="Htoday" value="${now}" pattern="yyyyMMddHHmmss"/>
+                                            <fmt:formatDate var="BngDtm" value="${item.bngnDtm}" pattern="yyyyMMddHHmmss"/>
+                                            <c:choose>
+                                                <c:when test="${Htoday gt BngDtm}">
+                                                    <span class="status_txt text-blue">${item.aprvState.value}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="status_txt text-warning">설문 예정</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                     	</c:when>
                                     	<c:when test="${item.aprvState.name() == 'CANCEL'}">
                                     		<a href="#alertPopup" data-toggle="modal" data-target="#alertPopup" class="status_txt text-danger dev-reject" data-no="${status.index }">${item.aprvState.value}</a>

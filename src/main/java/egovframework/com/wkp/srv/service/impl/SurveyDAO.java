@@ -1,12 +1,11 @@
 package egovframework.com.wkp.srv.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
+import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 import egovframework.com.wkp.srv.service.*;
 import org.springframework.stereotype.Repository;
 
-//import egovframework.com.cmm.LoginVO;
-import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 DAO 클래스
@@ -37,6 +36,10 @@ public class SurveyDAO extends EgovComAbstractDAO {
 	 */
 	public List<SurveyVO> selectSurveyList(SurveyVO surveyVO) {
 		return selectList("SurveyDAO.selectSurveyList", surveyVO);
+	}
+
+	public List<SurveyVO> selectSurveyManageList(SurveyVO surveyVO) {
+		return selectList("SurveyDAO.selectSurveyManageList", surveyVO);
 	}
 
 	/**
@@ -71,6 +74,10 @@ public class SurveyDAO extends EgovComAbstractDAO {
 	 */
 	public int selectSurveyListCount(SurveyVO surveyVO) {
 		return selectOne("SurveyDAO.selectSurveyListCount", surveyVO);
+	}
+
+	public int selectSurveyManageListCount(SurveyVO surveyVO) {
+		return selectOne("SurveyDAO.selectSurveyManageListCount", surveyVO);
 	}
 
 	/**

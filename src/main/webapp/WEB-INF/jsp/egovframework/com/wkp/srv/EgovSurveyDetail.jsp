@@ -276,9 +276,13 @@
                                 <div class="col-xs-6">
                                     <button type="button" class="btn btn-default dev-reload">설문 초기화</button>
                                 </div>
-                                <div class="col-xs-6 text-right">
-                                    <button type="button" class="btn btn-blue dev-answer-submit"><i class="ti-bar-chart-alt" aria-hidden="true"></i>설문 참여하기</button>
-                                </div>
+                                <fmt:formatDate var="Htoday" value="${now}" pattern="yyyyMMddHHmmss"/>
+                                <fmt:formatDate var="BngDtm" value="${detail.bngnDtm}" pattern="yyyyMMddHHmmss"/>
+                                <c:if test="${Htoday gt BngDtm}">
+                                    <div class="col-xs-6 text-right">
+                                        <button type="button" class="btn btn-blue dev-answer-submit"><i class="ti-bar-chart-alt" aria-hidden="true"></i>설문 참여하기</button>
+                                    </div>
+                                </c:if>
                             </c:when>
                             <c:otherwise>
 								<div class="col-xs-6">

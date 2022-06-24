@@ -1,6 +1,7 @@
 package egovframework.com.wkp.srv.service;
 
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+
 import java.util.List;
 
 /**
@@ -29,8 +30,10 @@ public interface EgovSurveyService {
 	 * @return ListWithPageNavigation<SurveyVO>
 	 * @
 	 */
-	public ListWithPageNavigation<SurveyVO> selectSurveyList(SurveyVO surveyVO);	/**
+	public ListWithPageNavigation<SurveyVO> selectSurveyList(SurveyVO surveyVO);
+	public ListWithPageNavigation<SurveyVO> selectSurveyManageList(SurveyVO surveyVO);
 
+	/**
 	 * 2020.10.10
 	 * 내가 작성한 설문조사 리스트를 가져온다.
 	 * @param surveyVO
@@ -56,6 +59,7 @@ public interface EgovSurveyService {
 	 * @
 	 */
 	public int selectSurveyListCount(SurveyVO surveyVO);
+	public int selectSurveyManageListCount(SurveyVO surveyVO);
 
 	/**
 	 * 2020.10.11

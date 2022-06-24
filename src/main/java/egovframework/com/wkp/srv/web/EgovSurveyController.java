@@ -84,6 +84,8 @@ public class EgovSurveyController {
             //배치 전 데이터 업데이트
             surveyService.updateSurveyDoingState();
 
+            param.setSid(user.getSid());
+
             surveyList = surveyService.selectSurveyList(param);
 
             model.addAttribute("surveyList", surveyList);
@@ -179,6 +181,7 @@ public class EgovSurveyController {
             model.addAttribute("page", page);
             model.addAttribute("searchText", searchText);
             model.addAttribute("user", user);
+            model.addAttribute("now", new Date());
 
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

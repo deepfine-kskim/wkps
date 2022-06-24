@@ -69,7 +69,8 @@ public class EgovSurveyManageController {
                 }
             }
 
-            surveyList = surveyService.selectSurveyList(param);
+
+            surveyList = surveyService.selectSurveyManageList(param);
 
             model.addAttribute("surveyList", surveyList);
             model.addAttribute("surveyTypes", SurveyType.values());

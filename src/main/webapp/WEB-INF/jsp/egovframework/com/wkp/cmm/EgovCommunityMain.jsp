@@ -269,7 +269,9 @@ $(function(){
 	
 	var isApply = "${fn:length(listApply) > 0 }";
 	if(isApply){
-		$('#applyPopup').modal("show");
+        setTimeout(function () {
+            $('#applyPopup').modal('show');
+        }, 50);
 	}
 });
 

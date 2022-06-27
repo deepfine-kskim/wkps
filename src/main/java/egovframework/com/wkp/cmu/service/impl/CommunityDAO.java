@@ -161,13 +161,23 @@ public class CommunityDAO extends EgovComAbstractDAO {
     public void insertCommunityComment(CommunityCommentVO vo) {
         insert("CommunityDAO.insertCommunityComment", vo);
     }
+    public void insertCommunity2Comment(CommunityCommentVO vo) {
+        insert("CommunityDAO.insertCommunity2Comment", vo);
+    }
 
     public void deleteCommunityComment(CommunityCommentVO vo) {
         update("CommunityDAO.deleteCommunityComment", vo);
     }
+
+    public void deleteCommunity2Comment(CommunityCommentVO vo) {
+        update("CommunityDAO.deleteCommunity2Comment", vo);
+    }
     
     public void updateCommunityComment(CommunityCommentVO vo) {
         update("CommunityDAO.updateCommunityComment", vo);
+    }
+    public void updateCommunity2Comment(CommunityCommentVO vo) {
+        update("CommunityDAO.updateCommunity2Comment", vo);
     }
 
     public CommunityCommentVO getCommunityComment(Long commentNo) {
@@ -176,16 +186,34 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectOne("CommunityDAO.getCommunityComment", param);
     }
 
+    public CommunityCommentVO getCommunity2Comment(Long commentNo) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("commentNo", commentNo);
+        return selectOne("CommunityDAO.getCommunity2Comment", param);
+    }
+
     public List<CommunityCommentVO> selectCommunityComment(Long pstgNo) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("pstgNo", pstgNo);
         return selectList("CommunityDAO.selectCommunityComment", param);
     }
 
+    public List<CommunityCommentVO> selectCommunity2Comment(Long pstgNo) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("pstgNo", pstgNo);
+        return selectList("CommunityDAO.selectCommunity2Comment", param);
+    }
+
     public CommunityFreeboardVO loadCommunityFreeboard(Long pstgNo) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("pstgNo", pstgNo);
         return selectOne("CommunityDAO.loadCommunityFreeboard", param);
+    }
+
+    public CommunityFreeboardVO loadCommunity2Freeboard(Long pstgNo) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("pstgNo", pstgNo);
+        return selectOne("CommunityDAO.loadCommunity2Freeboard", param);
     }
 
     public CommunityFreeboardVO loadCommunityFreeboardPrev(Long cmmntyNo, Long pstgNo, String sid) {
@@ -202,6 +230,22 @@ public class CommunityDAO extends EgovComAbstractDAO {
         param.put("pstgNo", pstgNo);
         param.put("sid", sid);
         return selectOne("CommunityDAO.loadCommunityFreeboardNext", param);
+    }
+
+    public CommunityFreeboardVO loadCommunity2FreeboardPrev(Long cmmntyNo, Long pstgNo, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("pstgNo", pstgNo);
+        param.put("sid", sid);
+        return selectOne("CommunityDAO.loadCommunity2FreeboardPrev", param);
+    }
+
+    public CommunityFreeboardVO loadCommunity2FreeboardNext(Long cmmntyNo, Long pstgNo, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("pstgNo", pstgNo);
+        param.put("sid", sid);
+        return selectOne("CommunityDAO.loadCommunity2FreeboardNext", param);
     }
 
     public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex) {
@@ -233,6 +277,17 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectList("CommunityDAO.findCommunityFreeboard", param);
     }
 
+    public List<CommunityFreeboardVO> findCommunity2Freeboard(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("search_value", searchValue);
+        param.put("limit", limit);
+        param.put("startIndex", startIndex);
+        param.put("sid", sid);
+        return selectList("CommunityDAO.findCommunity2Freeboard", param);
+    }
+
     public int findCommunityFreeboardTotalCount(Long cmmntyNo, String searchType, String searchValue, String sid) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
@@ -241,20 +296,44 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectOne("CommunityDAO.findCommunityFreeboardTotalCount", param);
     }
 
+    public int findCommunity2FreeboardTotalCount(Long cmmntyNo, String searchType, String searchValue, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("sid", sid);
+        return selectOne("CommunityDAO.findCommunity2FreeboardTotalCount", param);
+    }
+
     public void insertCommunityFreeboard(CommunityFreeboardVO vo) {
         insert("CommunityDAO.insertCommunityFreeboard", vo);
+    }
+
+    public void insertCommunity2Freeboard(CommunityFreeboardVO vo) {
+        insert("CommunityDAO.insertCommunity2Freeboard", vo);
     }
 
     public void updateCommunityFreeboard(CommunityFreeboardVO vo) {
         update("CommunityDAO.updateCommunityFreeboard", vo);
     }
 
+    public void updateCommunity2Freeboard(CommunityFreeboardVO vo) {
+        update("CommunityDAO.updateCommunity2Freeboard", vo);
+    }
+
     public void deleteCommunityFreeboard(CommunityFreeboardVO vo) {
         update("CommunityDAO.deleteCommunityFreeboard", vo);
+    }
+
+    public void deleteCommunity2Freeboard(CommunityFreeboardVO vo) {
+        update("CommunityDAO.deleteCommunity2Freeboard", vo);
     }
     
     public void updateCommunityFreeboardInq(CommunityFreeboardVO vo) {
         update("CommunityDAO.updateCommunityFreeboardInq", vo);
+    }
+
+    public void updateCommunity2FreeboardInq(CommunityFreeboardVO vo) {
+        update("CommunityDAO.updateCommunity2FreeboardInq", vo);
     }
     
     public int findCommunityKnowledgeTotalCount(Long cmmntyNo) {

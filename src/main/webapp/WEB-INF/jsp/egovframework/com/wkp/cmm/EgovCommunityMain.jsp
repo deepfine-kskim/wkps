@@ -69,6 +69,7 @@
                             --%>
                         </div>
                         <div class="row type10 widget_set">
+                            <%--
                             <div class="col-sm-6">
                                 <div class="panel panel-info widget_panel">
                                     <div class="panel-heading">
@@ -85,27 +86,48 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="panel panel-info widget_panel">
-                                    <div class="panel-heading">
-                                        <div class="h6"><i class="fa fa-file-text-o" aria-hidden="true"></i> <strong>자유 게시판</strong></div>
-                                    </div>
-                                    <div class="panel-body p_0">
-                                        <ul class="latest_list">
-                                        <c:forEach items="${free}" var="free">
-                                            <li><a href="communityFreeView.do?cmmntyNo=${community.cmmntyNo}&pstgNo=${free.pstgNo}">${free.title }</a></li>
+                            --%>
+                        <div class="col-sm-6">
+                            <div class="panel panel-info widget_panel">
+                                <div class="panel-heading">
+                                    <div class="h6"><i class="fa fa-file-text-o" aria-hidden="true"></i> <strong>지식 게시판</strong></div>
+                                </div>
+                                <div class="panel-body p_0">
+                                    <ul class="latest_list">
+                                        <c:forEach items="${freeKnowledgeList}" var="free">
+                                            <li><a href="community2FreeView.do?cmmntyNo=${community.cmmntyNo}&pstgNo=${free.pstgNo}">${free.title }</a></li>
                                         </c:forEach>
-                                            
-                                            <!-- 데이터 없을시 -->
-                                            <c:if test="${ fn:length(free)==0}">
+
+                                        <!-- 데이터 없을시 -->
+                                        <c:if test="${ fn:length(freeKnowledgeList)==0}">
                                             <li class="empty">등록된 게시글이 없습니다</li>
-                                            </c:if>
-                                            <!-- //데이터 없을시 -->
-                                        </ul>
-                                    </div>
+                                        </c:if>
+                                        <!-- //데이터 없을시 -->
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="panel panel-info widget_panel">
+                                <div class="panel-heading">
+                                    <div class="h6"><i class="fa fa-file-text-o" aria-hidden="true"></i> <strong>자유 게시판</strong></div>
+                                </div>
+                                <div class="panel-body p_0">
+                                    <ul class="latest_list">
+                                        <c:forEach items="${free}" var="free">
+                                            <li><a href="communityFreeView.do?cmmntyNo=${community.cmmntyNo}&pstgNo=${free.pstgNo}">${free.title }</a></li>
+                                        </c:forEach>
+
+                                        <!-- 데이터 없을시 -->
+                                        <c:if test="${ fn:length(free)==0}">
+                                            <li class="empty">등록된 게시글이 없습니다</li>
+                                        </c:if>
+                                        <!-- //데이터 없을시 -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <!-- //CONTENTS -->
                     <c:if test="${fn:length(calendar) > 0 }">

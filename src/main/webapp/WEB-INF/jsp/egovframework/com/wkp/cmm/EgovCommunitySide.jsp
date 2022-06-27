@@ -173,11 +173,19 @@ function cancel(){
                                     </a>
                                 </li>
                                 <li class="list-group-item">
+                                    <a href="/cmu/community2FreeList.do?cmmntyNo=${community.cmmntyNo}">
+                                        지식 게시판
+                                        <span class="badge">${community.free2Count}</span>
+                                    </a>
+                                </li>
+                                <%--
+                                <li class="list-group-item">
                                     <a href="/cmu/communityKnowledgeList.do?cmmntyNo=${community.cmmntyNo}">
                                         지식 게시판
                                         <span class="badge">${community.knowledgeCount}</span>
                                     </a>
                                 </li>
+                                --%>
                             </ul>
                         </div>
                     </div>

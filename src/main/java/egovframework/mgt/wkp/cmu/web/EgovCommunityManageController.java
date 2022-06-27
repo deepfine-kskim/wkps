@@ -6,16 +6,11 @@ import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.wkp.cmu.service.CommunityEventVO;
-import egovframework.com.wkp.cmu.service.CommunityMemberVO;
-import egovframework.com.wkp.cmu.service.CommunityRoleTypes;
-import egovframework.com.wkp.cmu.service.CommunityVO;
-import egovframework.com.wkp.cmu.service.EgovCommunityService;
+import egovframework.com.wkp.cmu.service.*;
 import egovframework.com.wkp.cmu.service.impl.CommunityDAO;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.cmu.service.CommunityBannerVO;
 import egovframework.mgt.wkp.cmu.service.EgovCommunityManageService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -28,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,10 +134,10 @@ public class EgovCommunityManageController {
         List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
         for(CommunityMemberVO m : owner) {
         	if(aprv.equals("Y")) {
-        		communityService.insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_MAKE_CONFIRM, cmmntyNo, -1L, -1L);
+        		communityService.insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_MAKE_CONFIRM, cmmntyNo, -1L, -1L, -1L, -1L);
         	}
         	if(aprv.equals("R")) {
-        		communityService.insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_MAKE_REJECT, cmmntyNo, -1L, -1L);
+        		communityService.insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_MAKE_REJECT, cmmntyNo, -1L, -1L, -1L, -1L);
         	}
         }
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();

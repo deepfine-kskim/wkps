@@ -18,10 +18,10 @@
 
 package egovframework.com.wkp.cmu.service;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class CommunityVO {
@@ -62,6 +62,7 @@ public class CommunityVO {
 	private int memCount;
 	private int noticeCount;
 	private int freeCount;
+	private int free2Count;
 	private int knowledgeCount;
 	
 	private CommunityMemberVO me;

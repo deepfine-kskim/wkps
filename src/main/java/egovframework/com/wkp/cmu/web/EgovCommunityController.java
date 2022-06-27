@@ -262,11 +262,13 @@ public class EgovCommunityController {
 
             model.addAttribute("notice", communityService.findCommunityNotice(cmmntyNo, null, null, 3, 0, user.getSid()));
 
+            // 자유게시판
             model.addAttribute("free", communityService.findCommunityFreeboard(cmmntyNo, null, null, 10, 0, user.getSid()));
-            //지식게시판
-            
 
-            
+            // 지식게시판(자유게시판 형식)
+            model.addAttribute("freeKnowledgeList", communityService.findCommunity2Freeboard(cmmntyNo, null, null, 10, 0, user.getSid()));
+
+            //지식게시판
             KnowledgeVO knowledgeVO = new KnowledgeVO();
             knowledgeVO.setCmmntyNo(cmmntyNo);
 
@@ -354,7 +356,7 @@ public class EgovCommunityController {
 
         } else {
         	
-        	communityService.insertCommunityEvent(user.getSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_CONFIRM, cmmntyNo, -1L, -1L);
+        	communityService.insertCommunityEvent(user.getSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_CONFIRM, cmmntyNo, -1L, -1L, -1L, -1L);
         	
             mem.setAprvYn("Y");
         }
@@ -934,6 +936,61 @@ public class EgovCommunityController {
         return "/com/wkp/cmm/EgovCommunityFreeList";
     }
 
+    @RequestMapping("/community2FreeList.do")
+    public String communityFree2List(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
+                                    @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                    @RequestParam(value = "rows", required = false, defaultValue = "10") int rows,
+                                    @RequestParam(value = "search_type", required = false, defaultValue = "01") String searchType,
+                                    @RequestParam(value = "search_value", required = false) String searchValue) {
+
+        try {
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+            includeCommon(model, cmmntyNo);
+
+            model.addAttribute("page", page);
+            model.addAttribute("rows", rows);
+            model.addAttribute("search_type", searchType);
+            model.addAttribute("search_value", searchValue);
+
+            int total = communityService.findCommunity2FreeboardTotalCount(cmmntyNo, searchType, searchValue, user.getSid());
+            int limit = rows;
+            int startIndex = (page - 1) * rows;
+            int	currentPage = 1;
+      		int displayNum = 10;
+
+      		PageMaker pageMaker = new PageMaker();
+    		pageMaker.setPage(page);
+    		pageMaker.setTotalCount(total);
+    		model.addAttribute("pageMaker", pageMaker);
+
+      		//System.out.println("pageMaker - " + pageMaker);
+            // 쿼리에 limit #{firstIndex}, #{lastIndex} 형태로 조회
+            //페이징 영역
+
+            List<CommunityFreeboardVO> list = communityService.findCommunity2Freeboard(cmmntyNo, searchType, searchValue, limit, startIndex, user.getSid());
+
+            PageInfo pi = new PageInfo(total, rows, 10, page);
+            model.addAttribute("pageMaker", pageMaker);
+            model.addAttribute("total_count", total);
+            model.addAttribute("total_page", pi.getTotalPage());
+            model.addAttribute("list", list);
+
+
+            CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+            if (mem == null) {
+            	//커뮤니티회원이 아님
+            	model.addAttribute("role", "N");
+            }else {
+            	model.addAttribute("role", "Y");
+            }
+        } catch (NullPointerException e) {
+        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
+        return "/com/wkp/cmm/EgovCommunity2FreeList";
+    }
+
     @RequestMapping("/communityFreeView.do")
     public String communityFreeView(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
                                     @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
@@ -971,6 +1028,45 @@ public class EgovCommunityController {
 		}
 
         return "/com/wkp/cmm/EgovCommunityFreeView";
+    }
+
+    @RequestMapping("/community2FreeView.do")
+    public String community2FreeView(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
+                                    @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+                                    @RequestParam(value = "pstgNo", required = true) Long pstgNo) {
+
+        try {
+            includeCommon( model, cmmntyNo);
+            CommunityFreeboardVO free =communityService.getCommunity2Freeboard(pstgNo);
+
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+            CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+            if (mem == null) {
+            	//커뮤니티회원이 아님
+            	model.addAttribute("role", "N");
+            }else {
+
+            	//본인 작성글 확인
+            	free.setInqCnt(free.getInqCnt() + 1);
+            	communityService.updateCommunity2FreeboardInq(free);
+            	if (free.getMberNo() != mem.getMberNo()) {
+            		model.addAttribute("role", "N");
+                }else {
+                	model.addAttribute("role", "Y");
+                }
+
+            	model.addAttribute("myMebrNo", mem.getMberNo());
+
+            }
+
+            model.addAttribute("free", free);
+            model.addAttribute("prev", communityService.getCommunity2FreeboardPrev(cmmntyNo, pstgNo, user.getSid()));
+            model.addAttribute("next", communityService.getCommunity2FreeboardNext(cmmntyNo, pstgNo, user.getSid()));
+        } catch (NullPointerException e) {
+        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
+        return "/com/wkp/cmm/EgovCommunity2FreeView";
     }
 
     @RequestMapping(value = "/writeCommunityComment.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1017,10 +1113,63 @@ public class EgovCommunityController {
         if(board != null) {
         	CommunityMemberVO board_writer = communityService.getCommunityMember(board.getMberNo());
         	if(board_writer != null) {
-        		communityService.insertCommunityEvent(board_writer.getUserSid(), CommunityEventVO.EVT_TYPE_COMMENT, cmmntyNo, pstgNo, vo.getCommentNo());		
+        		communityService.insertCommunityEvent(board_writer.getUserSid(), CommunityEventVO.EVT_TYPE_COMMENT, cmmntyNo, pstgNo, vo.getCommentNo(), -1L, -1L);
         	}
         }
         
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
+    @RequestMapping(value = "/writeCommunity2Comment.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView writeCommunity2Comment(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "pstgNo", required = true) Long pstgNo,
+            @RequestParam(value = "comment", required = true) String comment
+
+    ) {
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+
+        System.out.println("cmmntyNo - " + cmmntyNo);
+        System.out.println("pstgNo - " + pstgNo);
+        System.out.println("comment - " + comment);
+
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityCommentVO vo = new CommunityCommentVO();
+        vo.setCmmntyNo(cmmntyNo);
+        vo.setPstgNo(pstgNo);
+        vo.setComment(comment);
+        vo.setMberNo(mem.getMberNo());
+        communityService.insertCommunity2Comment(vo);
+
+        //이벤트 추가
+        CommunityFreeboardVO board = communityService.getCommunity2Freeboard(pstgNo);
+        if(board != null) {
+        	CommunityMemberVO board_writer = communityService.getCommunityMember(board.getMberNo());
+        	if(board_writer != null) {
+        		communityService.insertCommunityEvent(board_writer.getUserSid(), CommunityEventVO.EVT_TYPE_COMMENT2, cmmntyNo, -1L, -1L, pstgNo, vo.getCommentNo());
+        	}
+        }
+
         ModelAndView mav = new ModelAndView("jsonView");
         mav.addObject("success", true);
         return mav;
@@ -1065,6 +1214,52 @@ public class EgovCommunityController {
 
 
         communityService.deleteCommunityComment(comment);
+
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
+    @RequestMapping(value = "/deleteCommunity2Comment.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView deleteCommunity2Comment(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "commentNo", required = true) Long commentNo
+
+    ) {
+
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        CommunityCommentVO comment = communityService.getCommunity2Comment(commentNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null || comment == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        if (comment.getMberNo() != mem.getMberNo()) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "본인이 작성한 글이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+
+        communityService.deleteCommunity2Comment(comment);
 
 
         ModelAndView mav = new ModelAndView("jsonView");
@@ -1118,6 +1313,53 @@ public class EgovCommunityController {
         return mav;
     }
 
+    @RequestMapping(value = "/updateCommunity2Comment.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView updateCommunity2Comment(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "comment", required = true) String commentText,
+            @RequestParam(value = "commentNo", required = true) Long commentNo
+
+    ) {
+
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        CommunityCommentVO comment = communityService.getCommunity2Comment(commentNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null || comment == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        if (comment.getMberNo() != mem.getMberNo()) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "본인이 작성한 글이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        comment.setComment(commentText);
+        communityService.updateCommunity2Comment(comment);
+
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
     @RequestMapping("/communityFreeWrite.do")
     public String communityFreeWrite(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
                                      @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo) {
@@ -1129,6 +1371,19 @@ public class EgovCommunityController {
 		}
         
         return "/com/wkp/cmm/EgovCommunityFreeWrite";
+    }
+
+    @RequestMapping("/community2FreeWrite.do")
+    public String community2FreeWrite(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
+                                     @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo) {
+
+        try {
+            includeCommon( model, cmmntyNo);
+        } catch (NullPointerException e) {
+        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
+        return "/com/wkp/cmm/EgovCommunity2FreeWrite";
     }
     
     @RequestMapping(value = "/writeCommunityFree.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1203,6 +1458,79 @@ public class EgovCommunityController {
         return mav;
     }
 
+    /* 지식게시판(자유게시판형식) 작성 */
+    @RequestMapping(value = "/writeCommunity2Free.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView writeCommunity2Free(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "title", required = true) String title,
+            @RequestParam(value = "cont", required = true) String cont,
+            @RequestParam(value = "showYn", required = true) String showYn,
+            final MultipartHttpServletRequest multiRequest
+
+    ) throws IOException, EgovComException {
+
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        List<FileVO> file = new ArrayList<FileVO>();
+
+        long atchFileNo = 0;
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+
+        List<MultipartFile> mFiles = multiRequest.getFiles("file1");
+        files.clear();
+
+        CommunityFreeboardVO vo = new CommunityFreeboardVO();
+
+        if (!mFiles.isEmpty()) {
+
+            for(MultipartFile mFile : mFiles) {
+            	files.put(mFile.getOriginalFilename(), mFile);
+            }
+
+            Iterator<String> mapIter = files.keySet().iterator();
+            while(mapIter.hasNext()){
+                String key = mapIter.next();
+                MultipartFile value = files.get(key);
+                //System.out.println(key+" : " + value);
+            }
+            file = fileUtil.parseFileInf(files, "CMU_", 0, "");
+            atchFileNo = fileMngService.insertFileInfs(file);
+            vo.setAtchFileNo(atchFileNo);
+        }
+
+        vo.setCmmntyNo(cmmntyNo);
+        vo.setTitle(title);
+        vo.setCont(decode(cont));
+        vo.setShowYn(showYn);
+        vo.setMberNo(mem.getMberNo());
+
+        communityService.insertCommunity2Freeboard(vo);
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
     @RequestMapping("/communityFreeModify.do")
     public String communityFreeModify(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
                                       @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
@@ -1241,6 +1569,47 @@ public class EgovCommunityController {
 		}
 
         return "/com/wkp/cmm/EgovCommunityFreeModify";
+    }
+
+    /* 지식게시판(자유게시판형식) 수정 */
+    @RequestMapping("/community2FreeModify.do")
+    public String community2FreeModify(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
+                                      @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+                                      @RequestParam(value = "pstgNo", required = true) Long pstgNo) {
+
+        try {
+        	//System.out.println("cmmntyNo12 - " + cmmntyNo);
+        	//System.out.println("pstgNo12 - " + pstgNo);
+
+            includeCommon( model, cmmntyNo);
+
+            CommunityFreeboardVO free = communityService.getCommunity2Freeboard(pstgNo);
+
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+            CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+            if (mem == null) {
+            	//커뮤니티회원이 아님
+            	model.addAttribute("role", "N");
+            	return "redirect:/cmu/community.do";
+            }else {
+            	//본인 작성글 확인
+            	if (free.getMberNo() != mem.getMberNo()) {
+            		model.addAttribute("role", "N");
+            		return "redirect:/cmu/community.do";
+                }else {
+                	model.addAttribute("role", "Y");
+                }
+
+            	model.addAttribute("myMebrNo", mem.getMberNo());
+
+            }
+
+            model.addAttribute("free", free);
+        } catch (NullPointerException e) {
+        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
+        return "/com/wkp/cmm/EgovCommunity2FreeModify";
     }
 
     @RequestMapping(value = "/modifyCommunityFree.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -1346,6 +1715,111 @@ public class EgovCommunityController {
         mav.addObject("success", true);
         return mav;
     }
+
+    /* 지식게시판(자유게시판형식) 수정 */
+    @RequestMapping(value = "/modifyCommunity2Free.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView modifyCommunity2Free(
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "pstgNo", required = true) Long pstgNo,
+            @RequestParam(value = "title", required = true) String title,
+            @RequestParam(value = "cont", required = true) String cont,
+            @RequestParam(value = "showYn", required = true) String showYn,
+            @RequestParam(value = "file1", required = false) MultipartFile file1,
+            final MultipartHttpServletRequest multiRequest
+    ) throws IOException, EgovComException {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        CommunityFreeboardVO free = communityService.getCommunity2Freeboard(pstgNo);
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null || free == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        if (free.getMberNo() != mem.getMberNo()) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "본인이 작성한 글이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+
+        List<FileVO> file = new ArrayList<FileVO>();
+
+        //System.out.println("free - " + free);
+        final Map<String, MultipartFile> files = multiRequest.getFileMap();
+
+	    List<MultipartFile> mFiles = multiRequest.getFiles("file1");
+	    files.clear();
+
+	    //System.out.println("mFiles - " + mFiles);
+
+	    long atchFileNo = 0;
+        if (!mFiles.isEmpty()) {
+    		//System.out.println("atchFileNo - " + free.getAtchFileNo());
+
+    		if((Long) free.getAtchFileNo() != null) {
+    			//System.out.println("11111111111111111111");
+
+	            for(MultipartFile mFile : mFiles) {
+	            	//System.out.println("mFile.getOriginalFilename() - " + mFile.getOriginalFilename());
+	            	files.put(mFile.getOriginalFilename(), mFile);
+	            }
+
+	            Iterator<String> mapIter = files.keySet().iterator();
+	            while(mapIter.hasNext()){
+	                String key = mapIter.next();
+	                MultipartFile value = files.get(key);
+	                //System.out.println(key+" : " + value);
+	            }
+
+	            file = fileUtil.parseFileInfs(free.getAtchFileNo(), files, "CMU_", 0, "");
+	            //System.out.println("file - " + file);
+	            fileMngService.updateFileInfs(file);
+	            //atchFileNo = fileMngService.insertFileInfs(file);
+	            //System.out.println("atchFileNo2 - " + atchFileNo);
+	            //free.setAtchFileNo(atchFileNo);
+        	} else {
+        		//System.out.println("2222222222222222222");
+	            for(MultipartFile mFile : mFiles) {
+	            	files.put(mFile.getOriginalFilename(), mFile);
+	            }
+
+	            Iterator<String> mapIter = files.keySet().iterator();
+	            while(mapIter.hasNext()){
+	                String key = mapIter.next();
+	                MultipartFile value = files.get(key);
+	                //System.out.println(key+" : " + value);
+	            }
+	            file = fileUtil.parseFileInf(files, "CMU_", 0, "");
+	            atchFileNo = fileMngService.insertFileInfs(file);
+	            free.setAtchFileNo(atchFileNo);
+        	}
+        }
+
+        free.setTitle(title);
+        free.setCont(decode(cont));
+        free.setShowYn(showYn);
+
+        communityService.updateCommunity2Freeboard(free);
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
     
     @RequestMapping(value = "/deleteCommunityFree.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView deleteCommunityFree(
@@ -1397,6 +1871,64 @@ public class EgovCommunityController {
         
        	CommunityFreeboardVO freeboard = communityService.getCommunityFreeboard(pstgNo);
         communityService.deleteCommunityFreeboard(freeboard);
+
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
+    /* 지식게시판(자유게시판형식) 삭제 */
+    @RequestMapping(value = "/deleteCommunity2Free.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView deleteCommunity2Free(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "pstgNo", required = true) Long pstgNo
+    ) {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+
+
+        CommunityVO community = communityService.getCommunity(cmmntyNo, user.getSid());
+        if (community == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+
+        if (!(mem.getCmmntyRoleCd() != null &&
+                (
+                        mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) ||
+                                mem.getCmmntyRoleCd().equals(CommunityRoleTypes.board.getCode())
+                ))) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "권한이 없습니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+		/*
+		 * for (Long no : pstgNo) { CommunityFreeboardVO freeboard =
+		 * communityService.getCommunityFreeboard(no);
+		 * communityService.deleteCommunityFreeboard(freeboard); }
+		 */
+
+       	CommunityFreeboardVO freeboard = communityService.getCommunity2Freeboard(pstgNo);
+        communityService.deleteCommunity2Freeboard(freeboard);
 
 
         ModelAndView mav = new ModelAndView("jsonView");

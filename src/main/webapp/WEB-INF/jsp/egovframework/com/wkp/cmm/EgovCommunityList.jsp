@@ -34,6 +34,14 @@ function goEventBoard(eventNo,cmmntyNo,pstgNo){
 	location.href="communityFreeView.do?cmmntyNo="+cmmntyNo+"&pstgNo="+pstgNo;
 }
 
+function goEventBoard2(eventNo,cmmntyNo,pstgNo){
+    var param = {eventNo:eventNo};
+    $.post("/cmu/clearEventCommunity.do",param,function(data, status){
+    });
+
+    location.href="community2FreeView.do?cmmntyNo="+cmmntyNo+"&pstgNo="+pstgNo;
+}
+
 </script>
 <div class="container sub_cont">
                 <div id="contents">
@@ -283,115 +291,125 @@ function goEventBoard(eventNo,cmmntyNo,pstgNo){
                                 <div class="modal-body">
                                     <ul class="alarm_list">
                                     	<c:choose>
-                                        <c:when test="${not empty list_event}">
-                                        <c:forEach items="${list_event}" var="event">
-                                        <c:if test="${event.eventType == '0' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <ul class="brd_latest_list reply_type">
-                                                        <li>
-                                                            <a href="#" onclick="goEventBoard(${event.eventNo},${event.cmmntyNo},${event.pstgNo})">
-                                                                <p class="tit">${event.pstgTitle }</p>
-                                                                <span class="date">
-                                                                <fmt:formatDate value="${event.pstgDtm }" pattern="yyyy.MM.dd"/>
-                                                                </span>
-                                                                <div class="reply">
-                                                                    <i class="fa fa-level-up fa-rotate-90 text-danger ico"><span class="sr-only">댓글</span></i>
-                                                                    ${event.pstgComment }
+                                            <c:when test="${not empty list_event}">
+                                                <c:forEach items="${list_event}" var="event">
+                                                    <c:if test="${event.eventType == '0' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <ul class="brd_latest_list reply_type">
+                                                                        <li>
+                                                                            <a href="#" onclick="goEventBoard(${event.eventNo},${event.cmmntyNo},${event.pstgNo})">
+                                                                                <p class="tit">${event.pstgTitle }</p>
+                                                                                <span class="date">
+                                                                                <fmt:formatDate value="${event.pstgDtm }" pattern="yyyy.MM.dd"/>
+                                                                                </span>
+                                                                                <div class="reply">
+                                                                                    <i class="fa fa-level-up fa-rotate-90 text-danger ico"><span class="sr-only">댓글</span></i>
+                                                                                    ${event.pstgComment }
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
-                                                            </a>
+                                                            </div>
                                                         </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        <c:if test="${event.eventType == '1' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <div class="msg_box">
-                                                        <span class="text-primary">가입신청</span>이 <span class="text-success">정상처리</span> 되었습니다.
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '1' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">가입신청</span>이 <span class="text-success">정상처리</span> 되었습니다.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '2' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">가입신청</span>이 <span class="text-danger">거절</span> 되었습니다.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '3' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">개설신청</span>이 <span class="text-success">정상처리</span> 되었습니다.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '4' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">개설신청</span>이 <span class="text-danger">거절</span> 되었습니다.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '5' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">가입요청</span>이 있습니다.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '6' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <ul class="brd_latest_list reply_type">
+                                                                        <li>
+                                                                            <a href="#" onclick="goEventBoard2(${event.eventNo},${event.cmmntyNo},${event.pstgNo2})">
+                                                                                <p class="tit">${event.pstgTitle2 }</p>
+                                                                                <span class="date">
+                                                                                <fmt:formatDate value="${event.pstgDtm2 }" pattern="yyyy.MM.dd"/>
+                                                                                </span>
+                                                                                <div class="reply">
+                                                                                    <i class="fa fa-level-up fa-rotate-90 text-danger ico"><span class="sr-only">댓글</span></i>
+                                                                                        ${event.pstgComment2 }
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                            <li class="alarm_item">
+                                                <div class="panel panel-default widget_panel">
+                                                    <div class="panel-body">
+                                                        <div class="msg_box">알림이 없습니다.</div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        <c:if test="${event.eventType == '2' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <div class="msg_box">
-                                                        <span class="text-primary">가입신청</span>이 <span class="text-danger">거절</span> 되었습니다.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        <c:if test="${event.eventType == '3' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <div class="msg_box">
-                                                        <span class="text-primary">개설신청</span>이 <span class="text-success">정상처리</span> 되었습니다.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        
-                                        <c:if test="${event.eventType == '4' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <div class="msg_box">
-                                                        <span class="text-primary">개설신청</span>이 <span class="text-danger">거절</span> 되었습니다.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        <c:if test="${event.eventType == '5' }">
-                                        
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
-                                                    <div class="msg_box">
-                                                        <span class="text-primary">가입요청</span>이 있습니다.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        
-                                        </c:if>
-                                        </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                        <li class="alarm_item">
-                                            <div class="panel panel-default widget_panel">
-                                                <div class="panel-body">
-                                                    <div class="msg_box">알림이 없습니다.</div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        </c:otherwise>
+                                            </li>
+                                            </c:otherwise>
                                         </c:choose>
                                     </ul>
                                 </div>

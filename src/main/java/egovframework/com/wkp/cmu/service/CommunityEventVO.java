@@ -18,9 +18,9 @@
 
 package egovframework.com.wkp.cmu.service;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class CommunityEventVO {
@@ -31,6 +31,7 @@ public class CommunityEventVO {
 	public static final String EVT_TYPE_COMMNTY_MAKE_CONFIRM = "3";//개설 정상처리
 	public static final String EVT_TYPE_COMMNTY_MAKE_REJECT = "4";//개설 거절
 	public static final String EVT_TYPE_COMMNTY_JOIN_REQUEST = "5";//가입신청이 있음
+	public static final String EVT_TYPE_COMMENT2 = "6"; // 지식게시판 답변 등록
 	
 	private Long eventNo;
 	private String userId;
@@ -39,12 +40,17 @@ public class CommunityEventVO {
 	private Long cmmntyNo;
 	private Long pstgNo;
 	private Long commentNo;
+	private Long pstgNo2;
+	private Long commentNo2;
 	
 	//query
 	private String cmmntyNm;
 	private String pstgTitle;
 	private String pstgComment;
 	private Date pstgDtm;
+	private String pstgTitle2;
+	private String pstgComment2;
+	private Date pstgDtm2;
 	
 		
 }

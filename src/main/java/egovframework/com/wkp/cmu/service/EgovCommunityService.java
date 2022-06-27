@@ -65,20 +65,33 @@ public interface EgovCommunityService {
 	public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex);
 	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType,String searchValue);
 	public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex, String sid);
+	public List<CommunityFreeboardVO> findCommunity2Freeboard(Long cmmntyNo,String searchType,String searchValue,int limit,int startIndex, String sid);
 	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType,String searchValue, String sid);
+	public int findCommunity2FreeboardTotalCount(Long cmmntyNo,String searchType,String searchValue, String sid);
 	public CommunityFreeboardVO getCommunityFreeboard(Long pstgNo);
+	public CommunityFreeboardVO getCommunity2Freeboard(Long pstgNo);
 	public CommunityFreeboardVO getCommunityFreeboardPrev(Long cmmntyNo,Long pstgNo, String sid);
 	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo, String sid);
+	public CommunityFreeboardVO getCommunity2FreeboardPrev(Long cmmntyNo,Long pstgNo, String sid);
+	public CommunityFreeboardVO getCommunity2FreeboardNext(Long cmmntyNo,Long pstgNo, String sid);
 	public void insertCommunityFreeboard(CommunityFreeboardVO vo);
+	public void insertCommunity2Freeboard(CommunityFreeboardVO vo);
 	public void updateCommunityFreeboard(CommunityFreeboardVO vo);
+	public void updateCommunity2Freeboard(CommunityFreeboardVO vo);
 	public void deleteCommunityFreeboard(CommunityFreeboardVO vo);
+	public void deleteCommunity2Freeboard(CommunityFreeboardVO vo);
 	public void updateCommunityFreeboardInq(CommunityFreeboardVO vo);
-	
+	public void updateCommunity2FreeboardInq(CommunityFreeboardVO vo);
+
 	public void insertCommunityComment(CommunityCommentVO vo);
+	public void insertCommunity2Comment(CommunityCommentVO vo);
 	public void deleteCommunityComment(CommunityCommentVO vo);
+	public void deleteCommunity2Comment(CommunityCommentVO vo);
 	public void updateCommunityComment(CommunityCommentVO vo);
+	public void updateCommunity2Comment(CommunityCommentVO vo);
 	public CommunityCommentVO getCommunityComment(Long commentNo);
-		
+	public CommunityCommentVO getCommunity2Comment(Long commentNo);
+
 	//회원목록
 	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff,int limit,int startIndex);
 	public int findCommunityMemberTotalCount(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff);
@@ -99,7 +112,7 @@ public interface EgovCommunityService {
 	public void memberDelStaff(Long [] mberNo);
 	public void memberUpdateStaffRole(Long [] mberNo,String [] role);
 	
-    public void insertCommunityEvent(String userId,String eventType,Long cmmntyNo,Long pstgNo,Long commentNo);
+    public void insertCommunityEvent(String userId,String eventType,Long cmmntyNo,Long pstgNo,Long commentNo,Long pstgNo2,Long commentNo2);
     public void clearCommunityEvent(Long eventNo);
     public List<CommunityEventVO> selectCommunityEvent(String userId);
     

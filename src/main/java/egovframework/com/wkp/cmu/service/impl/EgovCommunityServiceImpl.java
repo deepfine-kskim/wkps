@@ -122,6 +122,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null, sid));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null, sid));
+		community.setFree2Count(communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, null, null, sid));
 		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
 		return community;
 	}
@@ -138,7 +139,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 			//이벤트 등록
 	        List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(vo.getCmmntyNo(), CommunityRoleTypes.owner.getCode());
 	        for(CommunityMemberVO m : owner) {
-	        	insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_REQUEST, m.getCmmntyNo(), -1L, -1L);
+	        	insertCommunityEvent(m.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_REQUEST, m.getCmmntyNo(), -1L, -1L, -1L, -1L);
 	        }
 		}
         
@@ -222,8 +223,19 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
+	public List<CommunityFreeboardVO> findCommunity2Freeboard(Long cmmntyNo,String searchType, String searchValue, int limit,
+															 int startIndex, String sid) {
+		return communityDAO.findCommunity2Freeboard(cmmntyNo, searchType, searchValue, limit, startIndex, sid);
+	}
+
+	@Override
 	public int findCommunityFreeboardTotalCount(Long cmmntyNo,String searchType, String searchValue, String sid) {
 		return communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, searchType, searchValue, sid);
+	}
+
+	@Override
+	public int findCommunity2FreeboardTotalCount(Long cmmntyNo,String searchType, String searchValue, String sid) {
+		return communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, searchType, searchValue, sid);
 	}
 
 	@Override
@@ -233,6 +245,14 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		vo.setComment(communityDAO.selectCommunityComment(vo.getPstgNo()));
 		return vo;
 		
+	}
+	@Override
+	public CommunityFreeboardVO getCommunity2Freeboard(Long pstgNo) {
+		CommunityFreeboardVO vo =communityDAO.loadCommunity2Freeboard(pstgNo);
+		vo.setAttach(communityDAO.getAtchFile(vo.getAtchFileNo()));
+		vo.setComment(communityDAO.selectCommunity2Comment(vo.getPstgNo()));
+		return vo;
+
 	}
 	
 	@Override
@@ -244,10 +264,25 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	public CommunityFreeboardVO getCommunityFreeboardNext(Long cmmntyNo,Long pstgNo, String sid){
 		return communityDAO.loadCommunityFreeboardNext(cmmntyNo, pstgNo, sid);
 	}
-	
+
+	@Override
+	public CommunityFreeboardVO getCommunity2FreeboardPrev(Long cmmntyNo,Long pstgNo, String sid){
+		return communityDAO.loadCommunity2FreeboardPrev(cmmntyNo, pstgNo, sid);
+	}
+
+	@Override
+	public CommunityFreeboardVO getCommunity2FreeboardNext(Long cmmntyNo,Long pstgNo, String sid){
+		return communityDAO.loadCommunity2FreeboardNext(cmmntyNo, pstgNo, sid);
+	}
+
 	@Override
 	public void insertCommunityFreeboard(CommunityFreeboardVO vo) {
 		communityDAO.insertCommunityFreeboard(vo);
+	}
+
+	@Override
+	public void insertCommunity2Freeboard(CommunityFreeboardVO vo) {
+		communityDAO.insertCommunity2Freeboard(vo);
 	}
 
 	@Override
@@ -256,18 +291,37 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
+	public void updateCommunity2Freeboard(CommunityFreeboardVO vo) {
+		communityDAO.updateCommunity2Freeboard(vo);
+	}
+
+	@Override
 	public void deleteCommunityFreeboard(CommunityFreeboardVO vo) {
 		communityDAO.deleteCommunityFreeboard(vo);
+	}
+
+	@Override
+	public void deleteCommunity2Freeboard(CommunityFreeboardVO vo) {
+		communityDAO.deleteCommunity2Freeboard(vo);
 	}
 	
 	@Override
 	public void updateCommunityFreeboardInq(CommunityFreeboardVO vo) {
 		communityDAO.updateCommunityFreeboardInq(vo);
 	}
+
+	@Override
+	public void updateCommunity2FreeboardInq(CommunityFreeboardVO vo) {
+		communityDAO.updateCommunity2FreeboardInq(vo);
+	}
 	
 	@Override
 	public void insertCommunityComment(CommunityCommentVO vo){
 		communityDAO.insertCommunityComment(vo);
+	}
+	@Override
+	public void insertCommunity2Comment(CommunityCommentVO vo){
+		communityDAO.insertCommunity2Comment(vo);
 	}
 	
 	@Override
@@ -275,12 +329,24 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		communityDAO.deleteCommunityComment(vo);
 	}
 	@Override
+	public void deleteCommunity2Comment(CommunityCommentVO vo){
+		communityDAO.deleteCommunity2Comment(vo);
+	}
+	@Override
 	public void updateCommunityComment(CommunityCommentVO vo){
 		communityDAO.updateCommunityComment(vo);
 	}
 	@Override
+	public void updateCommunity2Comment(CommunityCommentVO vo){
+		communityDAO.updateCommunity2Comment(vo);
+	}
+	@Override
 	public CommunityCommentVO getCommunityComment(Long commentNo){
 		return communityDAO.getCommunityComment(commentNo);
+	}
+	@Override
+	public CommunityCommentVO getCommunity2Comment(Long commentNo){
+		return communityDAO.getCommunity2Comment(commentNo);
 	}
 	@Override
 	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType, String nickname, String joinReq, String staff,
@@ -343,7 +409,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 			//이벤트 등록
 			CommunityMemberVO mvo = getCommunityMember(m);
 			if(mvo != null) {
-				insertCommunityEvent(mvo.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_CONFIRM, mvo.getCmmntyNo(), -1L, -1L);
+				insertCommunityEvent(mvo.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_CONFIRM, mvo.getCmmntyNo(), -1L, -1L, -1L, -1L);
 			}
 			communityDAO.updateCommunityMemberConfirm(m);
 		}
@@ -354,7 +420,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 			//이벤트 등록
 			CommunityMemberVO mvo = getCommunityMember(m);
 			if(mvo != null) {
-				insertCommunityEvent(mvo.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_REJECT, mvo.getCmmntyNo(), -1L, -1L);
+				insertCommunityEvent(mvo.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_JOIN_REJECT, mvo.getCmmntyNo(), -1L, -1L, -1L, -1L);
 			}
 			communityDAO.updateCommunityMemberReject(m);
 		}
@@ -389,14 +455,16 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public void insertCommunityEvent(String userId,String eventType,Long cmmntyNo,Long pstgNo,Long commentNo){
+	public void insertCommunityEvent(String userId, String eventType, Long cmmntyNo, Long pstgNo, Long commentNo, Long pstgNo2, Long commentNo2) {
 		CommunityEventVO vo = new CommunityEventVO();
 		vo.setUserId(userId);
 		vo.setEventType(eventType);
-		vo.setCommentNo(commentNo);
 		vo.setCmmntyNo(cmmntyNo);
+		vo.setCommentNo(commentNo);
+		vo.setCommentNo2(commentNo2);
 		vo.setPstgNo(pstgNo);
-		
+		vo.setPstgNo2(pstgNo2);
+
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.HOUR, 48);
 		vo.setExpireDtm(cal.getTime());

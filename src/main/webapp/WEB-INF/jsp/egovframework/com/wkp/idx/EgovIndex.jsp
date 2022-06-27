@@ -124,10 +124,10 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <div class="caption_box">
-                                                    <strong class="subject"><c:out value="${newKnowledge.title}"/></strong>
-                                                    <p class="txt"><c:out value="${newKnowledge.summry}"/></p>
+                                                    <strong class="subject">${newKnowledge.title}</strong>
+                                                    <p class="txt">${newKnowledge.summry}</p>
                                                 </div>
-                                                <span class="date"><c:out value="${newKnowledge.registDtm}"/></span>
+                                                <span class="date">${newKnowledge.registDtm}</span>
                                             </a>
                                         </div>
                                     </c:forEach>
@@ -152,10 +152,10 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <div class="caption_box">
-                                                    <strong class="subject"><c:out value="${recommendKnowledge.title}"/></strong>
-                                                    <p class="txt"><c:out value="${recommendKnowledge.summry}"/></p>
+                                                    <strong class="subject">${recommendKnowledge.title}</strong>
+                                                    <p class="txt">${recommendKnowledge.summry}</p>
                                                 </div>
-                                                <span class="date"><c:out value="${recommendKnowledge.registDtm}"/></span>
+                                                <span class="date">${recommendKnowledge.registDtm}</span>
                                             </a>
                                         </div>
                                     </c:forEach>
@@ -180,10 +180,10 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <div class="caption_box">
-                                                    <strong class="subject"><c:out value="${personalizeKnowledge.title}"/></strong>
-                                                    <p class="txt"><c:out value="${personalizeKnowledge.summry}"/></p>
+                                                    <strong class="subject">${personalizeKnowledge.title}</strong>
+                                                    <p class="txt">${personalizeKnowledge.summry}</p>
                                                 </div>
-                                                <span class="date"><c:out value="${personalizeKnowledge.registDtm}"/></span>
+                                                <span class="date">${personalizeKnowledge.registDtm}</span>
                                             </a>
                                         </div>
                                     </c:forEach>

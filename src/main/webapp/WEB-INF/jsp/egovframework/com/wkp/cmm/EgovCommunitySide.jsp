@@ -106,12 +106,21 @@ function cancel(){
                                             <span class="tit">회원수</span>
                                         </div>
                                         <div class="col-xs-6 text-right data">
-                                        <c:if test="${role_adm == 'Y'}">
-                                            <a href="#" onclick="clickMember()" class="text-danger underline">${community.memCount } 명</a>
-                                        </c:if>
-                                        <c:if test="${role_adm != 'Y'}">
-                                            ${community.memCount } 명
-                                        </c:if>
+                                            <c:choose>
+                                                <c:when test="${community.memPubYn eq 'Y'}">
+                                                    <a href="#" onclick="clickMember()" class="text-danger underline">${community.memCount } 명</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${role_adm ne 'N'}">
+                                                            <a href="#" onclick="clickMember()" class="text-danger underline">${community.memCount } 명</a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${community.memCount } 명
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </li>

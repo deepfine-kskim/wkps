@@ -77,7 +77,6 @@ $(function() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:if test="${community.memPubYn == 'Y'}">
                                         <c:forEach items="${list}" var="mem">
                                         <tr>
                                             <td class="text-primary">${mem.cmmntyNicknm }</td>
@@ -87,16 +86,10 @@ $(function() {
                                             <td>${mem.strRegDate }</td>
                                         </tr>
                                         </c:forEach>
-                                        </c:if>
-                                        <c:if test="${fn:length(list)==0 or community.memPubYn == 'N' }">
+                                        <c:if test="${fn:length(list)==0}">
                                         <tr>
                                             <td colspan="5" class="empty">
-                                            <c:if test="${fn:length(list)==0}">
                                             	회원이 없습니다.
-                                            </c:if>
-                                            <c:if test="${fn:length(list)>0 and community.memPubYn == 'N' }">
-                                            	회원 목록을 공개하지 않은 커뮤니티 입니다
-                                            </c:if>
                                             </td>
                                         </tr>
                                         </c:if>

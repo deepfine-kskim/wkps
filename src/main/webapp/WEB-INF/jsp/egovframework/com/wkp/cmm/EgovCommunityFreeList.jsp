@@ -194,10 +194,10 @@ $(function() {
                                     <div class="col-xs-6">
                                     <c:if test="${role=='Y'}">
                                     	<button type="button" class="btn btn-danger" id="btn_delete">선택삭제</button>
-                                    </c:if>                                    
+                                    </c:if>
                                     </div>
                                     <div class="col-xs-6 text-right">
-                                    <c:if test="${role=='Y'}">
+                                    <c:if test="${role != 'N'}">
                                         <a href="communityFreeWrite.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-blue"><i class="ti-pencil-alt"></i> 글작성</a>
                                     </c:if>
                                     </div>

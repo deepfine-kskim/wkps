@@ -178,12 +178,13 @@ function mod_comment(commentNo){
                             </div>
                             <!--- //댓글 리스트 -->
                             <!-- 댓글 작성 -->
-                            
+
+                            <c:if test="${role ne 'N'}">
                                 <fieldset>
                                     <legend class="sr-only">댓글작성</legend>
                                     <div class="well comment_write">
                                         <strong class="title">댓글작성</strong>
-                                        <!-- 
+                                        <!--
                                         <div class="form-group">
                                             <label for="commentName" class="col-sm-2 col-lg-1 control-label">작성자</label>
                                             <div class="col-sm-3">
@@ -195,7 +196,7 @@ function mod_comment(commentNo){
                                             </div>
                                         </div>
                                          -->
-                                       
+
                                         <div class="form-group">
                                             <label for="comment" class="sr-only">덧글내용</label>
                                             <div class="col-sm-12">
@@ -207,6 +208,7 @@ function mod_comment(commentNo){
                                         </div>
                                     </div>
                                 </fieldset>
+                            </c:if>
                             
                             <!-- //댓글 작성 -->
                             <!-- 이전/다음 -->
@@ -225,10 +227,12 @@ function mod_comment(commentNo){
                                     <a href="communityFreeModify.do?cmmntyNo=${community.cmmntyNo }&pstgNo=${free.pstgNo}" class="btn btn-black">수정</a>
                                     <a href="#" class="btn btn-danger" id="btn_del">삭제</a>
                                 </c:if>
+                                <c:if test="${role eq 'A'}">
+                                    <a href="#" class="btn btn-danger" id="btn_del">삭제</a>
+                                </c:if>
                                 </div>
                                 <div class="col-sm-6 text-right">
                                     <a href="communityFreeList.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-black">목록</a>
-                                    <a href="communityFreeWrite.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-blue"><i class="ti-pencil-alt" aria-hidden="true"></i> 글작성</a>
                                 </div>
                             </div>
                         </div>

@@ -146,7 +146,7 @@ $(function() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       <c:forEach items="${list }" var="board">
+                                       <c:forEach items="${list }" var="board" varStatus="status">
                                         <tr>
                                             <td><label for="brdChk1" class="sr-only">선택</label><input type="checkbox" name="${board.noticeNo }" id="${board.noticeNo }" /></td>
                                             <%-- <td>${board.noticeNo }</td> --%>
@@ -191,12 +191,10 @@ $(function() {
                             <div class="btn_area">
                             <c:if test="${role=='Y'}">
                                 <div class="row type0">
-                            		<c:if test="${role_adm == 'Y'}">
                                     <div class="col-xs-6">
                                         <button type="button" class="btn btn-danger" id="btn_delete">선택삭제</button>
                                     </div>
-                                    </c:if>
-                                    <div class="col-xs-<c:if test="${role_adm == 'Y'}">6</c:if><c:if test="${role_adm != 'Y'}">12</c:if> text-right">
+                                    <div class="col-xs-<c:if test="${role == 'Y'}">6</c:if><c:if test="${role != 'Y'}">12</c:if> text-right">
                                         <a href="communityNoticeWrite.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-blue"><i class="ti-pencil-alt"></i> 글작성</a>
                                     </div>
                                 </div>

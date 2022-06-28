@@ -178,7 +178,8 @@ function mod_comment(commentNo){
                             </div>
                             <!--- //댓글 리스트 -->
                             <!-- 댓글 작성 -->
-                            
+
+                            <c:if test="${role ne 'N'}">
                                 <fieldset>
                                     <legend class="sr-only">댓글작성</legend>
                                     <div class="well comment_write">
@@ -207,6 +208,7 @@ function mod_comment(commentNo){
                                         </div>
                                     </div>
                                 </fieldset>
+                            </c:if>
                             
                             <!-- //댓글 작성 -->
                             <!-- 이전/다음 -->
@@ -225,10 +227,12 @@ function mod_comment(commentNo){
                                     <a href="community2FreeModify.do?cmmntyNo=${community.cmmntyNo }&pstgNo=${free.pstgNo}" class="btn btn-black">수정</a>
                                     <a href="#" class="btn btn-danger" id="btn_del">삭제</a>
                                 </c:if>
+                                <c:if test="${role eq 'A'}">
+                                    <a href="#" class="btn btn-danger" id="btn_del">삭제</a>
+                                </c:if>
                                 </div>
                                 <div class="col-sm-6 text-right">
                                     <a href="community2FreeList.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-black">목록</a>
-                                    <a href="community2FreeWrite.do?cmmntyNo=${community.cmmntyNo }" class="btn btn-blue"><i class="ti-pencil-alt" aria-hidden="true"></i> 글작성</a>
                                 </div>
                             </div>
                         </div>

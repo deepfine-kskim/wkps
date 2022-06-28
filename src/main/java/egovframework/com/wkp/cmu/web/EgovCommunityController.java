@@ -85,10 +85,10 @@ public class EgovCommunityController {
                             mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) ||
                                     mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode())
                     ))) {
-        		//권한이 없음
-        		model.addAttribute("role_adm", "N");
+        		//권한이 없음(일반 회원
+        		model.addAttribute("role_adm", "M");
             }else {
-            	model.addAttribute("role_adm", "Y");	
+            	model.addAttribute("role_adm", "Y");
             }
         }
     }
@@ -924,10 +924,19 @@ public class EgovCommunityController {
             
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
-            	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+                //커뮤니티회원이 아님
+                model.addAttribute("role", "N");
             }else {
-            	model.addAttribute("role", "Y");
+                if (!(mem.getCmmntyRoleCd() != null &&
+                        (
+                                mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) ||
+                                        mem.getCmmntyRoleCd().equals(CommunityRoleTypes.board.getCode())
+                        ))) {
+                    //권한이 없음
+                    model.addAttribute("role", "M");
+                }else {
+                    model.addAttribute("role", "Y");
+                }
             }
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -979,10 +988,19 @@ public class EgovCommunityController {
 
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
-            	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+                //커뮤니티회원이 아님
+                model.addAttribute("role", "N");
             }else {
-            	model.addAttribute("role", "Y");
+                if (!(mem.getCmmntyRoleCd() != null &&
+                        (
+                                mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) ||
+                                        mem.getCmmntyRoleCd().equals(CommunityRoleTypes.board.getCode())
+                        ))) {
+                    //권한이 없음
+                    model.addAttribute("role", "M");
+                }else {
+                    model.addAttribute("role", "Y");
+                }
             }
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -1011,7 +1029,11 @@ public class EgovCommunityController {
             	free.setInqCnt(free.getInqCnt() + 1);
             	communityService.updateCommunityFreeboardInq(free);
             	if (free.getMberNo() != mem.getMberNo()) {
-            		model.addAttribute("role", "N");
+                    if(mem.getCmmntyRoleCd() != null && (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()))){
+                        model.addAttribute("role", "A");
+                    } else{
+                        model.addAttribute("role", "M");
+                    }
                 }else {
                 	model.addAttribute("role", "Y");	
                 }
@@ -1046,16 +1068,20 @@ public class EgovCommunityController {
             	model.addAttribute("role", "N");
             }else {
 
-            	//본인 작성글 확인
-            	free.setInqCnt(free.getInqCnt() + 1);
-            	communityService.updateCommunity2FreeboardInq(free);
-            	if (free.getMberNo() != mem.getMberNo()) {
-            		model.addAttribute("role", "N");
+                //본인 작성글 확인
+                free.setInqCnt(free.getInqCnt() + 1);
+                communityService.updateCommunityFreeboardInq(free);
+                if (free.getMberNo() != mem.getMberNo()) {
+                    if(mem.getCmmntyRoleCd() != null && (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()))){
+                        model.addAttribute("role", "A");
+                    } else{
+                        model.addAttribute("role", "M");
+                    }
                 }else {
-                	model.addAttribute("role", "Y");
+                    model.addAttribute("role", "Y");
                 }
 
-            	model.addAttribute("myMebrNo", mem.getMberNo());
+                model.addAttribute("myMebrNo", mem.getMberNo());
 
             }
 
@@ -1553,12 +1579,16 @@ public class EgovCommunityController {
             }else {
             	//본인 작성글 확인
             	if (free.getMberNo() != mem.getMberNo()) {
-            		model.addAttribute("role", "N");
-            		return "redirect:/cmu/community.do";
+                    if(mem.getCmmntyRoleCd() != null && (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()))){
+                        model.addAttribute("role", "Y");
+                    } else{
+                        model.addAttribute("role", "M");
+                        return "redirect:/cmu/community.do";
+                    }
                 }else {
-                	model.addAttribute("role", "Y");	
+                	model.addAttribute("role", "Y");
                 }
-            	
+
             	model.addAttribute("myMebrNo", mem.getMberNo());
             	
             }
@@ -1593,14 +1623,18 @@ public class EgovCommunityController {
             	return "redirect:/cmu/community.do";
             }else {
             	//본인 작성글 확인
-            	if (free.getMberNo() != mem.getMberNo()) {
-            		model.addAttribute("role", "N");
-            		return "redirect:/cmu/community.do";
+                if (free.getMberNo() != mem.getMberNo()) {
+                    if(mem.getCmmntyRoleCd() != null && (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()))){
+                        model.addAttribute("role", "Y");
+                    } else{
+                        model.addAttribute("role", "M");
+                        return "redirect:/cmu/community.do";
+                    }
                 }else {
-                	model.addAttribute("role", "Y");
+                    model.addAttribute("role", "Y");
                 }
 
-            	model.addAttribute("myMebrNo", mem.getMberNo());
+                model.addAttribute("myMebrNo", mem.getMberNo());
 
             }
 
@@ -1908,6 +1942,7 @@ public class EgovCommunityController {
             return mav;
         }
 
+/*
 
         if (!(mem.getCmmntyRoleCd() != null &&
                 (
@@ -1920,6 +1955,7 @@ public class EgovCommunityController {
             mav.addObject("success", false);
             return mav;
         }
+*/
 
 		/*
 		 * for (Long no : pstgNo) { CommunityFreeboardVO freeboard =

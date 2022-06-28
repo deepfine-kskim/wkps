@@ -314,6 +314,13 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectOne("CommunityDAO.findCommunity2FreeboardTotalCount", param);
     }
 
+    public int findCommunity2FreeboardTotalCount(Long cmmntyNo, String searchType, String searchValue) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        return selectOne("CommunityDAO.findCommunity2FreeboardTotalCount", param);
+    }
+
     public void insertCommunityFreeboard(CommunityFreeboardVO vo) {
         insert("CommunityDAO.insertCommunityFreeboard", vo);
     }

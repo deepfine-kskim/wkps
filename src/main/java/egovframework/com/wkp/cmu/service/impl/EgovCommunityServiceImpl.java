@@ -109,6 +109,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null));
+		community.setFree2Count(communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, null, null));
 		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
 		return community;
 	}

@@ -91,7 +91,7 @@ function goEventBoard2(eventNo,cmmntyNo,pstgNo){
                                         	<c:forEach items="${list_banner }" var="banner">
                                             <div class="item">
                                                 <c:if test="${not empty banner.link and banner.link ne '' }"><a href="${banner.link }"></c:if>
-                                                    <img src=${banner.fileStreCours }${banner.streFileNm }" alt="${banner.title }" />
+                                                    <img src="${banner.fileStreCours }${banner.streFileNm }" alt="${banner.title }" />
                                                 <c:if test="${not empty banner.link and banner.link ne '' }"></a></c:if>
                                             </div>
                                             </c:forEach>

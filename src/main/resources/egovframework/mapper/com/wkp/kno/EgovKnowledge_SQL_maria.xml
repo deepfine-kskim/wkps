@@ -340,6 +340,7 @@
 		 WHERE TB_USER.DEL_YN = 'N'
 		   AND TB_USER.OU_CODE = #{ouCode}
 		   AND TB_ROLE.ROLE_CD = 'ROLE_ORG'
+		 LIMIT 1
 	</select>
  	
  	<select id="selectKnowledgeContentsList" parameterType="KnowledgeVO" resultType="KnowledgeContentsVO"> 

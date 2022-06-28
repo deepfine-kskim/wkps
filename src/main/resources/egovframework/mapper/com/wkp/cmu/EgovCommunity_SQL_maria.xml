@@ -342,8 +342,6 @@
     </select>
 
     <select id="findCommunityDashBoard" parameterType="map" resultType="CommunityFreeboardVO">
-        SELECT *
-        FROM (
         (
         SELECT CF.CMMNTY_NO, CF.PSTG_NO, CF.TITLE, CF.REGIST_DTM, 'free1' AS TYPE FROM TB_COMMUNITY_FREEBOARD CF
         LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CF.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
@@ -358,6 +356,8 @@
                 USER_SID = #{sid}) > 0)
             </if>
         </where>
+        ORDER BY CF.REGIST_DTM DESC
+        LIMIT 1
         )
         UNION
         (
@@ -374,6 +374,8 @@
                 USER_SID = #{sid}) > 0)
             </if>
         </where>
+        ORDER BY CF.REGIST_DTM DESC
+        LIMIT 1
         )
         UNION
         (
@@ -390,12 +392,9 @@
                 USER_SID = #{sid}) > 0)
             </if>
         </where>
+        ORDER BY CF.REGIST_DTM DESC
+        LIMIT 1
         )
-        ) TA
-        ORDER BY TA.REGIST_DTM DESC
-        <if test="startIndex &gt; -1 and limit &gt; -1 ">
-            LIMIT #{limit} OFFSET #{startIndex}
-        </if>
         ;
     </select>
 

@@ -18,12 +18,12 @@
 
 package egovframework.com.wkp.cmu.service;
 
+import lombok.Data;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import lombok.Data;
 
 @Data
 public class CommunityFreeboardVO {
@@ -41,6 +41,7 @@ public class CommunityFreeboardVO {
 	private String delYn;
 	private Long inqCnt;
 	private String showYn;
+	private String TYPE;
 
 	private Long atchFileNo;
 	private String link1;

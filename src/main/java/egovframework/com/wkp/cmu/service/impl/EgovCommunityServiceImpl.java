@@ -44,7 +44,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		List<CommunityVO> list = communityDAO.loadMyCommunity(userSid);
 		
 		for(CommunityVO vo : list) {
-			vo.setListFree(communityDAO.findCommunityFreeboard(vo.getCmmntyNo(), null, null, 3, 0));
+			vo.setListFree(communityDAO.findCommunityDashBoard(vo.getCmmntyNo(), null, null, 3, 0));
 		}
 		
 		return list;

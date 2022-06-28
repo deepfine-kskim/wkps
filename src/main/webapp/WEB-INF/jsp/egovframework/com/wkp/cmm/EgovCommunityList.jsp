@@ -148,8 +148,20 @@ function goEventBoard2(eventNo,cmmntyNo,pstgNo){
                                                         <ul class="brd_latest_list">
                                                             <c:forEach items="${my.listFree }" var="free">
                                                             <li>
-                                                                <a href="communityFreeView.do?cmmntyNo=${free.cmmntyNo}&pstgNo=${free.pstgNo}">
-                                                                    <p class="tit">${free.title }</p>
+                                                                <c:choose>
+                                                                    <c:when test="${free.TYPE eq 'free2'}">
+                                                                        <a href="community2FreeView.do?cmmntyNo=${free.cmmntyNo}&pstgNo=${free.pstgNo}">
+                                                                            <p class="tit"><span class="label label-default">지식게시판</span> ${free.title }</p>
+                                                                        </c:when>
+                                                                    <c:when test="${free.TYPE eq 'notice'}">
+                                                                        <a href="communityNoticeView.do?cmmntyNo=${free.cmmntyNo}&noticeNo=${free.pstgNo}">
+                                                                            <p class="tit"><span class="label label-danger">공지사항</span> ${free.title }</p>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a href="communityFreeView.do?cmmntyNo=${free.cmmntyNo}&pstgNo=${free.pstgNo}">
+                                                                            <p class="tit"><span class="label label-default">자유게시판</span> ${free.title }</p>
+                                                                    </c:otherwise>
+                                                                </c:choose>
                                                                     <span class="date">${free.strRegDate}</span>
                                                                 </a>
                                                             </li>

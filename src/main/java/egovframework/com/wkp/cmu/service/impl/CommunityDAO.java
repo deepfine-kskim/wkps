@@ -248,6 +248,16 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectOne("CommunityDAO.loadCommunity2FreeboardNext", param);
     }
 
+    public List<CommunityFreeboardVO> findCommunityDashBoard(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("search_type", searchType);
+        param.put("search_value", searchValue);
+        param.put("limit", limit);
+        param.put("startIndex", startIndex);
+        return selectList("CommunityDAO.findCommunityDashBoard", param);
+    }
+
     public List<CommunityFreeboardVO> findCommunityFreeboard(Long cmmntyNo, String searchType, String searchValue, int limit, int startIndex) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);

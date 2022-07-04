@@ -16,6 +16,7 @@
             <div class="brd_view_area q_type">
                 <div class="view_header">
                     <strong class="subject">${requestDetail.title }</strong>
+                    <%--
                     <div class="row type0 info_view">
                         <div class="col-sm-12">
                             <span class="info_txt"><b>지식맵</b> :
@@ -29,6 +30,7 @@
                             </span>
                         </div>
                     </div>
+                    --%>
                     <div class="row type0 info_view">
                         <div class="col-xs-12 col-sm-4">
                             <span>작성일 : </span><span class="data">${requestDetail.registDtm }</span>

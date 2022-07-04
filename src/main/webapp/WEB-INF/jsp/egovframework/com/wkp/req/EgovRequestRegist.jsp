@@ -16,6 +16,7 @@
                 <fieldset>
                     <legend class="sr-only">게시판 글작성</legend>
                     <div class="brd_write_area">
+                        <%--
                         <div class="form-group">
                             <label for="inpCate" class="col-sm-1 control-label"><span class="req">*</span> 유형</label>
                             <div class="col-sm-3">
@@ -27,6 +28,7 @@
                                 </form:select>
                             </div>
                         </div>
+                        --%>
                         <div class="form-group">
                             <label for="inpSubject" class="col-sm-1 control-label"><span class="req">*</span>제목</label>
                             <div class="col-sm-11">

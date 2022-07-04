@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/images/egovframework/com/favicon.ico">
 	<link rel="icon" href="/images/egovframework/com/favicon.ico">
-    <title>새로운 경기 공정한 세상</title>
+    <title>도정지식포털</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <!--[if IEMobile]>

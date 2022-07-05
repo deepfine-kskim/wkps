@@ -1,7 +1,7 @@
 package egovframework.com.wkp.req.service.impl;
 
 import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
-import egovframework.com.wkp.bbs.service.NoticeVO;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
 import egovframework.com.wkp.req.service.ReqVO;
 import org.springframework.stereotype.Repository;
 
@@ -34,8 +34,9 @@ public class ReqDAO extends EgovComAbstractDAO {
 		return selectOne("ReqDAO.selectRequestNext", reqVO);
 	}
 
-	public int insertRequest(ReqVO reqVO) {
-		return insert("ReqDAO.insertRequest", reqVO);
+	public long insertRequest(ReqVO reqVO) {
+		insert("ReqDAO.insertRequest", reqVO);
+		return reqVO.getRequstNo();
 	}
 
 	public int updateRequest(ReqVO reqVO) {
@@ -65,4 +66,21 @@ public class ReqDAO extends EgovComAbstractDAO {
 	public int updateAnswerSelection(ReqVO reqVO) {
 		return update("ReqDAO.updateAnswerSelection", reqVO);
 	}
+
+	public int insertUserRequestMileage(KnowledgeVO knowledgeVO) {
+		return insert("ReqDAO.insertUserRequestMileage", knowledgeVO);
+	}
+
+	public int insertOrgRequestMileage(KnowledgeVO knowledgeVO) {
+		return insert("ReqDAO.insertOrgRequestMileage", knowledgeVO);
+	}
+
+	public int deleteUserRequestMileage(KnowledgeVO knowledgeVO) {
+		return delete("ReqDAO.deleteUserRequestMileage", knowledgeVO);
+	}
+
+	public int deleteOrgRequestMileage(KnowledgeVO knowledgeVO) {
+		return delete("ReqDAO.deleteOrgRequestMileage", knowledgeVO);
+	}
+
 }

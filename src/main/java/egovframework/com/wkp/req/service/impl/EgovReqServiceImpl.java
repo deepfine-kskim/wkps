@@ -4,7 +4,7 @@ import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.utl.wed.comm.PageNavigation;
 import egovframework.com.utl.wed.enums.LogSubjectType;
 import egovframework.com.utl.wed.enums.LogType;
-import egovframework.com.wkp.qna.service.AnswerVO;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.mgt.wkp.log.service.EgovLogService;
@@ -83,7 +83,7 @@ public class EgovReqServiceImpl extends EgovAbstractServiceImpl implements ReqSe
 	}
 
 	@Override
-	public int insertRequest(ReqVO reqVO) {
+	public long insertRequest(ReqVO reqVO) {
 		return reqDAO.insertRequest(reqVO);
 	}
 
@@ -120,5 +120,25 @@ public class EgovReqServiceImpl extends EgovAbstractServiceImpl implements ReqSe
 	@Override
 	public int updateAnswerSelection(ReqVO reqVO) {
 		return reqDAO.updateAnswerSelection(reqVO);
+	}
+
+	@Override
+	public int insertUserRequestMileage(KnowledgeVO knowledgeVO) {
+		return reqDAO.insertUserRequestMileage(knowledgeVO);
+	}
+
+	@Override
+	public int insertOrgRequestMileage(KnowledgeVO knowledgeVO) {
+		return reqDAO.insertOrgRequestMileage(knowledgeVO);
+	}
+
+	@Override
+	public int deleteUserRequestMileage(KnowledgeVO knowledgeVO) {
+		return reqDAO.deleteUserRequestMileage(knowledgeVO);
+	}
+
+	@Override
+	public int deleteOrgRequestMileage(KnowledgeVO knowledgeVO) {
+		return reqDAO.deleteOrgRequestMileage(knowledgeVO);
 	}
 }

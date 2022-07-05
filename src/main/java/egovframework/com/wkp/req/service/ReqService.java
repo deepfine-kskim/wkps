@@ -1,8 +1,7 @@
 package egovframework.com.wkp.req.service;
 
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
-import egovframework.com.wkp.bbs.service.NoticeVO;
-import egovframework.com.wkp.qna.service.AnswerVO;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface ReqService {
 
     public ReqVO selectRequestNext(ReqVO reqVO);
     
-    public int insertRequest(ReqVO reqVO);
+    public long insertRequest(ReqVO reqVO);
     
     public int updateRequest(ReqVO reqVO);
     
@@ -35,4 +34,12 @@ public interface ReqService {
     public List<ReqVO> selectAnswerList(ReqVO reqVO);
 
     public int updateAnswerSelection(ReqVO reqVO);
+
+    public int insertUserRequestMileage(KnowledgeVO knowledgeVO);
+
+    public int insertOrgRequestMileage(KnowledgeVO knowledgeVO);
+
+    public int deleteUserRequestMileage(KnowledgeVO knowledgeVO);
+
+    public int deleteOrgRequestMileage(KnowledgeVO knowledgeVO);
 }

@@ -6,6 +6,8 @@ import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
+import egovframework.com.wkp.kno.service.EgovKnowledgeService;
+import egovframework.com.wkp.kno.service.KnowledgeVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
 import egovframework.com.wkp.usr.service.UserVO;
@@ -37,6 +39,9 @@ public class ReqController {
 
     @Resource(name = "EgovFileMngUtil")
     private EgovFileMngUtil fileUtil;
+
+	@Resource(name = "knowledgeService")
+	private EgovKnowledgeService knowledgeService;
 	
 	@RequestMapping("/requestList.do")
 	public String requestList(@ModelAttribute("reqVO") ReqVO reqVO, Model model) {
@@ -118,7 +123,7 @@ public class ReqController {
 		try {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			reqVO.setRegisterId(userVO.getSid());
-			
+
 			List<FileVO> result = new ArrayList<FileVO>();
 			long atchFileNo = 0;
 			final Map<String, MultipartFile> files = multiRequest.getFileMap();
@@ -126,9 +131,20 @@ public class ReqController {
 				result = fileUtil.parseFileInf(files, "REQUST_", 0, "");
 				atchFileNo = fileMngService.insertFileInfs(result);
 			}
-			
+
 			reqVO.setAtchFileNo(atchFileNo);
-			reqService.insertRequest(reqVO);			
+			long requestKnowlgNo = reqService.insertRequest(reqVO);
+
+			/* 지식 요청 질문 2점*/
+			KnowledgeVO knowledgeViewVO = new KnowledgeVO();
+			knowledgeViewVO.setMileageType("REQUEST");
+			knowledgeViewVO.setRequestNo(requestKnowlgNo);
+			knowledgeViewVO.setMileageScore(2.0f);
+			knowledgeViewVO.setOuCode(userVO.getOuCode());
+			knowledgeViewVO.setRegisterId(userVO.getSid());
+
+			reqService.insertUserRequestMileage(knowledgeViewVO);
+			reqService.insertOrgRequestMileage(knowledgeViewVO);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		} catch (IOException e) {
@@ -207,7 +223,11 @@ public class ReqController {
 	public String deleteNotice(@ModelAttribute("reqVO") ReqVO reqVO, Model model) {
 		
 		try {
-			reqService.deleteRequest(reqVO);			
+            KnowledgeVO knowledgeViewVO = new KnowledgeVO();
+			reqService.deleteRequest(reqVO);
+            knowledgeViewVO.setRequestNo(reqVO.getRequstNo());
+            reqService.deleteUserRequestMileage(knowledgeViewVO);
+            reqService.deleteOrgRequestMileage(knowledgeViewVO);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -253,6 +273,17 @@ public class ReqController {
 		UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		reqVO.setUpdaterId(user.getSid());
 		reqService.updateAnswerSelection(reqVO);
+
+		/* 답변채택 2점*/
+		KnowledgeVO knowledgeViewVO = new KnowledgeVO();
+		knowledgeViewVO.setMileageType("CHOOSE");
+		knowledgeViewVO.setRequestNo(reqVO.getRequstNo());
+		knowledgeViewVO.setMileageScore(2.0f);
+		knowledgeViewVO.setOuCode(user.getOuCode());
+		knowledgeViewVO.setRegisterId(reqVO.getRegisterId());
+
+		reqService.insertUserRequestMileage(knowledgeViewVO);
+		reqService.insertOrgRequestMileage(knowledgeViewVO);
 		return reqVO;
 	}
 

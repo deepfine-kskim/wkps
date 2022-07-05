@@ -302,9 +302,9 @@ public class EgovKnowledgeController {
         if (knowledgeService.countKnowledgeView(knowledgeViewVO) == 0) {
             knowledgeService.insertKnowledgeView(knowledgeViewVO);
             
-            // 지식 조회 시 마일리지 5점 적립
+            // 지식 조회 시 마일리지 5점 적립 -> 1점으로 변경
             knowledgeViewVO.setMileageType("VIEW");
-            knowledgeViewVO.setMileageScore(5.0f);
+            knowledgeViewVO.setMileageScore(1.0f);
             knowledgeViewVO.setOuCode(user.getOuCode());
             knowledgeService.insertUserMileage(knowledgeViewVO);
             knowledgeService.insertOrgMileage(knowledgeViewVO);
@@ -670,8 +670,9 @@ public class EgovKnowledgeController {
                     }
                 }
 
+                /* 지식 등록 시 5점 */
                 knowledgeVO.setMileageType("NEW");
-                knowledgeVO.setMileageScore(2.0f);
+                knowledgeVO.setMileageScore(5.0f);
                 knowledgeService.insertUserMileage(knowledgeVO);
                 knowledgeService.insertOrgMileage(knowledgeVO);
 
@@ -1072,8 +1073,9 @@ public class EgovKnowledgeController {
                     }
                 }
 
+                /* 지식 갱신 2점 */
                 knowledgeVO.setMileageType("UPD");
-                knowledgeVO.setMileageScore(1.0f);
+                knowledgeVO.setMileageScore(2.0f);
                 knowledgeService.insertUserMileage(knowledgeVO);
                 knowledgeService.insertOrgMileage(knowledgeVO);
 
@@ -1331,9 +1333,10 @@ public class EgovKnowledgeController {
 	        knowledgeContentsVO.setCont(knowledgeVO.getCont());
 	        
 	        knowledgeService.updateKnowledgeContents(knowledgeContentsVO);
-	        
+
+            /* 지식 갱신 2점 */
 	        knowledgeDetail.setMileageType("UPD");
-	        knowledgeDetail.setMileageScore(1.0f);
+	        knowledgeDetail.setMileageScore(2.0f);
 	        knowledgeService.insertUserMileage(knowledgeDetail);
 	        knowledgeService.insertOrgMileage(knowledgeDetail);
 
@@ -1571,6 +1574,7 @@ public class EgovKnowledgeController {
             Boolean isRecommend = false;
             if(knowledgeService.selectRecommend(knowledgeVO) != null) {
             	isRecommend = true;
+                /* 지식 추천 3점 */
     	        knowledgeVO.setMileageType("REC");
     	        knowledgeVO.setMileageScore(3.0f);
     	        knowledgeService.insertUserMileage(knowledgeVO);

@@ -87,7 +87,7 @@
                                 </div>
                                 <c:if test="${not isSelection && loginVO.sid eq requestDetail.registerId}">
                                     <div class="board-list-button">
-                                        <button type="button" class="btn btn-danger btn-xs dev-selection" data-requst-answer-no="${answer.requstAnswerNo}" data-requst-no="${answer.requstNo}">
+                                        <button type="button" class="btn btn-danger btn-xs dev-selection" data-register-id="${answer.registerId}"  data-requst-answer-no="${answer.requstAnswerNo}" data-requst-no="${answer.requstNo}">
                                             <i class="ti-check-box"></i> 채택
                                         </button>
                                     </div>
@@ -253,6 +253,8 @@
 
             const data = {
                 "requstAnswerNo": $(this).data("requst-answer-no")
+                , "requstNo": $(this).data("requst-no")
+                , "registerId": $(this).data("register-id")
             }
 
             if (confirm("해당 답변을 채택 하시겠습니까? 이후 수정은 불가능합니다.")) {

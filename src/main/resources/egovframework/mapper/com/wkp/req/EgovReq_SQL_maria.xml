@@ -111,7 +111,7 @@
         	
     </select>
  	
-	<insert id="insertRequest" parameterType="ReqVO">
+	<insert id="insertRequest" useGeneratedKeys="true" keyProperty="requstNo"  parameterType="ReqVO">
 		
 			INSERT INTO TB_REQUEST_KNOWLEDGE
 			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NO, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
@@ -207,5 +207,59 @@
 			 , UPD_DTM = now()
 		 WHERE REQUST_ANSWER_NO = #{requstAnswerNo}
 	</update>
+
+
+
+	<insert id="insertUserRequestMileage" parameterType="KnowledgeVO">
+
+		INSERT INTO TB_USER_REQUEST_MILEAGE
+			(MILEAGE_TYPE, KNOWLG_NO, MILEAGE_SCORE, SID, REGIST_DTM)
+		VALUES
+			(#{mileageType}, #{requestNo}, #{mileageScore}, #{registerId}, SYSDATE())
+
+	</insert>
+
+	<insert id="insertOrgRequestMileage" parameterType="KnowledgeVO">
+
+		INSERT INTO TB_ORG_REQUEST_MILEAGE
+			(MILEAGE_TYPE, KNOWLG_NO, MILEAGE_SCORE, OU_CODE, REGIST_DTM)
+		VALUES
+			(#{mileageType}, #{requestNo}, #{mileageScore}, #{ouCode}, SYSDATE())
+
+	</insert>
+
+	<delete id="deleteUserRequestMileage" parameterType="KnowledgeVO">
+
+		DELETE
+		FROM
+		TB_USER_REQUEST_MILEAGE
+		<where>
+			AND KNOWLG_NO = #{requestNo}
+			<if test="mileageType != null and mileageType !=''">
+				AND MILEAGE_TYPE = #{mileageType}
+			</if>
+			<if test="registerId != null and registerId != ''">
+				AND SID = #{registerId}
+			</if>
+		</where>
+
+	</delete>
+
+	<delete id="deleteOrgRequestMileage" parameterType="KnowledgeVO">
+
+		DELETE
+		FROM
+		TB_ORG_REQUEST_MILEAGE
+		<where>
+			AND KNOWLG_NO = #{requestNo}
+			<if test="mileageType != null and mileageType !=''">
+				AND MILEAGE_TYPE = #{mileageType}
+			</if>
+			<if test="ouCode != null and ouCode != ''">
+				AND OU_CODE = #{ouCode}
+			</if>
+		</where>
+
+	</delete>
  	
 </mapper>

@@ -698,6 +698,8 @@
 
     <select id="findCommunityMember" parameterType="map" resultType="CommunityMemberVO">
         SELECT *
+        , (SELECT COUNT(1) FROM tb_community_comment WHERE MBER_NO = CM.MBER_NO AND CMMNTY_NO = 4001) + (SELECT COUNT(1) FROM tb_community_comment2 WHERE MBER_NO = CM.MBER_NO AND CMMNTY_NO = 4001) AS commentCount
+        , (SELECT COUNT(1) FROM tb_community_freeboard WHERE MBER_NO = CM.MBER_NO AND CMMNTY_NO = 4001) + (SELECT COUNT(1) FROM tb_community_freeboard2 WHERE MBER_NO = CM.MBER_NO AND CMMNTY_NO = 4001) AS freeCount
         FROM TB_COMMUNITY_MEMBER CM
         LEFT OUTER JOIN TB_USER U ON CM.USER_SID = U.SID
         <where>

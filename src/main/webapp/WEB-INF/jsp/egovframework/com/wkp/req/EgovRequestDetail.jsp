@@ -94,7 +94,7 @@
                                 </c:if>
                             </div>
                             <div class="board-list-controls">
-                                <p class="board-list-details">${answer.cont}</p>
+                                <p class="board-list-details" style="white-space: pre-wrap">${answer.cont}</p>
                             </div>
                         </li>
                     </c:forEach>

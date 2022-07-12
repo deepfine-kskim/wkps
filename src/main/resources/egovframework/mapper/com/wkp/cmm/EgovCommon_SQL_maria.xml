@@ -38,25 +38,24 @@
 	</insert>
 	
 	<select id="selectDisplayTargetList" parameterType="map" resultType="TargetVO">
-	
-			SELECT 		TB.TARGET_NO, TB.TARGET_TYPE_CD, TB.SORT_ORDR, TB.TARGET_CODE
-							
-				,
-							
-			(				 CASE WHEN TB.TARGET_TYPE_CD = 'ORG' THEN (SELECT OU FROM TB_ORG O WHERE O.OU_CODE = TB.TARGET_CODE)
-									WHEN TB.TARGET_TYPE_CD = 'USER' THEN (SELECT DISPLAY_NAME FROM TB_USER U WHERE U.SID = TB.TARGET_CODE)
-									WHEN TB.TARGET_TYPE_CD = 'GROUP' THEN (SELECT GROUP_NM FROM TB_GROUP G WHERE G.GROUP_NO = TB.TARGET_CODE)
-							 END
-			) AS DISP_NAME			
-															 
-				
-				
-			FROM
-				TB_TARGET_DETAIL TB
-			WHERE
-				TB.TARGET_NO = #{targetNo}
-			ORDER BY TB.SORT_ORDR
-	
+		SELECT TB.TARGET_NO
+			 , TB.TARGET_TYPE_CD
+			 , TB.SORT_ORDR
+			 , TB.TARGET_CODE
+			 , (CASE
+					WHEN TB.TARGET_TYPE_CD = 'ORG' THEN (SELECT OU
+														   FROM TB_ORG O
+														  WHERE O.OU_CODE = TB.TARGET_CODE)
+					WHEN TB.TARGET_TYPE_CD = 'USER' THEN (SELECT CONCAT(OU, ' ', DISPLAY_NAME)
+															FROM TB_USER U
+														   WHERE U.SID = TB.TARGET_CODE)
+					WHEN TB.TARGET_TYPE_CD = 'GROUP' THEN (SELECT GROUP_NM
+															 FROM TB_GROUP G
+															WHERE G.GROUP_NO = TB.TARGET_CODE)
+			     END) AS DISP_NAME
+		  FROM TB_TARGET_DETAIL TB
+		 WHERE TB.TARGET_NO = #{targetNo}
+		 ORDER BY TB.SORT_ORDR
 	</select>
 
 	<!-- 우수 사용자 목록 조회 -->

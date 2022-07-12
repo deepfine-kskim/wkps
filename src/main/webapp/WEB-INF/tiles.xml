@@ -14,6 +14,10 @@
 	<definition name="admTemplate" template="/WEB-INF/jsp/layout/template_adm.jsp">
 	</definition>
 
+	<definition name="/com/*/*" extends="mainTemplate">
+		<put-attribute name="contents" value="/WEB-INF/jsp/egovframework/com/{1}/{2}.jsp"/>
+	</definition>
+
 	<definition name="/com/*/*/*" extends="mainTemplate">
 		<put-attribute name="contents" value="/WEB-INF/jsp/egovframework/com/{1}/{2}/{3}.jsp"/>
 	</definition>

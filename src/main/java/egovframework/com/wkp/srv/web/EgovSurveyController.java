@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/srv")
@@ -35,7 +36,7 @@ public class EgovSurveyController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovSurveyController.class);
 
     @Resource(name = "surveyService")
-    EgovSurveyService surveyService;
+    private EgovSurveyService surveyService;
 
     @Resource(name = "commonService")
     private EgovCommonService commonService;
@@ -167,6 +168,30 @@ public class EgovSurveyController {
                     }
                 }
 
+                OrgVO orgVO = new OrgVO();
+                orgVO.setOuLevel(2);
+                List<OrgVO> topList = orgService.selectOrgList(orgVO);
+
+                orgVO.setOuLevel(3);
+                List<OrgVO> parentList = orgService.selectOrgList(orgVO);
+
+                orgVO.setOuLevel(4);
+                List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+                parentList.forEach(parent -> {
+                    String ouCode = parent.getOuCode();
+                    List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                    parent.setNextDepthList(list);
+                });
+
+                topList.forEach(top -> {
+                    String ouCode = top.getOuCode();
+                    List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                    top.setNextDepthList(list);
+                });
+
+                model.addAttribute("topList", topList);
+
                 model.addAttribute("isAnswer", surveyService.selectAnswerJoinCount(surveyNo, user.getSid()));
 
                 String str = detail.getSurveyDesc();
@@ -205,8 +230,7 @@ public class EgovSurveyController {
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
-        
-        return "/upload/cmm/surveyPopup";
+        return "/com/cmm/surveyPopup";
     }
 
 
@@ -246,21 +270,32 @@ public class EgovSurveyController {
             List<GroupVO> groupList;
             groupList = commonService.selectGroupList(groupVO);
             model.addAttribute("groupList", groupList);
-            
+
             OrgVO orgVO = new OrgVO();
             orgVO.setOuLevel(2);
             List<OrgVO> topList = orgService.selectOrgList(orgVO);
-            
+
             orgVO.setOuLevel(3);
             List<OrgVO> parentList = orgService.selectOrgList(orgVO);
-            
+
             orgVO.setOuLevel(4);
             List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+            parentList.forEach(parent -> {
+                String ouCode = parent.getOuCode();
+                List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                parent.setNextDepthList(list);
+            });
+
+            topList.forEach(top -> {
+                String ouCode = top.getOuCode();
+                List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                top.setNextDepthList(list);
+            });
+
             model.addAttribute("excellenceUserList", excellenceUserList);
             model.addAttribute("excellenceOrgList", excellenceOrgList);
             model.addAttribute("topList", topList);
-            model.addAttribute("parentList", parentList);
-            model.addAttribute("childList", childList);
 
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
@@ -351,30 +386,38 @@ public class EgovSurveyController {
             if (detail != null) {
                 model.addAttribute("detail", detail);
 
+                List<TargetVO> targetVOList = commonService.selectDisplayTargetList(detail.getTargetNo());
+
                 GroupVO groupVO = new GroupVO();
                 groupVO.setRegisterId(userVO.getSid());
                 List<GroupVO> groupList;
                 groupList = commonService.selectGroupList(groupVO);
-                
-                List<ExcellenceOrgVO> excellenceOrgList = commonService.selectExcellenceOrgList(new ExcellenceOrgVO());
-                List<ExcellenceUserVO> excellenceUserList = commonService.selectExcellenceUserList(new ExcellenceUserVO());
 
                 OrgVO orgVO = new OrgVO();
                 orgVO.setOuLevel(2);
                 List<OrgVO> topList = orgService.selectOrgList(orgVO);
-                
+
                 orgVO.setOuLevel(3);
                 List<OrgVO> parentList = orgService.selectOrgList(orgVO);
-                
+
                 orgVO.setOuLevel(4);
                 List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+                parentList.forEach(parent -> {
+                    String ouCode = parent.getOuCode();
+                    List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+                    parent.setNextDepthList(list);
+                });
+
+                topList.forEach(top -> {
+                    String ouCode = top.getOuCode();
+                    List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+                    top.setNextDepthList(list);
+                });
                 
-                //model.addAttribute("excellenceOrgList", excellenceOrgList);
-                //model.addAttribute("excellenceUserList", excellenceUserList);
-                model.addAttribute("topList", topList);
-                model.addAttribute("parentList", parentList);
-                model.addAttribute("childList", childList);
                 model.addAttribute("groupList", groupList);
+                model.addAttribute("topList", topList);
+                model.addAttribute("targetVOList", targetVOList);
 
             } else {
                 return "redirect:/srv/list.do";

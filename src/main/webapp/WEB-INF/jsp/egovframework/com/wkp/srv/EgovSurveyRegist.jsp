@@ -25,19 +25,6 @@
                     <legend class="sr-only">게시판 글작성</legend>
                     <div class="brd_write_area">
                         <div class="form-group">
-                            <label for="svRls1" class="col-sm-2 control-label"><span class="req">*</span>설문 공개여부</label>
-                            <div class="col-sm-3">
-                                <label for="svRls1" class="radio-inline">
-                                    <input type="radio" id="svRls1" name="rlsYn"
-                                           value="Y" ${detail.rlsYn == 'Y' ? 'checked':'' } /> 공개
-                                </label>
-                                <label for="svRls2" class="radio-inline">
-                                    <input type="radio" id="svRls2" name="rlsYn"
-                                           value="N" ${detail.rlsYn == 'N' ? 'checked':'' }/> 비공개
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <strong class="col-sm-2 control-label"><span class="req">*</span> 시작일시</strong>
                             <div class="col-sm-5 col-lg-5">
                                 <div class="row type1">
@@ -86,24 +73,18 @@
                                 </label>
                                 <label for="svTarget2" class="radio-inline">
                                     <input type="radio" id="svTarget2" name="targetYn" value="Y"
-                                           class="inp_tog" ${!detail.targetYn == 'Y'? 'checked':'' }/> 지정
+                                           class="inp_tog" ${detail.targetYn == 'Y'? 'checked':'' }/> 지정
                                 </label>
                                 <a href="#selectGrpPopup" class="btn btn-xs btn-primary inp_tog_cont"
                                    data-toggle="modal" data-target="#selectGrpPopup">부서/개인/그룹 선택</a>
-                                <div id="rlsList" class="tag_grp_area"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="svTargetRls1" class="col-sm-2 control-label"><span class="req">*</span>설문 대상자 외 공개여부</label>
-                            <div class="col-sm-3">
-                                <label for="svTargetRls1" class="radio-inline">
-                                    <input type="radio" id="svTargetRls1" name="targetRlsYn"
-                                           value="Y" ${detail.targetRlsYn == 'Y' ? 'checked':'' } /> 공개
-                                </label>
-                                <label for="svTargetRls2" class="radio-inline">
-                                    <input type="radio" id="svTargetRls2" name="targetRlsYn"
-                                           value="N" ${detail.targetRlsYn == 'N' ? 'checked':'' }/> 비공개
-                                </label>
+                                <div id="rlsList" class="tag_grp_area">
+                                    <c:forEach var="targetVO" items="${targetVOList}">
+                                        <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
+                                        <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
+                                        <c:set var="target" value="${targetVO.dispName}"/>
+                                        <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove flow-action-remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="${type2}" value="${targetVO.targetCode}"/></span>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -348,143 +329,6 @@
             </form>
             <!-- // 일정쓰기-->
             <script type="text/javascript" src="<c:url value='/js/egovframework/com/wkp/surveyFrm.js'/>"></script>
-
-            <!-- 조직그룹 선택 팝업 -->
-                <div class="modal fade" id="selectGrpPopup" tabindex="-1" role="dialog" aria-labelledby="selectGrpPopupLabel">
-                    <div class="modal-dialog" role="document">
-	                    <div class="modal-content">
-	                        <div class="modal-header">
-	                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                            <h4 class="modal-title" id="selectGrpPopupLabel">부서/개인/그룹 선택</h4>
-	                        </div>
-	                        <div class="modal-body">
-	                            <ul class="nav nav-tabs" role="tablist">
-	                                <li role="presentation" class="active"><a href="#selectGrpTab1" aria-controls="selectGrpTab1" role="tab" data-toggle="tab">부서</a></li>
-	                                <li role="presentation"><a href="#selectGrpTab2" aria-controls="selectGrpTab2" role="tab" data-toggle="tab">개인</a></li>
-	                                <li role="presentation"><a href="#selectGrpTab3" aria-controls="selectGrpTab3" role="tab" data-toggle="tab">그룹</a></li>
-	                            </ul>
-	                            <div class="tab-content">
-	                                <div id="selectGrpTab1" class="tab-pane active" role="tabpanel">
-	                                    <div class="srch_area">
-	                                        <fieldset>
-	                                            <legend class="sr-only">이름 검색영역</legend>
-	                                            <div class="input-group">
-	                                                <label for="orgText" class="sr-only">이름 입력</label>
-	                                                <input type="text" id="orgText" name="orgText" class="form-control flow-enter-search" placeholder="부서 검색(2글자 이상)" data-search-button="orgBtn">
-	                                                <span class="input-group-btn"><a href="javascript:;" id="orgBtn" class="btn btn-default">검색</a></span>
-	                                            </div>
-	                                        </fieldset>
-	                                    </div>
-	                                    <div class="hummingbird-treeview well chk_tree_area">
-	                                        <div class="checkbox">
-	                                            <label for="allChk1"><input type="checkbox" id="allChk1" class="all_chk" /> 전체선택</label>
-	                                        </div>
-	                                        <!-- 트리 열어둘 경우 <i class="fa ti-minus"></i> 아이콘 + 열어둘 자식 ul에 open 클래스 달기 -->
-	                                        <ul id="orgList" class="chk_tree_list hummingbird-base treeview">
-	                                        	<c:forEach var="top" items="${topList }" varStatus="topStatus">
-                                                <li>
-                                                	<i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1 }"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1 }" value="${top.ouCode }" data-id="customChk-${topStatus.index+1 }" data-name="${top.ou }" />${top.ou }</label>
-                                                    <ul>
-                                                    	<c:forEach var="parent" items="${parentList }" varStatus="parentStatus">
-                                                    	<c:if test="${parent.parentOuCode eq top.ouCode }">
-                                                        <li>
-                                                            <i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1 }-${parentStatus.index+1 }"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1 }-${parentStatus.index+1 }" value="${parent.ouCode }"data-id="customChk-${topStatus.index+1 }-${parentStatus.index+1 }" data-name="${parent.ou }" />${parent.ou }</label>
-                                                            <ul class="not_depth_list">
-                                                            	<c:forEach var="child" items="${childList }" varStatus="childStatus">
-                                                            	<c:if test="${child.parentOuCode eq parent.ouCode }">
-                                                                <li>
-                                                                	<i class="fa fa-plus"></i> <label for="chk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }"><input type="checkbox" name="orgList" id="chk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }" value="${child.ouCode }" data-id="customChk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }" data-name="${child.ou }" />${child.ou }</label>
-                                                                </li>
-                                                                </c:if>
-                                                                </c:forEach>
-                                                            </ul>
-                                                        </li>
-                                                        </c:if>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </li>
-                                                </c:forEach>
-	                                        </ul>
-	                                    </div>
-	                                </div>
-	                                <div id="selectGrpTab2" class="tab-pane" role="tabpanel">
-	                                    <div class="srch_area">
-	                                        <fieldset>
-	                                            <legend class="sr-only">이름 검색영역</legend>
-	                                            <div class="input-group">
-	                                                <label for="userText" class="sr-only">이름 입력</label>
-	                                                <input type="text" id="userText" name="userText" class="form-control flow-enter-search" placeholder="이름 검색(2글자 이상)" data-search-button="userBtn">
-	                                                <span class="input-group-btn"><a href="javascript:;" id="userBtn" class="btn btn-default">검색</a></span>
-	                                            </div>
-	                                        </fieldset>
-	                                    </div>
-	                                    <div class="hummingbird-treeview well chk_tree_area">
-	                                        <div class="checkbox">
-	                                            <label for="allSrchChk"><input type="checkbox" id="allSrchChk" class="all_chk" /> 전체선택</label>
-	                                        </div>
-	                                        <ul id="userList" class="chk_tree_list hummingbird-base treeview">
-	                                        	<c:forEach var="top" items="${topList }" varStatus="topStatus">
-                                                <li>
-                                                	<i class="fa fa-plus" data-code="${top.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }" />${top.ou }</label>
-                                                    <ul>
-                                                    	<c:forEach var="parent" items="${parentList }" varStatus="parentStatus">
-                                                    	<c:if test="${parent.parentOuCode eq top.ouCode }">
-                                                        <li>
-                                                            <i class="fa fa-plus" data-code="${parent.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }" />${parent.ou }</label>
-                                                            <ul class="not_depth_list">
-                                                            	<c:forEach var="child" items="${childList }" varStatus="childStatus">
-                                                            	<c:if test="${child.parentOuCode eq parent.ouCode }">
-                                                                <li>
-                                                                	<i class="fa fa-plus" data-code="${child.ouCode }"></i> <label for="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }"><input type="checkbox" id="allSrchChk-${topStatus.index+1 }-${parentStatus.index+1 }-${childStatus.index+1 }" />${child.ou }</label>
-                                                                	<ul>
-                                                                	</ul>
-                                                                </li>
-                                                                </c:if>
-                                                                </c:forEach>
-                                                            </ul>
-                                                        </li>
-                                                        </c:if>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </li>
-                                                </c:forEach>
-	                                        </ul>
-	                                    </div>
-	                                </div>
-	                                <div id="selectGrpTab3" class="tab-pane" role="tabpanel">
-	                                <c:choose>
-	                                	<c:when test="${not empty groupList }">
-	                                    <div class="hummingbird-treeview well chk_tree_area">
-	                                        <!-- 트리 열어둘 경우 <i class="fa ti-minus"></i> 아이콘 + 열어둘 자식 ul에 open 클래스 달기 -->
-	                                        <div class="checkbox">
-	                                            <label for="allSrchGrp"><input type="checkbox" id="allSrchGrp" class="all_chk" /> 전체선택</label>
-	                                        </div>
-	                                        <ul id="grpList" class="chk_tree_list hummingbird-base treeview">
-	                                        	<c:forEach var="group" items="${groupList }" varStatus="status">
-	                                        	<li><label for="allSrchGrp-${status.index }"><input id="allSrchGrp-${status.index }" name="groupList" data-id="allSrchGrp-${status.index }" type="checkbox" value="${group.groupNo }" data-name="${group.groupNm }">${group.groupNm }</label></li>
-	                                        	</c:forEach>
-	                                        </ul>
-	                                    </div>
-	                                    </c:when>
-										<c:otherwise>
-	                                    <!-- 검색결과 없음 -->
-	                                    <div class="well text-center mb_0">
-	                                        <p>등록된 그룹이 없습니다</p>
-	                                    </div>
-	                                    <!-- //검색결과 없음 -->
-	                                    </c:otherwise>
-	                                </c:choose>
-	                                    <p class="mt_5 fs_95"><span class="text-danger">※</span> 그룹 편집은  <a href="/myp/mypage.do" class="text-danger underline">마이 페이지</a>에서 가능합니다</p>
-	                                </div>
-	                            </div>
-	                        </div>
-	                        <div class="modal-footer">
-	                            <button type="button" id="rlsChk" class="btn btn-blue" data-dismiss="modal">확인</button>
-	                        </div>
-	                    </div>
-                    </div>
-                </div>
-                <!-- //조직그룹 선택 팝업 -->
         </div>
         <!-- //page-body -->
         <script type="text/javascript" src="<c:url value='/js/egovframework/com/wkp/calendarW.js'/>"></script>
@@ -614,19 +458,19 @@
                     var userList = new Array();
                     var groupList = new Array();
 
-                    $('input:hidden[name="orgListHidden"]').each(function(e){
+                    $('input[type="hidden"][name="orgList"]').each(function(e){
                         {
                             orgList.push($(this).val());
                         }
                     });
 
-                    $('input:hidden[name="userListHidden"]').each(function(e){
+                    $('input[type="hidden"][name="userList"]').each(function(e){
                         {
                             userList.push($(this).val());
                         }
                     });
 
-                    $('input:hidden[name="groupListHidden"]').each(function(e){
+                    $('input[type="hidden"][name="groupList"]').each(function(e){
                         {
                             groupList.push($(this).val());
                         }
@@ -644,8 +488,8 @@
                         , "orgList" : orgList
                         , "userList" : userList
                         , "groupList" : groupList
-                        , "rlsYn" : $("input[name='rlsYn']:checked").val()
-                        , "targetRlsYn" : $("input[name='targetRlsYn']:checked").val()
+                        , "rlsYn" : ''
+                        , "targetRlsYn" : ''
                     }
 
                     var questionList = new Array();
@@ -772,235 +616,6 @@
             isPreview = true;
             $("#tempButton").trigger("click");
         });
-
-        $("#orgBtn").click(function(e){
-            var ou = $("input[name=orgText]").val();
-
-            if(ou == ''){
-				alert("부서를 입력해주세요.");
-				return false;
-			}
-            
-            $.ajax({
-                url : '/org/orgList.do',
-                data : {
-                    ou : ou
-                },
-                dataType: "json",
-                success : function(data) {
-                    //$('#orgList li').remove();
-                    for(var i=0; i < data.orgList.length; i++){
-                    	$('#orgList').prepend('<li>---------------------------------------------------------------------------------</li>');
-                        $('#orgList').prepend('<li><label for="chk-'+i+'"><input id="chk-'+i+'" name="orgList" data-id="customChk-'+i+'" type="checkbox" value="'+data.orgList[i].ouCode+'" data-name="'+data.orgList[i].ou+'">'+data.orgList[i].ou+'</label></li>');
-                    }
-                },
-                error : function(){
-                	$('#orgList').prepend('<li>---------------------------------------------------------------------------------</li>');
-                	$('#orgList').prepend('<li>검색 결과가 없습니다.</li>');
-                }
-            });
-        });
-
-        $("#userBtn").click(function(e){
-            var displayName = $("input[name=userText]").val();
-            
-            if(displayName == ''){
-				alert("이름을 입력해주세요.");
-				return false;
-			}
-            
-            $.ajax({
-                url : '/usr/userList.do',
-                data : {
-                    displayName : displayName
-                },
-                dataType: "json",
-                success : function(data) {
-                    //$('#userList li').remove();
-                    for(var i=0; i < data.userList.length; i++){
-                    	$('#userList').prepend('<li>---------------------------------------------------------------------------------</li>');
-                        $('#userList').prepend('<li><label for="allSrchChk-'+i+'"><input id="allSrchChk-'+i+'" name="userList" data-id="allSrchChk-'+i+'" type="checkbox" value="'+data.userList[i].sid+'" data-ou="'+data.userList[i].ou+'" data-name="'+data.userList[i].displayName+'">'+ data.userList[i].ou + ' ' + data.userList[i].displayName+'</label></li>');
-                    }
-                },
-                error : function(){
-                	$('#userList').prepend('<li>---------------------------------------------------------------------------------</li>');
-                	$('#userList').prepend('<li>검색 결과가 없습니다.</li>');
-                }
-            });
-        });
-
-        var orgLi = [];
-        $("#rlsChk").click(function(e){
-            //$('#rlsList').empty();
-            
-           /*  $('input:checkbox[name="orgList"]').each(function(e){
-                if(this.checked){
-                    $('#rlsList').append('<span class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="orgListHidden" value="'+$(this).val()+'"></span>');
-                }
-            });
-
-            $('input:checkbox[name="userList"]').each(function(e){
-                if(this.checked){
-                    $('#rlsList').append('<span class="tag_btn label label-default">'+$(this).data('ou') + ' ' +$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="userListHidden" value="'+$(this).val()+'"></span>');
-                }
-            });
-
-            $('input:checkbox[name="groupList"]').each(function(e){
-                if(this.checked){
-                    $('#rlsList').append('<span class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="groupListHidden" value="'+$(this).val()+'"></span>');
-                }
-            }); */
-            
-            /* $('input:checkbox[name="orgList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#orgName').text();
-					
-					if(list != '') {
-						var listSplit = list.split('x삭제');
-						for(var i = 0; i < listSplit.length; i++) {
-							if(listSplit[i] == $(this).data('name')) {
-								alert('동일한 부서가 선택되어 있습니다.');
-								return false;
-							}
-						}
-					}
-					$('#rlsList').append('<span id="orgName" class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span></span>');
-				}
-			});
-			
-			$('input:checkbox[name="userList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#usersName').text();
-					
-					if(list != '') {
-						var listSplit = list.split('x삭제');
-						for(var i = 0; i < listSplit.length; i++) {
-							if(listSplit[i] == $(this).data('ou') + ' ' + $(this).data('name')) {
-								alert('동일한 사용자가 선택되어 있습니다.');
-								return false;
-							}
-						}
-					}
-					
-					$('#rlsList').append('<span id="usersName" class="tag_btn label label-default">'+$(this).data('ou')+' '+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span></span>');
-				}
-			});
-			
-			$('input:checkbox[name="groupList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#groupName').text();
-					
-					if(list != '') {
-						var listSplit = list.split('x삭제');
-						for(var i = 0; i < listSplit.length; i++) {
-							if(listSplit[i] == $(this).data('name')) {
-								alert('동일한 그룹이 선택되어 있습니다.');
-								return false;
-							}
-						}
-					}
-					$('#rlsList').append('<span id="groupName" class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span></span>');		
-				}
-			});
-            
-            $( 'input[name="allChk1"]' ).attr( 'checked', false );
-			$( 'input[name="orgList"]' ).attr( 'checked', false );
-			$( 'input[name="allSrchChk"]' ).attr( 'checked', false );
-			$( 'input[name="userList"]' ).attr( 'checked', false );
-			$( 'input[name="allSrchGrp"]' ).attr( 'checked', false );
-			$( 'input[name="groupList"]' ).attr( 'checked', false ); */
-			
-			$('input:checkbox[name="orgList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#orgName').text();
-					var data = $(this).data('name');
-					
-					//console.log("orgLi.indexOf(data) - " + orgLi.indexOf(data));
-					if(orgLi.indexOf(data) < 0) {
-						orgLi.push(data);
-					}
-					
-					//console.log("orgLi - " + orgLi);
-					//console.log("orgLi - " + orgLi);
-					//console.log("list.indexOf(data) - " + list.indexOf(data));
-					//console.log("data - " + data);
-
-					if(list.indexOf(data) < 0) {
-						$('#rlsList').append('<span id="orgName" class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="orgListHidden" value="'+$(this).val()+'"></span>');
-					}
-				}
-			});
-			
-			$('input:checkbox[name="userList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#usersName').text();
-					var data = $(this).data('name');
-					
-					//console.log("orgLi.indexOf(data) - " + orgLi.indexOf(data));
-					if(orgLi.indexOf(data) < 0) {
-						orgLi.push(data);
-					}
-					
-					//console.log("orgLi - " + orgLi);
-					//console.log("orgLi - " + orgLi);
-					//console.log("list.indexOf(data) - " + list.indexOf(data));
-					//console.log("data - " + data);
-
-					if(list.indexOf(data) < 0) {
-						$('#rlsList').append('<span id="usersName" class="tag_btn label label-default">'+$(this).data('ou') + ' ' +$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="userListHidden" value="'+$(this).val()+'"></span>');
-					}
-				}
-			});
-			
-			$('input:checkbox[name="groupList"]').each(function(e){
-				if(this.checked){
-					var list = $('#rlsList').children('#groupName').text();
-					var data = $(this).data('name');
-					
-					//console.log("orgLi.indexOf(data) - " + orgLi.indexOf(data));
-					if(orgLi.indexOf(data) < 0) {
-						orgLi.push(data);
-					}
-					
-					//console.log("orgLi - " + orgLi);
-					//console.log("orgLi - " + orgLi);
-					//console.log("list.indexOf(data) - " + list.indexOf(data));
-					//console.log("data - " + data);
-
-					if(list.indexOf(data) < 0) {
-						$('#rlsList').append('<span id="groupName" class="tag_btn label label-default">'+$(this).data('name')+'<i class="remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="groupListHidden" value="'+$(this).val()+'"></span>');
-					}
-				}
-			});
-			
-			$( 'input[name="allChk1"]' ).attr( 'checked', false );
-			//$( 'input[name="orgList"]' ).attr( 'checked', false );
-			$( 'input[name="allSrchChk"]' ).attr( 'checked', false );
-			//$( 'input[name="userList"]' ).attr( 'checked', false );
-			$( 'input[name="allSrchGrp"]' ).attr( 'checked', false );
-			//$( 'input[name="groupList"]' ).attr( 'checked', false );
-        });
-
-        
-        $("#userList .fa").click(function(e){
-			var tmp = $(this);
-			var ouCode = $(this).data('code');
-     		$.ajax({
-     			url : '/usr/userList.do',
-     			data : {
-     				ouCode : ouCode
-     			},
-     			dataType: "json",
-     			success : function(data) {
-     				for(var i=data.userList.length-1; i >= 0; i--){
-     					tmp.next().next().prepend('<li><label for="allSrchChk-'+i+'"><input id="allSrchChk-'+i+'" name="userList" data-id="allSrchChk-'+i+'" type="checkbox" value="'+data.userList[i].sid+'" data-name="'+data.userList[i].displayName+'" data-ou="'+data.userList[i].ou+'">'+data.userList[i].ou+' '+data.userList[i].displayName+'</label></li>');
-     				}
-     			},
-     			error : function(){
-     				alert("에러가 발생하였습니다.");
-     			}
-     		});
-		});		
 
     }); // end ready()
 

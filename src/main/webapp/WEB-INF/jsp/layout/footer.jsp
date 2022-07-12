@@ -202,6 +202,7 @@
                 action: {
                     open: function () {
                         orgModal.bind.action.clear();
+                        // TODO::중복 코드 처리 필요 #1
                         $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
                             const name = $(item).attr('name');
                             const value = $(item).val();
@@ -316,6 +317,13 @@
                                     }
 
                                     $li.addClass('flow-search-end');
+
+                                    // TODO::중복 코드 처리 필요 #1
+                                    $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
+                                        const name = $(item).attr('name');
+                                        const value = $(item).val();
+                                        $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+                                    });
                                 },
                                 error: function () {
                                     alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');

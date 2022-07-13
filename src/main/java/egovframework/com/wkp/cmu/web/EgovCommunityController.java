@@ -775,7 +775,7 @@ public class EgovCommunityController {
         if (!mFiles.isEmpty()) {
     		//System.out.println("atchFileNo - " + free.getAtchFileNo());
 
-    		if((Long) notice.getAtchFileNo() != null) {
+    		if((Long) notice.getAtchFileNo() != null && notice.getAtchFileNo() != 0) {
     			//System.out.println("11111111111111111111");
     			
 	            for(MultipartFile mFile : mFiles) {
@@ -1700,7 +1700,7 @@ public class EgovCommunityController {
         if (!mFiles.isEmpty()) {
     		//System.out.println("atchFileNo - " + free.getAtchFileNo());
 
-    		if((Long) free.getAtchFileNo() != null) {
+    		if((Long) free.getAtchFileNo() != null && free.getAtchFileNo() != 0) {
     			//System.out.println("11111111111111111111");
     			
 	            for(MultipartFile mFile : mFiles) {
@@ -1805,7 +1805,7 @@ public class EgovCommunityController {
         if (!mFiles.isEmpty()) {
     		//System.out.println("atchFileNo - " + free.getAtchFileNo());
 
-    		if((Long) free.getAtchFileNo() != null) {
+    		if((Long) free.getAtchFileNo() != null && free.getAtchFileNo() != 0) {
     			//System.out.println("11111111111111111111");
 
 	            for(MultipartFile mFile : mFiles) {

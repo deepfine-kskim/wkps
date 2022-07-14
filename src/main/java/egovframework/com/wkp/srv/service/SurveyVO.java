@@ -37,6 +37,7 @@ public class SurveyVO {
 	private String targetRlsYn;
 	private String isFront;
 	private String sid;
+	private String roleCd;
 
 	private boolean mine;
 

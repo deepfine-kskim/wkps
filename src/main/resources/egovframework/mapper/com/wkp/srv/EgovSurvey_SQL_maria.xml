@@ -50,19 +50,21 @@
 		</if>
 		
 		<if test="isFront != null and isFront !=''">
-			AND (
-        		a.TARGET_YN = 'N'
-        		OR (
-        			a.TARGET_YN = 'Y'
-        			AND (
-        				#{ouCode} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'ORG')
-        				OR
-        				#{registerId} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'USER')
-        				OR
-        				a.REGISTER_ID = #{registerId} 
-        			)
-        		)
-        	)
+			<if test="roleCd != 'ROLE_ADMIN'">
+				AND (
+					a.TARGET_YN = 'N'
+					OR (
+						a.TARGET_YN = 'Y'
+						AND (
+							#{ouCode} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'ORG')
+							OR
+							#{registerId} IN (SELECT TARGET_CODE FROM TB_TARGET_DETAIL b WHERE b.TARGET_NO = a.TARGET_NO AND b.TARGET_TYPE_CD = 'USER')
+							OR
+							a.REGISTER_ID = #{registerId}
+						)
+					)
+				)
+			</if>
 		</if>
 		
 		</where>

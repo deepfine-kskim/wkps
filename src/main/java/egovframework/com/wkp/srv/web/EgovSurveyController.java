@@ -86,6 +86,7 @@ public class EgovSurveyController {
             surveyService.updateSurveyDoingState();
 
             param.setSid(user.getSid());
+            param.setRoleCd(user.getRoleCd());
 
             surveyList = surveyService.selectSurveyList(param);
 

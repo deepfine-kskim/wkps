@@ -101,7 +101,9 @@
                     <ul class="nav nav-pills" role="tablist">
                         <li role="presentation" class="active"><a href="#mainTab1" aria-controls="mainTab1" role="tab" data-toggle="tab">최신 지식</a></li>
                         <li role="presentation"><a href="#mainTab2" aria-controls="mainTab2" role="tab" data-toggle="tab">추천 지식</a></li>
-                        <li role="presentation"><a href="#mainTab3" aria-controls="mainTab3" role="tab" data-toggle="tab">맞춤 지식</a></li>
+                        <c:if test="${loginVO.ou ne '행정1부지사' and loginVO.ou ne '행정2부지사' and loginVO.ou ne '평화부지사' and loginVO.ou ne '경기도위원회'}">
+                            <li role="presentation"><a href="#mainTab3" aria-controls="mainTab3" role="tab" data-toggle="tab">맞춤 지식</a></li>
+                        </c:if>
                     </ul>
                 </div>
                 <div class="col_cont">

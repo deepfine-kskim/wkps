@@ -33,7 +33,9 @@
                     		</button>
                     		<ul class="dropdown-menu" aria-labelledby="schSortOpt">
                     			<c:forEach var="org" items="${orgList }">
-                    				<li<c:if test="${org.ouCode eq ouCode }"> class="active"</c:if>><a href="/adm/personalizeList.do?ouCode=${org.ouCode }">${org.ou}</a></li>
+									<c:if test="${org.ou ne '행정1부지사' and org.ou ne '행정2부지사' and org.ou ne '평화부지사' and org.ou ne '경기도위원회'}">
+                    					<li<c:if test="${org.ouCode eq ouCode }"> class="active"</c:if>><a href="/adm/personalizeList.do?ouCode=${org.ouCode }">${org.ou}</a></li>
+									</c:if>
                     			</c:forEach>
                     		</ul>
                     	</div>

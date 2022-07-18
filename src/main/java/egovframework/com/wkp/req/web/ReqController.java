@@ -259,6 +259,17 @@ public class ReqController {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
 			reqVO.setRegisterId(userVO.getSid());
 			reqService.insertRequestAnswer(reqVO);
+
+			/* 답변작성 5점*/
+			KnowledgeVO knowledgeViewVO = new KnowledgeVO();
+			knowledgeViewVO.setMileageType("REG");
+			knowledgeViewVO.setRequestNo(reqVO.getRequstNo());
+			knowledgeViewVO.setMileageScore(5.0f);
+			knowledgeViewVO.setOuCode(userVO.getOuCode());
+			knowledgeViewVO.setRegisterId(reqVO.getRegisterId());
+
+			reqService.insertUserRequestMileage(knowledgeViewVO);
+			reqService.insertOrgRequestMileage(knowledgeViewVO);
 		} catch (NullPointerException e) {
 			LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
@@ -274,11 +285,11 @@ public class ReqController {
 		reqVO.setUpdaterId(user.getSid());
 		reqService.updateAnswerSelection(reqVO);
 
-		/* 답변채택 2점*/
+		/* 답변채택 1점*/
 		KnowledgeVO knowledgeViewVO = new KnowledgeVO();
 		knowledgeViewVO.setMileageType("CHOOSE");
 		knowledgeViewVO.setRequestNo(reqVO.getRequstNo());
-		knowledgeViewVO.setMileageScore(2.0f);
+		knowledgeViewVO.setMileageScore(1.0f);
 		knowledgeViewVO.setOuCode(user.getOuCode());
 		knowledgeViewVO.setRegisterId(reqVO.getRegisterId());
 

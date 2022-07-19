@@ -399,7 +399,9 @@
     </select>
 
     <select id="findCommunityFreeboard" parameterType="map" resultType="CommunityFreeboardVO">
-        SELECT * FROM TB_COMMUNITY_FREEBOARD CF
+        SELECT *
+        , CASE WHEN DATEDIFF(CF.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+        FROM TB_COMMUNITY_FREEBOARD CF
         LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CF.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
         <where>
             AND CF.DEL_YN = 'N'
@@ -500,7 +502,9 @@
         LIMIT 1
     </select>
     <select id="findCommunity2Freeboard" parameterType="map" resultType="CommunityFreeboardVO">
-        SELECT * FROM TB_COMMUNITY_FREEBOARD2 CF
+        SELECT *
+        , CASE WHEN DATEDIFF(CF.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+        FROM TB_COMMUNITY_FREEBOARD2 CF
         LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CF.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
         <where>
             AND CF.DEL_YN = 'N'

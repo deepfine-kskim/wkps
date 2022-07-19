@@ -156,7 +156,7 @@ $(function() {
                                             <td class="text-left">
                                                 <p class="subject">
                                                     <a href="community2FreeView.do?cmmntyNo=${board.cmmntyNo }&pstgNo=${board.pstgNo }">${board.title }</a>
-                                                    <span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span>
+                                                    <c:if test="${board.isNew }"><span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></c:if>
                                                 </p>
                                             </td>
                                             <td class="hidden-xs">${board.cmmntyNicknm}</td>

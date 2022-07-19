@@ -42,6 +42,7 @@ public class CommunityFreeboardVO {
 	private Long inqCnt;
 	private String showYn;
 	private String TYPE;
+	private Boolean isNew;
 
 	private Long atchFileNo;
 	private String link1;

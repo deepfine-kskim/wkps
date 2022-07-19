@@ -42,6 +42,7 @@ public class CommunityNoticeVO {
 	private Long atchFileNo;
 	private String link1;
 	private String link2;
+	private Boolean isNew;
 	
 	private String cmmntyNicknm;
 	

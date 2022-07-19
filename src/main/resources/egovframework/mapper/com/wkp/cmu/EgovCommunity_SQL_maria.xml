@@ -241,7 +241,9 @@
     </select>
 
     <select id="findCommunityNotice" parameterType="map" resultType="CommunityNoticeVO">
-        SELECT * FROM TB_COMMUNITY_NOTICE CN
+        SELECT *
+        , CASE WHEN DATEDIFF(CN.REGIST_DTM, SYSDATE()) > -4 THEN TRUE ELSE FALSE END AS IS_NEW
+        FROM TB_COMMUNITY_NOTICE CN
         LEFT OUTER JOIN TB_COMMUNITY_MEMBER CM ON CN.MBER_NO = CM.MBER_NO AND CM.DEL_YN = 'N'
         <where>
             AND CN.DEL_YN = 'N'

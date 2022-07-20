@@ -468,8 +468,11 @@
 	</select>
 	
 	<select id="selectAnswer" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">
-		SELECT 
-			IFNULL(a.QUS_ANSWER_CONT, CONCAT(d.ORDER_NO, '(', d.CONT, ')')) AS QUS_ANSWER_CONT
+		SELECT
+			CASE
+				WHEN d.ORDER_NO = 9999 THEN CONCAT('기타(', a.QUS_ANSWER_CONT, ')')
+				ELSE IFNULL(a.QUS_ANSWER_CONT, CONCAT(d.ORDER_NO, '(', d.CONT, ')'))
+				END AS QUS_ANSWER_CONT
 		FROM TB_SURVEY_ANSWER a
 		INNER JOIN TB_SURVEY_EXAMPLE d ON d.SURVEY_EXAMPLE_NO = a.SURVEY_EXAMPLE_NO
 		WHERE a.SURVEY_NO = #{surveyNo} AND a.SURVEY_QUS_NO = #{surveyQusNo} AND a.REGISTER_ID = #{registerId}

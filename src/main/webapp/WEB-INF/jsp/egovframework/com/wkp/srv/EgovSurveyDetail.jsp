@@ -406,8 +406,12 @@
                         }
                     }
                 } else if($type == 'SINGLE' || $type == 'SKIP') {
-                    answer.surveyExampleNo = _this.find(".dev-input-no:checked").val();
+                    var $checkedInput = _this.find(".dev-input-no:checked");
+                    answer.surveyExampleNo = $checkedInput.val();
                     if(answer.surveyExampleNo) {
+                        if($checkedInput.closest('.row').hasClass('etc_set')){
+                            answer.qusAnswerCont = _this.find(".dev-input-cont").val();
+                        }
                         answerList.push(answer);
                     } else {
                         if($esntlyn == "Y") {

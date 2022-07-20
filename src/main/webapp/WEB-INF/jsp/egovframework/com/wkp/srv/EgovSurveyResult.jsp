@@ -51,7 +51,14 @@
                                                 	서술형 답변
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${example.orderNo}) ${example.cont}
+                                                    <c:choose>
+                                                        <c:when test="${example.orderNo >= 9999}">
+                                                            기타)
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${example.orderNo}) ${example.cont}
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>

@@ -474,7 +474,7 @@
 	<select id="selectAnswer" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">
 		SELECT
 			CASE
-				WHEN d.ORDER_NO = 9999 THEN CONCAT('기타(', a.QUS_ANSWER_CONT, ')')
+				WHEN d.ORDER_NO = 9999 THEN IF(a.QUS_ANSWER_CONT IS NULL , '기타(의견없음)', CONCAT('기타(', a.QUS_ANSWER_CONT, ')') )
 				ELSE IFNULL(a.QUS_ANSWER_CONT, CONCAT(d.ORDER_NO, '(', d.CONT, ')'))
 				END AS QUS_ANSWER_CONT
 		FROM TB_SURVEY_ANSWER a

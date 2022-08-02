@@ -128,14 +128,17 @@
                                     <div class="col-xs-12 col-sm-8 info_txts">
                                         <span class="info_txt name">등록일 : <span class="data">${knowledgeDetail.registDtmStr}</span></span>
                                     </div>
-                                    <div class="col-xs-12">
-                                        <span>부서 지식 관리자 : </span><span class="data">
-                                        <c:choose>
-                                            <c:when test="${!empty orgUser.displayName}">${orgUser.displayName}(${orgUser.ou})</c:when>
-                                            <c:otherwise> - </c:otherwise>
-                                        </c:choose>
-                                    </span>
-                                    </div>
+                                    <c:if test="${knowledgeDetail.knowlgMapType ne 'PERSONAL'}">
+                                        <div class="col-xs-12">
+                                            <span>부서 지식 관리자 : </span>
+                                            <span class="data">
+                                                <c:choose>
+                                                    <c:when test="${!empty orgUser.displayName}">${orgUser.displayName}(${orgUser.ou})</c:when>
+                                                    <c:otherwise> - </c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                        </div>
+                                    </c:if>
                                 </div>
                             </div>
                             <c:if test="${not empty fileList}">

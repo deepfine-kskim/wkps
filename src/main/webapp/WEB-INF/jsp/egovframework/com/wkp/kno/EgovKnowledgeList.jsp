@@ -385,7 +385,7 @@
                                     <c:choose>
                                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                                         <c:when test="${fn:indexOf(knowlgMap.knowlgMapNm, '연설문, 축사, 기념사, 브리핑') ne -1}">
-                                            <c:forEach var="item" items="${'finee0122,sinflyoh3,eunn0628'}">
+                                            <c:forEach var="item" items="${'finee012,sinflyoh,eunn0628'}">
                                                 <c:if test="${item eq loginVO.sid}">
                                                     <a href="javascript:postData('${knowledgeVO.knowlgMapType}', '${knowlgMap.upNo}', '${knowlgMap.knowlgMapNo}');" class="btn btn-blue"><i class="ti-pencil-alt"></i> 등록하기</a>
                                                 </c:if>

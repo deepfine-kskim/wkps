@@ -14,6 +14,10 @@ public class CommonDAO extends EgovComAbstractDAO {
 	public List<TargetVO> selectTargetList(TargetVO targetVO) {
 		return selectList("CommonDAO.selectTargetList", targetVO);
 	}
+
+	public List<TargetVO> selectGroupListForDetail(TargetVO targetVO) {
+		return selectList("CommonDAO.selectGroupListForDetail", targetVO);
+	}
 	
 	public long insertTarget(TargetVO targetVO) {
 		insert("CommonDAO.insertTarget", targetVO);

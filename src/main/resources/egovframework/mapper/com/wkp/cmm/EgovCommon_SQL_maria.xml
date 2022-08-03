@@ -18,6 +18,13 @@
 			ORDER BY b.SORT_ORDR
 	
 	</select>
+
+	<select id="selectGroupListForDetail" parameterType="TargetVO" resultType="TargetVO">
+			SELECT
+				b.TARGET_TYPE_CD, b.TARGET_CODE
+			FROM TB_GROUP_DETAIL b
+			WHERE b.GROUP_NO = #{targetCode}
+	</select>
 	
 	<insert id="insertTarget" useGeneratedKeys="true" keyProperty="targetNo" parameterType="TargetVO">
 		

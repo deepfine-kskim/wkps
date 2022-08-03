@@ -7,6 +7,8 @@ import java.util.List;
 public interface EgovCommonService {
 	
 	public List<TargetVO> selectTargetList(TargetVO targetVO);
+
+	public List<TargetVO> selectGroupListForDetail(TargetVO targetVO);
 	
 	public long insertTarget(TargetVO targetVO);
 	

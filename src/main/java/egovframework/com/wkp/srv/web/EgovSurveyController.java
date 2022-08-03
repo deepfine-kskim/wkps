@@ -157,6 +157,17 @@ public class EgovSurveyController {
                             result = targetList.get(i).getTargetCode().equals(ouCode);
                         }
 
+                        if (targetList.get(i).getTargetTypeCd().equals("GROUP")) {
+                            List<TargetVO> groupList = commonService.selectGroupListForDetail(targetList.get(i));
+                            if (groupList.get(i).getTargetTypeCd().equals("USER")) {
+                                result = groupList.get(i).getTargetCode().equals(sid);
+                            }
+
+                            if (groupList.get(i).getTargetTypeCd().equals("ORG")) {
+                                result = groupList.get(i).getTargetCode().equals(ouCode);
+                            }
+                        }
+
                         if (result) {
                             break;
                         } else {

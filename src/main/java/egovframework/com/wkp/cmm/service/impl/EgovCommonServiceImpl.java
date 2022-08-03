@@ -18,6 +18,11 @@ public class EgovCommonServiceImpl extends EgovAbstractServiceImpl implements Eg
 	public List<TargetVO> selectTargetList(TargetVO targetVO) {
 		return commonDAO.selectTargetList(targetVO);
 	}
+
+	@Override
+	public List<TargetVO> selectGroupListForDetail(TargetVO targetVO) {
+		return commonDAO.selectGroupListForDetail(targetVO);
+	}
 	
     @Override
 	public long insertTarget(TargetVO targetVO) {

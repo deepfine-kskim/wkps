@@ -139,6 +139,9 @@ public class EgovSurveyController {
             SurveyVO detail = surveyService.selectDetail(param);
 
             if (detail != null) {
+//                그룹으로 대상자를 지정한 경우 상세페이지로 안넘어가져서 그룹도 체크하게 하였으나 운영에 반영하였을때 운영에선 알수없는 이유로 안되어서 우선
+//                대상이 아닌 설문조사건은 리스트에서 안보이기때문에 detail 화면에 들어갈때 검증하지 않도록 수정
+                /*
                 if ("Y".equals(detail.getTargetYn()) && !user.getRoleCd().equals("ROLE_ADMIN") && !user.getSid().equals(detail.getRegisterId())) {
                     TargetVO targetVO = new TargetVO();
                     targetVO.setTargetNo(detail.getTargetNo());
@@ -179,6 +182,7 @@ public class EgovSurveyController {
                         return "redirect:/srv/list.do";
                     }
                 }
+*/
 
                 OrgVO orgVO = new OrgVO();
                 orgVO.setOuLevel(2);

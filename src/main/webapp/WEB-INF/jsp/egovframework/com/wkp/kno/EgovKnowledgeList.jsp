@@ -136,7 +136,7 @@
                                 <form:form class="form-inline bbs_srch_frm" name="knowledgeFrm" modelAttribute="knowledgeVO" action="/kno/knowledgeList.do">
                                 <div class="col-xs-12 col-sm-12 text-right">
                                 	<input type="hidden" name="sid" value="${loginVO.sid }">
-									<input type="hidden" name="page" value="${knowledgeList.pageNavigation.pageIndex }">
+									<input type="hidden" name="page" value="${knowledgeList.pageNavigation.pageIndex == 0 ? 1 : knowledgeList.pageNavigation.pageIndex }">
                                    	<input type="hidden" name="knowlgNo" value="0">
                                    	<input type="hidden" name="title" value="">
 									<input type="hidden" name="knowlgMapNo" value="${knowlgMap.knowlgMapNo }">

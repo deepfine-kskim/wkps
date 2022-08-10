@@ -319,9 +319,17 @@
                                    class="btn btn-warning dev-preview"><i class="fa fa-window-maximize" aria-hidden="true"></i> 미리보기</a>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <button type="button" class="btn btn-blue outline submit-btn" id="tempButton" data-state="TEMPORARY">임시저장
-                            </button>
-                            <button type="button" class="btn btn-blue submit-btn" data-state="WAIT">승인신청</button>
+                            <c:if test="${detail.aprvState.name() != 'DOING'}">
+                                <button type="button" class="btn btn-blue outline submit-btn" id="tempButton" data-state="TEMPORARY">임시저장</button>
+                            </c:if>
+                            <c:choose>
+                                <c:when test="${detail.aprvState.name() == 'DOING'}">
+                                    <button type="button" class="btn btn-blue submit-btn" data-state="WAIT">수정</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button" class="btn btn-blue submit-btn" data-state="WAIT">승인신청</button>
+                                </c:otherwise>
+                            </c:choose>
                             <a href="/srv/list.do" class="btn btn-black">취소</a>
                         </div>
                     </div>
@@ -366,6 +374,7 @@
             e.preventDefault();
 
             var question = "관리자 승인이 완료 되면 진행중인 설문에 노출됩니다. 진행하시겠습니까?";
+            var aprv_state = $(this).data("state");
 
             if(isPreview){
             	question = "미리보기 시 등록중인 설문이 임시저장됩니다. 진행하시겠습니다?";
@@ -377,6 +386,7 @@
             <c:if test="${detail.surveyNo != null or detail.surveyNo > 0}">
                 question = "수정하시겠습니까?";
                 url = "/srv/updateProc.do";
+                aprv_state = $('input[name=aprvState]').val();
                 surveyNo = '${detail.surveyNo}';
             </c:if>
 
@@ -477,7 +487,7 @@
                     });
 
                     var data = {
-                          "aprvState": $(this).data("state")
+                          "aprvState": aprv_state
                         , "bngnDtm": $("#inpStartDate").val() + " " + $("#inpStartTime").val()
                         , "endDtm": $("#inpEndDate").val() + " " + $("#inpEndTime").val()
                         , "surveyNo": surveyNo

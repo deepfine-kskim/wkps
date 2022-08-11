@@ -103,18 +103,18 @@
                                         <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}" class="flow-action-checkUserList" />${top.ou}</label>
                                         <ul class="flow-user-list" data-ou-code="${top.ouCode}">
                                             <c:forEach var="parent" items="${top.nextDepthList}" varStatus="parentStatus">
-                                                    <li>
-                                                        <i class="fa fa-plus" data-code="${parent.ouCode}"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}" />${parent.ou}</label>
-                                                        <ul class="not_depth_list flow-user-list" data-ou-code="${parent.ouCode}">
-                                                            <c:forEach var="child" items="${parent.nextDepthList}" varStatus="childStatus">
-                                                                    <li>
-                                                                        <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}" />${child.ou}</label>
-                                                                        <ul class="flow-user-list" data-ou-code="${child.ouCode}">
-                                                                        </ul>
-                                                                    </li>
-                                                            </c:forEach>
-                                                        </ul>
-                                                    </li>
+                                                <li>
+                                                    <i class="fa fa-plus" data-code="${parent.ouCode}"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}" />${parent.ou}</label>
+                                                    <ul class="not_depth_list flow-user-list" data-ou-code="${parent.ouCode}">
+                                                        <c:forEach var="child" items="${parent.nextDepthList}" varStatus="childStatus">
+                                                                <li>
+                                                                    <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}" />${child.ou}</label>
+                                                                    <ul class="flow-user-list" data-ou-code="${child.ouCode}">
+                                                                    </ul>
+                                                                </li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </li>
                                             </c:forEach>
                                         </ul>
                                     </li>
@@ -198,6 +198,8 @@
                         const value = $(this).siblings('input[type="hidden"]').val();
                         $('ul#' + name).find('input[value="' + value + '"]').prop('checked', false);
                     });
+
+                    _search.binding();
                 },
                 action: {
                     open: function () {
@@ -239,6 +241,8 @@
                                 } else {
                                     $('#orgList').prepend('<li class="flow-search-list">검색 결과가 없습니다.</li>');
                                 }
+                                _search.binding();
+                                _search.init('orgList');
                             },
                             error: function () {
                                 alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
@@ -269,9 +273,11 @@
                                 } else {
                                     $('#userList').prepend('<li class="flow-search-list">검색 결과가 없습니다.</li>');
                                 }
+                                _search.binding();
+                                _search.init('userList');
                             },
                             error: function () {
-                                alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
+                                 alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
                             }
                         });
                     },
@@ -319,11 +325,30 @@
                                     $li.addClass('flow-search-end');
 
                                     // TODO::중복 코드 처리 필요 #1
+                                    // $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
+                                    //     const name = $(item).attr('name');
+                                    //     const value = $(item).val();
+                                    //     $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+                                    // });
+
                                     $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
                                         const name = $(item).attr('name');
                                         const value = $(item).val();
-                                        $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+
+                                        if($('ul#' + name).find('input[value="' + value + '"]').length > 1){
+                                            if($('ul#' + name).find('input[value=' + value + ']._flow-user_data').length > 0){
+                                                let check_yn = $('ul#' + name).find('input[value=' + value + ']._flow-user_data').prop('checked');
+                                                $('ul#' + name).find('li').not('li.flow-search-list').find('input[value="' + value + '"]').prop('checked', check_yn);
+                                            } else{
+                                                let check_yn = $('ul#' + name).find('li.flow-search-list input[value="' + value + '"]').prop('checked');
+                                                $('ul#' + name).find('li').not('li.flow-search-list').find('input[value="' + value + '"]').prop('checked', check_yn);
+                                            }
+                                        } else{
+                                            $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+                                        }
                                     });
+
+                                    _search.binding();
                                 },
                                 error: function () {
                                     alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
@@ -387,4 +412,66 @@
 
         orgModal.init();
     });
+
+    let _search = {
+        init: function (name){
+            $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
+                const name = $(item).attr('name');
+                const value = $(item).val();
+
+                if($('ul#' + name).find('input[value="' + value + '"]').length > 1){
+                    let check_yn = $('ul#' + name).find('li').not('li.flow-search-list').find('input[value="' + value + '"]').prop('checked');
+                    $('ul#' + name).find('li.flow-search-list input[value="' + value + '"]').prop('checked', check_yn);
+                } else{
+                    $('ul#' + name).find('li.flow-search-list input[value="' + value + '"]').prop('checked', true);
+                }
+            });
+
+            $('input:checkbox[name="' + name + '"]:checked').each(function (i, item) {
+                const name = $(item).attr('name');
+                const value = $(item).val();
+
+                $('ul#' + name).find('li.flow-search-list input[value="' + value + '"]').prop('checked', true);
+            });
+        },
+        binding: function () {
+            // 체크된 부서 항목
+            // const orgList = [];
+            $('input:checkbox[name=orgList]').each(function (e) {
+                $(this).off('change').on('change', function () {
+                    const ouCode = $(this).val();
+                    if ($(this).is(':checked')) {
+                        $('ul#orgList').find('input[value='+ouCode+']').prop('checked', true);
+                    } else{
+                        $('ul#orgList').find('input[value='+ouCode+']').prop('checked', false);
+                    }
+                });
+            });
+
+            // 체크된 개인 항목
+            // const userList = [];
+            $('input:checkbox[name=userList]').each(function (e) {
+                $(this).off('change').on('change', function () {
+                    const sid = $(this).val();
+                    let user_length = $('ul#userList').find('li').not('li.flow-search-list').find('input[value="' + sid + '"]').length;
+
+                    if(user_length > 0){
+                        if ($(this).is(':checked')) {
+                            $('ul#userList').find('input[value='+sid+']').prop('checked', true);
+                        } else {
+                            $('ul#userList').find('input[value='+sid+']').prop('checked', false);
+                        }
+                    } else{
+                        if ($(this).is(':checked')) {
+                            $('ul#userList').find('input[value=' + sid + ']._flow-user_data').remove();
+                            $('ul#userList').append('<input class="_flow-user_data" name="userList" type="checkbox" style="display: none" value="' + sid + '" data-name="' + $(this).attr('data-name') + '" data-ou="' + $(this).attr('data-ou') + '" checked="checked"/>');
+                        } else {
+                            $('ul#userList').find('input[value=' + sid + ']._flow-user_data').remove();
+                            $('ul#userList').append('<input class="_flow-user_data" name="userList" type="checkbox" style="display: none" value="' + sid + '" data-name="' + $(this).attr('data-name') + '" data-ou="' + $(this).attr('data-ou') + '"/>');
+                        }
+                    }
+                });
+            });
+        },
+    }
 </script>

@@ -597,7 +597,14 @@
                                         previewPopup();
                                         location.href="/srv/surveyUpdate.do?surveyNo="+response.data.surveyNo; 
                                     } else {
-                                        alert("임시저장 되었습니다.");
+                                        <c:choose>
+                                            <c:when test="${detail.aprvState.name() == 'DOING'}">
+                                                alert("저장 되었습니다.");
+                                            </c:when>
+                                            <c:otherwise>
+                                                alert("임시저장 되었습니다.");
+                                            </c:otherwise>
+                                        </c:choose>
                                         location.href="/srv/surveyUpdate.do?surveyNo="+response.data.surveyNo;
                                     }
 

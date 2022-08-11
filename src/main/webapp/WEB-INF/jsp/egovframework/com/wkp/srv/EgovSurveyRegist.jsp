@@ -82,7 +82,7 @@
                                         <c:set var="type" value="${targetVO.targetTypeCd eq 'USER' ? 'usersName' : targetVO.targetTypeCd eq 'ORG' ? 'orgName' : 'groupName'}"/>
                                         <c:set var="type2" value="${targetVO.targetTypeCd eq 'USER' ? 'userList' : targetVO.targetTypeCd eq 'ORG' ? 'orgList' : 'groupList'}"/>
                                         <c:set var="target" value="${targetVO.dispName}"/>
-                                        <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove flow-action-remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="${type2}" value="${targetVO.targetCode}"/></span>
+                                        <span id="${type}" class="tag_btn label label-default"><c:out value="${targetVO.dispName}"/><i class="remove flow-action-remove">x</i><span class="sr-only">삭제</span><input type="hidden" name="${type2}" value="${targetVO.targetCode}" data-ou="${targetVO.ou}" data-name="${targetVO.name}"/></span>
                                     </c:forEach>
                                 </div>
                             </div>

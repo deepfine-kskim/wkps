@@ -208,7 +208,12 @@
                         $('#rlsList').find('input[type="hidden"]').each(function (i, item) {
                             const name = $(item).attr('name');
                             const value = $(item).val();
-                            $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+                            if($('ul#' + name).find('input[value="' + value + '"]').length > 0){
+                                $('ul#' + name).find('input[value="' + value + '"]').prop('checked', true);
+                            } else {
+                                 $('ul#' + name).find('input[value=' + value + ']._flow-user_data').remove();
+                                 $('ul#' + name).append('<input class="_flow-user_data" name="userList" type="checkbox" style="display: none" value="' + value + '" data-name="' + $(this).attr('data-name') + '" data-ou="' + $(this).attr('data-ou') + '" checked="checked"/>');
+                            }
                         });
                     },
                     clear: function () {

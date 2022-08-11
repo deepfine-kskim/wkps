@@ -31,4 +31,8 @@ public class TargetVO {
 	
 	//수정화면에서 필요
 	private String dispName;
+
+	private String ou;
+
+	private String name;
 }

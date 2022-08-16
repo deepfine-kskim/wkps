@@ -37,8 +37,14 @@
                         </div>
                         <div class="col-xs-12 col-sm-8 info_txts">
                             <span class="info_txt">조회 : <span class="data">${requestDetail.inqCnt }</span></span>
-                            <span class="info_txt name">작성자 : <span
-                                    class="data">${requestDetail.displayName }</span></span>
+                            <c:choose>
+                                <c:when test="${requestDetail.requstNo eq 23}">
+                                    <span class="info_txt name">작성자 : <span class="data">익명</span></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="info_txt name">작성자 : <span class="data">${requestDetail.displayName }</span></span>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </div>
@@ -79,7 +85,14 @@
                         <li class="board-list-item js-collapse-contents" style="border-top: 1px solid #ddd;">
                             <div class="board-list-content">
                                 <p class="board-list-number">답변 ${status.end - status.index} <c:if test="${answer.slctnYn eq 'Y'}">&nbsp;<span class="label label-danger"><i class="ti-check"></i> 채택</span></c:if></p>
-                                <p class="board-list-name">작성자 : ${answer.displayName}</p>
+                                <c:choose>
+                                    <c:when test="${requestDetail.requstNo eq 23}">
+                                        <p class="board-list-name">작성자 : 익명</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p class="board-list-name">작성자 : ${answer.displayName}</p>
+                                    </c:otherwise>
+                                </c:choose>
                                 <p class="board-list-date">작성일 : <fmt:formatDate value="${answer.registDtm}" pattern="yyyy-MM-dd"/></p>
                                 <div class="board-list-answer">
                                     <p class="board-list-text">${answer.cont}</p>

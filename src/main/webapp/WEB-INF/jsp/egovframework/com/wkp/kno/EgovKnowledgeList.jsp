@@ -321,7 +321,14 @@
 														</p>
 													</td>
 													<td>${knowledge.registDtm }</td>
-													<td>${knowledgeVO.knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
+                                                    <c:choose>
+                                                        <c:when test="${knowledge.title eq '블러 테스트게시물입니다.'}">
+                                                            <td>${knowledgeVO.knowlgMapType eq 'PERSONAL' ? '익명' : knowledge.ownerOu}</td>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <td>${knowledgeVO.knowlgMapType eq 'PERSONAL' ? knowledge.displayName : knowledge.ownerOu}</td>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                     <td><fmt:formatNumber value="${knowledge.inqCnt}" pattern="#,###"/></td>
 												</tr>
 											</c:forEach>

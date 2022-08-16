@@ -34,7 +34,14 @@
                         </div>
                         <div class="row type0 info_view">
                             <div class="col-xs-12 col-sm-4">
-                                <span>작성자 : </span><span class="data">${knowledgeDetail.displayName}(${knowledgeDetail.ou})</span>
+                                <c:choose>
+                                    <c:when test="${knowledgeDetail.title eq '블러 테스트게시물입니다.'}">
+                                        <span>작성자 : </span><span class="data">익명</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>작성자 : </span><span class="data">${knowledgeDetail.displayName}(${knowledgeDetail.ou})</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="col-xs-12 col-sm-8 info_txts">
                                 <span class="info_txt name">등록일 : <span class="data">${knowledgeDetail.registDtmStr}</span></span>

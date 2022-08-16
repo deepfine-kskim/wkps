@@ -75,7 +75,14 @@
                                         <c:if test="${request.isNew }"><span class="brd_ico"><i class="xi-new"><span class="sr-only">새글</span></i></span></c:if>
                                     </p>
                                 </td>
-                                <td>${request.displayName }</td>
+                                <c:choose>
+                                    <c:when test="${request.requstNo eq 23}">
+                                        <td>익명</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>${request.displayName }</td>
+                                    </c:otherwise>
+                                </c:choose>
                                 <td>${request.registDtm }</td>
                                 <td>
                                     <c:choose>

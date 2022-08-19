@@ -10,6 +10,7 @@ import egovframework.com.wkp.kno.service.EgovKnowledgeService;
 import egovframework.com.wkp.kno.service.KnowledgeVO;
 import egovframework.com.wkp.req.service.ReqService;
 import egovframework.com.wkp.req.service.ReqVO;
+import egovframework.com.wkp.srv.service.SurveyDTO;
 import egovframework.com.wkp.usr.service.UserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -236,8 +237,9 @@ public class ReqController {
 		
 	}
 
-	@RequestMapping("/updateRequestAnswer.do")
-	public String updateRequestAnswer(@ModelAttribute("reqVO") ReqVO reqVO, Model model) {
+	@ResponseBody
+	@RequestMapping(value = "/updateRequestAnswer.do")
+	public ReqVO updateRequestAnswer(@RequestBody ReqVO reqVO) {
 
 		try {
 			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
@@ -248,7 +250,7 @@ public class ReqController {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
 
-		return "redirect:/req/requestDetail.do?requstNo="+reqVO.getRequstNo();
+		return reqVO;
 
 	}
 

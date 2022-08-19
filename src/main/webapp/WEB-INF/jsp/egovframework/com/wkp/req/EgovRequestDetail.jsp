@@ -107,7 +107,20 @@
                                 </c:if>
                             </div>
                             <div class="board-list-controls">
-                                <p class="board-list-details" style="white-space: pre-wrap">${answer.cont}</p>
+                                <c:choose>
+                                    <c:when test="${not isSelection && loginVO.sid eq answer.registerId}">
+                                    <div>
+                                        <textarea class="form-control" rows="4" name="cont" required="required" placeholder="답변을 입력해 주세요.">${answer.cont}</textarea>
+                                    </div>
+                                    <hr/>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-blue dev-updateAnswer" data-register-id="${answer.registerId}"  data-requst-answer-no="${answer.requstAnswerNo}">수정</button>
+                                    </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p class="board-list-details" style="white-space: pre-wrap">${answer.cont}</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </li>
                     </c:forEach>
@@ -122,7 +135,8 @@
                                 <label for="inpMemo" class="sr-only control-label">답변</label>
                                 <div class="col-sm-12">
                                     <textarea class="form-control" rows="4" id="inpMemo" name="cont" required="required"
-                                              placeholder="답변을 입력해 주세요."></textarea>
+                                              placeholder="답변을 입력해 주세요.">
+                                    </textarea>
                                 </div>
                             </div>
                             <hr/>
@@ -281,6 +295,33 @@
                         var form = $("form[name=requestFrm]");
                         form.attr("action", "/req/requestDetail.do");
                         form.submit();
+                    },
+                    error: function (error) {
+                        alert("답변 채택 중 에러가 발생하였습니다.");
+                    }
+                });
+            }
+        });
+
+        $(".dev-updateAnswer").on("click", function (e) {
+            e.preventDefault();
+
+            const data = {
+                "requstAnswerNo": $(this).data("requst-answer-no")
+                , "answerId": $(this).data("register-id")
+                , "answerCont": $(this).closest('div.board-list-controls').find('textarea[name=cont]').val()
+            }
+
+            if (confirm("해당 답변을 수정 하시겠습니까?")) {
+                $.ajax({
+                    url: "/req/updateRequestAnswer.do",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: "POST",
+                    success: function (data) {
+                        alert("답변 수정이 완료되었습니다.");
+                        location.reload();
                     },
                     error: function (error) {
                         alert("답변 채택 중 에러가 발생하였습니다.");

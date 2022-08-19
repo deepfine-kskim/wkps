@@ -165,14 +165,13 @@
 	<update id="updateRequestAnswer" parameterType="ReqVO">
 
 			UPDATE
-				TB_REQUEST_KNOWLEDGE
+				TB_REQUEST_KNOWLEDGE_ANSWER
 			SET
-				ANSWER_ID = #{answerId},
-				ANSWER_CONT = #{answerCont},
-				ANSWER_YN = 'Y',
-				ANSWER_DTM = SYSDATE()
+				CONT 		= #{answerCont},
+				UPDATER_ID 	= #{answerId},
+				UPD_DTM 	= SYSDATE()
 			<where>
-				AND REQUST_NO = #{requstNo}
+				AND REQUST_ANSWER_NO = #{requstAnswerNo}
 			</where>
 
 	</update>

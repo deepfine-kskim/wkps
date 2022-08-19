@@ -865,9 +865,7 @@
          WHERE MBER_NO = #{mberNo}
     </update>
     <update id="updateCommunityMemberReject">
-        UPDATE TB_COMMUNITY_MEMBER
-           SET APRV_YN  = 'N'
-             , APRV_DTM = now()
+        DELETE FROM TB_COMMUNITY_MEMBER
          WHERE MBER_NO = #{mberNo}
     </update>
 

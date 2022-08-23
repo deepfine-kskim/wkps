@@ -261,8 +261,17 @@
                                                                 <input type="text" id="item${question.orderNo}-skip${example.orderNo}" name="item${question.orderNo}-skip${example.orderNo}" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" value="${example.cont}" />
                                                                 <div class="form-inline skip_num_inp">
                                                                     <label for="item${question.orderNo}-skip${example.orderNo}-num${example.orderNo}" class="text-primary control-label"> 선택시
-                                                                        <input type="text" id="item${question.orderNo}-skip1-num1" name="item${question.orderNo}-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" value="${example.skipNo}" />
-                                                                        번 항목으로 건너뛰기</label>
+<%--                                                                        <input type="text" id="item${question.orderNo}-skip1-num1" name="item${question.orderNo}-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" value="${example.skipNo}" />--%>
+<%--                                                                        번 항목으로 건너뛰기--%>
+                                                                        <select id="item${question.orderNo}-skip1-num1" name="item${question.orderNo}-skip1-num1" class="_flow-select-skip dev-example-skip">'
+                                                                            <option value="0">건너뛸 항목을 선택해주세요</option>
+                                                                    <c:forEach var="i" begin="1" end="${fn:length(detail.questionList)}">
+                                                                        <c:if test="${i > 1 and i ne question.orderNo}">
+                                                                            <option value="${i}" <c:if test="${i eq example.skipNo }"> selected </c:if>>${i} 번 항목으로 건너뛰기</option>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                        </select>
+                                                                    </label>
                                                                 </div>
                                                                 <c:if test="${example.atchFileNo != null && example.atchFileNo > 0}">
                                                                     <div class="form-group inner_frm_grp file_set">
@@ -434,6 +443,20 @@
                         isSubmit = true;
                         return false;
                     }
+
+                    let skip_flag = false;
+                    $('.dev-example-skip').each(function () {
+                        let selectVal = $(this).val();
+                        if(selectVal == 0 && $(this).is(':visible')){
+                            alert("건너뛸 설문항목을 선택해주세요.");
+                            isSubmit = true;
+                            skip_flag = true;
+                            return false;
+                        }
+                    });
+                    if(skip_flag){
+                        return false;
+                    }
                     
                     $(".item_panel").each(function(index, item) {
                         var question = new Object();
@@ -508,7 +531,6 @@
                         var _this = $(this);
 
                         question.orderNo = _this.find(".order-id").html();
-                        console.log('question.orderNo - ' + question.orderNo)
 
                         var qusType = $("#item"+ question.orderNo +"-type");
 

@@ -134,8 +134,17 @@ function panelPlus() {
         panelTag += '<div class="col-sm-8 col-md-7 col-lg-8">';
         panelTag += '<input type="text" id="item' + num + '-skip1" name="item' + num + '-skip1" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" />';
         panelTag += '<div class="form-inline skip_num_inp">';
-        panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시 <input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" />';
-        panelTag += ' 번 항목으로 건너뛰기</label>';
+        // panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시 <input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" />';
+        panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시';
+        panelTag += '   <select id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="_flow-select-skip dev-example-skip">';
+        panelTag += '   <option value="0" selected>건너뛸 항목을 선택해주세요</option>';
+        $('.item_panel').each(function (i, item) {
+            // 첫 번째 항목으로 건너뛰기는 방지, 나 자신에게 건너뛰기 못하게
+            if(i > 0 && (i+1) != num){
+                panelTag += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+            }
+        });
+        panelTag += '</label>';
         panelTag += '</div>';
         panelTag += '</div>';
         panelTag += ' <div class="col-sm-2 col-md-3 col-lg-2 btn_area">';
@@ -163,6 +172,7 @@ function panelPlus() {
         panelTag += '</div>';
         panelTag += '</div>';
         $('.item_panel_area').append(panelTag);
+        allNumReset();
     });
 }
 
@@ -171,6 +181,7 @@ function panelPlusBefore() {
 		var panelTag = '';
 		var numB = $(this).closest('.item_panel').attr('id').substring(4,5);
         var num = $('.item_panel').length + 1;
+
         //console.log('numB - ' + numB);
         panelTag += '<div id="item' + num + '-panel" class="panel panel-default item_panel">';
         panelTag += '<div class="panel-heading">';
@@ -305,8 +316,17 @@ function panelPlusBefore() {
         panelTag += '<div class="col-sm-8 col-md-7 col-lg-8">';
         panelTag += '<input type="text" id="item' + num + '-skip1" name="item' + num + '-skip1" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" />';
         panelTag += '<div class="form-inline skip_num_inp">';
-        panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시 <input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" />';
-        panelTag += ' 번 항목으로 건너뛰기</label>';
+        // panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시 <input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" />';
+        panelTag += '<label for="item' + num + '-skip1-num1" class="text-primary control-label"> 선택시';
+        panelTag += '   <select id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="_flow-select-skip dev-example-skip">';
+        panelTag += '   <option value="0" selected>건너뛸 항목을 선택해주세요</option>';
+        $('.item_panel').each(function (i, item) {
+            // 첫 번째 항목으로 건너뛰기는 방지, 나 자신에게 건너뛰기 못하게
+            if(i > 0 && (i+1) != num){
+                panelTag += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+            }
+        });
+        panelTag += '</label>';
         panelTag += '</div>';
         panelTag += '</div>';
         panelTag += ' <div class="col-sm-2 col-md-3 col-lg-2 btn_area">';
@@ -334,7 +354,37 @@ function panelPlusBefore() {
         panelTag += '</div>';
         panelTag += '</div>';
         $('#item' + numB + '-panel').before(panelTag);
-        
+
+        $('.item_panel_area .panel').each(function (i) {
+            var newNum = i + 1;
+            $(this).find(".dev-example-skip").each(function () {
+                let beforeVal = $(this).val();
+                $(this).html('');
+                let selectOption = '';
+                if(beforeVal == 0 || beforeVal == '' || beforeVal == null){
+                    selectOption += '<option value="0" selected>건너뛸 항목을 선택해주세요</option>';
+                } else{
+                    selectOption += '<option value="0">건너뛸 항목을 선택해주세요</option>';
+                }
+                $('.item_panel').each(function (i, item) {
+                    // 첫 번째 항목으로 건너뛰기는 방지, 나 자신에게 건너뛰기 못하게
+                    if(i > 0 && (i+1) != newNum){
+                        // 삭제된 이후의 리셋인지
+                        if(numB <= beforeVal){
+                            if(beforeVal == i){
+                                selectOption += '<option value="'+ (i + 1) +'" selected>'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                            }else{
+                                selectOption += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                            }
+                        } else{
+                            selectOption += '<option value="'+ (i + 1) +'" '+(beforeVal == i+1 ? "selected" : "")+'>'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                        }
+                    }
+                });
+                $(this).html(selectOption);
+            });
+        });
+
         allNumReset();
     });
 }
@@ -342,14 +392,23 @@ function panelPlusBefore() {
 function panelDel() {
     $('.item_panel_area').on('click', '.del_panel_btn', function () {
         var myPanel = $(this).closest('.panel');
+        var myOrderId = myPanel.find('.order-id').text();
+
         //console.log(myPanel);
+        $(".dev-example-skip").each(function () {
+
+            if ($(this).val() == myOrderId) {
+                $(this).val(0);
+            }
+        });
+
         $('.' + myPanel.attr('id') + '-connect').remove();
         myPanel.remove();
-        allNumReset();
+        allNumReset(myOrderId);
     });
 }
 
-function allNumReset() {
+function allNumReset(delId) {
     $('.item_panel_area .panel').each(function (i) {
         var newNum = i + 1;
         var myNum = $(this).attr('id').replace(/[^0-9]/g, '');
@@ -357,12 +416,32 @@ function allNumReset() {
         var afStr = 'item' + newNum;
         $(this).attr('id', $(this).attr('id').replace(beStr, afStr));
         $(this).find('.panel-title > span').text(newNum);
-
-        $(".dev-example-skip").each(function () {
-            if ($(this).val() == myNum) {
-                $(this).val(newNum);
-                return false;
+        $(this).find(".dev-example-skip").each(function () {
+            let beforeVal = $(this).val();
+            $(this).html('');
+            let selectOption = '';
+            if(beforeVal == 0 || beforeVal == '' || beforeVal == null){
+                selectOption += '<option value="0" selected>건너뛸 항목을 선택해주세요</option>';
+            } else{
+                selectOption += '<option value="0">건너뛸 항목을 선택해주세요</option>';
             }
+            $('.item_panel').each(function (i, item) {
+                // 첫 번째 항목으로 건너뛰기는 방지, 나 자신에게 건너뛰기 못하게
+                if(i > 0 && (i+1) != newNum){
+                    // 삭제된 이후의 리셋인지
+                    if(delId && delId < beforeVal){
+                        selectOption += '<option value="'+ (i + 1) +'" '+(beforeVal-1 == i+1 ? "selected" : "")+'>'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                    } else{
+                        selectOption += '<option value="'+ (i + 1) +'" '+(beforeVal == i+1 ? "selected" : "")+'>'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                    }
+                }
+            });
+            $(this).html(selectOption);
+
+            // if ($(this).val() == myNum) {
+            //     $(this).val(newNum);
+            //     return false;
+            // }
         });
 
         var inps = $(this).find('input[id^="item' + myNum + '"]');
@@ -450,8 +529,18 @@ function optPlus() {
                 inpTags += '<div class="col-sm-8 col-md-7 col-lg-8">';
                 inpTags += '<input type="text" id="item' + num + '-skip' + lastNum + '" name="item' + num + '-skip' + lastNum + '" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" />';
                 inpTags += '<div class="form-inline skip_num_inp">';
-                inpTags += '<label for="item' + num + '-skip' + lastNum + '-num' + lastNum + '" class="text-primary control-label">선택시 <input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" value="' + afterNum + '" />'
-                inpTags += ' 번 항목으로 건너뛰기</label>';
+                inpTags += '<label for="item' + num + '-skip' + lastNum + '-num' + lastNum + '" class="text-primary control-label">선택시 ';
+                // inpTags += '<input type="text" id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" value="' + afterNum + '" />'
+                inpTags += '<select id="item' + num + '-skip1-num1" name="item' + num + '-skip1-num1" class="_flow-select-skip dev-example-skip">';
+                inpTags += '<option value="0" selected>건너뛸 항목을 선택해주세요</option>';
+            $('.item_panel').each(function (i, item) {
+                // 첫 번째 항목으로 건너뛰기는 방지, 나 자신에게 건너뛰기 못하게
+                if(i > 0 && (i+1) != num){
+                    inpTags += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
+                }
+            });
+                inpTags += '</select>';
+                inpTags += '</label>';
                 inpTags += '</div>';
                 inpTags += '</div>';
                 inpTags += '<div class="col-sm-2 col-md-3 col-lg-2 btn_area">';
@@ -460,12 +549,12 @@ function optPlus() {
                 inpTags += '</div>';
                 inpTags += '</div>';
 
-                $('#itemSetPlus').trigger('click');
-                var myPanel = $(this).closest('.panel');
-                var connectPanel = $(document).find(".panel:visible").last();
-                var connectClass = myPanel.attr('id') + '-connect';
-                connectPanel.addClass(connectClass);
-                connectPanel.find('.del_panel_btn').remove();
+                // $('#itemSetPlus').trigger('click');
+                // var myPanel = $(this).closest('.panel');
+                // var connectPanel = $(document).find(".panel:visible").last();
+                // var connectClass = myPanel.attr('id') + '-connect';
+                // connectPanel.addClass(connectClass);
+                // connectPanel.find('.del_panel_btn').remove();
             //}
         } else {
             inpTags += '<div class="form-group dev-group">';
@@ -663,15 +752,15 @@ $(document).ready(function () {
             var next = myPanel.find(".dev-example-skip");
             next.each(function (index, item) {
                 var _this = $(this);
-                _this.val($(".panel-default:visible").length + 1);
-                $('#itemSetPlus').trigger('click');
-                var connectPanel = $(document).find(".panel:visible").last();
-                var connectClass = myPanel.attr('id') + '-connect';
-                connectPanel.addClass(connectClass);
-                connectPanel.find('.del_panel_btn').remove();
+                // _this.val($(".panel-default:visible").length + 1);
+                // $('#itemSetPlus').trigger('click');
+                // var connectPanel = $(document).find(".panel:visible").last();
+                // var connectClass = myPanel.attr('id') + '-connect';
+                // connectPanel.addClass(connectClass);
+                // connectPanel.find('.del_panel_btn').remove();
             });
         } else {
-            $('.' + myPanel.attr('id') + '-connect').remove();
+            // $('.' + myPanel.attr('id') + '-connect').remove();
             allNumReset();
         }
     });

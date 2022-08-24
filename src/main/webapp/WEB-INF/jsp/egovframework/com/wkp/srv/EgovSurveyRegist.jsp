@@ -395,7 +395,18 @@
             <c:if test="${detail.surveyNo != null or detail.surveyNo > 0}">
                 question = "수정하시겠습니까?";
                 url = "/srv/updateProc.do";
-                aprv_state = $('input[name=aprvState]').val();
+                // 임시저장 버튼누르면 임시저장으로 변경
+                if(aprv_state == 'TEMPORARY'){
+                    aprv_state = 'TEMPORARY';
+                } else{
+                    // 저장버튼 클릭한 임시저장상태의 설문조사일경우 승인대기로 변경
+                    if($('input[name=aprvState]').val() == 'TEMPORARY'){
+                        aprv_state = 'WAIT';
+                    } else{
+                        // 그 외의 경우 현재 자신의 상태 유지
+                        aprv_state = $('input[name=aprvState]').val();
+                    }
+                }
                 surveyNo = '${detail.surveyNo}';
             </c:if>
 

@@ -144,6 +144,7 @@ function panelPlus() {
                 panelTag += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
             }
         });
+        panelTag += '</select>';
         panelTag += '</label>';
         panelTag += '</div>';
         panelTag += '</div>';
@@ -152,19 +153,8 @@ function panelPlus() {
         panelTag += '</div>';
         panelTag += '</div>';
         panelTag += '</div>';
-
-        // panelTag +=                '<div class="etc_area">'
-        // panelTag +=                    '<div class="form-group">'
-        // panelTag +=                         '<label for="item'+ num +'-chk-etc" class="col-sm-2 control-label">기타)</label>'
-        // panelTag +=                         '<div class="col-sm-8 col-md-7 col-lg-8">'
-        // panelTag +=                            '<input type="text" id="item'+ num +'-chk-etc" name="item'+ num +'-chk-etc" class="form-control" placeholder="복수선택 기타항목 사용" readonly="readonly" />'
-        // panelTag +=                        '</div>'
-        // panelTag +=                    '</div>'
-        // panelTag +=                '</div>'
-
         panelTag += '<div class="text-right">';
-        // panelTag +=                    '<button type="button" class="btn btn-black add_etc_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 기타 항목 추가</button> ';
-        panelTag += '<button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 복수선택 항목 추가</button>';
+        panelTag += '    <button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 건너뛰기 항목 추가</button>';
         panelTag += '</div>';
         panelTag += '</div>';
 
@@ -326,6 +316,7 @@ function panelPlusBefore() {
                 panelTag += '<option value="'+ (i + 1) +'">'+(i + 1)+' 번 항목으로 건너뛰기</option>';
             }
         });
+        panelTag += '</select>';
         panelTag += '</label>';
         panelTag += '</div>';
         panelTag += '</div>';
@@ -334,23 +325,10 @@ function panelPlusBefore() {
         panelTag += '</div>';
         panelTag += '</div>';
         panelTag += '</div>';
-
-        // panelTag +=                '<div class="etc_area">'
-        // panelTag +=                    '<div class="form-group">'
-        // panelTag +=                         '<label for="item'+ num +'-chk-etc" class="col-sm-2 control-label">기타)</label>'
-        // panelTag +=                         '<div class="col-sm-8 col-md-7 col-lg-8">'
-        // panelTag +=                            '<input type="text" id="item'+ num +'-chk-etc" name="item'+ num +'-chk-etc" class="form-control" placeholder="복수선택 기타항목 사용" readonly="readonly" />'
-        // panelTag +=                        '</div>'
-        // panelTag +=                    '</div>'
-        // panelTag +=                '</div>'
-
         panelTag += '<div class="text-right">';
-        // panelTag +=                    '<button type="button" class="btn btn-black add_etc_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 기타 항목 추가</button> ';
-        panelTag += '<button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 복수선택 항목 추가</button>';
+        panelTag += '    <button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 건너뛰기 항목 추가</button>';
         panelTag += '</div>';
         panelTag += '</div>';
-
-
         panelTag += '</div>';
         panelTag += '</div>';
         $('#item' + numB + '-panel').before(panelTag);

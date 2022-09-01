@@ -38,7 +38,7 @@
                         <div class="col-xs-12 col-sm-8 info_txts">
                             <span class="info_txt">조회 : <span class="data">${requestDetail.inqCnt }</span></span>
                             <c:choose>
-                                <c:when test="${requestDetail.requstNo eq 23}">
+                                <c:when test="${requestDetail.requstNo eq 28}">
                                     <span class="info_txt name">작성자 : <span class="data">익명</span></span>
                                 </c:when>
                                 <c:otherwise>
@@ -86,7 +86,7 @@
                             <div class="board-list-content">
                                 <p class="board-list-number">답변 ${status.end - status.index} <c:if test="${answer.slctnYn eq 'Y'}">&nbsp;<span class="label label-danger"><i class="ti-check"></i> 채택</span></c:if></p>
                                 <c:choose>
-                                    <c:when test="${requestDetail.requstNo eq 23}">
+                                    <c:when test="${requestDetail.requstNo eq 28}">
                                         <p class="board-list-name">작성자 : 익명</p>
                                     </c:when>
                                     <c:otherwise>

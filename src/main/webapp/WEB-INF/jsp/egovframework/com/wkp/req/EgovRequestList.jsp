@@ -76,7 +76,7 @@
                                     </p>
                                 </td>
                                 <c:choose>
-                                    <c:when test="${request.requstNo eq 23}">
+                                    <c:when test="${request.requstNo eq 28}">
                                         <td>익명</td>
                                     </c:when>
                                     <c:otherwise>

@@ -195,14 +195,14 @@
                                         <div class="form-group inp_set_area">
                                             <label for="svTarget1" class="col-sm-2 control-label"><span class="req">*</span> 공개범위</label>
                                             <div class="col-sm-10 tree_chk_area">
-                                                <label for="svTarget1" class="radio-inline">
-                                                    <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" /> 전체
-                                                </label>
                                                 <c:if test="${not isIgnoreOrg}">
                                                     <label for="svTarget3" class="radio-inline">
                                                         <form:radiobutton path="rlsYn" id="svTarget3" value="B" checked="${knowledgeDetail.rlsYn eq 'B' ? 'checked' : ''}" /> 전체(의회미포함)
                                                     </label>
                                                 </c:if>
+                                                <label for="svTarget1" class="radio-inline">
+                                                    <form:radiobutton path="rlsYn" id="svTarget1" value="Y" checked="${knowledgeDetail.rlsYn eq 'Y' ? 'checked' : ''}" /> 전체
+                                                </label>
                                                 <label for="svTarget2" class="radio-inline">
                                                     <form:radiobutton path="rlsYn" id="svTarget2" value="N" checked="${knowledgeDetail.rlsYn eq 'N' ? 'checked' : ''}" class="inp_tog" /> 지정
                                                 </label>

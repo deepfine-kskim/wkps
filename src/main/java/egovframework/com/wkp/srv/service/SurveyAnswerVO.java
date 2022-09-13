@@ -43,6 +43,7 @@ public class SurveyAnswerVO {
     private String registerName;
     private String updaterName;
     private String displayName;
+    private String orgFullName;
     private String ou;
     private String position;
 }

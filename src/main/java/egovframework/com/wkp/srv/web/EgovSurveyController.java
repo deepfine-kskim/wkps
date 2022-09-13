@@ -652,8 +652,9 @@ public class EgovSurveyController {
 		        question.add("성명");
 	        }*/
 	        if(user.getRoleCd().equals("ROLE_ADMIN")) {
-                question.add("부서");
+                question.add("전체소속명");
                 question.add("성명");
+                question.add("직책");
             }
 	        question.add("참여일");
 	        
@@ -685,8 +686,9 @@ public class EgovSurveyController {
 		        }
 		        */
                 if(user.getRoleCd().equals("ROLE_ADMIN")) {
-	        	    answer.add(answerUserList.get(i).getOu());
+	        	    answer.add(answerUserList.get(i).getOrgFullName());
 	        	    answer.add(answerUserList.get(i).getDisplayName());
+	        	    answer.add(answerUserList.get(i).getPosition());
                 }
 	        	answer.add(transFormat.format(answerUserList.get(i).getRegistDtm()));
         		surveyAnswerVO.setRegisterId(answerUserList.get(i).getRegisterId());

@@ -463,12 +463,17 @@
 	</select>
 	
 	<select id="selectAnswerUserList" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">
-		SELECT *
-		FROM TB_SURVEY_ANSWER a
-	    LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID		
-		WHERE SURVEY_NO = #{surveyNo}
-		GROUP BY REGISTER_ID
-		ORDER BY a.REGIST_DTM
+		SELECT o.ORG_FULL_NAME
+			 , e.POSITION
+			 , e.DISPLAY_NAME
+			 , a.REGISTER_ID
+			 , a.REGIST_DTM
+		  FROM TB_SURVEY_ANSWER a
+		  LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
+		  LEFT OUTER JOIN TB_ORG o ON e.OU_CODE = o.OU_CODE
+		 WHERE SURVEY_NO = #{surveyNo}
+		 GROUP BY REGISTER_ID
+		 ORDER BY a.REGIST_DTM;
 	</select>
 	
 	<select id="selectAnswer" resultType="SurveyAnswerVO" parameterType="SurveyAnswerVO">

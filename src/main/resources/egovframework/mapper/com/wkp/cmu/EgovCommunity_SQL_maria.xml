@@ -70,13 +70,13 @@
             AND DEL_YN = 'N'
             AND APRV_YN = 'Y'
             <if test='search_value != null and search_value != "" '>
-                <if test='search_type != null and search_type != "01" '>
+                <if test='search_type != null and search_type == "01"'>
                     AND CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
                 </if>
-                <if test='search_type != null and search_type != "02" '>
+                <if test='search_type != null and search_type == "02"'>
                     AND CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
                 </if>
-                <if test='search_type != null and search_type != "03" '>
+                <if test='search_type != null and search_type == "03"'>
                     AND ( KEYWORD01 LIKE CONCAT('%',#{search_value},'%')
                     OR KEYWORD02 LIKE CONCAT('%',#{search_value},'%')
                     OR KEYWORD03 LIKE CONCAT('%',#{search_value},'%')
@@ -102,14 +102,14 @@
         <where>
             AND DEL_YN = 'N'
             AND APRV_YN = 'Y'
-            <if test='search_value != null and search_value != "" '>
-                <if test='search_type != null and search_type != "01" '>
+            <if test='search_value != null and search_value != ""'>
+                <if test='search_type != null and search_type == "01"'>
                     AND CMMNTY_NM LIKE CONCAT('%',#{search_value},'%')
                 </if>
-                <if test='search_type != null and search_type != "02" '>
+                <if test='search_type != null and search_type == "02"'>
                     AND CMMNTY_DESC LIKE CONCAT('%',#{search_value},'%')
                 </if>
-                <if test='search_type != null and search_type != "03" '>
+                <if test='search_type != null and search_type == "03"'>
                     AND ( KEYWORD01 LIKE CONCAT('%',#{search_value},'%')
                     OR KEYWORD02 LIKE CONCAT('%',#{search_value},'%')
                     OR KEYWORD03 LIKE CONCAT('%',#{search_value},'%')
@@ -820,6 +820,14 @@
           FROM TB_COMMUNITY_MEMBER
          WHERE DEL_YN = 'N'
            AND MBER_NO = #{mberNo}
+    </select>
+
+    <select id="getCommunityMemberExistUser" parameterType="map" resultType="int">
+        SELECT count(*)
+          FROM TB_COMMUNITY_MEMBER
+         WHERE DEL_YN = 'N'
+           AND CMMNTY_NO = #{cmmntyNo}
+           AND USER_SID = #{userSid}
     </select>
 
     <insert id="insertCommunityMember" parameterType="CommunityMemberVO">

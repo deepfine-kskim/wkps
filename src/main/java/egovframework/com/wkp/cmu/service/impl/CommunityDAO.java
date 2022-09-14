@@ -435,6 +435,12 @@ public class CommunityDAO extends EgovComAbstractDAO {
         param.put("mberNo", mberNo);
         return selectOne("CommunityDAO.getCommunityMember", param);
     }
+    public int getCommunityMemberExistUser(Long cmmntyNo, String userSid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("userSid", userSid);
+        return selectOne("CommunityDAO.getCommunityMemberExistUser", param);
+    }
     
     public void insertCommunityMember(CommunityMemberVO vo) {
         insert("CommunityDAO.insertCommunityMember", vo);

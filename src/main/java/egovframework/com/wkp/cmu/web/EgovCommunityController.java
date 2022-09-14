@@ -325,16 +325,19 @@ public class EgovCommunityController {
 
         //private String aprvYn;
         //private Date aprvDtm;
-        CommunityMemberVO vo = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
-        if (vo != null) {
-            ModelAndView mav = new ModelAndView("jsonView");
+        int vo = communityService.getCommunityMemberExistUser(cmmntyNo, user.getSid());
+        if (vo != 0) {
+            /*ModelAndView mav = new ModelAndView("jsonView");
             if (vo.getAprvYn().equals("N")) {
                 mav.addObject("err_msg", "이미 가입요청 되어 있습니다.");
             } else {
                 mav.addObject("err_msg", "이미 가입되어 있습니다.");
-            }
+            }*/
 
+            ModelAndView mav = new ModelAndView("jsonView");
+            mav.addObject("err_msg", "이미 가입되어 있습니다.");
             mav.addObject("success", false);
+
             return mav;
         }
         if (!communityService.joinCheckNickname(cmmntyNo, nickname)) {

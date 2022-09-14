@@ -9,7 +9,12 @@ $(function() {
 	$('#btn_search').click(function(){
 		location.href="communitySearch.do?search_type="+$('#search_type').val()+"&search_value="+$('#search_value').val();
 	});
-	
+
+    $('input[name="search_value"]').keydown(function(event) {
+        if (event.keyCode === 13) {
+            location.href="communitySearch.do?search_type="+$('#search_type').val()+"&search_value="+$('#search_value').val();
+        }
+    });
 
 });
 
@@ -60,7 +65,7 @@ function goEventBoard2(eventNo,cmmntyNo,pstgNo){
                                     </a></p> <a href="communityRegist.do" class="btn btn-primary"><i class="ti-pencil-alt" aria-hidden="true"></i> 커뮤니티 만들기</a>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <form class="form-inline comm_srch_frm">
+                                    <form class="form-inline comm_srch_frm" onsubmit="return false">
                                         <fieldset>
                                             <legend class="sr-only">커뮤니티 검색</legend>
                                             <div class="form-group">

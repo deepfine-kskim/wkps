@@ -124,6 +124,13 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null, sid));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null, sid));
 		community.setFree2Count(communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, null, null, sid));
+
+		CommunityMemberVO mem = communityDAO.getCommunityMemberUser(cmmntyNo, sid);
+		if (mem != null) {
+			//커뮤니티회원이 아님
+			CommunityVO nick = communityDAO.getCommunityNicknameByUserSid(cmmntyNo, sid);
+			community.setCmmntyNicknm(nick.getCmmntyNicknm());
+		}
 		community.setKnowledgeCount(communityDAO.findCommunityKnowledgeTotalCount(cmmntyNo));
 		return community;
 	}
@@ -402,6 +409,10 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public void updateCommunity(CommunityVO vo) {
 		communityDAO.updateCommunity(vo);
+	}
+
+	public void updateCommunityMemberNickName(CommunityMemberVO vo) {
+		communityDAO.updateCommunityMemberNickName(vo);
 	}
 
 	@Override

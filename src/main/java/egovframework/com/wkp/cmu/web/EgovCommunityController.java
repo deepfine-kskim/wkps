@@ -12,6 +12,7 @@ import egovframework.com.utl.wed.comm.ListWithPageNavigation;
 import egovframework.com.wkp.cal.service.EgovCalendarService;
 import egovframework.com.wkp.cmm.service.EgovCommonService;
 import egovframework.com.wkp.cmu.service.*;
+import egovframework.com.wkp.cmu.service.impl.CommunityDAO;
 import egovframework.com.wkp.kno.service.EgovKnowledgeService;
 import egovframework.com.wkp.kno.service.KnowledgeMapVO;
 import egovframework.com.wkp.kno.service.KnowledgeVO;
@@ -294,6 +295,36 @@ public class EgovCommunityController {
         return "/com/wkp/cmm/EgovCommunityMain";
     }
 
+
+
+    @RequestMapping(value = "/changeNickName.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView changeNickName(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "nickname", required = true) String nickname
+
+    ) {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        if (!communityService.joinCheckNickname(cmmntyNo, nickname)) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "닉네임 중복이 있습니다.");
+            mav.addObject("success", false);
+            return mav;
+        } else{
+            CommunityMemberVO vo = new CommunityMemberVO();
+            vo.setCmmntyNicknm(nickname);
+            vo.setCmmntyNo(cmmntyNo);
+            vo.setUserSid(user.getSid());
+            communityService.updateCommunityMemberNickName(vo);
+        }
+
+        ModelAndView mav = new ModelAndView("jsonView");
+
+        mav.addObject("success", true);
+        return mav;
+    }
 
     @RequestMapping(value = "/joinCommunity.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView joinCommunity(

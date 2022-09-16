@@ -830,6 +830,14 @@
            AND USER_SID = #{userSid}
     </select>
 
+    <select id="getCommunityNicknameByUserSid" parameterType="map" resultType="CommunityVO">
+        SELECT CMMNTY_NICKNM
+          FROM TB_COMMUNITY_MEMBER
+         WHERE DEL_YN = 'N'
+           AND CMMNTY_NO = #{cmmntyNo}
+           AND USER_SID = #{sid}
+    </select>
+
     <insert id="insertCommunityMember" parameterType="CommunityMemberVO">
         INSERT INTO TB_COMMUNITY_MEMBER
         ( CMMNTY_NO, CMMNTY_ROLE_CD, CMMNTY_NICKNM, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, APRV_YN, APRV_DTM
@@ -837,6 +845,7 @@
         VALUES ( #{cmmntyNo}, #{cmmntyRoleCd}, #{cmmntyNicknm}, #{registerId}, now(), #{updaterId}, now(), #{aprvYn}
                , #{aprvDtm}, #{userSid}, 'N')
     </insert>
+
     <update id="updateCommunityMember" parameterType="CommunityMemberVO">
         UPDATE TB_COMMUNITY_MEMBER
            SET CMMNTY_ROLE_CD = #{cmmntyRoleCd}
@@ -844,6 +853,14 @@
              , UPDATER_ID     = #{updaterId}
              , UPD_DTM        = now()
          WHERE MBER_NO = #{mberNo}
+    </update>
+
+    <update id="updateCommunityMemberNickName" parameterType="CommunityMemberVO">
+        UPDATE TB_COMMUNITY_MEMBER
+           SET CMMNTY_NICKNM  = #{cmmntyNicknm}
+             , UPDATER_ID     = #{userSid}
+             , UPD_DTM        = now()
+         WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
     </update>
 
     <update id="deleteCommunityMember" parameterType="CommunityMemberVO">

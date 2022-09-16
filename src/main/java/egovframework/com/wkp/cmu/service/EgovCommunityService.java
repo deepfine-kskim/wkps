@@ -106,6 +106,7 @@ public interface EgovCommunityService {
 	//커뮤디니위임
 	public void entrust(Long cmmntyNo,Long targetMberNo);
 	public void updateCommunity(CommunityVO vo);
+	public void updateCommunityMemberNickName(CommunityMemberVO vo);
 	public void closeCommunity(Long cmmntyNo);
 	public void memberConfirm(Long [] mberNo);
 	public void memberReject(Long [] mberNo);

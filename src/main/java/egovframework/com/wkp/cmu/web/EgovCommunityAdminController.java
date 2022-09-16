@@ -59,7 +59,7 @@ public class EgovCommunityAdminController {
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+            	model.addAttribute("role_adm", "N");
             	return "redirect:/cmu/community.do";
             }else {
             	if (!(mem.getCmmntyRoleCd() != null &&
@@ -72,14 +72,14 @@ public class EgovCommunityAdminController {
                             (
                                     mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()) 
                             ))) {
-            			model.addAttribute("role", "N");	
+            			model.addAttribute("role_adm", "N");
             		}else {
             			return "redirect:/cmu/community.do";
             		}
             		
             		
                 }else {
-                	model.addAttribute("role", "Y");	
+                	model.addAttribute("role_adm", "Y");
                 }
             }
         } catch (NullPointerException e) {
@@ -331,7 +331,7 @@ public class EgovCommunityAdminController {
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+            	model.addAttribute("role_adm", "N");
             	return "redirect:/cmu/community.do";
             }else {
             	if (!(mem.getCmmntyRoleCd() != null &&
@@ -340,10 +340,10 @@ public class EgovCommunityAdminController {
                                 mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode())
                         ))) {
             		//권한이 없음
-            		model.addAttribute("role", "N");
+            		model.addAttribute("role_adm", "N");
             		return "redirect:/cmu/community.do";
                 }else {
-                	model.addAttribute("role", "Y");	
+                	model.addAttribute("role_adm", "Y");	
                 }
             }
         } catch (NullPointerException e) {
@@ -437,7 +437,7 @@ public class EgovCommunityAdminController {
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+            	model.addAttribute("role_adm", "N");
             	return "redirect:/cmu/community.do";
             }else {
             	if (!(mem.getCmmntyRoleCd() != null &&
@@ -446,10 +446,10 @@ public class EgovCommunityAdminController {
                                 mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode())
                         ))) {
             		//권한이 없음
-            		model.addAttribute("role", "N");
+            		model.addAttribute("role_adm", "N");
             		return "redirect:/cmu/community.do";
                 }else {
-                	model.addAttribute("role", "Y");	
+                	model.addAttribute("role_adm", "Y");	
                 }
             }
         } catch (NullPointerException e) {
@@ -579,7 +579,7 @@ public class EgovCommunityAdminController {
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
             if (mem == null) {
             	//커뮤니티회원이 아님
-            	model.addAttribute("role", "N");
+            	model.addAttribute("role_adm", "N");
             	return "redirect:/cmu/community.do";
             }else {
             	if (!(mem.getCmmntyRoleCd() != null &&
@@ -588,10 +588,10 @@ public class EgovCommunityAdminController {
                                 mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode())
                         ))) {
             		//권한이 없음
-            		model.addAttribute("role", "N");
+            		model.addAttribute("role_adm", "N");
             		return "redirect:/cmu/community.do";
                 }else {
-                	model.addAttribute("role", "Y");	
+                	model.addAttribute("role_adm", "Y");	
                 }
             }
         } catch (NullPointerException e) {

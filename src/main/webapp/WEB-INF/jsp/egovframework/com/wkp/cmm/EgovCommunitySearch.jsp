@@ -41,7 +41,7 @@ $(function() {
       	form.attr("action", "communitySearch.do");
       	form.submit();
     }
-	
+
 
 });
 

@@ -298,6 +298,13 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectList("CommunityDAO.findCommunity2Freeboard", param);
     }
 
+    public CommunityVO getCommunityNicknameByUserSid(Long cmmntyNo, String sid) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        param.put("sid", sid);
+        return selectOne("CommunityDAO.getCommunityNicknameByUserSid", param);
+    }
+
     public int findCommunityFreeboardTotalCount(Long cmmntyNo, String searchType, String searchValue, String sid) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
@@ -448,6 +455,10 @@ public class CommunityDAO extends EgovComAbstractDAO {
 
     public void updateCommunityMember(CommunityMemberVO vo) {
         update("CommunityDAO.updateCommunityMember", vo);
+    }
+
+    public void updateCommunityMemberNickName(CommunityMemberVO vo) {
+        update("CommunityDAO.updateCommunityMemberNickName", vo);
     }
 
     public void deleteCommunityMember(CommunityMemberVO vo) {

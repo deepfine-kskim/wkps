@@ -20,6 +20,23 @@ function join(){
 		$('#commJoinPopup').modal('hide');
 	})
 }
+function change(){
+	var param = {cmmntyNo:sideCmmntyNo,
+			nickname:$('#commChangeNickName').val()};
+
+	$.post("/cmu/changeNickName.do",param,function(data, status){
+		var json = JSON.parse(data);
+	      if(json.success){
+	    	 alert('닉네임이 변경 되었습니다.');
+	    	 location.reload();
+		  }else{
+			 alert(json.err_msg);
+		  }
+
+
+		$('#commChangePopup').modal('hide');
+	})
+}
 function clickMember(){
 	location.href="/cmu/communityMember.do?cmmntyNo=${community.cmmntyNo }";
 }
@@ -81,6 +98,30 @@ function cancel(){
                         </div>
                     </div>
                     <!-- //커뮤니티 가입 팝업 -->
+</script>
+                    <div class="modal fade" id="commChangePopup" tabindex="-1" role="dialog" aria-labelledby="commChangePopupLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content form-horizontal">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="commChangePopupLabel"><strong>닉네임 변경</strong></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group mb_0">
+                                        <label for="commJoinNickName" class="col-sm-3 control-label">닉네임 변경</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" value="${community.cmmntyNicknm}" class="form-control" id="commChangeNickName" name="commChangeNickName" placeholder="닉네임을 입력하세요." required="required" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-blue " onclick="change();">변경하기</button>
+                                    <button type="button" class="btn btn-black" data-dismiss="modal">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //닉네임 변경 팝업 -->
                     
 <div id="aside" class="col-md-3">
                         <div class="side_card_box comm_data">
@@ -153,6 +194,21 @@ function cancel(){
                             <div class="text-center btn_area">
                                 <div class="row">
                                     <div class="col-xs-8 col-xs-offset-2"><a href="#" class="btn btn-danger outline btn-block" onclick="out()">탈퇴하기</a></div>
+                                </div>
+                            </div>
+                            </c:if>
+                            <c:if test="${ community.me != null and community.me.aprvYn == 'Y'}">
+                            <div class="text-center btn_area">
+                                <div class="row">
+                                    <c:choose>
+                                        <c:when test="${role_adm == 'Y'}">
+                                            <c:out value="${community.owner.cmmntyNicknm}"></c:out>님 안녕하세요.
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${community.cmmntyNicknm}"></c:out>님 안녕하세요.
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="col-xs-8 col-xs-offset-2"><a href="#commChangePopup" data-toggle="modal" data-target="#commChangePopup" class="btn btn-primary outline btn-block">닉네임 변경하기</a></div>
                                 </div>
                             </div>
                             </c:if>

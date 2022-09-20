@@ -7,8 +7,8 @@
 <!DOCTYPE html>
 <head lang="ko">
 	<meta charset="utf-8">
-	<link rel="shortcut icon" href="/images/egovframework/com/favicon.ico">
-	<link rel="icon" href="/images/egovframework/com/favicon.ico">
+	<link rel="shortcut icon" href="/images/egovframework/com/favicon2209.ico">
+	<link rel="icon" href="/images/egovframework/com/favicon2209.ico">
 	<title>관리자</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="format-detection" content="telephone=no">

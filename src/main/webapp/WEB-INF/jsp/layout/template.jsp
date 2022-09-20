@@ -8,8 +8,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/images/egovframework/com/favicon.ico">
-	<link rel="icon" href="/images/egovframework/com/favicon.ico">
+    <link rel="shortcut icon" href="/images/egovframework/com/favicon2209.ico">
+	<link rel="icon" href="/images/egovframework/com/favicon2209.ico">
     <title>도정지식포털</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />

@@ -134,6 +134,10 @@ public class ReqController {
 			}
 
 			reqVO.setAtchFileNo(atchFileNo);
+			if(reqVO.getAnonYn() == null || reqVO.getAnonYn().equals("")){
+				reqVO.setAnonYn("N");
+			}
+
 			long requestKnowlgNo = reqService.insertRequest(reqVO);
 
 			/* 지식 요청 질문 2점*/
@@ -206,7 +210,9 @@ public class ReqController {
             if (atchFileNo != 0) {
             	reqVO.setAtchFileNo(atchFileNo);
             }
-			
+			if(reqVO.getAnonYn() == null || reqVO.getAnonYn().equals("")){
+				reqVO.setAnonYn("N");
+			}
 			reqService.updateRequest(reqVO);
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

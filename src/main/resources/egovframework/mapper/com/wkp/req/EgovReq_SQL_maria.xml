@@ -114,9 +114,9 @@
 	<insert id="insertRequest" useGeneratedKeys="true" keyProperty="requstNo"  parameterType="ReqVO">
 		
 			INSERT INTO TB_REQUEST_KNOWLEDGE
-			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NO, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN)
+			(KNOWLG_MAP_TYPE, KNOWLG_MAP_NO, TITLE, CONT, ATCH_FILE_NO, INQ_CNT, ANSWER_YN, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, DEL_YN, ANON_YN)
 			VALUES
-			(#{knowlgMapType}, #{knowlgMapNo}, #{title}, #{cont}, #{atchFileNo}, 0, 'N', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N')
+			(#{knowlgMapType}, #{knowlgMapNo}, #{title}, #{cont}, #{atchFileNo}, 0, 'N', #{registerId}, SYSDATE(), #{registerId}, SYSDATE(), 'N', #{anonYn})
 		
 	</insert>
 	
@@ -131,7 +131,8 @@
 				CONT = #{cont},
 				ATCH_FILE_NO = #{atchFileNo},
 				UPDATER_ID = #{registerId},
-				UPD_DTM = SYSDATE()
+				UPD_DTM = SYSDATE(),
+			    ANON_YN = #{anonYn}
 			<where>
 				AND REQUST_NO = #{requstNo}
 			</where>		

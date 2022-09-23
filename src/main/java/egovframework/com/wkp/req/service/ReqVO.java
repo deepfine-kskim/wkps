@@ -77,4 +77,6 @@ public class ReqVO {
 
 	private String selectionYn;
 
+	private String anonYn;
+
 }

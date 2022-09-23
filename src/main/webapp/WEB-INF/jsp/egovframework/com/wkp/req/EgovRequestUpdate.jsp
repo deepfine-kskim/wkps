@@ -32,9 +32,13 @@
                         --%>
                         <div class="form-group">
                             <label for="inpSubject" class="col-sm-1 control-label"><span class="req">*</span>제목</label>
-                            <div class="col-sm-11">
+                            <div class="col-sm-10 col-md-10 col-lg-7">
                                 <input type="text" class="form-control" name="title" id="inpSubject" placeholder="제목를 입력하세요" required value="${requestDetail.title}"/>
+                            </div>                   <div class="col-lg-3 col-lg-push-0 col-md-10 col-md-push-2">
+                            <div class="checkbox-inline">
+                                <label for="anonYn"><input type="checkbox" name="anonYn" id="anonYn" value="Y" <c:if test="${requestDetail.anonYn eq 'Y'}">checked</c:if> />익명게시물 설정</label>
                             </div>
+                        </div>
                         </div>
                         <div class="form-group">
                             <label for="inpText" class="col-sm-1 control-label"><span class="req">*</span>내용</label>

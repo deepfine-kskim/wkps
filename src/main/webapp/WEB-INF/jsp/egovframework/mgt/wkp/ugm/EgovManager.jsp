@@ -63,6 +63,7 @@
                             <tr>
                                 <th scope="col">번호</th>
                                 <th scope="col">이름</th>
+                                <th scope="col">직급</th>
                                 <th scope="col">부서</th>
                                 <th scope="col">권한</th>
                                 <th scope="col">지정일자</th>
@@ -74,6 +75,7 @@
                             <tr>
                                 <td>${status.index+1 }</td>
                                 <td>${manager.displayName }</td>
+                                <td>${manager.position }</td>
                                 <td>${manager.ou }</td>
                                 <td>${manager.roleNm }</td>
                                 <td>${manager.registDtm }</td>
@@ -129,6 +131,7 @@
                                                 <tr>
                                                     <th scope="col">선택</th>
                                                     <th scope="col">이름</th>
+                                                    <th scope="col">직급</th>
                                                     <th scope="col">부서</th>
                                                 </tr>
                                                 </thead>
@@ -178,6 +181,7 @@
 		           		$('#userList').append('<tr>'+
 		           				'<td><label for="brdChk'+i+'"><input type="radio" id="brdChk'+i+'" name="sid" value="'+data.userList[i].sid+'"  required="required"/></label></td>'+
 		           				'<td>'+data.userList[i].displayName+'</td>'+
+		           				'<td>'+data.userList[i].position+'</td>'+
 		           				'<td>'+data.userList[i].ou+'</td>'+
 		           				'</tr>');
 		           	}

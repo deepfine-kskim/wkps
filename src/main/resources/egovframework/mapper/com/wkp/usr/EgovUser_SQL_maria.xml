@@ -123,6 +123,7 @@
  			SELECT *
  			  FROM (SELECT tr.*
  			             , (SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = tr.SID) AS DISPLAY_NAME
+ 			             , (SELECT POSITION FROM TB_USER tu WHERE tu.SID = tr.SID) AS POSITION
  			             , (SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = tr.SID)) AS OU
  			             , CASE WHEN tr.ROLE_CD = 'ROLE_ADMIN' THEN '시스템 관리자'
 							    WHEN tr.ROLE_CD = 'ROLE_KNOWLEDGE' THEN '지식 관리자'
@@ -211,7 +212,8 @@
 			SELECT 
 				trm.*,
 				(SELECT DISPLAY_NAME FROM TB_USER tu WHERE tu.SID = trm.SID) AS DISPLAY_NAME,
-				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = trm.SID)) AS OU
+				(SELECT OU FROM TB_ORG trg WHERE trg.OU_CODE = (SELECT OU_CODE FROM TB_USER tu WHERE tu.SID = trm.SID)) AS OU,
+		 		(SELECT POSITION FROM TB_USER tu WHERE tu.SID = teu.SID) AS POSITION
 			FROM
 				TB_REQUEST_MANAGER trm
 			<include refid="selectListCondition" />

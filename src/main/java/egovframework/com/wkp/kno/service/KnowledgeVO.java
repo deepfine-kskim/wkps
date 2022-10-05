@@ -108,7 +108,9 @@ public class KnowledgeVO {
 	private String endDate;
 	
 	private String ou;
-	
+
+	private String position;
+
 	private String mileageType;
 	
 	private float mileageScore;

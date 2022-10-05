@@ -234,6 +234,7 @@
     function goPage(page) {
         var form = $("form[name=searchForm]");
         form.find("input[name=page]").val(page);
+        form.attr('action', '/adm/surveySetup.do');
         form.submit();
     }
 

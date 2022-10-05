@@ -25,13 +25,13 @@
 	        	
 	        	<entry key="charset" value="UTF-8" />
 	        	<entry key="site" value="경기도청" /> <!-- 사이트명 -->
-	        		        	
+
 				<entry key="ksfDomain" value="0" />
 				<entry key="ksfMaxResult" value="10" />
-				
+
 				<!-- 운영(true)/개발(false) 라이선스 구분-->
 				<entry key="realLic" value="true" />
-				
+
 				<entry key="pageSize" value="10" />
 				<entry key="pageSizeTotal" value="3" />
 				

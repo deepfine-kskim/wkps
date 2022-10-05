@@ -25,7 +25,8 @@
                 <caption class="sr-only">게시판 리스트</caption>
                 <colgroup>
                     <col style="width:10%;" />
-                    <col style="width:30%;" />
+                    <col style="width:15%;" />
+                    <col style="width:15%;" />
                     <col />
                     <col style="width:20%;" />
                     <col style="width:10%;" />
@@ -34,6 +35,7 @@
                     <tr>
                         <th scope="col">순위</th>
                         <th scope="col">이름</th>
+                        <th scope="col">직급</th>
                         <th scope="col">부서</th>
                         <th scope="col">마일리지</th>
                         <th scope="col">삭제</th>
@@ -44,6 +46,7 @@
                         <tr>
                             <td>${excellenceUser.rki}</td>
                             <td>${excellenceUser.displayName}</td>
+                            <td>${excellenceUser.position}</td>
                             <td>${excellenceUser.ou}</td>
                             <td>${excellenceUser.mileageScore}</td>
                             <td><a href="/adm/deleteExcellentUser.do?sid=${excellenceUser.sid}&rki=${excellenceUser.rki}" class="btn btn-default" onclick="return confirm('삭제하시겠습니까?');">삭제</a></td>
@@ -93,11 +96,13 @@
                                             <col style="width:10%;">
                                             <col>
                                             <col>
+                                            <col>
                                         </colgroup>
                                         <thead>
                                         <tr>
                                             <th scope="col">선택</th>
                                             <th scope="col">이름</th>
+                                            <th scope="col">직급</th>
                                             <th scope="col">부서</th>
                                         </tr>
                                         </thead>
@@ -162,6 +167,7 @@
                         html += '<tr>';
                         html += '    <td><label for="brdChk' + i + '"><input type="radio" id="brdChk' + i + '" name="sid" value="' + data.userList[i].sid + '" required/></label></td>';
                         html += '    <td>' + data.userList[i].displayName + '</td>';
+                        html += '    <td>' + data.userList[i].position + '</td>';
                         html += '    <td>' + data.userList[i].ou + '</td>';
                         html += '</tr>';
                     }

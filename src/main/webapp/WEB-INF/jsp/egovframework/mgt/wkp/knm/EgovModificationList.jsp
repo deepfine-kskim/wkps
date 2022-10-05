@@ -55,6 +55,7 @@
                     <col>
                     <col style="width:15%;">
                     <col style="width:10%;">
+                    <col style="width:10%;">
                 </colgroup>
                 <thead>
                     <tr>
@@ -63,6 +64,7 @@
                         <th scope="col">유형</th>
                         <th scope="col">제목</th>
                         <th scope="col">요청자</th>
+                        <th scope="col">직급</th>
                         <th scope="col">요청일</th>
                     </tr>
                 </thead>
@@ -74,6 +76,7 @@
                             <td class="text-primary" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;"><c:out value="${result.parentKnowlgMapNm}"/></td>
                             <td class="text-left"><c:out value="${result.title}"/></td>
                             <td><c:out value="${result.displayName}(${result.ou})"/></td>
+                            <td><c:out value="${result.position}"/></td>
                             <td><c:out value="${result.registDtm}"/></td>
                         </tr>
                     </c:forEach>

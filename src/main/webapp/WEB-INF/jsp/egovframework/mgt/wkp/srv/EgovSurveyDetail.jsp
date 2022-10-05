@@ -38,7 +38,7 @@
                     <th>설문 공개여부</th>
 					<td>
 						<c:choose>
-                            <c:when test="${detail.rlsYn eq 'Y'}">공개</c:when>
+                            <c:when test="${detail.resltRlsYn eq 'Y'}">공개</c:when>
                             <c:otherwise>비공개</c:otherwise>
                         </c:choose>
 					</td>

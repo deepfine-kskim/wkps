@@ -164,6 +164,7 @@
             var page = $(this).data('page');
             var form = $("form[name=requestFrm]");
             form.find("input[name=page]").val(page);
+            form.attr("action", "/req/requestList.do");
             form.submit();
         });
         

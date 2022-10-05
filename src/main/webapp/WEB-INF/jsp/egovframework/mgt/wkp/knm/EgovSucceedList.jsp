@@ -54,6 +54,7 @@
                     <col style="width:10%;">
                     <col>
                     <col style="width:15%;">
+                    <col style="width:10%;">
                     <col style="width:15%;">
                     <col style="width:10%;">
                 </colgroup>
@@ -64,6 +65,7 @@
                         <th scope="col">유형</th>
                         <th scope="col">제목</th>
                         <th scope="col">담당자</th>
+                        <th scope="col">직급</th>
                         <th scope="col">지식 소유 부서</th>
                         <th scope="col">등록일</th>
                     </tr>
@@ -81,6 +83,7 @@
                                 <c:out value="${result.title}"/>
                             </td>
                             <td><c:out value="${result.displayName}(${result.ou})"/></td>
+                            <td><c:out value="${result.position}"/></td>
                             <td><c:out value="${result.ownerOu}"/></td>
                             <td><c:out value="${result.registDtm}"/></td>
                         </tr>
@@ -275,7 +278,7 @@
                     $('#ownerList').prepend('<li class="flow-search-list">---------------------------------------------------------------------------</li>');
                     if (data.userList.length > 0) {
                         for (let i = 0; i < data.userList.length; i++) {
-                            $('#ownerList').prepend('<li class="flow-search-list"><label for="allSrchChk-' + i + '"><input id="allSrchChk-' + i + '" name="userList" data-id="allSrchChk-' + i + '" type="radio" value="' + data.userList[i].sid + '" data-name="' + data.userList[i].displayName + '" data-ou="' + data.userList[i].ou + '"> ' + data.userList[i].ou + ' ' + data.userList[i].displayName + '</label></li>');
+                            $('#ownerList').prepend('<li class="flow-search-list"><label for="allSrchChk-' + i + '"><input id="allSrchChk-' + i + '" name="userList" data-id="allSrchChk-' + i + '" type="radio" value="' + data.userList[i].sid + '" data-name="' + data.userList[i].displayName + '" data-ou="' + data.userList[i].ou + '"> ' + data.userList[i].ou + ' ' +data.userList[i].position + ' ' + data.userList[i].displayName + '</label></li>');
                         }
                     } else {
                         $('#ownerList').prepend('<li class="flow-search-list">검색 결과가 없습니다.</li>');

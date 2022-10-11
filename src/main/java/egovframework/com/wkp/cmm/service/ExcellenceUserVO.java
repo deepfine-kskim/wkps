@@ -16,6 +16,8 @@ public class ExcellenceUserVO {
 	private String sid;
 	
 	private String displayName;
+
+	private String position;
 	
 	private String ou;
 	

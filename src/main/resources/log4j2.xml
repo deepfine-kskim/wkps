@@ -5,47 +5,54 @@
             <PatternLayout pattern="[log4j]%d %5p [%c] %m{nolookups}%n" />
         </Console>
     </Appenders>
-    
-     <Loggers>
-        
-        <logger name="jdbc" level="OFF"/>
-	    <logger name="jdbc.sqlonly" level="OFF"/>
-	    <logger name="jdbc.sqltiming" level="DEBUG"/>
-	    <logger name="jdbc.audit" level="OFF"/>
-	    <logger name="jdbc.resultset" level="OFF"/>
-	    <logger name="jdbc.resultsettable" level="DEBUG"/>
-	    <logger name="jdbc.connection" level="OFF"/>
-	     <Logger name="org.springframework" level="INFO" additivity="false">
-	        <AppenderRef ref="console" />
-	    </Logger>
-	    <Logger name="egovframework" level="DEBUG" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
-	    <root level="INFO">
-	        <appender-ref ref="console" />
-	    </root>
-        
-    </Loggers>
+    <!--
 
-<!-- 
+         <Loggers>
+            <logger name="jdbc" level="OFF"/>
+            <logger name="jdbc.sqlonly" level="OFF"/>
+            <logger name="jdbc.sqltiming" level= "INFO"/>
+            <logger name="jdbc.audit" level="OFF"/>
+            <logger name="jdbc.resultset" level="OFF"/>
+            <logger name="jdbc.resultsettable" level="INFO"/>
+            <logger name="jdbc.connection" level="OFF"/>
+             <Logger name="org.springframework" level="INFO" additivity="false">
+                <AppenderRef ref="console" />
+            </Logger>
+            <Logger name="egovframework" level="INFO" additivity="false">
+                <AppenderRef ref="console" />
+            </Logger>
+            <root level="INFO">
+                <appender-ref ref="console" />
+            </root>
+
+        </Loggers>
+    -->
+
+
     <Loggers>
-        <Logger name="java.sql" level="DEBUG" additivity="false">
+        <logger name="jdbc" level="OFF"/>
+        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
-        <Logger name="egovframework" level="DEBUG" additivity="false">
+        <Logger name="jdbc.resultsettable" level="INFO" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
-	    <Logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
-	        <AppenderRef ref="console" />
-	    </Logger>
-	    <Logger name="org.springframework" level="INFO" additivity="false">
-	        <AppenderRef ref="console" />
-	    </Logger>
+        <Logger name="jdbc.audit" level="OFF"/>
+        <Logger name="jdbc.resultset" level="OFF"/>
+        <Logger name="java.sql" level="OFF" />
+        <Logger name="egovframework" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
         <Root level="INFO">
             <AppenderRef ref="console" />
         </Root>
     </Loggers>
- -->    
-    
+
 
 </Configuration>

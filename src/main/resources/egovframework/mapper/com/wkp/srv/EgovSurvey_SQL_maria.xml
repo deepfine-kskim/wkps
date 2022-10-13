@@ -82,7 +82,8 @@
 		LEFT OUTER JOIN TB_USER e ON a.REGISTER_ID = e.SID
         <include refid="selectListCondition"/>
 		AND (a.BNGN_DTM <![CDATA[<]]> now() OR (a.APRV_STATE <![CDATA[<>]]> 'DOING' OR a.REGISTER_ID = #{sid}))
-        ORDER BY a.SURVEY_NO DESC
+		ORDER BY CASE WHEN a.APRV_STATE = 'DOING' THEN 1
+		ELSE 2 END, a.BNGN_DTM DESC
         LIMIT #{itemCountPerPage} OFFSET #{itemOffset}
     </select>
 

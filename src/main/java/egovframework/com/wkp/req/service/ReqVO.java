@@ -64,6 +64,8 @@ public class ReqVO {
 	private Integer itemCountPerPage = 10;
 	
 	private Integer itemOffset = 0;
+
+	private Integer answerCount;
 	
 	private String searchType;
 	

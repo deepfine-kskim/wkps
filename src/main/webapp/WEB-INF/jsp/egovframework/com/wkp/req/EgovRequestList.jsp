@@ -86,8 +86,9 @@
                                 <td>${request.registDtm }</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${request.selectionYn eq 'Y'}"><span>완료</span></c:when>
-                                        <c:when test="${request.selectionYn eq 'N'}"><span class="text-blue">진행중</span></c:when>
+                                        <c:when test="${request.selectionYn eq 'Y'}"><span>채택완료</span></c:when>
+                                        <c:when test="${request.selectionYn eq 'N' and request.answerCount > 0}"><span class="text-blue">채택대기중</span></c:when>
+                                        <c:otherwise><span class="text-blue">답변대기중</span></c:otherwise>
                                     </c:choose>
                                 </td>
                                 <td class="hidden-xs hidden-sm">${request.inqCnt }</td>

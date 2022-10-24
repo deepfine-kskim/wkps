@@ -189,7 +189,7 @@
                         <a href="javascript:;" class="btn btn-black dev-update" data-no="${requestDetail.requstNo }">수정</a>
                     </c:if>
                     <c:if test="${(requestDetail.registerId == loginVO.sid and not isSelection) or loginVO.roleCd eq 'ROLE_ADMIN'}">
-                        <a href="javascript:;" class="btn btn-danger Adev-delete" data-no="${requestDetail.requstNo }">삭제</a>
+                        <a href="javascript:;" class="btn btn-danger dev-delete" data-no="${requestDetail.requstNo }">삭제</a>
                     </c:if>
                 </div>
                 <div class="col-sm-6 text-right">

@@ -74,7 +74,7 @@
                 </div>
             </div>
             <!-- //brd_view_area -->
-            <c:if test="${not isSelection && loginVO.sid ne requestDetail.registerId}">
+            <c:if test="${not isSelection && loginVO.sid ne requestDetail.registerId and not isAnswer}">
                 <div class="text-right mb_15 dev-answer-write">
                     <a href="#answerBox" class="btn btn-primary collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="answerBox">답변하기</a>
                 </div>

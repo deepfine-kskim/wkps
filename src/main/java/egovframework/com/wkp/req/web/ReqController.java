@@ -96,7 +96,10 @@ public class ReqController {
 
 			List<ReqVO> answerList = reqService.selectAnswerList(reqVO);
 
+			UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+
 			boolean isSelection = answerList.stream().anyMatch(answer -> "Y".equals(answer.getSlctnYn()));
+			boolean isAnswer = answerList.stream().anyMatch(answer -> userVO.getSid().equals(answer.getRegisterId()));
 
 			model.addAttribute("requestDetail", requestDetail);
 			model.addAttribute("fileList", result);
@@ -104,6 +107,7 @@ public class ReqController {
             model.addAttribute("requestNext", reqService.selectRequestNext(reqVO));
             model.addAttribute("answerList", answerList);
             model.addAttribute("isSelection", isSelection);
+            model.addAttribute("isAnswer", isAnswer);
 
 		} catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());

@@ -19,7 +19,7 @@
 			</when>
 			<when test="aprvState != null and aprvState.name == 'MINE'">
 				AND (
-					a.APRV_STATE = 'DOING' or a.APRV_STATE = 'DONE'
+					(a.APRV_STATE = 'DOING' or a.APRV_STATE = 'DONE')
 					AND
 					a.SURVEY_NO IN (SELECT DISTINCT(SURVEY_NO) FROM TB_SURVEY_ANSWER WHERE REGISTER_ID = #{registerId})
 				)

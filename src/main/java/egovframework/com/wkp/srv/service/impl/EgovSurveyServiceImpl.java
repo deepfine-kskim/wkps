@@ -155,6 +155,18 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
         return result;
     }
 
+    /**
+     * 내가 제출한 설문조사 정보 가져온다.
+     *
+     * @param surveyVO
+     * @return
+     * @
+     */
+    @Override
+    public List<SurveyVO> selectMyAnswer(SurveyVO surveyVO) {
+        return surveyDAO.selectMyAnswer(surveyVO);
+    }
+
     @Override
     public SurveyVO insert(SurveyVO surveyVO) {
 
@@ -198,6 +210,12 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
     public int delete(SurveyVO surveyVO) {
         egovLogService.insert(LogType.DELETE, LogSubjectType.SURVEY, surveyVO);
         return surveyDAO.delete(surveyVO);
+    }
+
+    @Override
+    public int deleteMyAnswer(SurveyAnswerVO surveyanswerVO) {
+        egovLogService.insert(LogType.DELETE, LogSubjectType.SURVEY, surveyanswerVO);
+        return surveyDAO.delete(surveyanswerVO);
     }
     
     @Override

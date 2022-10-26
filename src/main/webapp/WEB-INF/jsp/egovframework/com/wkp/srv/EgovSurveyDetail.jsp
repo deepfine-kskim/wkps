@@ -287,6 +287,7 @@
                             <c:otherwise>
 								<div class="col-xs-6">
 									이미 참여한 설문입니다.
+                                    <a href="javascript:;" class="btn btn-black dev-delInsert">수정하기</a>
 								</div>
                             </c:otherwise>
                             </c:choose>
@@ -340,7 +341,6 @@
 <script>
 
     $(document).ready(function () {
-
         $(".dev-skip").each(function() {
             $(".dev-panel-" + $(this).data("skipno")).hide();
         });
@@ -481,13 +481,126 @@
             location.href="/srv/surveyUpdate.do?surveyNo=${detail.surveyNo}"
         })
 
+        $(".dev-delInsert").on("click", function(e) {
+            var answerList = new Array();
+            var error;
+
+            $(".panel-default:visible").each(function() {
+                var answer = new Object();
+                var _this = $(this);
+
+                answer.surveyNo = _this.data("surveyno");
+                answer.surveyQusNo = _this.data("questionno");
+                var $type = _this.data("type");
+                var $esntlyn = _this.data("esntlyn");
+
+                if($type == 'DESCRIPTION') {
+                    answer.qusAnswerCont = _this.find(".dev-input-cont").val();
+                    if(answer.qusAnswerCont) {
+                        answer.surveyExampleNo = _this.find(".dev-input-no").val();
+                        answerList.push(answer);
+                    } else {
+                        if($esntlyn == "Y") {
+                            $('body').animate({scrollTop : _this.offset().top}, 400);
+                            error = "1";
+                            return false;
+                        }
+                    }
+                } else if($type == 'SINGLE' || $type == 'SKIP') {
+                    var $checkedInput = _this.find(".dev-input-no:checked");
+                    answer.surveyExampleNo = $checkedInput.val();
+                    if(answer.surveyExampleNo) {
+                        if($checkedInput.closest('.row').hasClass('etc_set')){
+                            answer.qusAnswerCont = _this.find(".dev-input-cont").val();
+                        }
+                        answerList.push(answer);
+                    } else {
+                        if($esntlyn == "Y") {
+                            $('body').animate({scrollTop : _this.offset().top}, 400);
+                            error = "1";
+                            return false;
+                        }
+                    }
+                } else if($type == 'MULTI') {
+                    var checkList = _this.find(".dev-input-no:checked");
+                    if(checkList.length > 0) {
+                        checkList.each(function() {
+                            var answerClone =  $.extend(true, {}, answer); //Depp Copy
+                            answerClone.surveyExampleNo = $(this).val();
+                            answerList.push(answerClone);
+                        });
+                    } else {
+                        if($esntlyn == "Y") {
+                            $('body').animate({scrollTop : _this.offset().top}, 400);
+                            error = "1";
+                            return false;
+                        }
+                    }
+                }
+            });
+
+            if(error) {
+                if(error == "1") {
+                    alert("필수 질문에 답변 후 참여하기를 눌러주세요.");
+                }
+
+                return false;
+            }
+
+            var data = JSON.stringify(answerList);
+
+            if(isSubmit) {
+                if(confirm('이미 작성하신 설문을 수정하시겠습니까?')){
+                    isSubmit = false;
+                    $.ajax({
+                        url: "/srv/surveyAnswerDelInsert.do",
+                        data: data,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        type: "POST",
+                        cache:false,
+                        success: function (data) {
+                            if (data.result) {
+                                alert("설문을 수정하였습니다.. 리스트로 이동합니다.");
+                                location.href="/srv/list.do"
+                            } else {
+                                alert("수정에 실패하였습니다.");
+                                isSubmit = true;
+                            }
+                        },
+                        error: function (error) {
+                            isSubmit = true;
+                            alert("설문 수정중 에러가 발생하였습니다.");
+                        },
+                        complete: function () {
+                            isSubmit = true;
+                        }
+                    });
+                }
+            }
+        })
+
         /*if(${isAnswer}) {
             if('${detail.registerId}' != '${user.sid}') {
                 alert("이미 참여한 설문입니다.");
                 location.href="/srv/list.do"
             }
         }*/
+        <c:if test="${isAnswer}">
+            <c:forEach var="answer" items="${myAnswer}">
+                $('div[data-questionno=${answer.surveyQusNo}]').show();
+                <c:choose>
+                    <c:when test="${not empty answer.qusAnswerCont}">
+                        <%--$('input[value=${answer.surveyExampleNo}]').val('${answer.qusAnswerCont}');--%>
+                        $('input[value=${answer.surveyExampleNo}]').next().text('${answer.qusAnswerCont}');
+                    </c:when>
+                    <c:otherwise>
+                        $('input[value=${answer.surveyExampleNo}]').prop('checked', true);
+                    </c:otherwise>
+                </c:choose>
 
+            </c:forEach>
+        </c:if>
     });
 
     function goPage() {

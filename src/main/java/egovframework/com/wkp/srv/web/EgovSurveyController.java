@@ -222,11 +222,13 @@ public class EgovSurveyController {
             model.addAttribute("page", page);
             model.addAttribute("searchText", searchText);
             model.addAttribute("user", user);
+            model.addAttribute("myAnswer", surveyService.selectMyAnswer(param));
             model.addAttribute("now", new Date());
 
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
+
 
         return "/com/wkp/srv/EgovSurveyDetail";
     }
@@ -545,6 +547,37 @@ public class EgovSurveyController {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
         
+        mav.addObject("result", result);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/surveyAnswerDelInsert.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView surveyAnswerDelInsert(@RequestBody List<SurveyAnswerVO> answer
+    ) {
+        boolean result = false;
+        ModelAndView mav = new ModelAndView("jsonView");
+        try {
+
+            UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+            SurveyAnswerVO surveyAnswerVO = new SurveyAnswerVO();
+            surveyAnswerVO.setSurveyNo(answer.get(0).getSurveyNo());
+            surveyAnswerVO.setRegisterId(user.getSid());
+            surveyService.deleteMyAnswer(surveyAnswerVO);
+
+            int count = 0;
+            for (SurveyAnswerVO vo : answer) {
+                vo.setRegisterId(user.getSid());
+                count = count + surveyService.insertAnswer(vo);
+            }
+            if (count > 0) {
+                result = true;
+            }
+        } catch (NullPointerException e) {
+        	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
+		}
+
         mav.addObject("result", result);
 
         return mav;

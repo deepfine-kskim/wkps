@@ -80,6 +80,15 @@ public interface EgovSurveyService {
 	public SurveyVO selectDetail(SurveyVO surveyVO);
 
 	/**
+	 * 2022.10.26
+	 * 내가 제출한 설문조사 정보 가져온다.
+	 * @param surveyVO
+	 * @return SurveyVO
+	 * @
+	 */
+	public List<SurveyVO> selectMyAnswer(SurveyVO surveyVO);
+
+	/**
 	 *  2020.10.07
 	 * 설문조사를 등록한다.
 	 * @param surveyVO
@@ -112,6 +121,14 @@ public interface EgovSurveyService {
 	 * @
 	 */
 	public int delete(SurveyVO surveyVO);
+
+	/**
+	 * 2022.10.26 내설문을 삭제한다.
+	 * @param surveyanswerVO
+	 * @return
+	 * @
+	 */
+	public int deleteMyAnswer(SurveyAnswerVO surveyanswerVO);
 	
 	/**
 	 * 설문 공개여부를 변경한다.

@@ -12,11 +12,15 @@ import java.util.List;
 public class SurveyVO {
 
 	private Long surveyNo;
+	private Long surveyAnswerNo;
+	private Long surveyQusNo;
+	private Long surveyExampleNo;
 	private Date bngnDtm;
 	private Date endDtm;
 	private String resltRlsYn;
 	private String title;
 	private String surveyDesc;
+	private String qusAnswerCont;
 	private SurveyStateType aprvState;
 	private String registerId;
 	private String ouCode;

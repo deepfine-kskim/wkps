@@ -107,6 +107,15 @@ public interface EgovSurveyService {
 	public boolean update(SurveyVO surveyVO);
 
 	/**
+	 * 2022.10.31
+	 * 진행중 설문을 수정한다.
+	 * @param surveyVO
+	 * @return int
+	 * @
+	 */
+	public boolean doingUpdate(SurveyVO surveyVO);
+
+	/**
 	 * 설문에 관련된 모든 질문과 예제를 지운다
 	 * @param surveyNo
 	 * @return

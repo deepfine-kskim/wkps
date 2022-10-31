@@ -122,14 +122,18 @@
                                     <div id="item${question.orderNo}-panel" class="panel panel-default item_panel">
                                        	<div class="panel-heading">
                                             <%-- <strong class="panel-title"><span class="order-id">${question.orderNo}</span>. 설문항목</strong> <button type="button" class="btn btn-danger btn-sm del_panel_btn">항목삭제</button> --%>
-                                            <strong class="panel-title"><span class="order-id" style="float: left;">${question.orderNo}</span>. 설문항목</strong><button type="button" class="btn btn-danger btn-sm del_panel_btn" style="float: right; margin-left:5px;">항목삭제</button><button type="button" class="btn btn-primary btn-sm add_panel_btn" style="float: right; padding: -10px;">설문항목 중간 추가</button>
+                                            <strong class="panel-title"><span class="order-id" style="float: left;">${question.orderNo}</span>. 설문항목</strong>
+                                                <c:if test="${detail.aprvState.name() != 'DOING'}">
+                                            <button type="button" class="btn btn-danger btn-sm del_panel_btn" style="float: right; margin-left:5px;">항목삭제</button>
+                                            <button type="button" class="btn btn-primary btn-sm add_panel_btn" style="float: right; padding: -10px;">설문항목 중간 추가</button>
+                                                </c:if>
                                         </div>
                                         <div class="panel-body">
                                             <div class="form-horizontal">
                                                 <div class="form-group">
                                                     <label for="item${question.orderNo}-type" class="col-sm-2 control-label sel_type_lable">항목형식</label>
                                                     <div class="col-sm-4">
-                                                        <select id="item${question.orderNo}-type" name="item${question.orderNo}-type" class="form-control sel_tab">
+                                                        <select id="item${question.orderNo}-type" name="item${question.orderNo}-type" class="form-control sel_tab" <c:if test="${detail.aprvState.name() == 'DOING'}">disabled</c:if>>
                                                             <option value="0">선택해주세요.</option>
                                                             <option value="1" <c:if test="${question.qusTypeCd == 'DESCRIPTION'}">selected</c:if>>서술형</option>
                                                             <option value="2" <c:if test="${question.qusTypeCd == 'SINGLE'}">selected</c:if>>단일선택형</option>
@@ -139,7 +143,7 @@
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label for="item${question.orderNo}-req" class="checkbox-inline">
-                                                            <input type="checkbox" id="item${question.orderNo}-req" name="item${question.orderNo}-req" <c:if test="${question.esntlYn =='Y'}">checked="checked"</c:if> class="dev-must-check"/> 필수
+                                                            <input type="checkbox" id="item${question.orderNo}-req" name="item${question.orderNo}-req" <c:if test="${question.esntlYn =='Y'}">checked="checked"</c:if> class="dev-must-check" <c:if test="${detail.aprvState.name() == 'DOING'}">disabled</c:if>/> 필수
                                                         </label>
                                                     </div>
                                                 </div>
@@ -147,7 +151,7 @@
                                                     <div class="form-group">
                                                         <label for="item${question.orderNo}-tit1" class="col-sm-2 control-label">질문</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" id="item${question.orderNo}-tit1" name="item${question.orderNo}-tit1" class="form-control dev-example-input" placeholder="질문을 입력하세요" value="${question.cont}" />
+                                                            <input type="text" id="item${question.orderNo}-tit1" name="item${question.orderNo}-tit1" class="form-control dev-example-input" placeholder="질문을 입력하세요" value="${question.cont}" <c:if test="${detail.aprvState.name() == 'DOING'}">readonly</c:if>/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -155,7 +159,7 @@
                                                     <div class="form-group">
                                                         <label for="item${question.orderNo}-tit2" class="col-sm-2 control-label">질문</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" id="item${question.orderNo}-tit2" name="item${question.orderNo}-tit2" class="form-control" placeholder="단일선택 질문을 입력하세요" value="${question.cont}" />
+                                                            <input type="text" id="item${question.orderNo}-tit2" name="item${question.orderNo}-tit2" class="form-control" placeholder="단일선택 질문을 입력하세요" value="${question.cont}"  <c:if test="${detail.aprvState.name() == 'DOING'}">readonly</c:if>/>
                                                         </div>
                                                     </div>
                                                     <div class="inp_list ra_grp">
@@ -164,8 +168,8 @@
                                                             <div class="form-group dev-group">
                                                                 <label for="item${question.orderNo}-ra${example.orderNo}" class="col-sm-2 control-label"><span class="num">${example.orderNo}</span>)</label>
                                                                 <div class="col-sm-8 col-md-7 col-lg-8">
-                                                                    <input type="text" id="item${question.orderNo}-ra${example.orderNo}" name="item${question.orderNo}-ra${example.orderNo}" class="form-control dev-example-input" placeholder="단일선택 내용을 입력하세요" value="${example.cont}" />
-
+                                                                    <input type="text" id="item${question.orderNo}-ra${example.orderNo}" name="item${question.orderNo}-ra${example.orderNo}" class="form-control dev-example-input" placeholder="단일선택 내용을 입력하세요" value="${example.cont}"  <c:if test="${detail.aprvState.name() == 'DOING'}">readonly</c:if>/>
+                                                                <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                                     <c:if test="${example.atchFileNo != null && example.atchFileNo > 0}">
                                                                         <div class="form-group inner_frm_grp file_set">
                                                                             <div class="col-xs-9 col-sm-10 dev-file-wrap">
@@ -177,13 +181,16 @@
                                                                             </div>
                                                                         </div>
                                                                     </c:if>
+                                                                </c:if>
                                                                 </div>
+                                                            <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                                 <div class="col-sm-2 col-md-3 col-lg-2 btn_area">
                                                                     <button type="button" class="btn btn-default outline ico_btn file_add" title="파일첨부"><i class="ti-save" aria-hidden="true"></i> <span class="sr-only">파일첨부</span></button>
                                                                     <c:if test="${status.index > 0}">
                                                                     <button type="button" class="btn btn-black ico_btn inp_del" title="삭제"><i class="ti-close" aria-hidden="true"></i> <span class="sr-only">항목삭제</span></button>
                                                                     </c:if>
                                                                 </div>
+                                                            </c:if>
                                                             </div>
                                                             </c:if>
                                                         </c:forEach>
@@ -196,6 +203,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <c:if test="${detail.aprvState.name() != 'DOING'}">
+
                                                     <div class="text-right">
                                                         <c:choose>
                                                             <c:when test="${ question.surveyExampleList[fn:length(question.surveyExampleList)-1].orderNo >= 9999 }">
@@ -207,12 +216,13 @@
                                                         </c:choose>
                                                         <button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 단일선택 항목 추가</button>
                                                     </div>
+                                                    </c:if>
                                                 </div>
                                                 <div class="tab-content item_tab3" <c:if test="${question.qusTypeCd == 'MULTI'}">style="display: block;"</c:if>>
                                                     <div class="form-group">
                                                         <label for="item${question.orderNo}-tit3" class="col-sm-2 control-label">질문</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" id="item${question.orderNo}-tit3" name="item${question.orderNo}-tit3" class="form-control" placeholder="복수선택 질문을 입력하세요" value="${question.cont}" />
+                                                            <input type="text" id="item${question.orderNo}-tit3" name="item${question.orderNo}-tit3" class="form-control" placeholder="복수선택 질문을 입력하세요" value="${question.cont}" <c:if test="${detail.aprvState.name() == 'DOING'}"> readonly</c:if> />
                                                         </div>
                                                     </div>
                                                     <div class="inp_list chk_grp">
@@ -220,7 +230,8 @@
                                                         <div class="form-group dev-group">
                                                             <label for="item${question.orderNo}-chk${example.orderNo}" class="col-sm-2 control-label"><span class="num">${example.orderNo}</span>)</label>
                                                             <div class="col-sm-8 col-md-7 col-lg-8">
-                                                                <input type="text" id="item${question.orderNo}-chk${example.orderNo}" name="item${question.orderNo}-chk${example.orderNo}" class="form-control dev-example-input" placeholder="복수선택 내용을 입력하세요" value="${example.cont}" />
+                                                                <input type="text" id="item${question.orderNo}-chk${example.orderNo}" name="item${question.orderNo}-chk${example.orderNo}" class="form-control dev-example-input" placeholder="복수선택 내용을 입력하세요" value="${example.cont}" <c:if test="${detail.aprvState.name() == 'DOING'}"> readonly</c:if> />
+                                                                <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                                 <c:if test="${example.atchFileNo != null && example.atchFileNo > 0}">
                                                                     <div class="form-group inner_frm_grp file_set">
                                                                         <div class="col-xs-9 col-sm-10 dev-file-wrap">
@@ -232,25 +243,30 @@
                                                                         </div>
                                                                     </div>
                                                                 </c:if>
+                                                                </c:if>
                                                             </div>
+                                                            <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                             <div class="col-sm-2 col-md-3 col-lg-2 btn_area">
                                                                 <button type="button" class="btn btn-default outline ico_btn file_add"><i class="ti-save" aria-hidden="true"></i> <span class="sr-only">첨부</span></button>
                                                                 <c:if test="${status.index > 0}">
                                                                 <button type="button" class="btn btn-black ico_btn inp_del" title="삭제"><i class="ti-close" aria-hidden="true"></i> <span class="sr-only">삭제</span></button>
                                                                 </c:if>
                                                             </div>
+                                                            </c:if>
                                                         </div>
                                                         </c:forEach>
                                                     </div>
+                                                    <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                     <div class="text-right">
                                                         <button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 복수선택 항목 추가</button>
                                                     </div>
+                                                    </c:if>
                                                 </div>
                                                 <div class="tab-content item_tab4 skip_type_box" <c:if test="${question.qusTypeCd == 'SKIP'}">style="display: block;"</c:if>>
                                                     <div class="form-group">
                                                         <label for="item${question.orderNo}-tit4" class="col-sm-2 control-label">질문</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" id="item${question.orderNo}-tit4" name="item${question.orderNo}-tit4" class="form-control" placeholder="건너뛰기 형 질문을 입력하세요" value="${question.cont}" />
+                                                            <input type="text" id="item${question.orderNo}-tit4" name="item${question.orderNo}-tit4" class="form-control" placeholder="건너뛰기 형 질문을 입력하세요" value="${question.cont}" <c:if test="${detail.aprvState.name() == 'DOING'}"> readonly</c:if>/>
                                                         </div>
                                                     </div>
                                                     <div class="inp_list skip_grp">
@@ -258,7 +274,8 @@
                                                         <div class="form-group dev-group">
                                                             <label for="item${question.orderNo}-skip${example.orderNo}" class="col-sm-2 control-label"><span class="num">${example.orderNo}</span>)</label>
                                                             <div class="col-sm-8 col-md-7 col-lg-8">
-                                                                <input type="text" id="item${question.orderNo}-skip${example.orderNo}" name="item${question.orderNo}-skip${example.orderNo}" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" value="${example.cont}" />
+                                                                <input type="text" id="item${question.orderNo}-skip${example.orderNo}" name="item${question.orderNo}-skip${example.orderNo}" class="form-control dev-example-input" placeholder="건너뛰기 형 단일선택 내용을 입력하세요" value="${example.cont}" <c:if test="${detail.aprvState.name() == 'DOING'}"> readonly</c:if>/>
+                                                                <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                                 <div class="form-inline skip_num_inp">
                                                                     <label for="item${question.orderNo}-skip${example.orderNo}-num${example.orderNo}" class="text-primary control-label"> 선택시
 <%--                                                                        <input type="text" id="item${question.orderNo}-skip1-num1" name="item${question.orderNo}-skip1-num1" class="form-control dev-example-skip" readonly="readonly" maxlength="2" value="${example.skipNo}" />--%>
@@ -284,19 +301,24 @@
                                                                         </div>
                                                                     </div>
                                                                 </c:if>
+                                                                </c:if>
                                                             </div>
+                                                            <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                             <div class="col-sm-2 col-md-3 col-lg-2 btn_area">
                                                                 <button type="button" class="btn btn-default outline ico_btn file_add" title="파일첨부"><i class="ti-save" aria-hidden="true"></i> <span class="sr-only">파일첨부</span></button>
                                                                 <c:if test="${status.index > 0}">
                                                                     <button type="button" class="btn btn-black ico_btn inp_del" title="삭제"><i class="ti-close" aria-hidden="true"></i> <span class="sr-only">삭제</span></button>
                                                                 </c:if>
                                                             </div>
+                                                            </c:if>
                                                         </div>
                                                         </c:forEach>
                                                     </div>
+                                                    <c:if test="${detail.aprvState.name() != 'DOING'}">
                                                     <div class="text-right">
                                                         <button type="button" class="btn btn-black add_inp_btn"><i class="fa fa-plus-square" aria-hidden="true"></i> 건너뛰기 항목 추가</button>
                                                     </div>
+                                                    </c:if>
                                                 </div>
                                             </div>
                                         </div>
@@ -314,6 +336,7 @@
                             	복수선택형 : 여러가지 답변을 선택하는 형태<br>
                             	건너뛰기형 : 해당 답변을 클릭 시 연결된 문항이 생성되는 형태
                             </div> -->
+                        <c:if test="${detail.aprvState.name() != 'DOING'}">
                             <div class="row text-center">
                                 <div class="col-sm-10 col-sm-push-2">
                                     <button type="button" class="btn btn-lg btn-primary" id="itemSetPlus"><i
@@ -321,6 +344,7 @@
                                     </button>
                                 </div>
                             </div>
+                        </c:if>
                     <hr/>
                     <div class="row type0">
                         <div class="col-sm-6">

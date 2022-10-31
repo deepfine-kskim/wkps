@@ -491,7 +491,11 @@ public class EgovSurveyController {
                 param.setTargetNo(targetNo);
             }
 
-            result = surveyService.update(param);
+            if(param.getAprvState().getValue().equals("진행중")){
+                result = surveyService.doingUpdate(param);
+            } else{
+                result = surveyService.update(param);
+            }
             mav.addObject("data", param);
 
         } catch (NullPointerException e) {

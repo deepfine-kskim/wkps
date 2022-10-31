@@ -207,6 +207,27 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
     }
 
     @Override
+    public boolean doingUpdate(SurveyVO surveyVO) {
+        boolean result = false;
+        if(surveyDAO.updateSurvey(surveyVO) > 0 ) {
+
+            egovLogService.insert(LogType.UPDATE, LogSubjectType.SURVEY, surveyVO);
+
+            //관련된 퀴즈와 예제, 답변을 다 지운다. 다 맞출 수 없어서 초기화를 한다.
+//            deleteQuestion(surveyVO.getSurveyNo());
+
+//            if (surveyVO.getQuestionList() != null) {
+//                for (SurveyQuestionVO surveyQuestionVO : surveyVO.getQuestionList()) {
+//                    surveyQuestionVO.setSurveyNo(surveyVO.getSurveyNo());
+//                    insertQuestion(surveyQuestionVO);
+//                }
+//            }
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
     public int delete(SurveyVO surveyVO) {
         egovLogService.insert(LogType.DELETE, LogSubjectType.SURVEY, surveyVO);
         return surveyDAO.delete(surveyVO);

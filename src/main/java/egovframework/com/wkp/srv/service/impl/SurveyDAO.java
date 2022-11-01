@@ -122,16 +122,6 @@ public class SurveyDAO extends EgovComAbstractDAO {
 	}
 
 	/**
-	 * 설문조사 상세
-	 * @param surveyVO
-	 * @return
-	 * @
-	 */
-	public List<SurveyVO> selectMyAnswer(SurveyVO surveyVO) {
-		return selectList("SurveyDAO.selectMyAnswer", surveyVO);
-	}
-
-	/**
 	 * 설문조사 대답 참여자 수
 	 * @param surveyAnswerVO
 	 * @return
@@ -151,16 +141,6 @@ public class SurveyDAO extends EgovComAbstractDAO {
 		return update("SurveyDAO.delete", surveyVO);
 	}
 
-	/**
-	 * 내설문조사 삭제하기
-	 * @param surveyanswerVO
-	 * @return
-	 * @
-	 */
-	public int delete(SurveyAnswerVO surveyanswerVO) {
-		return update("SurveyDAO.deleteMyAnswer", surveyanswerVO);
-	}
-	
 	/**
 	 * 설문조사 공개변경
 	 * @param surveyVO

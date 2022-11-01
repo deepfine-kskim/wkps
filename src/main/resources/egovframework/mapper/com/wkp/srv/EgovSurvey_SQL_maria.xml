@@ -189,17 +189,6 @@
 		AND SURVEY_NO = #{surveyNo}
 	</select>
 
-    <select id="selectMyAnswer" parameterType="SurveyVO" resultType="SurveyVO">
-		SELECT SURVEY_ANSWER_NO
-		, SURVEY_QUS_NO
-		, SURVEY_EXAMPLE_NO
-		, QUS_ANSWER_CONT
-		  FROM TB_SURVEY_ANSWER
-		 WHERE SURVEY_NO = #{surveyNo}
-		   AND REGISTER_ID = #{registerId}
-	</select>
-
-
     <select id="selectSurveyJoinCount" parameterType="SurveyVO" resultType="int">
 		SELECT COUNT(DISTINCT REGISTER_ID) as cnt FROM TB_SURVEY_ANSWER
 		WHERE
@@ -314,12 +303,6 @@
 	<delete id="deleteAnswer" parameterType="map" >
 		DELETE FROM TB_SURVEY_ANSWER
 		WHERE SURVEY_NO = #{surveyNo}
-	</delete>
-
-	<delete id="deleteMyAnswer" parameterType="map" >
-		DELETE FROM TB_SURVEY_ANSWER
-		WHERE SURVEY_NO = #{surveyNo}
-		AND REGISTER_ID = #{registerId}
 	</delete>
 
     <select id="selectQuestionList" parameterType="SurveyQuestionVO" resultType="SurveyQuestionVO">

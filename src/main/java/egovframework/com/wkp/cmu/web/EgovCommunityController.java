@@ -1104,7 +1104,7 @@ public class EgovCommunityController {
 
                 //본인 작성글 확인
                 free.setInqCnt(free.getInqCnt() + 1);
-                communityService.updateCommunityFreeboardInq(free);
+                communityService.updateCommunity2FreeboardInq(free);
                 if (free.getMberNo() != mem.getMberNo()) {
                     if(mem.getCmmntyRoleCd() != null && (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode()))){
                         model.addAttribute("role", "A");

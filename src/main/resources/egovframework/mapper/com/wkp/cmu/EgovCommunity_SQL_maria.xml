@@ -828,6 +828,7 @@
           FROM TB_COMMUNITY_MEMBER
          WHERE DEL_YN = 'N'
            AND CMMNTY_NO = #{cmmntyNo}
+           AND USER_SID != #{userSid}
     </select>
 
     <select id="getCommunityMemberExistUser" parameterType="map" resultType="int">

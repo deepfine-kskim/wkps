@@ -384,9 +384,15 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	public CommunityMemberVO getCommunityMemberUser(Long cmmntyNo,String userSid){
 		return communityDAO.getCommunityMemberUser(cmmntyNo, userSid);
 	}
+
 	@Override
 	public CommunityMemberVO getCommunityMember(Long mberNo){
 		return communityDAO.getCommunityMember(mberNo);
+	}
+
+	@Override
+	public List<CommunityMemberVO> getCommunityMemberByCommNo(Long cmmntyNo,String userSid){
+		return communityDAO.getCommunityMemberByCommNo(cmmntyNo, userSid);
 	}
 
 	@Override

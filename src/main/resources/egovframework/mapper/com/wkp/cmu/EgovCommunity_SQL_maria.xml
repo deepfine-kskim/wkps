@@ -815,11 +815,19 @@
            AND CMMNTY_NO = #{cmmntyNo}
            AND USER_SID = #{userSid}
     </select>
+
     <select id="getCommunityMember" parameterType="map" resultType="CommunityMemberVO">
         SELECT *
           FROM TB_COMMUNITY_MEMBER
          WHERE DEL_YN = 'N'
            AND MBER_NO = #{mberNo}
+    </select>
+
+    <select id="getCommunityMemberByCommNo" parameterType="map" resultType="CommunityMemberVO">
+        SELECT *
+          FROM TB_COMMUNITY_MEMBER
+         WHERE DEL_YN = 'N'
+           AND CMMNTY_NO = #{cmmntyNo}
     </select>
 
     <select id="getCommunityMemberExistUser" parameterType="map" resultType="int">

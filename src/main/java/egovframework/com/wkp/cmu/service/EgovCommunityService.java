@@ -99,6 +99,7 @@ public interface EgovCommunityService {
 	public CommunityMemberVO getCommunityMemberNickname(Long cmmntyNo,String nickname);
 	public CommunityMemberVO getCommunityMemberUser(Long cmmntyNo,String userSid);
 	public CommunityMemberVO getCommunityMember(Long mberNo);
+	public List<CommunityMemberVO> getCommunityMemberByCommNo(Long cmmntyNo,String userSid);
 
 	public int getCommunityMemberExistUser(Long cmmntyNo,String userSid);
 	

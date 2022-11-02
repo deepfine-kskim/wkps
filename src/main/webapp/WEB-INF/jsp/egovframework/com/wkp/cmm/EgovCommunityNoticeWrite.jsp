@@ -14,6 +14,7 @@ $(function() {
 	    formData.append("title", $('#title').val());
 	    formData.append("cont", cont);
 	    formData.append("showYn", showYn);
+	    formData.append("cmmntyNm", $('#cmmntyNm').text());
 	    //formData.append("change_file1", change_file1);
 	    //formData.append("change_file2", change_file2);
 	    formData.append("file1", $('#file1')[0].files[0]);

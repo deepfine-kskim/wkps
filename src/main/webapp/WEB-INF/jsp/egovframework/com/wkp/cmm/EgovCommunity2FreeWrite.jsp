@@ -13,6 +13,7 @@ $(function() {
 	    formData.append("title", $('#title').val());
 	    formData.append("cont", cont);
 	    formData.append("showYn", $('[name=showYn]:checked').val());
+        formData.append("cmmntyNm", $('#cmmntyNm').text());
 	    //formData.append("change_file1", change_file1);
 	    //formData.append("change_file2", change_file2);
 	    var file = document.getElementById('file1').files[0]

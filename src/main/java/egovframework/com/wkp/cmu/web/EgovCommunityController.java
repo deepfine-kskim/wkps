@@ -3,9 +3,7 @@ package egovframework.com.wkp.cmu.web;
 import com.ibm.icu.util.Calendar;
 import egovframework.com.cmm.EgovComException;
 import egovframework.com.cmm.PageInfo;
-import egovframework.com.cmm.service.EgovFileMngService;
-import egovframework.com.cmm.service.EgovFileMngUtil;
-import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.service.*;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.kf.common.PageMaker;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
@@ -66,6 +64,9 @@ public class EgovCommunityController {
     
     @Resource(name = "commonService")
     private EgovCommonService commonService;
+
+    @Resource(name = "messengerService")
+    private MessengerService messengerService;
 
     void includeCommon(Model model, Long cmmntyNo) {
         UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
@@ -634,6 +635,7 @@ public class EgovCommunityController {
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = false) String cont,
             @RequestParam(value = "showYn", required = false) String showYn,
+            @RequestParam(value = "cmmntyNm", required = false) String cmmntyNm,
             @RequestParam(value = "link1", required = false) String link1,
             @RequestParam(value = "link2", required = false) String link2,
             @RequestParam(value = "file1", required = false) MultipartFile file1,
@@ -709,6 +711,26 @@ public class EgovCommunityController {
 
         ModelAndView mav = new ModelAndView("jsonView");
         mav.addObject("success", true);
+
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        /* 메신저 알림 전송 */
+        MessengerVO messengerVO = new MessengerVO();
+//        메세지 보내는 사람 이름 : 여기선 글 작성자
+        messengerVO.setSndUser(userVO.getDisplayName());
+        messengerVO.setDocTitle("[도정지식포털 커뮤니티 알림]");
+        messengerVO.setDocDesc("[도정지식포털 커뮤니티 "+ cmmntyNm +"] 새로운 글이 등록되었습니다.");
+        messengerVO.setDocUrl("http://105.0.1.229/cmu/communityMain.do?cmmntyNo=" + cmmntyNo);
+
+//      현재 로그인한사람 제외한 커뮤니티 멤버에게 전송
+        List<CommunityMemberVO> cmmMem = communityService.getCommunityMemberByCommNo(cmmntyNo, user.getSid());
+
+        for(CommunityMemberVO memVo : cmmMem){
+//        받는사람 id 여기선 커뮤니티 회원들
+            messengerVO.setRecvId(memVo.getUserSid());
+            messengerService.insert(messengerVO);
+        }
+
+
         return mav;
     }
 
@@ -1453,6 +1475,7 @@ public class EgovCommunityController {
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = true) String cont,
             @RequestParam(value = "showYn", required = true) String showYn,
+            @RequestParam(value = "cmmntyNm", required = false) String cmmntyNm,
             final MultipartHttpServletRequest multiRequest
 
     ) throws IOException, EgovComException {
@@ -1515,6 +1538,25 @@ public class EgovCommunityController {
 
         ModelAndView mav = new ModelAndView("jsonView");
         mav.addObject("success", true);
+
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        /* 메신저 알림 전송 */
+        MessengerVO messengerVO = new MessengerVO();
+//        메세지 보내는 사람 이름 : 여기선 글 작성자
+        messengerVO.setSndUser(userVO.getDisplayName());
+        messengerVO.setDocTitle("[도정지식포털 커뮤니티 알림]");
+        messengerVO.setDocDesc("[도정지식포털 커뮤니티 "+ cmmntyNm +"] 새로운 글이 등록되었습니다.");
+        messengerVO.setDocUrl("http://105.0.1.229/cmu/communityMain.do?cmmntyNo=" + cmmntyNo);
+
+//      현재 로그인한사람 제외한 커뮤니티 멤버에게 전송
+        List<CommunityMemberVO> cmmMem = communityService.getCommunityMemberByCommNo(cmmntyNo, user.getSid());
+
+        for(CommunityMemberVO memVo : cmmMem){
+//        받는사람 id 여기선 커뮤니티 회원들
+            messengerVO.setRecvId(memVo.getUserSid());
+            messengerService.insert(messengerVO);
+        }
+
         return mav;
     }
 
@@ -1526,6 +1568,7 @@ public class EgovCommunityController {
             @RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "cont", required = true) String cont,
             @RequestParam(value = "showYn", required = true) String showYn,
+            @RequestParam(value = "cmmntyNm", required = false) String cmmntyNm,
             final MultipartHttpServletRequest multiRequest
 
     ) throws IOException, EgovComException {
@@ -1588,6 +1631,25 @@ public class EgovCommunityController {
 
         ModelAndView mav = new ModelAndView("jsonView");
         mav.addObject("success", true);
+
+        UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        /* 메신저 알림 전송 */
+        MessengerVO messengerVO = new MessengerVO();
+//        메세지 보내는 사람 이름 : 여기선 글 작성자
+        messengerVO.setSndUser(userVO.getDisplayName());
+        messengerVO.setDocTitle("[도정지식포털 커뮤니티 알림]");
+        messengerVO.setDocDesc("[도정지식포털 커뮤니티 "+ cmmntyNm +"] 새로운 글이 등록되었습니다.");
+        messengerVO.setDocUrl("http://105.0.1.229/cmu/communityMain.do?cmmntyNo=" + cmmntyNo);
+
+//      현재 로그인한사람 제외한 커뮤니티 멤버에게 전송
+        List<CommunityMemberVO> cmmMem = communityService.getCommunityMemberByCommNo(cmmntyNo, user.getSid());
+
+        for(CommunityMemberVO memVo : cmmMem){
+//        받는사람 id 여기선 커뮤니티 회원들
+            messengerVO.setRecvId(memVo.getUserSid());
+            messengerService.insert(messengerVO);
+        }
+
         return mav;
     }
 

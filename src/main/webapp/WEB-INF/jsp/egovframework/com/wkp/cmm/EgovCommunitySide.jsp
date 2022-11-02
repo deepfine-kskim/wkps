@@ -129,7 +129,7 @@ function cancel(){
                             <c:if test="${role_adm == 'Y'}">
                             <a href="/cmu/admin/communityAdmin.do?cmmntyNo=${community.cmmntyNo }" class="adm_btn" title="관리자"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> 관리자</a>
                             </c:if>
-                            <a href="/cmu/communityMain.do?cmmntyNo=${community.cmmntyNo }">${community.cmmntyNm }</a></strong>
+                            <a href="/cmu/communityMain.do?cmmntyNo=${community.cmmntyNo }" id="cmmntyNm">${community.cmmntyNm }</a></strong>
                             <ul class="ico_list info_list">
                                 <li>
                                     <div class="row type0">

@@ -113,6 +113,44 @@ $(function() {
 	
 });
 
+$(document).ready(function(){
+
+    $('#rlsUserChk').off('click').on('click', function () {
+        // 체크된 개인 항목
+        const userList = [];
+        $('input:checkbox:not(:disabled)[name="userList"]').each(function (e) {
+            if (this.checked) {
+                const sid = $(this).val();
+                if (userList.indexOf(sid) === -1) {
+                    userList.push(sid);
+                }
+            }
+        });
+
+        if(userList.length == 0){
+            alert("커뮤니티에 초대할 사용자를 선택해 주세요.");
+            return;
+        }
+
+        var param ={ cmmntyNo: cmmntyNo,
+            userList:userList,
+            cmmntyNm:'${community.cmmntyNm}'};
+
+        $.post("inviteMember.do",
+            param,
+            function(data, status) {
+                var json = JSON.parse(data);
+                if(json.success){
+                    alert('초대 하였습니다.');
+                    location.reload();
+                }else{
+                    alert(json.err_msg);
+                }
+            }
+        );
+    });
+});
+
 </script>
 <div class="container sub_cont">
                 <div class="row layout_side_row">
@@ -190,7 +228,14 @@ $(function() {
                                             <td>${mem.ou }</td>
                                             <td><span class="text-blue">${mem.freeCount }</span>개</td>
                                             <td><span class="text-blue">${mem.commentCount }</span>개</td>
-                                            <td>${mem.strRegDate }</td>
+                                            <c:choose>
+                                                <c:when test="${mem.inviteYn eq 'Y' and mem.aprvYn eq 'N'}">
+                                                    <td>초대중인 유저입니다.</td>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td>${mem.strRegDate }</td>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </tr>
                                         </c:forEach>
                                         <c:if test="${fn:length(list)==0 }">
@@ -220,6 +265,7 @@ $(function() {
                             <div class="btn_area">
                                 <a href="#" class="btn btn-danger" id="btn_del_mem">강제탈퇴</a>
                                 <a href="#" class="btn btn-primary" id="btn_staff_mem">스텝등록</a>
+                                <a href="#selectGrpPopup" class="btn btn-primary" data-toggle="modal" data-target="#selectGrpPopup">멤버 초대</a>
                             </div>
                             
                         </div>
@@ -228,3 +274,65 @@ $(function() {
                 </div>
                 <!-- //row -->
             </div>
+
+<!-- 조직그룹 선택 팝업 -->
+<div class="modal fade" id="selectGrpPopup" tabindex="-1" role="dialog" aria-labelledby="selectGrpPopupLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="selectGrpPopupLabel">개인 선택</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#selectGrpTab2" aria-controls="selectGrpTab2" role="tab" data-toggle="tab">개인</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="selectGrpTab2" class="tab-pane active" role="tabpanel">
+                        <div class="srch_area">
+                            <fieldset>
+                                <legend class="sr-only">이름 검색영역</legend>
+                                <div class="input-group">
+                                    <label for="userText" class="sr-only">이름 입력</label>
+                                    <input type="text" id="userText" name="userText" class="form-control flow-enter-search" placeholder="이름 검색(2글자 이상)" data-search-button="userBtn">
+                                    <span class="input-group-btn"><a href="javascript:;" id="userBtn" class="btn btn-default">검색</a></span>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="hummingbird-treeview well chk_tree_area">
+                            <%--<div class="checkbox">
+                                <label for="allSrchChk"><input type="checkbox" id="allSrchChk" class="all_chk" /> 전체선택</label>
+                            </div>--%>
+                            <ul id="userList" class="chk_tree_list hummingbird-base treeview">
+                                <c:forEach var="top" items="${topList}" varStatus="topStatus">
+                                    <li class="flow-action-userList">
+                                        <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}" class="flow-action-checkUserList" />${top.ou}</label>
+                                        <ul class="flow-user-list" data-ou-code="${top.ouCode}">
+                                            <c:forEach var="parent" items="${top.nextDepthList}" varStatus="parentStatus">
+                                                <li>
+                                                    <i class="fa fa-plus" data-code="${parent.ouCode}"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}" />${parent.ou}</label>
+                                                    <ul class="not_depth_list flow-user-list" data-ou-code="${parent.ouCode}">
+                                                        <c:forEach var="child" items="${parent.nextDepthList}" varStatus="childStatus">
+                                                            <li>
+                                                                <i class="fa fa-plus"></i> <label for="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}"><input type="checkbox" id="allSrchChk-${topStatus.index}-${parentStatus.index}-${childStatus.index}" />${child.ou}</label>
+                                                                <ul class="flow-user-list" data-ou-code="${child.ouCode}">
+                                                                </ul>
+                                                            </li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="rlsUserChk" class="btn btn-blue" data-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>

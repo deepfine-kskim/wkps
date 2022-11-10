@@ -31,11 +31,13 @@ public class CommunityMemberVO {
 	
 	private String cmmntyRoleCd;
 	private String cmmntyNicknm;
+	private String cmmntyNm;
 	private String registerId;
 	private Date registDtm;
 	private String updaterId;
 	private Date updDtm;
 	private String delYn;
+	private String inviteYn;
 	private String aprvYn;
 	private Date aprvDtm;
 	private String userSid;

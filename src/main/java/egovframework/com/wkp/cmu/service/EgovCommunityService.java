@@ -93,8 +93,9 @@ public interface EgovCommunityService {
 	public CommunityCommentVO getCommunity2Comment(Long commentNo);
 
 	//회원목록
-	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff,int limit,int startIndex);
-	public int findCommunityMemberTotalCount(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff);
+	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff, String invite,int limit,int startIndex);
+	public List<CommunityMemberVO> findCommunityAlreadyMember(Long cmmntyNo);
+	public int findCommunityMemberTotalCount(Long cmmntyNo,String searchType,String nickname,String joinReq,String staff, String invite);
 	public void setBoardCount(List<CommunityMemberVO> mem);
 	public CommunityMemberVO getCommunityMemberNickname(Long cmmntyNo,String nickname);
 	public CommunityMemberVO getCommunityMemberUser(Long cmmntyNo,String userSid);
@@ -108,6 +109,9 @@ public interface EgovCommunityService {
 	public void entrust(Long cmmntyNo,Long targetMberNo);
 	public void updateCommunity(CommunityVO vo);
 	public void updateCommunityMemberNickName(CommunityMemberVO vo);
+	public void receptCommunityInvite(CommunityMemberVO vo);
+	public void rejectCommunityInvite(CommunityMemberVO vo);
+	public void inviteCommunityMember(List<CommunityMemberVO> vo);
 	public void closeCommunity(Long cmmntyNo);
 	public void memberConfirm(Long [] mberNo);
 	public void memberReject(Long [] mberNo);

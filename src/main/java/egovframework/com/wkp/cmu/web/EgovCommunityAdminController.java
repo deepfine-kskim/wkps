@@ -2,10 +2,9 @@ package egovframework.com.wkp.cmu.web;
 
 import egovframework.com.cmm.PageInfo;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.wkp.cmu.service.CommunityMemberVO;
-import egovframework.com.wkp.cmu.service.CommunityRoleTypes;
-import egovframework.com.wkp.cmu.service.CommunityVO;
-import egovframework.com.wkp.cmu.service.EgovCommunityService;
+import egovframework.com.wkp.cmu.service.*;
+import egovframework.com.wkp.usr.service.EgovOrgService;
+import egovframework.com.wkp.usr.service.OrgVO;
 import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.mgt.wkp.mnu.service.EgovMenuService;
 import egovframework.mgt.wkp.mnu.service.MenuVO;
@@ -22,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cmu/admin/")
@@ -35,6 +36,9 @@ public class EgovCommunityAdminController {
 
     @Resource(name = "menuService")
     EgovMenuService menuService;
+
+    @Resource(name = "orgService")
+    private EgovOrgService orgService;
 
     void includeCommon(MenuVO menuVO, Model model, Long cmmntyNo) {
         
@@ -292,7 +296,7 @@ public class EgovCommunityAdminController {
         }
 
         ModelAndView mav = new ModelAndView("jsonView");
-        mav.addObject("list", communityService.findCommunityMember(cmmntyNo, null, nickname, "N", null, 1000, 0));
+        mav.addObject("list", communityService.findCommunityMember(cmmntyNo, null, nickname, "N", null, "N", 1000, 0));
         mav.addObject("success", true);
         return mav;
     }
@@ -315,11 +319,11 @@ public class EgovCommunityAdminController {
             model.addAttribute("search_value", searchValue);
 
 
-            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "Y", null);
+            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "Y", null, "N");
             int limit = rows;
             int startIndex = (page - 1) * rows;
 
-            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "Y", null, limit, startIndex);
+            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "Y", null, "N", limit, startIndex);
 
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("total_count", total);
@@ -421,17 +425,19 @@ public class EgovCommunityAdminController {
             model.addAttribute("search_value", searchValue);
 
 
-            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "N", "N");
+            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "N", "N", "N");
             int limit = rows;
             int startIndex = (page - 1) * rows;
 
-            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "N", "N", limit, startIndex);
+            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "N", "N", "Y", limit, startIndex);
+            List<CommunityMemberVO> alreadyList = communityService.findCommunityAlreadyMember(cmmntyNo);
             communityService.setBoardCount(list);
 
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("total_count", total);
             model.addAttribute("total_page", pi.getTotalPage());
             model.addAttribute("list", list);
+            model.addAttribute("alreadyList", alreadyList);
 
             UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
             CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
@@ -455,6 +461,30 @@ public class EgovCommunityAdminController {
         } catch (NullPointerException e) {
         	LOGGER.error("[" + e.getClass() +"] :" + e.getMessage());
 		}
+
+        OrgVO orgVO = new OrgVO();
+        orgVO.setOuLevel(2);
+        List<OrgVO> topList = orgService.selectOrgList(orgVO);
+
+        orgVO.setOuLevel(3);
+        List<OrgVO> parentList = orgService.selectOrgList(orgVO);
+
+        orgVO.setOuLevel(4);
+        List<OrgVO> childList = orgService.selectOrgList(orgVO);
+
+        parentList.forEach(parent -> {
+            String ouCode = parent.getOuCode();
+            List<OrgVO> list = childList.stream().filter(child -> ouCode.equals(child.getParentOuCode())).collect(Collectors.toList());
+            parent.setNextDepthList(list);
+        });
+
+        topList.forEach(top -> {
+            String ouCode = top.getOuCode();
+            List<OrgVO> list = parentList.stream().filter(parent -> ouCode.equals(parent.getParentOuCode())).collect(Collectors.toList());
+            top.setNextDepthList(list);
+        });
+
+        model.addAttribute("topList", topList);
 
         return "/com/wkp/cmm/EgovCommunityAdminMember";
     }
@@ -546,6 +576,67 @@ public class EgovCommunityAdminController {
         return mav;
     }
 
+    //커뮤니티 초대 []
+    @RequestMapping(value = "/inviteMember.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView inviteMember(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "cmmntyNm", required = true) String cmmntyNm,
+            @RequestParam(value = "userList[]", required = false) String[] userList
+
+    ) {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        CommunityVO community = communityService.getCommunity(cmmntyNo);
+        if (community == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "잘못된 파라메터 입니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        CommunityMemberVO mem = communityService.getCommunityMemberUser(cmmntyNo, user.getSid());
+        if (mem == null) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "커뮤니티 회원이 아닙니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        if (!(mem.getCmmntyRoleCd() != null &&
+                (mem.getCmmntyRoleCd().equals(CommunityRoleTypes.owner.getCode()) || mem.getCmmntyRoleCd().equals(CommunityRoleTypes.member.getCode())))) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "권한이없습니다.");
+            mav.addObject("success", false);
+            return mav;
+        }
+
+        List<CommunityMemberVO> inviteList = new ArrayList<>();
+        for(String m : userList) {
+            CommunityMemberVO oneList = new CommunityMemberVO();
+            oneList.setUserSid(m);
+            oneList.setCmmntyNo(cmmntyNo);
+            oneList.setCmmntyNicknm(m);
+            oneList.setCmmntyRoleCd(null);
+            oneList.setCmmntyNm(cmmntyNm);
+            oneList.setAprvYn("N");
+            oneList.setRegisterId(user.getSid());
+
+            inviteList.add(oneList);
+        }
+
+//        커뮤니티 초대 로직
+         communityService.inviteCommunityMember(inviteList);
+
+
+        ModelAndView mav = new ModelAndView("jsonView");
+        mav.addObject("success", true);
+        return mav;
+    }
+
 
     @RequestMapping("/communityAdminStaff.do")
     public String communityMain(@ModelAttribute("menuVO") MenuVO menuVO, Model model,
@@ -564,11 +655,11 @@ public class EgovCommunityAdminController {
             model.addAttribute("search_value", searchValue);
 
 
-            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "N", "Y");
+            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, searchType, searchValue, "N", "Y", "N");
             int limit = rows;
             int startIndex = (page - 1) * rows;
 
-            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "N", "Y", limit, startIndex);
+            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, searchType, searchValue, "N", "Y", "N", limit, startIndex);
 
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("total_count", total);

@@ -727,20 +727,35 @@
             <if test='joinReq != null and joinReq == "Y" '>
                 AND CM.APRV_YN = 'N'
             </if>
-            <if test='joinReq != null and joinReq == "N" '>
-                AND CM.APRV_YN = 'Y'
-            </if>
+            <choose>
+                <when test='joinReq != null and joinReq == "N" and invite == "Y"'>
+                    AND (CM.APRV_YN = 'Y' OR CM.INVITE_YN = 'Y')
+                </when>
+                <when test='joinReq != null and joinReq == "N"'>
+                    AND CM.APRV_YN = 'Y'
+                </when>
+            </choose>
             <if test='staff != null and staff == "Y" '>
                 AND CM.CMMNTY_ROLE_CD IS NOT NULL
             </if>
             <if test='staff != null and staff == "N" '>
                 AND CM.CMMNTY_ROLE_CD IS NULL
             </if>
+            <if test='invite != null and invite == "N" '>
+                AND (CM.INVITE_YN = 'N' OR CM.APRV_YN = 'Y')
+            </if>
         </where>
         ORDER BY CM.MBER_NO DESC
         <if test="startIndex &gt; -1 and limit &gt; -1 ">
             LIMIT #{limit} OFFSET #{startIndex}
         </if>
+    </select>
+
+    <select id="findCommunityAlreadyMember" parameterType="map" resultType="CommunityMemberVO">
+        SELECT *
+        FROM TB_COMMUNITY_MEMBER
+        WHERE CMMNTY_NO = #{cmmntyNo}
+        AND DEL_YN = 'N'
     </select>
 
     <select id="findCommunityMemberTotalCount" parameterType="map" resultType="int">
@@ -774,6 +789,9 @@
             </if>
             <if test='staff != null and staff == "N" '>
                 AND CM.CMMNTY_ROLE_CD IS NULL
+            </if>
+            <if test='invite != null and invite == "N" '>
+                AND (CM.INVITE_YN = 'N' OR CM.APRV_YN = 'Y')
             </if>
         </where>
     </select>
@@ -870,6 +888,27 @@
              , UPDATER_ID     = #{userSid}
              , UPD_DTM        = now()
          WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
+    </update>
+
+    <update id="receptCommunityInvite" parameterType="CommunityMemberVO">
+        UPDATE TB_COMMUNITY_MEMBER
+           SET APRV_YN  = 'Y'
+             , UPDATER_ID     = #{userSid}
+             , UPD_DTM        = now()
+         WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
+    </update>
+
+    <update id="rejectCommunityInvite" parameterType="CommunityMemberVO">
+        DELETE FROM TB_COMMUNITY_MEMBER
+         WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
+    </update>
+
+    <update id="inviteCommunityMember" parameterType="CommunityMemberVO">
+        INSERT INTO TB_COMMUNITY_MEMBER
+        ( CMMNTY_NO, CMMNTY_ROLE_CD, CMMNTY_NICKNM, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, APRV_YN, APRV_DTM
+        , USER_SID, DEL_YN, INVITE_YN)
+        VALUES ( #{cmmntyNo}, #{cmmntyRoleCd}, #{cmmntyNicknm}, #{registerId}, now(), #{updaterId}, now(), #{aprvYn}
+               , #{aprvDtm}, #{userSid}, 'N', 'Y')
     </update>
 
     <update id="deleteCommunityMember" parameterType="CommunityMemberVO">

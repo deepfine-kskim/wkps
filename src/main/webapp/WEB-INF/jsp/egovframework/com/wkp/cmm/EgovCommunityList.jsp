@@ -47,6 +47,59 @@ function goEventBoard2(eventNo,cmmntyNo,pstgNo){
     location.href="community2FreeView.do?cmmntyNo="+cmmntyNo+"&pstgNo="+pstgNo;
 }
 
+function inviteEvent(eventNo, receptYn){
+    var param = {eventNo:eventNo};
+    $.post("/cmu/inviteEventCommunity.do",param,function(data, status){
+    });
+
+    location.href="community2FreeView.do?cmmntyNo="+cmmntyNo+"&pstgNo="+pstgNo;
+}
+
+function clearEvent(eventNo){
+    var param = {eventNo:eventNo};
+    $.post("/cmu/clearEventCommunity.do",param,function(data, status){
+    });
+}
+
+function receptInvite(cmmntyNo, eventNo){
+    if($('#commJoinNickName').val() == '' || $('#commJoinNickName').val() == null){
+        alert('사용할 닉네임을 입력해주세요.');
+        return false;
+    }
+    clearEvent(eventNo);
+    var param = {cmmntyNo:cmmntyNo,
+        nickname:$('#commJoinNickName').val()};
+
+    $.post("/cmu/receptInvite.do",param,function(data, status){
+        var json = JSON.parse(data);
+        if(json.success){
+            alert('승인되었습니다.');
+            location.reload();
+        }else{
+            alert(json.err_msg);
+        }
+
+        $('#commJoinPopup').modal('hide');
+    });
+}
+
+function rejectInvite(cmmntyNo, eventNo){
+    clearEvent(eventNo);
+    var param = {cmmntyNo:cmmntyNo};
+
+    $.post("/cmu/rejectInvite.do",param,function(data, status){
+        var json = JSON.parse(data);
+        if(json.success){
+            alert('거절되었습니다.');
+            location.reload();
+        }else{
+            alert(json.err_msg);
+        }
+
+        $('#commJoinPopup').modal('hide');
+    });
+}
+
 </script>
 <div class="container sub_cont">
                 <div id="contents">
@@ -412,6 +465,26 @@ function goEventBoard2(eventNo,cmmntyNo,pstgNo){
                                                                             </a>
                                                                         </li>
                                                                     </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:if test="${event.eventType == '7' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+<%--                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>--%>
+                                                                    <div class="subject"><strong>커뮤니티 ${event.cmmntyNm}에 초대되었습니다</strong></div>
+                                                                    <div class="form-group">
+                                                                        <label for="commJoinNickName" class="col-sm-3 control-label">커뮤니티 닉네임</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control" id="commJoinNickName" name="commJoinNickName" placeholder="닉네임을 입력하세요." required="required" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="msg_box">
+                                                                        <button type="button" class="btn btn-blue" onclick="receptInvite(${event.cmmntyNo}, ${event.eventNo}); return false;">승인하기</button>
+                                                                        <button type="button" class="btn btn-danger" onclick="rejectInvite(${event.cmmntyNo}, ${event.eventNo}); return false;">거절하기</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </li>

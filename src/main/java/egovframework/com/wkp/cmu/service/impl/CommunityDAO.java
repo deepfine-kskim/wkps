@@ -386,25 +386,33 @@ public class CommunityDAO extends EgovComAbstractDAO {
         return selectList("CommunityDAO.loadCommunityMemberByRole", param);
     }
 
-    public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo, String searchType, String nickname, String joinReq, String staff, int limit, int startIndex) {
+    public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo, String searchType, String nickname, String joinReq, String staff, String invite, int limit, int startIndex) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
         param.put("search_type", searchType);
         param.put("nickname", nickname);
         param.put("joinReq", joinReq);
         param.put("staff", staff);
+        param.put("invite", invite);
         param.put("limit", limit);
         param.put("startIndex", startIndex);
         return selectList("CommunityDAO.findCommunityMember", param);
     }
 
-    public int findCommunityMemberTotalCount(Long cmmntyNo, String searchType, String nickname, String joinReq, String staff) {
+    public List<CommunityMemberVO> findCommunityAlreadyMember(Long cmmntyNo) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("cmmntyNo", cmmntyNo);
+        return selectList("CommunityDAO.findCommunityAlreadyMember", param);
+    }
+
+    public int findCommunityMemberTotalCount(Long cmmntyNo, String searchType, String nickname, String joinReq, String staff, String invite) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("cmmntyNo", cmmntyNo);
         param.put("search_type", searchType);
         param.put("nickname", nickname);
         param.put("joinReq", joinReq);
         param.put("staff", staff);
+        param.put("invite", invite);
         return selectOne("CommunityDAO.findCommunityMemberTotalCount", param);
     }
 
@@ -468,6 +476,18 @@ public class CommunityDAO extends EgovComAbstractDAO {
 
     public void updateCommunityMemberNickName(CommunityMemberVO vo) {
         update("CommunityDAO.updateCommunityMemberNickName", vo);
+    }
+
+    public void receptCommunityInvite(CommunityMemberVO vo) {
+        update("CommunityDAO.receptCommunityInvite", vo);
+    }
+
+    public void rejectCommunityInvite(CommunityMemberVO vo) {
+        update("CommunityDAO.rejectCommunityInvite", vo);
+    }
+
+    public void inviteCommunityMember(CommunityMemberVO vo) {
+        insert("CommunityDAO.inviteCommunityMember", vo);
     }
 
     public void deleteCommunityMember(CommunityMemberVO vo) {

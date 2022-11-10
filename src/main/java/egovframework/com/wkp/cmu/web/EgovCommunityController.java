@@ -327,6 +327,55 @@ public class EgovCommunityController {
         return mav;
     }
 
+    @RequestMapping(value = "/receptInvite.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView receptInvite(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo,
+            @RequestParam(value = "nickname", required = true) String nickname
+
+    ) {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        if (!communityService.joinCheckNickname(cmmntyNo, nickname)) {
+            ModelAndView mav = new ModelAndView("jsonView");
+
+            mav.addObject("err_msg", "닉네임 중복이 있습니다.");
+            mav.addObject("success", false);
+            return mav;
+        } else{
+            CommunityMemberVO vo = new CommunityMemberVO();
+            vo.setCmmntyNicknm(nickname);
+            vo.setCmmntyNo(cmmntyNo);
+            vo.setUserSid(user.getSid());
+            communityService.updateCommunityMemberNickName(vo);
+            communityService.receptCommunityInvite(vo);
+        }
+
+        ModelAndView mav = new ModelAndView("jsonView");
+
+        mav.addObject("success", true);
+        return mav;
+    }
+
+    @RequestMapping(value = "/rejectInvite.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView rejectInvite(
+
+            @RequestParam(value = "cmmntyNo", required = true) Long cmmntyNo
+
+    ) {
+
+        UserVO user = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();//사용자 session
+        CommunityMemberVO vo = new CommunityMemberVO();
+        vo.setCmmntyNo(cmmntyNo);
+        vo.setUserSid(user.getSid());
+        communityService.rejectCommunityInvite(vo);
+
+        ModelAndView mav = new ModelAndView("jsonView");
+
+        mav.addObject("success", true);
+        return mav;
+    }
+
     @RequestMapping(value = "/joinCommunity.do", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView joinCommunity(
 
@@ -457,11 +506,11 @@ public class EgovCommunityController {
 
 
             //가입 승인이 난 회원만 보여준다.
-            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null);
+            int total = communityService.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null, "Y");
             int limit = rows;
             int startIndex = (page - 1) * rows;
 
-            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, null, null, "N", null, limit, startIndex);
+            List<CommunityMemberVO> list = communityService.findCommunityMember(cmmntyNo, null, null, "N", null, "Y", limit, startIndex);
 
             PageInfo pi = new PageInfo(total, rows, 10, page);
             model.addAttribute("total_count", total);

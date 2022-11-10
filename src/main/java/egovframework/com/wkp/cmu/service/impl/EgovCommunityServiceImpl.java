@@ -1,9 +1,14 @@
 package egovframework.com.wkp.cmu.service.impl;
 
 import com.ibm.icu.util.Calendar;
+import egovframework.com.cmm.service.MessengerService;
+import egovframework.com.cmm.service.MessengerVO;
+import egovframework.com.cmm.service.impl.MessengerDAO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.wkp.cal.service.CalendarVO;
 import egovframework.com.wkp.cal.service.impl.CalendarDAO;
 import egovframework.com.wkp.cmu.service.*;
+import egovframework.com.wkp.usr.service.UserVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +43,9 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 
     @Resource(name="calendarDAO")
     private CalendarDAO calendarDAO;
-    
+
+	@Resource(name = "messengerService")
+	private MessengerService messengerService;
 	
 	public List<CommunityVO> selectMyCommunity(String userSid){
 		List<CommunityVO> list = communityDAO.loadMyCommunity(userSid);
@@ -106,7 +113,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 
 		List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
 		community.setOwner(owner.get(0));
-		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
+		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null, "N"));
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null));
 		community.setFree2Count(communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, null, null));
@@ -120,7 +127,7 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		
 		List<CommunityMemberVO> owner = communityDAO.loadCommunityMemberByRole(cmmntyNo, CommunityRoleTypes.owner.getCode());
 		community.setOwner(owner.get(0));
-		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null));
+		community.setMemCount(communityDAO.findCommunityMemberTotalCount(cmmntyNo, null, null, "N", null, "N"));
 		community.setNoticeCount(communityDAO.findCommunityNoticeTotalCount(cmmntyNo, null, null, sid));
 		community.setFreeCount(communityDAO.findCommunityFreeboardTotalCount(cmmntyNo, null, null, sid));
 		community.setFree2Count(communityDAO.findCommunity2FreeboardTotalCount(cmmntyNo, null, null, sid));
@@ -357,15 +364,20 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		return communityDAO.getCommunity2Comment(commentNo);
 	}
 	@Override
-	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType, String nickname, String joinReq, String staff,
+	public List<CommunityMemberVO> findCommunityMember(Long cmmntyNo,String searchType, String nickname, String joinReq, String staff, String invite,
 			int limit, int startIndex) {
-		return communityDAO.findCommunityMember(cmmntyNo, searchType,nickname, joinReq, staff, limit, startIndex);
+		return communityDAO.findCommunityMember(cmmntyNo, searchType,nickname, joinReq, staff, invite, limit, startIndex);
 	}
 
 	@Override
-	public int findCommunityMemberTotalCount(Long cmmntyNo,String searchType, String nickname, String joinReq, String staff)
+	public List<CommunityMemberVO> findCommunityAlreadyMember(Long cmmntyNo) {
+		return communityDAO.findCommunityAlreadyMember(cmmntyNo);
+	}
+
+	@Override
+	public int findCommunityMemberTotalCount(Long cmmntyNo,String searchType, String nickname, String joinReq, String staff, String invite)
 			 {
-		return communityDAO.findCommunityMemberTotalCount(cmmntyNo, searchType,nickname, joinReq, staff);
+		return communityDAO.findCommunityMemberTotalCount(cmmntyNo, searchType,nickname, joinReq, staff, invite);
 	}
 	
 	@Override
@@ -419,6 +431,32 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 
 	public void updateCommunityMemberNickName(CommunityMemberVO vo) {
 		communityDAO.updateCommunityMemberNickName(vo);
+	}
+	public void receptCommunityInvite(CommunityMemberVO vo) {
+		communityDAO.receptCommunityInvite(vo);
+	}
+	public void rejectCommunityInvite(CommunityMemberVO vo) {
+		communityDAO.rejectCommunityInvite(vo);
+	}
+
+	public void inviteCommunityMember(List<CommunityMemberVO> vo) {
+		for(CommunityMemberVO mem : vo) {
+			if(communityDAO.getCommunityMemberExistUser(mem.getCmmntyNo(), mem.getUserSid()) == 0){
+				communityDAO.inviteCommunityMember(mem);
+				insertCommunityEvent(mem.getUserSid(), CommunityEventVO.EVT_TYPE_COMMNTY_INVITE, mem.getCmmntyNo(), -1L, -1L, -1L, -1L);
+
+				UserVO userVO = (UserVO) EgovUserDetailsHelper.getAuthenticatedUser();
+				/* 메신저 알림 전송 */
+				MessengerVO messengerVO = new MessengerVO();
+//        		메세지 보내는 사람 이름 : 여기선 커뮤니티 관리자
+				messengerVO.setSndUser(userVO.getDisplayName());
+				messengerVO.setDocTitle("[도정지식포털 커뮤니티 알림]");
+				messengerVO.setDocDesc("[도정지식포털 커뮤니티 "+ mem.getCmmntyNm() +"] 에 초대되셨습니다.");
+				messengerVO.setDocUrl("http://105.0.1.229/cmu/community.do");
+				messengerVO.setRecvId(mem.getUserSid());
+				messengerService.insert(messengerVO);
+			}
+		}
 	}
 
 	@Override

@@ -280,6 +280,14 @@
                                 }
                                 _search.binding();
                                 _search.init('userList');
+
+                                let $userInput;
+                                <c:forEach items="${alreadyList}" var="mem">
+                                $userInput = $('#userList').find('input[value=${mem.userSid}]');
+                                $userInput.prop('checked', true);
+                                $userInput.prop('disabled', true);
+
+                                </c:forEach>
                             },
                             error: function () {
                                  alert('처리 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
@@ -353,6 +361,14 @@
                                         }
                                     });
 
+                                    let $userInput;
+
+                                    <c:forEach items="${alreadyList}" var="mem">
+                                    $userInput = $('#userList').find('input[value=${mem.userSid}]');
+                                    $userInput.prop('checked', true);
+                                    $userInput.prop('disabled', true);
+
+                                    </c:forEach>
                                     _search.binding();
                                 },
                                 error: function () {

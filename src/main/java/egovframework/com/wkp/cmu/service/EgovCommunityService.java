@@ -111,6 +111,7 @@ public interface EgovCommunityService {
 	public void updateCommunityMemberNickName(CommunityMemberVO vo);
 	public void receptCommunityInvite(CommunityMemberVO vo);
 	public void rejectCommunityInvite(CommunityMemberVO vo);
+	public CommunityMemberVO selectCommunityInviteUser(CommunityMemberVO vo);
 	public void inviteCommunityMember(List<CommunityMemberVO> vo);
 	public void closeCommunity(Long cmmntyNo);
 	public void memberConfirm(Long [] mberNo);

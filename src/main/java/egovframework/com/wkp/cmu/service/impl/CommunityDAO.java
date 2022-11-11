@@ -485,6 +485,9 @@ public class CommunityDAO extends EgovComAbstractDAO {
     public void rejectCommunityInvite(CommunityMemberVO vo) {
         update("CommunityDAO.rejectCommunityInvite", vo);
     }
+    public CommunityMemberVO selectCommunityInviteUser(CommunityMemberVO vo) {
+        return selectOne("CommunityDAO.selectCommunityInviteUser", vo);
+    }
 
     public void inviteCommunityMember(CommunityMemberVO vo) {
         insert("CommunityDAO.inviteCommunityMember", vo);
@@ -498,6 +501,12 @@ public class CommunityDAO extends EgovComAbstractDAO {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("mberNo", mberNo);
         update("CommunityDAO.deleteCommunityMemberByNo", param);
+    }
+    public List<CommunityEventVO> selectCommunityEventReject(String userId, Long cmmntyNo) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", userId);
+        param.put("cmmntyNo", cmmntyNo);
+        return selectList("CommunityDAO.selectCommunityEventReject", param);
     }
 
     public void updateCommunityMemberConfirm(Long mberNo) {

@@ -845,6 +845,7 @@
         SELECT *
           FROM TB_COMMUNITY_MEMBER
          WHERE DEL_YN = 'N'
+           AND APRV_YN = 'Y'
            AND CMMNTY_NO = #{cmmntyNo}
            AND USER_SID != #{userSid}
     </select>
@@ -903,6 +904,11 @@
          WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
     </update>
 
+    <select id="selectCommunityInviteUser" parameterType="map" resultType="CommunityMemberVO">
+        SELECT * FROM TB_COMMUNITY_MEMBER
+         WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid} AND DEL_YN = 'N'
+    </select>
+
     <update id="inviteCommunityMember" parameterType="CommunityMemberVO">
         INSERT INTO TB_COMMUNITY_MEMBER
         ( CMMNTY_NO, CMMNTY_ROLE_CD, CMMNTY_NICKNM, REGISTER_ID, REGIST_DTM, UPDATER_ID, UPD_DTM, APRV_YN, APRV_DTM
@@ -959,6 +965,12 @@
            SET EXPIRE_DTM = #{expireDtm}
          WHERE EVENT_NO = #{eventNo}
     </update>
+
+    <select id="selectCommunityEventReject" parameterType="map" resultType="CommunityEventVO">
+        SELECT *
+          FROM TB_COMMUNITY_EVENT
+         WHERE CMMNTY_NO = #{cmmntyNo} AND USER_ID = #{userId} AND EVENT_TYPE = 7 AND EXPIRE_DTM > now()
+    </select>
 
     <select id="selectCommunityEvent" parameterType="map" resultType="CommunityEventVO">
         SELECT CE.*

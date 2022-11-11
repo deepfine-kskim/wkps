@@ -439,6 +439,9 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 		communityDAO.rejectCommunityInvite(vo);
 	}
 
+	@Override
+	public CommunityMemberVO selectCommunityInviteUser(CommunityMemberVO vo) { return communityDAO.selectCommunityInviteUser(vo);}
+
 	public void inviteCommunityMember(List<CommunityMemberVO> vo) {
 		for(CommunityMemberVO mem : vo) {
 			if(communityDAO.getCommunityMemberExistUser(mem.getCmmntyNo(), mem.getUserSid()) == 0){
@@ -490,10 +493,21 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	@Override
 	public void memberDelete(Long[] mberNo) {
 		for(Long m : mberNo) {
+
+			CommunityMemberVO mem = communityDAO.getCommunityMember(m);
+			if(mem.getInviteYn().equals("Y") && mem.getAprvYn().equals("N")){
+				List<CommunityEventVO> rejectMem = communityDAO.selectCommunityEventReject(mem.getUserSid(), mem.getCmmntyNo());
+
+				for (CommunityEventVO rejectm : rejectMem){
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.HOUR, -1);
+					communityDAO.clearCommunityEvent(rejectm.getEventNo(), cal.getTime());
+				}
+
+			}
 			communityDAO.deleteCommunityMember(m);
 		}
 	}
-
 	@Override
 	public void memberAddStaff(Long[] mberNo) {
 		for(Long m : mberNo) {

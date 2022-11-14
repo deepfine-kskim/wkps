@@ -562,6 +562,11 @@ public class EgovCommunityServiceImpl extends EgovAbstractServiceImpl implements
 	public int selectCommunityCount(String userId) {
 		return communityDAO.selectCommunityCount(userId);
 	}
+
+	@Override
+	public int selectCommunityEventCount(String userId) {
+		return communityDAO.selectCommunityEventCount(userId, Calendar.getInstance().getTime());
+	}
 	
 	@Override
     public List<CommunityEventVO> selectCommunityApply(String userId, Long cmmntyNo){

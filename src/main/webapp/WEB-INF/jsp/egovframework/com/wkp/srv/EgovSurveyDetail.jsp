@@ -30,6 +30,15 @@
                             <span class="info_txt name">작성자 : <span class="data">${detail.registerName}</span></span>
                         </div>
                     </div>
+                    <c:if test="${detail.aprvState.name() == 'DOING'}">
+                        <c:if test="${isAnswer}">
+                            <div class="row type0 info_view">
+                                <span class="data text-danger">
+                                    이미 참여한 설문입니다.
+                                </span>
+                            </div>
+                        </c:if>
+                    </c:if>
                 </div>
                 <div class="view_body">
                     <div class="text-black mb_5 block"><strong>설문내용</strong></div>
@@ -271,8 +280,7 @@
                     <!-- //panel -->
                     <div class="row type0 mb_20">
                         <c:if test="${detail.aprvState.name() == 'DOING'}">                           
-                            <c:choose>
-                            <c:when test="${!isAnswer}">
+                            <c:if test="${!isAnswer}">
                                 <div class="col-xs-6">
                                     <button type="button" class="btn btn-default dev-reload">설문 초기화</button>
                                 </div>
@@ -283,13 +291,7 @@
                                         <button type="button" class="btn btn-blue dev-answer-submit"><i class="ti-bar-chart-alt" aria-hidden="true"></i>설문 참여하기</button>
                                     </div>
                                 </c:if>
-                            </c:when>
-                            <c:otherwise>
-								<div class="col-xs-6">
-									이미 참여한 설문입니다.
-								</div>
-                            </c:otherwise>
-                            </c:choose>
+                            </c:if>
                         </c:if>
                     </div>
                 </div>

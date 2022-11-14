@@ -205,6 +205,13 @@ public interface EgovSurveyService {
 	 * @return
 	 */
 	public List<SurveyExcelDTO> selectSurveyExcelList(Long surveyNo);
+
+	/**
+	 * 설문조사 엑셀 다운로드 로그
+	 * @param surveyNo
+	 * @return
+	 */
+	public void saveSurveyExcelLog(Long surveyNo);
 	
 	/**
 	 * 설문조사 응답자 리스트

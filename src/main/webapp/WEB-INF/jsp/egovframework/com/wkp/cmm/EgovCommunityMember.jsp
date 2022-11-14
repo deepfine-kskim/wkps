@@ -83,7 +83,17 @@ $(function() {
                                             <td>${mem.ou }</td>
                                             <td><span class="text-blue">${mem.freeCount }</span>개</td>
                                             <td><span class="text-blue">${mem.commentCount }</span>개</td>
-                                            <td>${mem.strRegDate }</td>
+                                            <c:choose>
+                                                <c:when test="${mem.inviteYn eq 'Y' and mem.aprvYn eq 'N' and mem.acceptResult eq 'REJECT'}">
+                                                    <td>초대를 거절한 유저입니다.</td>
+                                                </c:when>
+                                                <c:when test="${mem.inviteYn eq 'Y' and mem.aprvYn eq 'N'}">
+                                                    <td>초대중인 유저입니다.</td>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td>${mem.strRegDate }</td>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </tr>
                                         </c:forEach>
                                         <c:if test="${fn:length(list)==0}">

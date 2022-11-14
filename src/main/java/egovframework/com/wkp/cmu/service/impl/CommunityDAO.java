@@ -558,6 +558,13 @@ public class CommunityDAO extends EgovComAbstractDAO {
         param.put("userId", userId);
 		return selectOne("CommunityDAO.selectCommunityCount");
 	}
+
+	public int selectCommunityEventCount(String userId, Date nowDtm) {
+    	HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", userId);
+        param.put("nowDtm", nowDtm);
+		return selectOne("CommunityDAO.selectCommunityEventCount");
+	}
 	
     public List<CommunityEventVO> selectCommunityApply(String userId,long cmmntyNo,Date nowDtm ) {
     	HashMap<String, Object> param = new HashMap<String, Object>();

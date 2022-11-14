@@ -336,6 +336,15 @@ public class EgovSurveyServiceImpl extends EgovAbstractServiceImpl implements Eg
         return surveyDAO.selectSurveyExcelList(surveyExcelDTO);
     }
 
+
+    @Override
+    public void saveSurveyExcelLog(Long surveyNo)  {
+        SurveyExcelDTO surveyExcelDTO = new SurveyExcelDTO();
+        surveyExcelDTO.setSurveyNo(surveyNo);
+
+        egovLogService.insert(LogType.DOWNLOAD_EXCEL, LogSubjectType.SURVEY, surveyExcelDTO);
+    }
+
     @Override
     public List<SurveyAnswerVO> selectAnswerUser(Long surveyExampleNo)  {
         return surveyDAO.selectAnswerUser(surveyExampleNo);

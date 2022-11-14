@@ -1009,6 +1009,15 @@
         </where>
     </select>
 
+    <select id="selectCommunityEventCount" parameterType="map" resultType="int">
+        SELECT COUNT(1)
+        FROM TB_COMMUNITY_EVENT CE
+        LEFT OUTER JOIN TB_COMMUNITY C ON CE.CMMNTY_NO = C.CMMNTY_NO
+        WHERE CE.USER_ID = #{userId}
+        AND CE.EXPIRE_DTM > #{nowDtm}
+        AND C.DEL_YN = 'N'
+    </select>
+
     <select id="selectCommunityApply" parameterType="map" resultType="CommunityEventVO">
         SELECT CE.*
              , C.CMMNTY_NM

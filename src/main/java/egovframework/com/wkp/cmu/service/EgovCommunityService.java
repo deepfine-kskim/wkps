@@ -126,6 +126,7 @@ public interface EgovCommunityService {
     public List<CommunityEventVO> selectCommunityEvent(String userId);
     
     public int selectCommunityCount(String userId);
-    
+    public int selectCommunityEventCount(String userId);
+
     public List<CommunityEventVO> selectCommunityApply(String userId,Long cmmntyNo);
 }

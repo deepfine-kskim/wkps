@@ -4,10 +4,7 @@ import egovframework.com.cmm.service.EgovProperties;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.utl.fcc.service.EgovFileUploadUtil;
 import egovframework.com.utl.wed.comm.ListWithPageNavigation;
-import egovframework.com.utl.wed.enums.SurveySearchKey;
-import egovframework.com.utl.wed.enums.SurveyStateType;
-import egovframework.com.utl.wed.enums.SurveyType;
-import egovframework.com.utl.wed.enums.YnEnum;
+import egovframework.com.utl.wed.enums.*;
 import egovframework.com.wkp.cmm.service.*;
 import egovframework.com.wkp.srv.service.*;
 import egovframework.com.wkp.usr.service.EgovOrgService;
@@ -724,9 +721,12 @@ public class EgovSurveyController {
 
         String tempPath = EgovProperties.getProperty("Globals.fileStorePath");
 
+
         EgovFileUploadUtil.writeCsv(data, tempPath + filename); //csv 쓰기 메소드 호출
         downloadData.put("rname", filename);
         downloadData.put("downloadFile", new File(tempPath + filename));
+
+        surveyService.saveSurveyExcelLog(surveyNo);
 
         return new ModelAndView("downloadView", "downloadData", downloadData);
     }

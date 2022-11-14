@@ -63,9 +63,11 @@ public class MenuPreparer implements ViewPreparer {
 			int mySurveyCnt = surveyService.selectSurveyListCountByMine(surveyVO);
 			
 			int communityCnt = communityService.selectCommunityCount("");
-			
-			int myCommunityCnt = communityService.selectCommunityCount(user.getSid());
-			
+
+//			알림의 커뮤니티 이벤트 개수가 커뮤니티 개수로 되어있었음 2022-11-14 hg.jeong
+//			int myCommunityCnt = communityService.selectCommunityCount(user.getSid());
+			int myCommunityCnt = communityService.selectCommunityEventCount(user.getSid());
+
 			ErrorStatementVO errorStatementVO = new ErrorStatementVO();
 			errorStatementVO.setAnswerYn("N");
 			int errorCnt = knowledgeService.selectErrorStatementListCount(errorStatementVO);

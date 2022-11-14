@@ -33,6 +33,7 @@ public class CommunityEventVO {
 	public static final String EVT_TYPE_COMMNTY_JOIN_REQUEST = "5";//가입신청이 있음
 	public static final String EVT_TYPE_COMMENT2 = "6"; // 지식게시판 답변 등록
 	public static final String EVT_TYPE_COMMNTY_INVITE = "7";//커뮤니티 초대가 있음
+	public static final String EVT_TYPE_COMMNTY_INVITE_REJECT = "8";//커뮤니티 초대거절
 
 	private Long eventNo;
 	private String userId;

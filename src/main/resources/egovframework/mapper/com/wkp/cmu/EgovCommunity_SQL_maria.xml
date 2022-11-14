@@ -896,11 +896,13 @@
            SET APRV_YN  = 'Y'
              , UPDATER_ID     = #{userSid}
              , UPD_DTM        = now()
+             , ACCEPT_RESULT = 'RECEPT'
          WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
     </update>
 
     <update id="rejectCommunityInvite" parameterType="CommunityMemberVO">
-        DELETE FROM TB_COMMUNITY_MEMBER
+        UPDATE TB_COMMUNITY_MEMBER
+           SET ACCEPT_RESULT = 'REJECT'
          WHERE CMMNTY_NO = #{cmmntyNo} AND USER_SID = #{userSid}
     </update>
 

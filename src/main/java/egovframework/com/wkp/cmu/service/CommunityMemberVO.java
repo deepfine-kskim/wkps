@@ -33,6 +33,7 @@ public class CommunityMemberVO {
 	private String cmmntyNicknm;
 	private String cmmntyNm;
 	private String registerId;
+	private String acceptResult;
 	private Date registDtm;
 	private String updaterId;
 	private Date updDtm;

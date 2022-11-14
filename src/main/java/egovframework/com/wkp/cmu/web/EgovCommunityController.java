@@ -368,6 +368,9 @@ public class EgovCommunityController {
         CommunityMemberVO vo = new CommunityMemberVO();
         vo.setCmmntyNo(cmmntyNo);
         vo.setUserSid(user.getSid());
+        CommunityMemberVO inviteVo = communityService.selectCommunityInviteUser(vo);
+
+        communityService.insertCommunityEvent(inviteVo.getRegisterId(), CommunityEventVO.EVT_TYPE_COMMNTY_INVITE_REJECT, cmmntyNo, -1L, -1L, -1L, -1L);
         communityService.rejectCommunityInvite(vo);
 
         ModelAndView mav = new ModelAndView("jsonView");

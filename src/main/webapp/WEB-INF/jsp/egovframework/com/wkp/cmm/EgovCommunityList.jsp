@@ -489,6 +489,18 @@ function rejectInvite(cmmntyNo, eventNo){
                                                             </div>
                                                         </li>
                                                     </c:if>
+                                                    <c:if test="${event.eventType == '8' }">
+                                                        <li class="alarm_item">
+                                                            <div class="panel panel-default widget_panel">
+                                                                <div class="panel-body">
+                                                                    <div class="subject"><strong><a href="#" onclick="goEventCommunity(${event.eventNo},${event.cmmntyNo})">${event.cmmntyNm }</a></strong></div>
+                                                                    <div class="msg_box">
+                                                                        <span class="text-primary">커뮤니티에 초대한 유저가 거절하였습니다.</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </c:if>
                                                 </c:forEach>
                                             </c:when>
                                             <c:otherwise>

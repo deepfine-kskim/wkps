@@ -30,8 +30,14 @@ public class ParameterVO {
     private String schCate3;
     private String schCate4;
     private String schCate5;
-    
-    /** 검색 서브카테고리 */
+
+	/** 검색 타겟(법령정보 or 자치법규) */
+    private String target;
+
+	/** 자치법규 자치구코드 */
+    private String org;
+
+	/** 검색 서브카테고리 */
     private String subCategory;
 		
 	/** 검색대상 필드 */
@@ -547,5 +553,21 @@ public class ParameterVO {
 
 	public void setDeptNm(String deptNm) {
 		this.deptNm = deptNm;
+	}
+
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public String getOrg() {
+		return org;
+	}
+
+	public void setOrg(String org) {
+		this.org = org;
 	}
 }

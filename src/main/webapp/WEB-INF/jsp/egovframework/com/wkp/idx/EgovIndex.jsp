@@ -221,20 +221,24 @@
 	    });
 	    
 	    $('#law').click(function(){
-        	$('#srchText').attr('name', 'query');
+        	// $('#srchText').attr('name', 'query');
+            $('#srchText').attr('name', 'kwd');
 	    	var form = $("form[name=totalSrchFrm]");
             form.find("input[name=target]").val('law');
             form.find("input[name=org]").val('');
-            form.attr("action", "http://www.law.go.kr/DRF/lawSearch.do");
+            // form.attr("action", "http://www.law.go.kr/DRF/lawSearch.do");
+            form.attr("action", "/searchLaw.do");
         	form.attr("target","_blank");
 	    });
 	    
 	    $('#ordin').click(function(){
-        	$('#srchText').attr('name', 'query');
+        	// $('#srchText').attr('name', 'query');
+            $('#srchText').attr('name', 'kwd');
 	    	var form = $("form[name=totalSrchFrm]");
             form.find("input[name=target]").val('ordin');
             form.find("input[name=org]").val('6410000');
-            form.attr("action", "http://www.law.go.kr/DRF/lawSearch.do");
+            // form.attr("action", "http://www.law.go.kr/DRF/lawSearch.do");
+            form.attr("action", "/searchLaw.do");
         	form.attr("target","_blank");
 	    });
 	    

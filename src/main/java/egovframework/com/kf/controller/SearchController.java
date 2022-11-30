@@ -1,5 +1,9 @@
 package egovframework.com.kf.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -113,6 +117,36 @@ public class SearchController {
 		model.addAttribute("params", paramVO);
 		
 		return "/com/wkp/search/search";
+	}
+
+
+	@RequestMapping(value = "/searchLaw.do")
+	public String searchLaw(@RequestParam Map<String, String> map, Model model) throws Exception {
+		// 파라미터 세팅
+		ParameterVO paramVO = setParameter.setParameter(map);
+
+		URL url = new URL("http://www.law.go.kr/DRF/lawSearch.do?OC=regina1102&target="+ paramVO.getTarget() +"&type=HTML&org="+paramVO.getOrg()+"&query="+paramVO.getKwd());
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		conn.setRequestMethod("GET"); // http 메서드
+		conn.setRequestProperty("Content-type", "application/json"); // header Content-Type 정보
+		conn.setRequestProperty("auth","myAuth"); // header의 auth 정보
+		conn.setDoOutput(true); // 서버로부터 받는 값이 있다면 true
+
+		// 서버로부터 데이터 읽어오기
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuilder stringBuilder = new StringBuilder();
+		String line = null;
+
+		while((line = bufferedReader.readLine()) != null){ // 읽을 수 있을 때 까지 반복
+			stringBuilder.append(line);
+		}
+
+		String send = stringBuilder.toString().replaceAll("/DRF/", "https://law.go.kr/DRF/");
+
+		model.addAttribute("send", send);
+
+		return "/com/wkp/search/searchLaw";
 	}
 	
 	

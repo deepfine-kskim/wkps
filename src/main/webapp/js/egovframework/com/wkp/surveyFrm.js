@@ -5,7 +5,8 @@ function panelPlus() {
         //console.log('num - ' + num);
         panelTag += '<div id="item' + num + '-panel" class="panel panel-default item_panel">';
         panelTag += '<div class="panel-heading">';
-        panelTag += '<strong class="panel-title"><span class="order-id" style="float: left;">' + num + '</span>. 설문항목</strong><button type="button" class="btn btn-danger btn-sm del_panel_btn" style="float: right; margin-left:5px;">항목삭제</button><button type="button" class="btn btn-primary btn-sm add_panel_btn" style="float: right; padding: -10px;">설문항목 중간 추가</button>';
+        panelTag +=        '<img src="/images/egovframework/com/wkp/icon_dragable.png">';
+        panelTag += '<strong class="panel-title" style="margin-left:7px;"><span class="order-id">' + num + '</span>. 설문항목</strong><button type="button" class="btn btn-danger btn-sm del_panel_btn" style="float: right; margin-left:5px;">항목삭제</button><button type="button" class="btn btn-primary btn-sm add_panel_btn" style="float: right; padding: -10px;">설문항목 중간 추가</button>';
         //panelTag += '<strong class="panel-title"><span class="order-id">' + num + '</span>. 설문항목</strong><button type="button" class="btn btn-danger btn-sm del_panel_btn">항목삭제</button>';
         panelTag += '</div>';
         panelTag += '<div class="panel-body">';

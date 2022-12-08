@@ -117,12 +117,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-10 col-sm-push-2 item_panel_area">
+                            <div class="col-sm-10 col-sm-push-2 item_panel_area _sortable-body">
                                 <c:forEach var="question" items="${detail.questionList}">
                                     <div id="item${question.orderNo}-panel" class="panel panel-default item_panel">
                                        	<div class="panel-heading">
                                             <%-- <strong class="panel-title"><span class="order-id">${question.orderNo}</span>. 설문항목</strong> <button type="button" class="btn btn-danger btn-sm del_panel_btn">항목삭제</button> --%>
-                                            <strong class="panel-title"><span class="order-id" style="float: left;">${question.orderNo}</span>. 설문항목</strong>
+                                            <img src="/images/egovframework/com/wkp/icon_dragable.png">
+                                            <strong class="panel-title" style="margin-left: 7px"><span class="order-id" >${question.orderNo}</span>. 설문항목</strong>
                                                 <c:if test="${detail.aprvState.name() != 'DOING'}">
                                             <button type="button" class="btn btn-danger btn-sm del_panel_btn" style="float: right; margin-left:5px;">항목삭제</button>
                                             <button type="button" class="btn btn-primary btn-sm add_panel_btn" style="float: right; padding: -10px;">설문항목 중간 추가</button>
@@ -691,6 +692,15 @@
             $("#tempButton").trigger("click");
         });
 
+        $("._sortable-body").sortable({
+            items : "div.item_panel",
+            cancel : "input, select, button",
+            placeholder: "ui-state-highlight",
+            update : function(event, ui) {
+                $('.item_panel_area .sel_tab').change()
+            }
+        })
+
     }); // end ready()
 
     function previewPopup() {
@@ -707,6 +717,8 @@
         var x = window.outerWidth / 2 + window.screenX - ( w / 2)
         return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + y + ', left=' + x);
     }
+
+
 
 </script>
 

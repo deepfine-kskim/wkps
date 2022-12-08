@@ -43,6 +43,8 @@ public class StaticsVO {
     private long totalPreAnswerCountCount; //총 Qna 답변 작성수
     
     private long totalKnowledgeCount; //총 지식 작성수
+    private long totalKnowledgeCreateCount; //총 지식 입력수
+    private long totalKnowledgeUpdateCount; //총 지식 갱신수
     private long totalPreKnowledgeCount; //총 지식 작성수
 
 }

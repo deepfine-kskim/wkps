@@ -31,6 +31,8 @@ public class StaticsKnowledgeVO {
     private String dt;
 
     private long knowledgeCount; //작성수
+    private long knowledgeCreateCount; //입력수
+    private long knowledgeUpdateCount; //갱신수
     private long preKnowledgeCount; //전일 작성수
 
     private Integer year;    

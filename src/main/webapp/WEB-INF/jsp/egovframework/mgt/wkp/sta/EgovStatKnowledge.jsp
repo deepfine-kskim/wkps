@@ -69,11 +69,15 @@
                             <col style="width:10%;">
                             <col>
                             <col>
+                            <col>
+                            <col>
                         </colgroup>
                         <thead>
                             <tr>
                                 <th scope="col">일자</th>
                                 <th scope="col">지식 등록수</th>
+                                <th scope="col">지식 입력수</th>
+                                <th scope="col">지식 갱신수</th>
                                 <th scope="col">전일 대비 지식 등록수</th>
                             </tr>
                         </thead>
@@ -85,6 +89,8 @@
                                         <tr>
                                             <td>${item.dt}</td>
                                             <td>${item.knowledgeCount}</td>
+                                            <td>${item.knowledgeCreateCount}</td>
+                                            <td>${item.knowledgeUpdateCount}</td>
                                             <td><span class="${item.preKnowledgeCount > 0 ? 'text-danger': item.preKnowledgeCount < 0 ? 'text-primary':''}">${item.preKnowledgeCount}</span></td>
                                         </tr>
                                     </c:forEach>
@@ -102,6 +108,12 @@
                                 <td><strong>Total</strong></td>
                                 <td>
                                     <strong>${statics.totalKnowledgeCount}</strong>
+                                </td>
+                                <td>
+                                    <strong>${statics.totalKnowledgeCreateCount}</strong>
+                                </td>
+                                <td>
+                                    <strong>${statics.totalKnowledgeUpdateCount}</strong>
                                 </td>
                                 <td>
                                     <strong>${statics.totalPreKnowledgeCount}</strong>

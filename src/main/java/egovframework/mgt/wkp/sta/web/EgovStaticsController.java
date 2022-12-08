@@ -218,16 +218,20 @@ public class EgovStaticsController {
 		String filename = "knoStatExcelDown" + "_" + today + ".csv";
 
 		List<String[]> data = new ArrayList<String[]>();
-		data.add(new String[]{"일자", "지식 등록 수", "전일 대비 지식 등록 수"});
+		data.add(new String[]{"일자", "지식 등록 수", "지식 입력 수", "지식 갱신 수", "전일 대비 지식 등록 수"});
 		try {
 			StaticsVO vo  = egovStaticsService.selectKnowledgeStatics(year, month);
 			if (vo != null && vo.getStaticsKnowledgeVoList() != null) {
 				for(StaticsKnowledgeVO s : vo.getStaticsKnowledgeVoList()) {
 					data.add(new String[]{s.getDt(), String.valueOf(s.getKnowledgeCount())
+							, String.valueOf(s.getKnowledgeCreateCount())
+							, String.valueOf(s.getKnowledgeUpdateCount())
 							, String.valueOf(s.getPreKnowledgeCount())});
 				}
 				data.add(new String[]{"총"
 						, String.valueOf(vo.getTotalKnowledgeCount())
+						, String.valueOf(vo.getTotalKnowledgeCreateCount())
+						, String.valueOf(vo.getTotalKnowledgeUpdateCount())
 						, String.valueOf(vo.getTotalPreKnowledgeCount())});
 
 			}

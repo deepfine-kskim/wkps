@@ -130,6 +130,8 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
         StaticsVO result = new StaticsVO();
 
         long totalKnowledgeCount = 0;
+        long totalKnowledgeCreateCount = 0;
+        long totalKnowledgeUpdateCount = 0;
         long totalPreKnowledgeCount = 0;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
@@ -150,6 +152,8 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
                     }
 
                     totalKnowledgeCount += list.get(i).getKnowledgeCount();
+                    totalKnowledgeCreateCount += list.get(i).getKnowledgeCreateCount();
+                    totalKnowledgeUpdateCount += list.get(i).getKnowledgeUpdateCount();
                     totalPreKnowledgeCount += list.get(i).getPreKnowledgeCount();
                     resultList.add(list.get(i));
                 }
@@ -158,6 +162,8 @@ public class EgovStaticsServiceImpl extends EgovAbstractServiceImpl implements E
         }
         result.setStaticsKnowledgeVoList(resultList);
         result.setTotalKnowledgeCount(totalKnowledgeCount);
+        result.setTotalKnowledgeCreateCount(totalKnowledgeCreateCount);
+        result.setTotalKnowledgeUpdateCount(totalKnowledgeUpdateCount);
         result.setTotalPreKnowledgeCount(totalPreKnowledgeCount);
 
         return result;

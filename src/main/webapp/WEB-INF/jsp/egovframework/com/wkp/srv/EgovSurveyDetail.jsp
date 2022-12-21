@@ -349,12 +349,25 @@
         $(".dev-input-skip").on("click", function() {
             var parent = $(this).closest(".panel-default");
             var skipChild = parent.find(".dev-skip");
+            var $selectPanel = $(".dev-panel-" + $(this).closest(".dev-skip").data("skipno"));
 
             skipChild.each(function(){
                 $(".dev-panel-" + $(this).data("skipno")).hide();
             });
 
-            $(".dev-panel-" + $(this).closest(".dev-skip").data("skipno")).show();
+            $selectPanel.show();
+            while ($selectPanel.find('.dev-input-skip:checked').length > 0){
+                $selectPanel.find('.dev-input-skip:checked').each(function () {
+                    var selectParent = $(this).closest(".panel-default");
+                    var selectSkipChild = selectParent.find(".dev-skip");
+
+                    selectSkipChild.each(function(){
+                        $(".dev-panel-" + $(this).data("skipno")).hide();
+                    });
+                    $selectPanel = $(".dev-panel-" + $(this).closest(".dev-skip").data("skipno"));
+                    $selectPanel.show();
+                });
+            }
 
         });
 

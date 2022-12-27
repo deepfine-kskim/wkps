@@ -446,7 +446,7 @@
                    	for(var i=0; i < data.knowledgeMapList.length; i++){
                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                         if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
-                            if (['finee012', 'sinflyoh', 'eunn0628'].indexOf('${loginVO.sid}') !== -1) {
+                            if (['finee012', 'sinflyoh', 'eunn0628', 'qctd0987'].indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }
                             continue;
@@ -475,7 +475,7 @@
 	               	for(var i=0; i < data.knowledgeMapList.length; i++){
                         <%-- (하드코딩) 연설문, 축사, 기념사, 브리핑 메뉴인 경우 특정 사용자만 등록 가능 --%>
                         if (data.knowledgeMapList[i].knowlgMapNm.indexOf('연설문, 축사, 기념사, 브리핑') !== -1) {
-                            if (['finee012', 'sinflyoh', 'eunn0628'].indexOf('${loginVO.sid}') !== -1) {
+                            if (['finee012', 'sinflyoh', 'eunn0628', 'qctd0987'].indexOf('${loginVO.sid}') !== -1) {
                                 $("#mainSel").append("<option value='" + data.knowledgeMapList[i].knowlgMapNo + "'>" + data.knowledgeMapList[i].knowlgMapNm + "</option> ");
                             }
                             continue;
